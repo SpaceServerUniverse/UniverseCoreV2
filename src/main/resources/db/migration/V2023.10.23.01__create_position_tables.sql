@@ -1,0 +1,25 @@
+use SpaceServerUniverse;
+
+CREATE TABLE IF NOT EXISTS positions(
+    id BIGINT UNSIGNED NOT NULL PRIMARY KEY,
+    name VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS user_positions(
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT UNSIGNED NOT NULL UNIQUE,
+    position_id BIGINT UNSIGNED NOT NULL,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
+    CONSTRAINT FK_USERS_USER_ID FOREIGN KEY (user_id) REFERENCES users (id),
+    CONSTRAINT FK_POSITIONS_POSITION_ID FOREIGN KEY (position_id) REFERENCES positions (id)
+);
+
+INSERT INTO positions VALUES(0, 'BAN');
+INSERT INTO positions VALUES(1, '鯖民');
+INSERT INTO positions VALUES(2, 'VIP');
+INSERT INTO positions VALUES(3, 'VIP+');
+INSERT INTO positions VALUES(4, 'VIP++');
+INSERT INTO positions VALUES(100, 'Staff');
+INSERT INTO positions VALUES(101, 'Developer');
+INSERT INTO positions VALUES(102, 'OWNER');
