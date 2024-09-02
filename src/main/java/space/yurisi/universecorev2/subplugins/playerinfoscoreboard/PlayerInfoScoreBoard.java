@@ -9,6 +9,7 @@ import space.yurisi.universecorev2.subplugins.playerinfoscoreboard.event.player.
 public final class PlayerInfoScoreBoard {
 
     public void onEnable(UniverseCoreV2 core) {
+        Bukkit.getLogger().info("PlayerInfoScoreBoard Loaded");
         TaskManager taskManager = new TaskManager(core);
         Bukkit.getPluginManager().registerEvents(new JoinEvent(taskManager), core);
         Bukkit.getPluginManager().registerEvents(new QuitEvent(taskManager), core);

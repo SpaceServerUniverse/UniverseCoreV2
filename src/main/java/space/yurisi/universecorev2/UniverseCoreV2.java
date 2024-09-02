@@ -8,6 +8,7 @@ import space.yurisi.universecorev2.database.DatabaseConnector;
 import space.yurisi.universecorev2.event.EventManager;
 import space.yurisi.universecorev2.file.Config;
 import space.yurisi.universecorev2.logs.filter.PasswordFilter;
+import space.yurisi.universecorev2.subplugins.levelsystem.LevelSystem;
 import space.yurisi.universecorev2.subplugins.playerinfoscoreboard.PlayerInfoScoreBoard;
 
 public final class UniverseCoreV2 extends JavaPlugin {
@@ -15,6 +16,8 @@ public final class UniverseCoreV2 extends JavaPlugin {
     private DatabaseConnector connector;
 
     private Config config;
+
+    private LevelSystem levelSystem;
 
     @Override
     public void onEnable() {
@@ -29,12 +32,18 @@ public final class UniverseCoreV2 extends JavaPlugin {
         new UniverseCoreV2API(this.connector);
         new EventManager(this);
         new CommandManager(this);
+
         new PlayerInfoScoreBoard().onEnable(this);
+
+        this.levelSystem = new LevelSystem();
+        levelSystem.onEnable(this);
     }
 
     @Override
     public void onDisable() {
+        levelSystem.onDisable();
         connector.close();
+
     }
 
     public Config getPluginConfig() {
