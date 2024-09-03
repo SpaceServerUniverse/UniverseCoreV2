@@ -2,12 +2,13 @@ package space.yurisi.universecorev2.subplugins.levelsystem;
 
 import org.bukkit.Bukkit;
 import space.yurisi.universecorev2.UniverseCoreV2;
+import space.yurisi.universecorev2.subplugins.SubPlugin;
 import space.yurisi.universecorev2.subplugins.levelsystem.manager.*;
 import space.yurisi.universecorev2.subplugins.levelsystem.task.SaveDataTask;
 import space.yurisi.universecorev2.subplugins.levelsystem.utils.DayOfWeek;
 import space.yurisi.universecorev2.subplugins.levelsystem.utils.connector.UniverseCoreAPIConnector;
 
-public final class LevelSystem {
+public final class LevelSystem implements SubPlugin {
 
     private PlayerLevelDataManager playerLevelDataManager;
 

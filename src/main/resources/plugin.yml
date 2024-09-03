@@ -7,14 +7,69 @@ commands:
     description: パスワードを設定します
     usage: /password <password 大文字小文字数字含む8~36文字>
   pplayer:
-    description: 貴方の役職を確認します
+    description: あなたの役職を確認します
     usage: /pplayer
+  #SubPlugins
+  #LevelSystem
   addexp:
         description: オンラインのプレイヤーに経験値を与えます
         permission: space.yurisi.levelsystem.addexp
         usage: /addexp [playername] [amount]
 
+  #UniverseEconomy
+  money:
+    description: お金管理のメニューを表示します
+    permission: space.yurisi.universeeconomy.money
+    usage: /money
+  mymoney:
+    description: 自分の持っているお金を確認します。
+    permission: space.yurisi.universeeconomy.mymoney
+    usage: /mymoney
+  pay:
+    description: プレイヤーにお金を払います。
+    permission: space.yurisi.universeeconomy.pay
+    usage: /pay <player>
+  seemoney:
+    description: 他のプレイヤーのお金を確認します
+    permission: space.yurisi.universeeconomy.seemoney
+    usage: /seemoney <player>
+  setmoney:
+    description: 他のプレイヤーのお金をセットします
+    permission: space.yurisi.universeeconomy.setmoney
+    usage: /setmoney <player> <amount>
+  addmoney:
+    description: 他のプレイヤーのお金を増やします
+    permission: space.yurisi.universeeconomy.addmoney
+    usage: /addmoney <player> <amount>
+  reducemoney:
+    description: 他のプレイヤーのお金を減らします
+    permission: space.yurisi.universeeconomy.reducemoney
+    usage: /player <player> <amount>
+
 permissions:
-    space.yurisi.levelsystem.addexp:
-      description: op command
-      default: op
+  #SubPlugins
+  #LevelSystem
+  space.yurisi.levelsystem.addexp:
+    description: op command
+    default: op
+
+  #UniverseEconomy
+  space.yurisi.universeeconomy.*:
+    description: default
+    default: true
+    children:
+      space.yurisi.universeeconomy.money: true
+      space.yurisi.universeeconomy.mymoney: true
+      space.yurisi.universeeconomy.pay: true
+      space.yurisi.universeeconomy.seemoney: true
+
+  space.yurisi.universeeconomy.setmoney:
+    description: op command
+    default: op
+  space.yurisi.universeeconomy.addmoney:
+    description: op command
+    default: op
+  space.yurisi.universeeconomy.reducemoney:
+    description: op command
+    default: op
+

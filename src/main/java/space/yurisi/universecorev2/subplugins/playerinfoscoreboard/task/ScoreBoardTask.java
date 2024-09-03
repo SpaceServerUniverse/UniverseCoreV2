@@ -8,6 +8,9 @@ import org.bukkit.scoreboard.Criteria;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
+import space.yurisi.universecorev2.exception.MoneyNotFoundException;
+import space.yurisi.universecorev2.exception.UserNotFoundException;
+import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomyAPI;
 
 import java.util.Objects;
 
@@ -49,7 +52,7 @@ public final class ScoreBoardTask extends BukkitRunnable {
     }
 
     private void setMoney(Objective objective, int score) {
-        /*UniverseEconomyAPI economyAPI = UniverseEconomyAPI.getInstance();
+        UniverseEconomyAPI economyAPI = UniverseEconomyAPI.getInstance();
         String unit = economyAPI.getUnit();
         //40tickに1回だけ更新
         if (coin == null || tick % 4 == 0) {
@@ -62,9 +65,7 @@ public final class ScoreBoardTask extends BukkitRunnable {
                 Objects.requireNonNull(objective).getScore("§e所持金: ERROR2").setScore(score);
                 return;
             }
-        }*/
-        int coin = 1;
-        String unit = "yen";
+        }
         Objects.requireNonNull(objective).getScore("§e所持金: " + coin + unit).setScore(score);
     }
 
