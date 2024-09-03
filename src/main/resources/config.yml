@@ -3,3 +3,6 @@ db:
   port: 3306
   username: "user"
   password: "password"
+
+customname:
+  "yurisi": "yurisi"

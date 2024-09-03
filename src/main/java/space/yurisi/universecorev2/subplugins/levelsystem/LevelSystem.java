@@ -19,7 +19,6 @@ public final class LevelSystem implements SubPlugin {
     private UniverseCoreAPIConnector connector;
 
     public void onEnable(UniverseCoreV2 core) {
-        Bukkit.getLogger().info("LevelSystem Loaded");
         new DayOfWeek();
         this.connector = new UniverseCoreAPIConnector();
         playerLevelDataManager = new PlayerLevelDataManager(this);
@@ -49,5 +48,15 @@ public final class LevelSystem implements SubPlugin {
 
     public void onDisable() {
         LevelSystemAPI.getInstance().saveAll();
+    }
+
+    @Override
+    public String getName() {
+        return "LevelSystem";
+    }
+
+    @Override
+    public String getVersion() {
+        return "1.3";
     }
 }

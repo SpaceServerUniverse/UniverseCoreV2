@@ -7,4 +7,8 @@ public interface SubPlugin {
     public void onEnable(UniverseCoreV2 core);
 
     public void onDisable();
+
+    public String getName();
+
+    public String getVersion();
 }
