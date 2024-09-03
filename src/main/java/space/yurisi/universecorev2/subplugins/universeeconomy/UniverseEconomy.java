@@ -34,4 +34,14 @@ public final class UniverseEconomy implements SubPlugin {
     public void onDisable() {
         // Plugin shutdown logic
     }
+
+    @Override
+    public String getName() {
+        return "UniverseEconomy";
+    }
+
+    @Override
+    public String getVersion() {
+        return "1.0.2";
+    }
 }

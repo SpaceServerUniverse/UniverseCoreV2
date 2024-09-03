@@ -10,7 +10,6 @@ import space.yurisi.universecorev2.subplugins.playerinfoscoreboard.event.player.
 public final class PlayerInfoScoreBoard implements SubPlugin {
 
     public void onEnable(UniverseCoreV2 core) {
-        Bukkit.getLogger().info("PlayerInfoScoreBoard Loaded");
         TaskManager taskManager = new TaskManager(core);
         Bukkit.getPluginManager().registerEvents(new JoinEvent(taskManager), core);
         Bukkit.getPluginManager().registerEvents(new QuitEvent(taskManager), core);
@@ -18,5 +17,15 @@ public final class PlayerInfoScoreBoard implements SubPlugin {
 
     public void onDisable() {
         // Plugin shutdown logic
+    }
+
+    @Override
+    public String getName() {
+        return "PlayerInfoScoreBoard";
+    }
+
+    @Override
+    public String getVersion() {
+        return "1.1";
     }
 }
