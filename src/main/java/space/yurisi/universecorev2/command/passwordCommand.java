@@ -47,7 +47,7 @@ public class passwordCommand implements CommandExecutor {
         String password = strings[0];
 
         if(!pattern.matcher(password).matches()){
-            commandSender.sendMessage(Component.text("パスワードが条件を満たしていません: 大文字小文字数字含む8~36文字"));
+            commandSender.sendMessage(Component.text("パスワードが条件を満たしていません: 大文字小文字数字含む8~32文字"));
             return false;
         }
 
