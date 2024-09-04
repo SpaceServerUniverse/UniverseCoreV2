@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import org.jetbrains.annotations.NotNull;
 import space.yurisi.universecorev2.subplugins.mywarp.connector.UniverseCoreAPIConnector;
+import space.yurisi.universecorev2.subplugins.mywarp.menu.MywarpInventoryMenu;
 
 public class MywarpHelpCommand  extends MywarpBaseCommand{
 
@@ -20,7 +21,7 @@ public class MywarpHelpCommand  extends MywarpBaseCommand{
             return false;
         }
 
-        if(args.length != 0){
+        /*if(args.length != 0){
             return false;
         }
 
@@ -32,7 +33,10 @@ public class MywarpHelpCommand  extends MywarpBaseCommand{
         sender.sendMessage("/mwtp <ワープ名> : 指定したワープポイントにテレポートします");
         sender.sendMessage("/mwvisit <プレイヤー名> <ワープ名> : 指定したプレイヤーの公開ワープポイントにテレポートできます");
         sender.sendMessage("/mwvisitlist <プレイヤー名> : 指定したプレイヤーの公開ワープポイントの一覧を表示します");
+        */
 
+        MywarpInventoryMenu menu = new MywarpInventoryMenu();
+        menu.sendMenu((Player) sender);
         return true;
     }
 }

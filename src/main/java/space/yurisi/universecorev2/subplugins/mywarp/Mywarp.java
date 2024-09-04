@@ -7,6 +7,9 @@ import space.yurisi.universecorev2.subplugins.mywarp.file.Config;
 import space.yurisi.universecorev2.UniverseCoreV2API;
 import space.yurisi.universecorev2.database.DatabaseManager;
 import space.yurisi.universecorev2.subplugins.mywarp.command.MywarpCommandManagaer;
+import space.yurisi.universecorev2.subplugins.mywarp.menu.AddMywarpInventoryMenu;
+import space.yurisi.universecorev2.subplugins.mywarp.menu.MywarpInventoryMenu;
+import space.yurisi.universecorev2.subplugins.universeland.event.player.TouchEvent;
 
 
 public final class Mywarp implements SubPlugin {
@@ -21,6 +24,8 @@ public final class Mywarp implements SubPlugin {
         this.config = new Config(core);
         this.connector = new UniverseCoreAPIConnector(manager, this.config);
         new MywarpCommandManagaer(core,  getConnector());
+        core.getServer().getPluginManager().registerEvents(new MywarpInventoryMenu(), core);
+        core.getServer().getPluginManager().registerEvents(new AddMywarpInventoryMenu(), core);
     }
 
     public UniverseCoreAPIConnector getConnector(){
@@ -31,7 +36,6 @@ public final class Mywarp implements SubPlugin {
         return this.config;
     }
 
-    @Override
     public void onDisable() {
         // Plugin shutdown logic
     }
