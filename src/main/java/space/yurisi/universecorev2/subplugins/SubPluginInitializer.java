@@ -4,8 +4,10 @@ import org.bukkit.Bukkit;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.subplugins.changemessages.ChangeMessages;
 import space.yurisi.universecorev2.subplugins.levelsystem.LevelSystem;
+import space.yurisi.universecorev2.subplugins.mywarp.Mywarp;
 import space.yurisi.universecorev2.subplugins.playerinfoscoreboard.PlayerInfoScoreBoard;
 import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomy;
+import space.yurisi.universecorev2.subplugins.universeland.UniverseLand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,8 @@ public class SubPluginInitializer {
         this.subPlugins.add(new LevelSystem());
         this.subPlugins.add(new UniverseEconomy());
         this.subPlugins.add(new ChangeMessages());
+        this.subPlugins.add(new UniverseLand());
+        this.subPlugins.add(new Mywarp());
     }
 
     public void onEnable(){

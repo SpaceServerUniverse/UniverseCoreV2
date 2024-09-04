@@ -46,6 +46,33 @@ commands:
     permission: space.yurisi.universeeconomy.reducemoney
     usage: /player <player> <amount>
 
+  #UniverseLand
+  land:
+    description: 土地を管理します
+
+  #Mywarp
+  mywarp:
+    description: マイワープのヘルプを表示します
+    usage: /mywarp
+  mwadd:
+    description: マイワープを追加します
+    usage: /mwadd <ワープ名> <公開するかどうか する|しない>
+  mwlist:
+    description: マイワープの一覧を表示します
+    usage: /mwlist
+  mwdel:
+    description: マイワープを削除します
+    usage: /mwdel <ワープ名>
+  mwtp:
+    description: マイワープにテレポートします
+    usage: /mwtp <ワープ名>
+  mwvisit:
+    description: 他人の公開マイワープに訪問します
+    usage: /mwvisit <プレイヤー名> <ワープ名>
+  mwvisitlist:
+    description: 他人の公開マイワープの一覧を表示します
+    usage: /mwvisitlist
+
 permissions:
   #SubPlugins
   #LevelSystem
