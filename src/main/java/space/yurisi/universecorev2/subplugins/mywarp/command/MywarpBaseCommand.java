@@ -7,15 +7,11 @@ import org.bukkit.command.CommandExecutor;
 import space.yurisi.universecorev2.subplugins.mywarp.connector.UniverseCoreAPIConnector;
 
 
-public abstract class MywarpBaseCommand implements CommandExecutor{
+public class MywarpBaseCommand {
 
     protected final String title = "[テレポートAI] ";
 
     protected UniverseCoreAPIConnector connector;
-
-    public MywarpBaseCommand(UniverseCoreAPIConnector connector){
-        this.connector = connector;
-    }
 
     protected Component getSuccessMessage(String message){
         return Component.text(title + message).color(TextColor.color(Color.GREEN.asRGB()));

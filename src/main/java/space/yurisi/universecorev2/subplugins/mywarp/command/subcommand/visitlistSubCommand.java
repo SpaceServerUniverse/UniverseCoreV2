@@ -1,9 +1,10 @@
-package space.yurisi.universecorev2.subplugins.mywarp.command;
+package space.yurisi.universecorev2.subplugins.mywarp.command.subcommand;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import space.yurisi.universecorev2.subplugins.mywarp.command.MywarpBaseCommand;
 import space.yurisi.universecorev2.subplugins.mywarp.connector.UniverseCoreAPIConnector;
 import space.yurisi.universecorev2.database.models.Mywarp;
 import space.yurisi.universecorev2.exception.MywarpNotFoundException;
@@ -11,17 +12,13 @@ import space.yurisi.universecorev2.exception.UserNotFoundException;
 
 import java.util.List;
 
-public class MywarpVisitListCommand extends MywarpBaseCommand {
-    public MywarpVisitListCommand(UniverseCoreAPIConnector connector) {
-        super(connector);
-    }
+public class visitlistSubCommand extends MywarpBaseCommand implements MywarpSubCommand {
 
-    @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args){
+    public boolean execute(UniverseCoreAPIConnector connector, CommandSender sender, String[] args){
         if(!(sender instanceof Player player)){
             return false;
         }
-        if(args.length == 0){
+        if(args.length < 2){
             player.sendMessage(getErrorMessage("ユーザー名を入力してください。"));
             return true;
         }
@@ -33,7 +30,7 @@ public class MywarpVisitListCommand extends MywarpBaseCommand {
                 mwpage--;
             }
             int page = 0;
-            if(args.length == 1){
+            if(args.length == 2){
                 if(mwpage > 1){
                     player.sendMessage(getSuccessMessage("/mwvisitlist ページ番号(§b1~" + mwpage + "§2)でページを指定できます。"));
                 }

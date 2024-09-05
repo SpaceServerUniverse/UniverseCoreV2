@@ -1,10 +1,11 @@
-package space.yurisi.universecorev2.subplugins.mywarp.command;
+package space.yurisi.universecorev2.subplugins.mywarp.command.subcommand;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import space.yurisi.universecorev2.subplugins.mywarp.command.MywarpBaseCommand;
 import space.yurisi.universecorev2.subplugins.mywarp.connector.UniverseCoreAPIConnector;
 import space.yurisi.universecorev2.database.models.Mywarp;
 import space.yurisi.universecorev2.exception.MywarpNotFoundException;
@@ -12,14 +13,9 @@ import space.yurisi.universecorev2.exception.UserNotFoundException;
 
 import java.util.List;
 
-public class MywarpListCommand extends MywarpBaseCommand {
+public class listSubCommand extends MywarpBaseCommand implements MywarpSubCommand {
 
-    public MywarpListCommand(UniverseCoreAPIConnector connector) {
-        super(connector);
-    }
-
-    @Override
-        public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args){
+    public boolean execute(UniverseCoreAPIConnector connector, CommandSender sender, String[] args){
             if (!(sender instanceof Player player)) {
                 return false;
             }
