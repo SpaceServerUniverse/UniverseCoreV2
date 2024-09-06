@@ -13,8 +13,10 @@ import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import space.yurisi.universecorev2.database.DatabaseManager;
 import space.yurisi.universecorev2.database.models.Land;
+import space.yurisi.universecorev2.database.models.LandPermission;
 import space.yurisi.universecorev2.database.models.User;
 import space.yurisi.universecorev2.exception.LandNotFoundException;
+import space.yurisi.universecorev2.exception.LandPermissionNotFoundException;
 import space.yurisi.universecorev2.exception.MoneyNotFoundException;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
 import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomyAPI;
@@ -129,8 +131,9 @@ public class LandCommand implements CommandExecutor, TabCompleter {
 
             try {
                 User user = database.getUserRepository().getUserFromPlayerName(args[1]);
+
                 LandData land = LandDataManager.getInstance().ultimateChickenHorseMaximumTheHormoneGetYutakaOzakiGreatGodUniverseWonderfulSpecialExpertPerfectHumanVerySuperGeri(player);
-                if(land == null){
+                if(land == null || !land.getOwnerUUID().toString().equals(player.getUniqueId().toString())){
                     player.sendMessage("現在いる場所は、あなたの土地ではないため招待できません");
                     return false;
                 }
@@ -142,6 +145,37 @@ public class LandCommand implements CommandExecutor, TabCompleter {
                 player.sendMessage(Component.text("ユーザーが見つかりませんでした"));
             } catch (LandNotFoundException e) {
                 player.sendMessage(Component.text("土地データが見つかりませんでした"));
+            }
+        } else if (args[0].equals("kick")) {
+            if (args.length == 1) {
+                player.sendMessage(Component.text("招待を取り消すプレイヤー名を指定してください"));
+                return false;
+            }else if(args[1].equals(player.getName())){
+                player.sendMessage(Component.text("自分を取り消すことはできません"));
+                return false;
+            }
+
+            DatabaseManager database = UniverseLand.getInstance().getDatabaseManager();
+
+            try {
+                User user = database.getUserRepository().getUserFromPlayerName(args[1]);
+
+                LandData land = LandDataManager.getInstance().ultimateChickenHorseMaximumTheHormoneGetYutakaOzakiGreatGodUniverseWonderfulSpecialExpertPerfectHumanVerySuperGeri(player);
+                if(land == null || !land.getOwnerUUID().toString().equals(player.getUniqueId().toString())){
+                    player.sendMessage("現在いる場所は、あなたの土地ではないため招待を取り消すことができません");
+                    return false;
+                }
+                Land landRepository = database.getLandRepository().getLand(land.getId());
+                LandPermission landPermission = database.getLandPermissionRepository().getLandPermission(user, landRepository);
+                database.getLandPermissionRepository().deleteLandPermission(landPermission);
+
+                player.sendMessage("この土地から " + args[1] + " の招待を削除しました");
+            } catch (UserNotFoundException e) {
+                player.sendMessage(Component.text("ユーザーが見つかりませんでした"));
+            } catch (LandNotFoundException e) {
+                player.sendMessage(Component.text("土地データが見つかりませんでした"));
+            } catch (LandPermissionNotFoundException e) {
+                player.sendMessage(Component.text("指定したプレイヤーと土地を共有していません"));
             }
         } else if (args[0].equals("here")) {
             LandData land = LandDataManager.getInstance().ultimateChickenHorseMaximumTheHormoneGetYutakaOzakiGreatGodUniverseWonderfulSpecialExpertPerfectHumanVerySuperGeri(player);
