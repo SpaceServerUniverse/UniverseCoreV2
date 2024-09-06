@@ -60,9 +60,9 @@ public class LandPermissionRepository {
     public LandPermission getLandPermission(User user, Land land) throws LandPermissionNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
         session.beginTransaction();
-        LandPermission data = session.createSelectionQuery("from LandPermission where land_id = ?1 and user_id = ?2", LandPermission.class)
+        LandPermission data = session.createSelectionQuery("from LandPermission where land_id = ?1 and uuid = ?2", LandPermission.class)
                 .setParameter(1, land.getId())
-                .setParameter(2, user.getId())
+                .setParameter(2, user.getUuid())
                 .getSingleResultOrNull();
         session.getTransaction().commit();
         session.close();

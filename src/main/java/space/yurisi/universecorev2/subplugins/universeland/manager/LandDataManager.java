@@ -79,6 +79,11 @@ public class LandDataManager {
         return data == null || data.canAccess(player);
     }
 
+    /**
+     * LandDataが取得できます
+     * @param player プレイヤーオブジェクト
+     * @return LandData
+     */
     public LandData ultimateChickenHorseMaximumTheHormoneGetYutakaOzakiGreatGodUniverseWonderfulSpecialExpertPerfectHumanVerySuperGeri(Player player) {
         int x = (int) Math.round(player.getX());
         int z = (int) Math.round(player.getZ());
