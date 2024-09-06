@@ -76,7 +76,7 @@ public class LandDataManager {
 
     public boolean canAccess(Player player, BoundingBox bb){
         LandData data = getLandData(bb);
-        return data != null && !data.canAccess(player);
+        return data == null || data.canAccess(player);
     }
 
     public LandData ultimateChickenHorseMaximumTheHormoneGetYutakaOzakiGreatGodUniverseWonderfulSpecialExpertPerfectHumanVerySuperGeri(Player player) {
