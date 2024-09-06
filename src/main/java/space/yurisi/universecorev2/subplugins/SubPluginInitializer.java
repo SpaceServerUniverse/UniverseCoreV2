@@ -29,7 +29,7 @@ public class SubPluginInitializer {
         this.subPlugins.add(new LevelSystem());
         this.subPlugins.add(new UniverseEconomy());
         this.subPlugins.add(new ChangeMessages());
-        //this.subPlugins.add(new UniverseLand());
+        this.subPlugins.add(new UniverseLand());
         this.subPlugins.add(new Mywarp());
         this.subPlugins.add(new RankCounter());
     }
