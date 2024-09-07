@@ -10,12 +10,10 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import space.yurisi.universecorev2.subplugins.mywarp.command.subcommand.*;
 import space.yurisi.universecorev2.subplugins.mywarp.connector.UniverseCoreAPIConnector;
-import space.yurisi.universecorev2.subplugins.mywarp.menu.MywarpMenu.MywarpInventoryMenu;
+import space.yurisi.universecorev2.subplugins.mywarp.menu.mywarp.MywarpInventoryMenu;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class MywarpCommand implements CommandExecutor, TabCompleter {
@@ -32,7 +30,7 @@ public class MywarpCommand implements CommandExecutor, TabCompleter {
         }
 
         if(args.length == 0){
-            MywarpInventoryMenu menu = new MywarpInventoryMenu();
+            MywarpInventoryMenu menu = new MywarpInventoryMenu(connector);
             menu.sendMenu((Player) sender);
             return true;
         }

@@ -1,10 +1,7 @@
-package space.yurisi.universecorev2.subplugins.mywarp.menu.AddMywarpMenu;
+package space.yurisi.universecorev2.subplugins.mywarp.menu.add;
 
-import net.kyori.adventure.text.Component;
 import net.wesjd.anvilgui.AnvilGUI;
-import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.menu.BaseMenu;
 

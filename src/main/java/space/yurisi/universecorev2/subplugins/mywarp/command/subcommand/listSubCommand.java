@@ -65,9 +65,9 @@ public class listSubCommand extends MywarpBaseCommand implements MywarpSubComman
                 player.sendMessage(getSuccessMessage("ワープポイント一覧 §b" + (page + 1) + "/" + mwpage + "§2ページ目を表示中"));
 
             } catch (UserNotFoundException e) {
-                sender.sendMessage(getErrorMessage("ユーザーデータが存在しないようです。管理者に報告してください。 コード-UES1"));
+                sender.sendMessage(getErrorMessage("ユーザーデータが存在しないようです。管理者に報告してください。 コード MW1"));
             } catch (MywarpNotFoundException e) {
-                sender.sendMessage(getErrorMessage("ワープポイントが見つかりませんでした。"));
+                sender.sendMessage(getErrorMessage("ワープポイントが見つかりませんでした。コード MW2"));
             }
             return true;
         }
