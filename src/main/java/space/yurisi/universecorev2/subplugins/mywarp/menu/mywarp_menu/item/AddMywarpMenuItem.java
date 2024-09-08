@@ -1,11 +1,11 @@
-package space.yurisi.universecorev2.subplugins.mywarp.menu.mywarp.item;
+package space.yurisi.universecorev2.subplugins.mywarp.menu.mywarp_menu.item;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
-import space.yurisi.universecorev2.subplugins.mywarp.menu.add.AddMywarpAnvilMenu;
+import space.yurisi.universecorev2.subplugins.mywarp.menu.add_menu.AddMywarpAnvilMenu;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.AbstractItem;

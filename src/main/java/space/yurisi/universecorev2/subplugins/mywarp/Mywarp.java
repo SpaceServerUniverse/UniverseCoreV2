@@ -20,6 +20,7 @@ public final class Mywarp implements SubPlugin {
         this.config = new Config(core);
         this.connector = new UniverseCoreAPIConnector(manager, this.config);
         core.getCommand("mywarp").setExecutor(new MywarpCommand(connector));
+        core.getCommand("mw").setExecutor(new MywarpCommand(connector));
     }
 
     public UniverseCoreAPIConnector getConnector(){

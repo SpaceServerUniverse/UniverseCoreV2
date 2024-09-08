@@ -1,22 +1,21 @@
 package space.yurisi.universecorev2.subplugins.mywarp.command.subcommand;
 
-import org.bukkit.command.Command;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-
-import space.yurisi.universecorev2.subplugins.mywarp.command.MywarpBaseCommand;
 import space.yurisi.universecorev2.subplugins.mywarp.connector.UniverseCoreAPIConnector;
 import space.yurisi.universecorev2.database.models.Mywarp;
 import space.yurisi.universecorev2.exception.MywarpNotFoundException;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
+import space.yurisi.universecorev2.subplugins.mywarp.utils.MessageHelper;
 
 import java.util.List;
 
-public class listSubCommand extends MywarpBaseCommand implements MywarpSubCommand {
+public class listSubCommand implements MywarpSubCommand {
 
     public boolean execute(UniverseCoreAPIConnector connector, CommandSender sender, String[] args){
             if (!(sender instanceof Player player)) {
+                Bukkit.getLogger().info("コマンドラインでは実行できません。");
                 return false;
             }
 
@@ -29,22 +28,22 @@ public class listSubCommand extends MywarpBaseCommand implements MywarpSubComman
                 }
                 int page = 0;
                 if(args.length == 0){
-                    if(mwpage > 1){
-                        player.sendMessage(getSuccessMessage("/mwlist ページ番号(§b1~" + mwpage + "§2)でページを指定できます。"));
+                    if(mwpage > 2){
+                        player.sendMessage(MessageHelper.getSuccessMessage("/mywarp  ページ番号(§b1~" + mwpage + "§2)でページを指定できます。"));
                     }
                 }else {
                     try {
                         page = Integer.parseInt(args[0]) - 1;
                     }catch (NumberFormatException e){
-                        player.sendMessage(getErrorMessage("ページ番号は数字で指定してください。"));
+                        player.sendMessage(MessageHelper.getErrorMessage("ページ番号は数字で指定してください。"));
                         return true;
                     }
                     if(page < 0){
-                        player.sendMessage(getErrorMessage("ページ番号は1以上で指定してください。"));
+                        player.sendMessage(MessageHelper.getErrorMessage("ページ番号は1以上で指定してください。"));
                         return true;
                     }
                     if (page >= mwpage) {
-                        player.sendMessage(getErrorMessage("ページが存在しません。§b" + mwpage + "§2ページ目までしかありません。"));
+                        player.sendMessage(MessageHelper.getErrorMessage("ページが存在しません。§b" + mwpage + "§2ページ目までしかありません。"));
                         return true;
                     }
                 }
@@ -62,12 +61,12 @@ public class listSubCommand extends MywarpBaseCommand implements MywarpSubComman
                     }
                     player.sendMessage(mwprivate + " | " + mywarp.getWorld_name() + " | §6" + mywarp.getName());
                 }
-                player.sendMessage(getSuccessMessage("ワープポイント一覧 §b" + (page + 1) + "/" + mwpage + "§2ページ目を表示中"));
+                player.sendMessage(MessageHelper.getSuccessMessage("ワープポイント一覧 §b" + (page + 1) + "/" + mwpage + "§2ページ目を表示中"));
 
             } catch (UserNotFoundException e) {
-                sender.sendMessage(getErrorMessage("ユーザーデータが存在しないようです。管理者に報告してください。 コード MW1"));
+                sender.sendMessage(MessageHelper.getErrorMessage("ユーザーデータが存在しないようです。管理者に報告してください。 コード MW1"));
             } catch (MywarpNotFoundException e) {
-                sender.sendMessage(getErrorMessage("ワープポイントが見つかりませんでした。コード MW2"));
+                sender.sendMessage(MessageHelper.getErrorMessage("ワープポイントが見つかりませんでした。コード MW2"));
             }
             return true;
         }

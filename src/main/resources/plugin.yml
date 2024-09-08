@@ -51,8 +51,11 @@ commands:
     description: 土地を管理します
 
   #Mywarp
+  mw:
+    description: マイワープを作成、ワープできます
+    usage: /mw
   mywarp:
-    description: マイワープのヘルプを表示します
+    description: マイワープを作成、ワープできます
     usage: /mywarp
 
 permissions:

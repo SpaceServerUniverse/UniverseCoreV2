@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import space.yurisi.universecorev2.subplugins.mywarp.command.subcommand.*;
 import space.yurisi.universecorev2.subplugins.mywarp.connector.UniverseCoreAPIConnector;
-import space.yurisi.universecorev2.subplugins.mywarp.menu.mywarp.MywarpInventoryMenu;
+import space.yurisi.universecorev2.subplugins.mywarp.menu.mywarp_menu.MywarpInventoryMenu;
 
 import java.util.ArrayList;
 import java.util.Arrays;
