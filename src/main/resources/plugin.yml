@@ -73,6 +73,22 @@ commands:
     description: 他人の公開マイワープの一覧を表示します
     usage: /mwvisitlist
 
+  #Salute
+  k:
+    description: こんにちはの顔文字を送信します
+    usage: /k
+  oti:
+    description: おちるときのの顔文字を送信します
+    usage: /oti
+  otu:
+    description: おつかれの顔文字を送信します
+    usage: /otu
+
+  #Suicide
+  su:
+    description: 自殺します
+    usage: /su
+
 permissions:
   #SubPlugins
   #LevelSystem

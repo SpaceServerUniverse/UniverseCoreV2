@@ -7,6 +7,8 @@ import space.yurisi.universecorev2.subplugins.levelsystem.LevelSystem;
 import space.yurisi.universecorev2.subplugins.mywarp.Mywarp;
 import space.yurisi.universecorev2.subplugins.playerinfoscoreboard.PlayerInfoScoreBoard;
 import space.yurisi.universecorev2.subplugins.rankcounter.RankCounter;
+import space.yurisi.universecorev2.subplugins.salute.Salute;
+import space.yurisi.universecorev2.subplugins.suicide.Suicide;
 import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomy;
 import space.yurisi.universecorev2.subplugins.universeland.UniverseLand;
 
@@ -32,6 +34,8 @@ public class SubPluginInitializer {
         this.subPlugins.add(new UniverseLand());
         this.subPlugins.add(new Mywarp());
         this.subPlugins.add(new RankCounter());
+        this.subPlugins.add(new Salute());
+        this.subPlugins.add(new Suicide());
     }
 
     public void onEnable(){
