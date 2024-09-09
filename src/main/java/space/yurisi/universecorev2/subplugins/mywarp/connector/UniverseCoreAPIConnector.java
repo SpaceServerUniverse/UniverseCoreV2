@@ -91,11 +91,15 @@ public class UniverseCoreAPIConnector {
         return denyWorlds.contains(world_name);
     }
 
-    public void setUserRepository(UserRepository userRepository) {
+    public void updateMywarp(Mywarp mywarp) throws MywarpNotFoundException {
+        mywarpRepository.updateMywarp(mywarp);
+    }
+
+    private void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public void setMywarpRepository(MywarpRepository mywarpRepository) {
+    private void setMywarpRepository(MywarpRepository mywarpRepository) {
         this.mywarpRepository = mywarpRepository;
     }
 }

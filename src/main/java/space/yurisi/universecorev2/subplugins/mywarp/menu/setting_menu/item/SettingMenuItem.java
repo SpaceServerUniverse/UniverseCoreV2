@@ -1,4 +1,4 @@
-package space.yurisi.universecorev2.subplugins.mywarp.menu.del_menu.item;
+package space.yurisi.universecorev2.subplugins.mywarp.menu.setting_menu.item;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -14,13 +14,13 @@ import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
 
-public class DelMenuItem extends AbstractItem {
+public class SettingMenuItem extends AbstractItem {
 
     Mywarp mywarp;
 
     UniverseCoreAPIConnector connector;
 
-    public DelMenuItem(UniverseCoreAPIConnector connector, Mywarp mywarp){
+    public SettingMenuItem(UniverseCoreAPIConnector connector, Mywarp mywarp){
         this.connector = connector;
         this.mywarp = mywarp;
     }
@@ -33,11 +33,20 @@ public class DelMenuItem extends AbstractItem {
                 "z:"+mywarp.getZ(),
                 "world:"+mywarp.getWorld_name(),
                 "公開:"+ (mywarp.getIs_private() ? "公開" : "非公開")
-                );
+        );
     }
 
     @Override
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
-        new DelConfirmMywarpInventoryMenu(connector, mywarp).sendMenu(player);
+        try {
+            Boolean is_private = mywarp.getIs_private();
+            String msg = (is_private ? "非公開": "公開");
+            mywarp.setIs_private(!is_private);
+            connector.updateMywarp(mywarp);
+            player.sendMessage(MessageHelper.getSuccessMessage("ワープポイント" + mywarp.getName() + "を" + msg + "にしました。"));
+        } catch (MywarpNotFoundException e) {
+            player.sendMessage(MessageHelper.getErrorMessage("ワープポイントが見つかりませんでした。"));
+        }
+        event.getInventory().close();
     }
 }

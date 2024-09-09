@@ -30,7 +30,9 @@ public class WarpMenuItem extends AbstractItem {
                 "x:"+mywarp.getX(),
                 "y:"+mywarp.getY(),
                 "z:"+mywarp.getZ(),
-                "world:"+mywarp.getWorld_name()
+                "world:"+mywarp.getWorld_name(),
+                "公開:"+ (mywarp.getIs_private() ? "公開" : "非公開"
+                )
         );
     }
 
