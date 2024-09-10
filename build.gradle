@@ -26,7 +26,6 @@ repositories {
         name = "sonatype"
         url = uri("https://oss.sonatype.org/content/groups/public/")
     }
-    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -38,8 +37,6 @@ dependencies {
     api "org.flywaydb:flyway-core:8.0.0"
     api "at.favre.lib:bcrypt:0.10.2"
     compileOnly 'io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT'
-
-    compileOnly("com.github.ZockerAxel:CrazyAdvancementsAPI:2.1.19:mojmap")
 }
 
 
