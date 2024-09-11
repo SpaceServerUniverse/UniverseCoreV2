@@ -28,6 +28,7 @@ import space.yurisi.universecorev2.subplugins.universeland.manager.LandDataManag
 import space.yurisi.universecorev2.subplugins.universeland.store.LandData;
 import space.yurisi.universecorev2.subplugins.universeland.store.LandStore;
 import space.yurisi.universecorev2.subplugins.universeland.utils.BoundingBox;
+import space.yurisi.universecorev2.subplugins.universeland.utils.LandChecker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -178,16 +179,7 @@ public class LandCommand implements CommandExecutor, TabCompleter {
                 player.sendMessage(Component.text("指定したプレイヤーと土地を共有していません"));
             }
         } else if (args[0].equals("here")) {
-            LandData land = LandDataManager.getInstance().ultimateChickenHorseMaximumTheHormoneGetYutakaOzakiGreatGodUniverseWonderfulSpecialExpertPerfectHumanVerySuperGeri(player);
-            if(land == null){
-                player.sendMessage(Component.text("この土地の情報がみつかりませんでした"));
-                return false;
-            }
-
-            OfflinePlayer offlinePlayer = Bukkit.getServer().getOfflinePlayer(land.getOwnerUUID());
-            player.sendMessage(Component.text("情報"));
-            player.sendMessage(Component.text("土地ID: " + land.getId()));
-            player.sendMessage(Component.text("所有者: " + offlinePlayer.getName()));
+            LandChecker.sendLandInfo(player);
         }
 
         return true;
