@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import space.yurisi.universecorev2.database.models.Land;
+import space.yurisi.universecorev2.database.models.Money;
 import space.yurisi.universecorev2.exception.LandNotFoundException;
 
 import java.util.Date;
@@ -18,14 +19,16 @@ import java.util.List;
  */
 public class LandRepository {
     private final SessionFactory sessionFactory;
+    private final LandRepository landRepository;
 
     /**
      * Instantiates a new User repository.
      *
      * @param sessionFactory session factory
      */
-    public LandRepository(SessionFactory sessionFactory) {
+    public LandRepository(SessionFactory sessionFactory, LandRepository landRepository) {
         this.sessionFactory = sessionFactory;
+        this.landRepository = landRepository;
     }
 
     /**
@@ -69,6 +72,19 @@ public class LandRepository {
             throw new LandNotFoundException("土地保護データが存在しませんでした。 ID:" + id);
         }
         return data;
+    }
+
+    /**
+     * 土地モデルに基づきデータをアップデートします。
+     *
+     * @param land Land
+     */
+    public void updateLand(Land land) {
+        Session session = this.sessionFactory.getCurrentSession();
+        session.beginTransaction();
+        session.merge(land);
+        session.getTransaction().commit();
+        session.close();
     }
 
     public List<Land> getLands() throws LandNotFoundException {

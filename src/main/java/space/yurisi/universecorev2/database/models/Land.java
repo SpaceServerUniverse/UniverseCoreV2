@@ -72,6 +72,10 @@ public class Land {
         return uuid;
     }
 
+    public void setUuid(String uuid){
+        this.uuid = uuid;
+    }
+
     public int getStart_x() {
         return start_x;
     }
