@@ -74,6 +74,10 @@ commands:
     description: 自殺します
     usage: /su
 
+  xtp:
+    description: テレポートします
+    usage: /xtp x y z ワールド名
+
 permissions:
   #SubPlugins
   #LevelSystem
