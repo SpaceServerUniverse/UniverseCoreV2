@@ -72,7 +72,7 @@ public class Land {
         return uuid;
     }
 
-    public void setUuid(String uuid){
+    public void setUuid(String uuid) {
         this.uuid = uuid;
     }
 

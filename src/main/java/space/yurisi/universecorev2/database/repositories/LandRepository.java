@@ -4,7 +4,6 @@ import org.bukkit.entity.Player;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import space.yurisi.universecorev2.database.models.Land;
-import space.yurisi.universecorev2.database.models.Money;
 import space.yurisi.universecorev2.exception.LandNotFoundException;
 
 import java.util.Date;
@@ -34,11 +33,11 @@ public class LandRepository {
     /**
      * 土地保護データを作成します。
      *
-     * @param player Player
-     * @param start_x int
-     * @param start_z int
-     * @param end_x int
-     * @param end_z int
+     * @param player     Player
+     * @param start_x    int
+     * @param start_z    int
+     * @param end_x      int
+     * @param end_z      int
      * @param world_name String
      * @return land Land
      */
