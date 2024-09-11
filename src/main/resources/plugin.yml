@@ -78,6 +78,10 @@ commands:
     description: テレポートします
     usage: /xtp x y z ワールド名
 
+  lobby:
+    description: ロビーに戻ります
+    usage: /lobby
+
 permissions:
   #SubPlugins
   #LevelSystem
