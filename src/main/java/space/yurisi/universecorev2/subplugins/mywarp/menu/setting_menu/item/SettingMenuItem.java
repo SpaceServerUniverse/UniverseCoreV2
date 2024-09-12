@@ -32,7 +32,7 @@ public class SettingMenuItem extends AbstractItem {
                 "y:"+mywarp.getY(),
                 "z:"+mywarp.getZ(),
                 "world:"+mywarp.getWorld_name(),
-                "公開:"+ (mywarp.getIs_private() ? "公開" : "非公開")
+                "公開:"+ (mywarp.getIs_private() ? "非公開" : "公開")
         );
     }
 
@@ -40,7 +40,7 @@ public class SettingMenuItem extends AbstractItem {
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         try {
             Boolean is_private = mywarp.getIs_private();
-            String msg = (is_private ? "非公開": "公開");
+            String msg = (is_private ? "公開": "非公開");
             mywarp.setIs_private(!is_private);
             connector.updateMywarp(mywarp);
             player.sendMessage(MessageHelper.getSuccessMessage("ワープポイント" + mywarp.getName() + "を" + msg + "にしました。"));
