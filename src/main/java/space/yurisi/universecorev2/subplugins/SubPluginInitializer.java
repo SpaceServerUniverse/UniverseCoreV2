@@ -3,6 +3,7 @@ package space.yurisi.universecorev2.subplugins;
 import org.bukkit.Bukkit;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.subplugins.changemessages.ChangeMessages;
+import space.yurisi.universecorev2.subplugins.freemarket.FreeMarket;
 import space.yurisi.universecorev2.subplugins.levelsystem.LevelSystem;
 import space.yurisi.universecorev2.subplugins.mywarp.Mywarp;
 import space.yurisi.universecorev2.subplugins.playerinfoscoreboard.PlayerInfoScoreBoard;
@@ -36,6 +37,7 @@ public class SubPluginInitializer {
         this.subPlugins.add(new RankCounter());
         this.subPlugins.add(new Salute());
         this.subPlugins.add(new Suicide());
+        this.subPlugins.add(new FreeMarket());
     }
 
     public void onEnable(){
