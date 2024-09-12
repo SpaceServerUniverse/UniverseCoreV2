@@ -50,6 +50,10 @@ commands:
   land:
     description: 土地を管理します
 
+  #UniverseDice
+  dice:
+    description: サイコロを振ります
+
   #Mywarp
   mw:
     description: マイワープを作成、ワープできます

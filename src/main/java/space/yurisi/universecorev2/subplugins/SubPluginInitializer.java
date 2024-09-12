@@ -11,6 +11,7 @@ import space.yurisi.universecorev2.subplugins.rankcounter.RankCounter;
 import space.yurisi.universecorev2.subplugins.salute.Salute;
 import space.yurisi.universecorev2.subplugins.signcommand.SignCommand;
 import space.yurisi.universecorev2.subplugins.suicide.Suicide;
+import space.yurisi.universecorev2.subplugins.universedice.UniverseDice;
 import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomy;
 import space.yurisi.universecorev2.subplugins.universeland.UniverseLand;
 import space.yurisi.universecorev2.subplugins.xtpsystem.XTPSystem;
@@ -36,6 +37,7 @@ public class SubPluginInitializer {
         this.subPlugins.add(new ChangeMessages());
         this.subPlugins.add(new LevelAward());
         this.subPlugins.add(new UniverseLand());
+        this.subPlugins.add(new UniverseDice());
         this.subPlugins.add(new Mywarp());
         this.subPlugins.add(new RankCounter());
         this.subPlugins.add(new Salute());
