@@ -25,7 +25,7 @@ public final class UpEvent implements Listener {
         if (newLevel % 5 == 0 && newLevel % 100 != 0) {
             // 5レベルずつ上がった場合の処理をここに書く
             try {
-                UniverseEconomyAPI.getInstance().addMoney(player,1000L);
+                UniverseEconomyAPI.getInstance().addMoney(player,1000L, "レベルアップ報酬");
             } catch (UserNotFoundException e) {
                 player.sendMessage(Component.text("プレイヤーデータが存在しません。管理者に報告してください。コード-RWC1"));
             } catch (MoneyNotFoundException e) {

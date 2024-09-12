@@ -38,7 +38,7 @@ public class UniverseEconomyAPI extends UniverseCoreAPIConnector{
      * @throws ParameterException      マイナスを指定している
      */
     public void addMoney(Player player, Long amount) throws UserNotFoundException, MoneyNotFoundException, CanNotAddMoneyException, ParameterException {
-        this.baseAddMoney(player, amount, null);
+        this.baseAddMoney(player, amount, "原因不明");
     }
 
     /**
