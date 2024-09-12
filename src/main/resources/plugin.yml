@@ -87,6 +87,10 @@ commands:
     usage: /lobby
 
 permissions:
+  # UniverseCoreV2
+  space.yurisi.universecorev2.interactevent.enchanttable:
+    default: op
+
   #SubPlugins
   #LevelSystem
   space.yurisi.levelsystem.addexp:
