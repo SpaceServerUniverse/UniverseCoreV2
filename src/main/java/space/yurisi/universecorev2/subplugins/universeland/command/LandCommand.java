@@ -56,7 +56,7 @@ public class LandCommand implements CommandExecutor, TabCompleter {
         } else if (args[0].equals("buy")) {
             BoundingBox land = landData.getLand();
 
-            if(land == null){
+            if (land == null) {
                 player.sendMessage(Component.text("土地を購入する場合は /land で土地を指定してください"));
                 return false;
             }
@@ -93,16 +93,16 @@ public class LandCommand implements CommandExecutor, TabCompleter {
             } catch (CanNotReduceMoneyException e) {
                 player.sendMessage(Component.text("購入失敗: 決済処理に失敗しました"));
             }
-        }else if (args[0].equals("sell")) {
+        } else if (args[0].equals("sell")) {
             LandData land = LandDataManager.getInstance().ultimateChickenHorseMaximumTheHormoneGetYutakaOzakiGreatGodUniverseWonderfulSpecialExpertPerfectHumanVerySuperGeri(player);
 
-            if(land == null){
+            if (land == null) {
                 player.sendMessage(Component.text("この土地の情報がみつかりませんでした"));
                 return false;
             }
 
             UUID ownerUUID = land.getOwnerUUID();
-            if(!ownerUUID.toString().equals(player.getUniqueId().toString())){
+            if (!ownerUUID.toString().equals(player.getUniqueId().toString())) {
                 player.sendMessage(Component.text("あなたはこの土地の所有者ではありません"));
                 return false;
             }
@@ -122,7 +122,7 @@ public class LandCommand implements CommandExecutor, TabCompleter {
             if (args.length == 1) {
                 player.sendMessage(Component.text("招待するプレイヤー名を指定してください"));
                 return false;
-            }else if(args[1].equals(player.getName())){
+            } else if (args[1].equals(player.getName())) {
                 player.sendMessage(Component.text("自分を招待することはできません"));
                 return false;
             }
@@ -133,7 +133,7 @@ public class LandCommand implements CommandExecutor, TabCompleter {
                 User user = database.getUserRepository().getUserFromPlayerName(args[1]);
 
                 LandData land = LandDataManager.getInstance().ultimateChickenHorseMaximumTheHormoneGetYutakaOzakiGreatGodUniverseWonderfulSpecialExpertPerfectHumanVerySuperGeri(player);
-                if(land == null || !land.getOwnerUUID().toString().equals(player.getUniqueId().toString())){
+                if (land == null || !land.getOwnerUUID().toString().equals(player.getUniqueId().toString())) {
                     player.sendMessage("現在いる場所は、あなたの土地ではないため招待できません");
                     return false;
                 }
@@ -150,7 +150,7 @@ public class LandCommand implements CommandExecutor, TabCompleter {
             if (args.length == 1) {
                 player.sendMessage(Component.text("招待を取り消すプレイヤー名を指定してください"));
                 return false;
-            }else if(args[1].equals(player.getName())){
+            } else if (args[1].equals(player.getName())) {
                 player.sendMessage(Component.text("自分を取り消すことはできません"));
                 return false;
             }
@@ -161,7 +161,7 @@ public class LandCommand implements CommandExecutor, TabCompleter {
                 User user = database.getUserRepository().getUserFromPlayerName(args[1]);
 
                 LandData land = LandDataManager.getInstance().ultimateChickenHorseMaximumTheHormoneGetYutakaOzakiGreatGodUniverseWonderfulSpecialExpertPerfectHumanVerySuperGeri(player);
-                if(land == null || !land.getOwnerUUID().toString().equals(player.getUniqueId().toString())){
+                if (land == null || !land.getOwnerUUID().toString().equals(player.getUniqueId().toString())) {
                     player.sendMessage("現在いる場所は、あなたの土地ではないため招待を取り消すことができません");
                     return false;
                 }
@@ -177,9 +177,46 @@ public class LandCommand implements CommandExecutor, TabCompleter {
             } catch (LandPermissionNotFoundException e) {
                 player.sendMessage(Component.text("指定したプレイヤーと土地を共有していません"));
             }
+        } else if (args[0].equals("transfer")) {
+            if (args.length == 1) {
+                player.sendMessage(Component.text("土地を譲渡するプレイヤー名を指定してください"));
+                return false;
+            } else if (args[1].equals(player.getName())) {
+                player.sendMessage(Component.text("自分自身に土地を譲渡することはできません"));
+                return false;
+            }
+
+            DatabaseManager database = UniverseLand.getInstance().getDatabaseManager();
+
+            try {
+                LandData land = LandDataManager.getInstance().ultimateChickenHorseMaximumTheHormoneGetYutakaOzakiGreatGodUniverseWonderfulSpecialExpertPerfectHumanVerySuperGeri(player);
+                if (land == null || !land.getOwnerUUID().toString().equals(player.getUniqueId().toString())) {
+                    player.sendMessage("現在いる場所は、あなたの土地ではないため土地を譲渡することができません");
+                    return false;
+                }
+
+                User user = database.getUserRepository().getUserFromPlayerName(args[1]);
+
+                Land landRepository = database.getLandRepository().getLand(land.getId());
+                landRepository.setUuid(user.getUuid());
+                database.getLandRepository().updateLand(landRepository);
+
+                player.sendMessage(args[1] + " に土地を譲渡しました");
+
+                User beforeOwner = database.getUserRepository().getUserFromUUID(player.getUniqueId());
+
+                Land newLand = database.getLandRepository().getLand(land.getId());
+                LandPermission landPermission = database.getLandPermissionRepository().getLandPermission(beforeOwner, newLand);
+                database.getLandPermissionRepository().deleteLandPermission(landPermission);
+            } catch (UserNotFoundException e) {
+                player.sendMessage(Component.text("ユーザーが見つかりませんでした"));
+            } catch (LandNotFoundException e) {
+                player.sendMessage(Component.text("土地データが見つかりませんでした"));
+            } catch (LandPermissionNotFoundException ignored) {//パーミッションを持っていなかった場合は無視
+            }
         } else if (args[0].equals("here")) {
             LandData land = LandDataManager.getInstance().ultimateChickenHorseMaximumTheHormoneGetYutakaOzakiGreatGodUniverseWonderfulSpecialExpertPerfectHumanVerySuperGeri(player);
-            if(land == null){
+            if (land == null) {
                 player.sendMessage(Component.text("この土地の情報がみつかりませんでした"));
                 return false;
             }
@@ -196,7 +233,7 @@ public class LandCommand implements CommandExecutor, TabCompleter {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
         if (args.length == 1) {
-            List<String> completions = List.of("buy", "invite", "here", "sell");
+            List<String> completions = List.of("buy", "invite", "here", "sell", "transfer");
             return StringUtil.copyPartialMatches(args[0], completions, new ArrayList<>());
         }
         return ImmutableList.of();

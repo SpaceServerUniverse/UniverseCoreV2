@@ -21,12 +21,14 @@ public class suCommand implements CommandExecutor{
         if (!(commandSender instanceof Player)) {
             return false;
         }
+        /*
         Player player = (Player) commandSender;
         EntityDamageEvent event = new EntityDamageEvent(player, EntityDamageEvent.DamageCause.SUICIDE, 100);
         player.setLastDamageCause(event);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) return true;
         player.setHealth(0);
+         */
 
         return true;
     }
