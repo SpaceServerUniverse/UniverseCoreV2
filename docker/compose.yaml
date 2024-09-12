@@ -1,0 +1,68 @@
+services:
+  paper:
+    image: itzg/minecraft-server:java21-jdk
+    stdin_open: true
+    tty: true
+    environment:
+      - EULA=TRUE
+      - TYPE=PAPER
+      - VERSION=1.21.1
+      - MEMORY=2G
+      - RCON_PASSWORD=${RCON_PASSWORD}
+      - TZ=Asia/Tokyo
+    ports:
+      - "25565:25565" # When you want to connect to the minecraft server, you need to connect to the port 25565.
+      - "25575:25575"
+    volumes:
+      - ./paper/data:/data
+      - ./paper/plugins:/data/plugins
+      - ./paper/logs:/data/logs
+    depends_on:
+      - db
+    networks:
+      - space_network
+      - shared_network
+
+  db:
+    image: mariadb:10.5.3-bionic
+    platform: linux/x86_64
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=SpaceServerUniverse
+      - TZ=Asia/Tokyo
+    command: [
+      '--wait_timeout=86400',
+      '--character-set-server=utf8',
+    ]
+    volumes:
+      - ./db/data:/var/lib/mysql
+      - ./db/my.cnf:/etc/mysql/conf.d/my.cnf
+    networks:
+      - space_network
+      - shared_network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - db
+    environment:
+      - TZ=Asia/Tokyo
+      - PMA_ARBITRARY=1
+      - PMA_HOST=db
+      - PMA_USER=root
+      - PMA_PASSWORD=password
+    ports:
+      - "8080:80"
+    volumes:
+      - ./phpmyadmin/sessions:/sessions
+    networks:
+      - space_network
+      - shared_network
+
+networks:
+  space_network:
+    driver: bridge
+  shared_network:
+    external: true
