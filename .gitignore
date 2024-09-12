@@ -2,3 +2,7 @@
 .gradle
 /build/
 /target/
+
+/docker/db/
+/docker/paper/
+/docker/phpmyadmin/

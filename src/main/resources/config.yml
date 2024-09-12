@@ -1,7 +1,7 @@
 db:
-  host: "localhost"
+  host: "db"
   port: 3306
-  username: "user"
+  username: "root"
   password: "password"
 
 universe-land:
