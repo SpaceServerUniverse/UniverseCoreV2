@@ -19,11 +19,11 @@ public class visitlistSubCommand implements MywarpSubCommand {
             return false;
         }
         if(args.length < 2){
-            player.sendMessage(MessageHelper.getErrorMessage("/mwvisitlist"));
+            player.sendMessage(MessageHelper.getErrorMessage("/mw visitlist"));
             return true;
         }
         try {
-            List<Mywarp> mywarpList = connector.getPublicMywarpListFromName(args[0]);
+            List<Mywarp> mywarpList = connector.getPublicMywarpListFromName(args[1]);
             // ワープポイントの一覧をフォームで表示
             int mwpage = (mywarpList.size() / 5) + 1;
             if(mywarpList.size() % 5 == 0){

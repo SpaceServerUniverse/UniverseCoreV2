@@ -20,12 +20,12 @@ public class visitSubCommand implements MywarpSubCommand {
         }
 
         if(args.length <= 2){
-            player.sendMessage("/mwvisit <プレイヤー名> <ワープ名>");
+            player.sendMessage("/mw visit <プレイヤー名> <ワープ名>");
             return false;
         }
 
         try {
-            List<Mywarp> data = connector.getPublicMywarpListFromName(args[0]);
+            List<Mywarp> data = connector.getPublicMywarpListFromName(args[1]);
             // ワープポイントの一覧をフォームで表示
             // デバッグ用
             // TODO: クエリから取得
