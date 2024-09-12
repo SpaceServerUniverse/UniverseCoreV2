@@ -11,7 +11,7 @@ public class InteractEvent implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK && event.getAction() != Action.LEFT_CLICK_BLOCK) {
             return;
         }
 
@@ -21,15 +21,20 @@ public class InteractEvent implements Listener {
 
         Sign sign = (Sign) event.getClickedBlock().getState();
         Player player = event.getPlayer();
-        String[] command = sign.getLines();
-        String execute = "";
-        for (String line : command){
-            execute += line;
+        String[] lines = sign.getLines();
+
+        if (!lines[0].equalsIgnoreCase("cmd")) {
+            return;
         }
 
+        StringBuilder commandBuilder = new StringBuilder();
+        for (int i = 1; i < lines.length; i++) {
+            commandBuilder.append(lines[i]);
+        }
+        String command = commandBuilder.toString().trim();
 
-        if (execute.startsWith("##")) {
-            player.performCommand(execute.substring(2));
+        if (!command.isEmpty()) {
+            player.performCommand(command);
         }
     }
 }
