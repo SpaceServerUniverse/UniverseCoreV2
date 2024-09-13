@@ -29,6 +29,8 @@ public class DatabaseManager {
 
     private final PlayerCountRepository playerCountRepository;
 
+    private final CustomNameRepository customNameRepository;
+
     public DatabaseManager(SessionFactory sessionFactory) {
         this.userRepository = new UserRepository(sessionFactory);
         this.moneyHistoryRepository = new MoneyHistoryRepository(sessionFactory);
@@ -45,6 +47,7 @@ public class DatabaseManager {
         this.lifeCountRepository = new LifeCountRepository(sessionFactory);
         this.oreCountRepository = new OreCountRepository(sessionFactory);
         this.playerCountRepository = new PlayerCountRepository(sessionFactory);
+        this.customNameRepository = new CustomNameRepository(sessionFactory);
     }
 
     /**
@@ -180,5 +183,14 @@ public class DatabaseManager {
      */
     public PlayerCountRepository getPlayerCountRepository() {
         return playerCountRepository;
+    }
+
+    /**
+     * 称号リポジトリを取得
+     *
+     * @return PlayerNormalLevelRepository
+     */
+    public CustomNameRepository getCustomNameRepository(){
+        return customNameRepository;
     }
 }
