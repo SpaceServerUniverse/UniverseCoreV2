@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class xtpCommand implements CommandExecutor{
+public class XtpCommand implements CommandExecutor{
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -38,17 +38,17 @@ public class xtpCommand implements CommandExecutor{
             World world = Bukkit.getServer().getWorld(args[3]);
 
             if(world == null){
-                player.sendMessage(Component.text("ワールド名が存在しません。"));
-                return true;
+                player.sendMessage(Component.text("§a[テレポートAI]　§cワールド名が存在しません。"));
+                return false;
             }
 
             Location location = new Location(world, x, y, z);
 
             player.teleport(location);
-
+            player.sendMessage(Component.text("§a[テレポートAI]　§6" + location + "にテレポート成功しました！"));
         } catch (NumberFormatException e){
-            player.sendMessage(Component.text("座標は数値で指定して下さい。"));
-            return true;
+            player.sendMessage(Component.text("§a[テレポートAI]　§c座標は数値で指定して下さい。"));
+            return false;
         }
         return true;
     }
