@@ -2,12 +2,10 @@ package space.yurisi.universecorev2.subplugins.levelaward.event;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
 import space.yurisi.universecorev2.exception.MoneyNotFoundException;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
 import space.yurisi.universecorev2.subplugins.levelsystem.event.level.LevelUpEvent;
@@ -39,10 +37,51 @@ public final class UpEvent implements Listener {
 
 
         }
-        if (newLevel % 100 == 0) {
-            player.sendMessage(Component.text("§aCONGRATULATIONS!"+newLevel+"levelを達成しました!"));
-            Bukkit.getServer().broadcast(Component.text("§l"+player.getName()+"が"+newLevel+"levelを達成しました!"));
-            player.getWorld().playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1, 1);
+
+        switch(newLevel){
+            case 100:
+                player.sendMessage(Component.text("§l§fCONGRATULATIONS!"+newLevel+"levelを達成しました!"));
+                Bukkit.getServer().broadcast(Component.text("§l§f"+player.getName()+"が"+newLevel+"levelを達成しました!"));
+                break;
+            case 200:
+                player.sendMessage(Component.text("§l§aCONGRATULATIONS!"+newLevel+"levelを達成しました!"));
+                Bukkit.getServer().broadcast(Component.text("§l§a"+player.getName()+"が"+newLevel+"levelを達成しました!"));
+                break;
+            case 300:
+                player.sendMessage(Component.text("§l§2CONGRATULATIONS!"+newLevel+"levelを達成しました!"));
+                Bukkit.getServer().broadcast(Component.text("§l§2"+player.getName()+"が"+newLevel+"levelを達成しました!"));
+                break;
+            case 400:
+                player.sendMessage(Component.text("§l§9CONGRATULATIONS!"+newLevel+"levelを達成しました!"));
+                Bukkit.getServer().broadcast(Component.text("§l§9"+player.getName()+"が"+newLevel+"levelを達成しました!"));
+                break;
+            case 500:
+                player.sendMessage(Component.text("§l§bCONGRATULATIONS!"+newLevel+"levelを達成しました!"));
+                Bukkit.getServer().broadcast(Component.text("§l§b"+player.getName()+"が"+newLevel+"levelを達成しました!"));
+                break;
+            case 600:
+                player.sendMessage(Component.text("§l§eCONGRATULATIONS!"+newLevel+"levelを達成しました!"));
+                Bukkit.getServer().broadcast(Component.text("§l§e"+player.getName()+"が"+newLevel+"levelを達成しました!"));
+                break;
+            case 700:
+                player.sendMessage(Component.text("§l§6CONGRATULATIONS!"+newLevel+"levelを達成しました!"));
+                Bukkit.getServer().broadcast(Component.text("§l§6"+player.getName()+"が"+newLevel+"levelを達成しました!"));
+                break;
+            case 800:
+                player.sendMessage(Component.text("§l§cCONGRATULATIONS!"+newLevel+"levelを達成しました!"));
+                Bukkit.getServer().broadcast(Component.text("§l§c"+player.getName()+"が"+newLevel+"levelを達成しました!"));
+                break;
+            case 900:
+                player.sendMessage(Component.text("§l§4CONGRATULATIONS!"+newLevel+"levelを達成しました!"));
+                Bukkit.getServer().broadcast(Component.text("§l§4"+player.getName()+"が"+newLevel+"levelを達成しました!"));
+                break;
+            case 1000:
+                player.sendMessage(Component.text("§l§0CONGRATULATIONS!"+newLevel+"levelを達成しました!"));
+                Bukkit.getServer().broadcast(Component.text("§l§0"+player.getName()+"が"+newLevel+"levelを達成しました!"));
+                break;
         }
+
+
+        player.getWorld().playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1, 1);
     }
 }
