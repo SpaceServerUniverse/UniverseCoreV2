@@ -14,7 +14,7 @@ import space.yurisi.universecorev2.subplugins.suicide.Suicide;
 import space.yurisi.universecorev2.subplugins.universedice.UniverseDice;
 import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomy;
 import space.yurisi.universecorev2.subplugins.universeland.UniverseLand;
-import space.yurisi.universecorev2.subplugins.xtpsystem.XTPSystem;
+import space.yurisi.universecorev2.subplugins.xtpsystem.XtpSystem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +43,7 @@ public class SubPluginInitializer {
         this.subPlugins.add(new Salute());
         this.subPlugins.add(new Suicide());
         this.subPlugins.add(new SignCommand());
-        this.subPlugins.add(new XTPSystem());
+        this.subPlugins.add(new XtpSystem());
     }
 
     public void onEnable(){

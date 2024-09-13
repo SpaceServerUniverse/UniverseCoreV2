@@ -2,14 +2,14 @@ package space.yurisi.universecorev2.subplugins.xtpsystem;
 
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.subplugins.SubPlugin;
-import space.yurisi.universecorev2.subplugins.xtpsystem.command.xtpCommand;
+import space.yurisi.universecorev2.subplugins.xtpsystem.command.XtpCommand;
 
-public class XTPSystem implements SubPlugin {
+public class XtpSystem implements SubPlugin {
 
 
     @Override
     public void onEnable(UniverseCoreV2 core) {
-        core.getCommand("xtp").setExecutor(new xtpCommand());
+        core.getCommand("xtp").setExecutor(new XtpCommand());
     }
 
     @Override
