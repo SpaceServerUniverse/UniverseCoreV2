@@ -82,6 +82,8 @@ public final class UpEvent implements Listener {
         }
 
 
-        player.getWorld().playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1, 1);
+        if (newLevel % 100 == 0) {
+            player.getWorld().playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1, 1);
+        }
     }
 }
