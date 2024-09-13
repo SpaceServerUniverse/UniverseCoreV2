@@ -3,10 +3,8 @@ package space.yurisi.universecorev2.subplugins.salute.command;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import space.yurisi.universecorev2.subplugins.universeeconomy.command.BaseCommand;
 
 public class otuCommand extends SaluteBaseCommand{
 

@@ -7,9 +7,11 @@ import space.yurisi.universecorev2.subplugins.levelsystem.LevelSystemAPI;
 import space.yurisi.universecorev2.subplugins.levelsystem.exception.PlayerDataNotFoundException;
 import space.yurisi.universecorev2.subplugins.levelsystem.manager.PlayerLevelDataManager;
 import space.yurisi.universecorev2.subplugins.levelsystem.utils.DayOfWeek;
+import space.yurisi.universecorev2.utils.Message;
 
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Map;
 
 public class SaveDataTask extends BukkitRunnable {
 
@@ -31,7 +33,7 @@ public class SaveDataTask extends BukkitRunnable {
             for (Player player : online) {
                 try {
                     LevelSystemAPI.getInstance().addExp(player, 1000);
-                    player.sendMessage("[管理AI] 遊んでくれてありがとうございます！1000EXPプレゼントです！");
+                    Message.sendSuccessMessage(player, "[管理AI]", "遊んでくれてありがとうございます！1000EXPプレゼントです！");
                 } catch (PlayerDataNotFoundException ignored) {
                 }
             }

@@ -11,6 +11,7 @@ import space.yurisi.universecorev2.UniverseCoreV2API;
 import space.yurisi.universecorev2.database.models.User;
 import space.yurisi.universecorev2.database.repositories.UserRepository;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
+import space.yurisi.universecorev2.utils.Message;
 
 import java.util.regex.Pattern;
 
@@ -35,8 +36,7 @@ public class passwordCommand implements CommandExecutor {
         try {
             user = userRepo.getUserFromUUID(player.getUniqueId());
         } catch (UserNotFoundException e){
-            e.printStackTrace();
-            commandSender.sendMessage(Component.text("エラーが発生しました ユーザーデータが存在しません。 エラーコード:U0001"));
+            Message.sendErrorMessage(player, "[管理AI]", "エラーが発生しました。ユーザーデータが存在しません");
             return false;
         }
 
@@ -47,7 +47,7 @@ public class passwordCommand implements CommandExecutor {
         String password = strings[0];
 
         if(!pattern.matcher(password).matches()){
-            commandSender.sendMessage(Component.text("パスワードが条件を満たしていません: 大文字小文字数字含む8~32文字"));
+            Message.sendErrorMessage(player, "[管理AI]", "パスワードが条件を満たしていません。大文字小文字数字含む8~32文字で設定してください");
             return false;
         }
 
@@ -56,7 +56,7 @@ public class passwordCommand implements CommandExecutor {
         user.setPassword(hashed_password);
 
         userRepo.updateUser(user);
-        commandSender.sendMessage(Component.text("パスワードを設定しました。(webからログインできるようになります)"));
+        Message.sendSuccessMessage(player, "[管理AI]", "パスワードを設定しました。Webからログインできるようになりました");
         return true;
     }
 }

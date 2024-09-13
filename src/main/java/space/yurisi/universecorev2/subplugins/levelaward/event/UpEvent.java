@@ -12,6 +12,7 @@ import space.yurisi.universecorev2.subplugins.levelsystem.event.level.LevelUpEve
 import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomyAPI;
 import space.yurisi.universecorev2.subplugins.universeeconomy.exception.CanNotAddMoneyException;
 import space.yurisi.universecorev2.subplugins.universeeconomy.exception.ParameterException;
+import space.yurisi.universecorev2.utils.Message;
 
 public final class UpEvent implements Listener {
 
@@ -25,17 +26,15 @@ public final class UpEvent implements Listener {
             try {
                 UniverseEconomyAPI.getInstance().addMoney(player,1000L, "レベルアップ報酬");
             } catch (UserNotFoundException e) {
-                player.sendMessage(Component.text("プレイヤーデータが存在しません。管理者に報告してください。コード-RWC1"));
+                Message.sendErrorMessage(player, "[銀行管理AI]", "プレイヤーデータが存在しません。管理者に報告してください");
             } catch (MoneyNotFoundException e) {
-                player.sendMessage(Component.text("マネーデータが存在しません。管理者に報告してください。コード-RWC2"));
+                Message.sendErrorMessage(player, "[銀行管理AI]", "マネーデータが存在しません。管理者に報告してください");
             } catch (CanNotAddMoneyException e) {
-                player.sendMessage(Component.text("桁数が多すぎます。管理者に報告してください。コード-RWC3"));
+                Message.sendErrorMessage(player, "[銀行管理AI]", "桁数が多すぎます。管理者に報告してください");
             } catch (ParameterException e) {
-                player.sendMessage(Component.text("マイナスの値を指定しています。管理者に報告してください。コードRWC4"));
+                Message.sendErrorMessage(player, "[銀行管理AI]", "マイナスの値を指定しています。管理者に報告してください");
             }
             return;
-
-
         }
 
         switch(newLevel){
