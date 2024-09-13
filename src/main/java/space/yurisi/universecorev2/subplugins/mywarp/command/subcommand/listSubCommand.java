@@ -15,7 +15,6 @@ public class listSubCommand implements MywarpSubCommand {
 
     public boolean execute(UniverseCoreAPIConnector connector, CommandSender sender, String[] args){
             if (!(sender instanceof Player player)) {
-                Bukkit.getLogger().info("コマンドラインでは実行できません。");
                 return false;
             }
 
