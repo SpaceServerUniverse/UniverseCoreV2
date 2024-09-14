@@ -14,13 +14,15 @@ public class addexpCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if(args.length != 2){
+        if (args.length != 2) {
+            Message.sendNormalMessage((Player) sender, "[XP管理AI]", "/addexp <プレイヤー名> <経験値>");
             return false;
         }
 
         Player to_player = Bukkit.getPlayerExact(args[0]);
 
-        if(to_player == null){
+        if (to_player == null) {
+            Message.sendErrorMessage((Player) sender, "[XP管理AI]", "プレイヤーが見つかりませんでした。");
             return false;
         }
 

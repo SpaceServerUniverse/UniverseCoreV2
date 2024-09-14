@@ -5,46 +5,37 @@ api-version: '1.21'
 commands:
   password:
     description: パスワードを設定します
-    usage: /password <password 大文字小文字数字含む8~36文字>
   pplayer:
     description: あなたの役職を確認します
-    usage: /pplayer
+
   #SubPlugins
   #LevelSystem
   addexp:
         description: オンラインのプレイヤーに経験値を与えます
         permission: space.yurisi.levelsystem.addexp
-        usage: /addexp [playername] [amount]
 
   #UniverseEconomy
   money:
     description: お金管理のメニューを表示します
     permission: space.yurisi.universeeconomy.money
-    usage: /money
   mymoney:
     description: 自分の持っているお金を確認します。
     permission: space.yurisi.universeeconomy.mymoney
-    usage: /mymoney
   pay:
     description: プレイヤーにお金を払います。
     permission: space.yurisi.universeeconomy.pay
-    usage: /pay <player>
   seemoney:
     description: 他のプレイヤーのお金を確認します
     permission: space.yurisi.universeeconomy.seemoney
-    usage: /seemoney <player>
   setmoney:
     description: 他のプレイヤーのお金をセットします
     permission: space.yurisi.universeeconomy.setmoney
-    usage: /setmoney <player> <amount>
   addmoney:
     description: 他のプレイヤーのお金を増やします
     permission: space.yurisi.universeeconomy.addmoney
-    usage: /addmoney <player> <amount>
   reducemoney:
     description: 他のプレイヤーのお金を減らします
     permission: space.yurisi.universeeconomy.reducemoney
-    usage: /player <player> <amount>
 
   #UniverseLand
   land:
@@ -57,34 +48,26 @@ commands:
   #Mywarp
   mw:
     description: マイワープを作成、ワープできます
-    usage: /mw
   mywarp:
     description: マイワープを作成、ワープできます
-    usage: /mywarp
 
   #Salute
   k:
     description: こんにちはの顔文字を送信します
-    usage: /k
   oti:
     description: おちるときのの顔文字を送信します
-    usage: /oti
   otu:
     description: おつかれの顔文字を送信します
-    usage: /otu
 
   #Suicide
   su:
     description: 自殺します
-    usage: /su
 
   xtp:
     description: テレポートします
-    usage: /xtp x y z ワールド名
 
   lobby:
     description: ロビーに戻ります
-    usage: /lobby
 
 permissions:
   # UniverseCoreV2
