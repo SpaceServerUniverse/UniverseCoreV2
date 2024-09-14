@@ -13,5 +13,9 @@ mywarp:
   settings:
     deny-worlds: [ ]
 
+tpp:
+  settings:
+    deny-worlds: [ ]
+
 customname:
   "yurisi": "yurisi"

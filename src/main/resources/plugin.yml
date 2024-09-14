@@ -62,6 +62,11 @@ commands:
     description: マイワープを作成、ワープできます
     usage: /mywarp
 
+  #TPP
+  tpp:
+      description: プレイヤーをテレポートします
+      usage: /tpp
+
   #Salute
   k:
     description: こんにちはの顔文字を送信します
