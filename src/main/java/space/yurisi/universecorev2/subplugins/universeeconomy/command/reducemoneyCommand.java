@@ -21,6 +21,7 @@ public class reducemoneyCommand extends BaseCommand {
         }
 
         if (args.length != 2) {
+            player.sendMessage(getSuccessMessage("/reducemoney <プレイヤー名> <金額>"));
             return false;
         }
 

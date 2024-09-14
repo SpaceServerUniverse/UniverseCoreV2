@@ -1,33 +1,43 @@
 package space.yurisi.universecorev2.subplugins.suicide.command;
 
-import com.google.common.collect.ImmutableList;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Random;
 
 public class suCommand implements CommandExecutor{
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        if (!(commandSender instanceof Player)) {
+        if (!(commandSender instanceof Player player)) {
             return false;
+
         }
-        Player player = (Player) commandSender;
-        EntityDamageEvent event = new EntityDamageEvent(player, EntityDamageEvent.DamageCause.SUICIDE, 100);
-        player.setLastDamageCause(event);
-        Bukkit.getPluginManager().callEvent(event);
-        if (event.isCancelled()) return true;
-        player.setHealth(0);
+
+        player.setHealth(0.0);
+        Bukkit.broadcast(getMessage(player));
 
         return true;
+    }
+
+    private int getRandom(Component[] components){
+        Random rnd = new Random();
+        return rnd.nextInt(components.length);
+    }
+
+    private Component getMessage(Player player) {
+        Component[] messages = new Component[]{
+                Component.text("§a §l[死亡管理AI]§b " + player.getName() + "§a は消滅した"),
+                Component.text("§a §l[死亡管理AI]§b " + player.getName() + "§a は存在がなくなった"),
+                Component.text("§a §l[死亡管理AI]§b " + player.getName() + "§a はちりになった"),
+                Component.text("§a §l[死亡管理AI]§b " + player.getName() + "§a は星になった")
+        };
+        int i = this.getRandom(messages);
+        return messages[i];
     }
 }

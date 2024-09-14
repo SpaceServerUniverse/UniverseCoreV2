@@ -19,6 +19,7 @@ public class setmoneyCommand extends BaseCommand {
             return false;
         }
         if (args.length != 2) {
+            player.sendMessage(getErrorMessage("/setmoney <ユーザー名> <金額>"));
             return false;
         }
 

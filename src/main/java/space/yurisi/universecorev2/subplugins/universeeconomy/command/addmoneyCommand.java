@@ -20,7 +20,9 @@ public class addmoneyCommand extends BaseCommand {
         if (!(sender instanceof Player player)) {
             return false;
         }
+
         if (args.length != 2) {
+            player.sendMessage(getErrorMessage("/addmoney <プレイヤー名> <金額>"));
             return false;
         }
 

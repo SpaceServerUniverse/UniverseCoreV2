@@ -27,7 +27,7 @@ public class DatabaseManager {
         this.userRepository = new UserRepository(sessionFactory);
         this.moneyHistoryRepository = new MoneyHistoryRepository(sessionFactory);
         this.moneyRepository = new MoneyRepository(sessionFactory, getMoneyHistoryRepository());
-        this.landRepository = new LandRepository(sessionFactory);
+        this.landRepository = new LandRepository(sessionFactory, getLandRepository());
         this.landPermissionRepository = new LandPermissionRepository(sessionFactory);
         this.mywarpRepository = new MywarpRepository(sessionFactory, getUserRepository());
         this.playerLevelRepository = new PlayerLevelRepository(sessionFactory);

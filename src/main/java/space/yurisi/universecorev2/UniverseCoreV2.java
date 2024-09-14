@@ -12,6 +12,7 @@ import space.yurisi.universecorev2.subplugins.SubPlugin;
 import space.yurisi.universecorev2.subplugins.SubPluginInitializer;
 import space.yurisi.universecorev2.subplugins.levelsystem.LevelSystem;
 import space.yurisi.universecorev2.subplugins.playerinfoscoreboard.PlayerInfoScoreBoard;
+import space.yurisi.universecorev2.world.WorldInitializer;
 
 public final class UniverseCoreV2 extends JavaPlugin {
 
@@ -21,8 +22,12 @@ public final class UniverseCoreV2 extends JavaPlugin {
 
     private SubPluginInitializer sub_plugin;
 
+    private static UniverseCoreV2 instance;
+
     @Override
     public void onEnable() {
+        instance = this;
+
         ((Logger) LogManager.getRootLogger()).addFilter(new PasswordFilter());
         this.config = new Config(this);
         this.connector = new DatabaseConnector(
@@ -34,6 +39,7 @@ public final class UniverseCoreV2 extends JavaPlugin {
         new UniverseCoreV2API(this.connector);
         new EventManager(this);
         new CommandManager(this);
+        new WorldInitializer();
         this.sub_plugin = new SubPluginInitializer(this);
         this.sub_plugin.onEnable();
 
@@ -47,5 +53,9 @@ public final class UniverseCoreV2 extends JavaPlugin {
 
     public Config getPluginConfig() {
         return this.config;
+    }
+
+    public static UniverseCoreV2 getInstance(){
+        return instance;
     }
 }

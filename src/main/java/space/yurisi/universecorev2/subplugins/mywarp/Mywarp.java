@@ -2,15 +2,11 @@ package space.yurisi.universecorev2.subplugins.mywarp;
 
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.subplugins.SubPlugin;
+import space.yurisi.universecorev2.subplugins.mywarp.command.MywarpCommand;
 import space.yurisi.universecorev2.subplugins.mywarp.connector.UniverseCoreAPIConnector;
 import space.yurisi.universecorev2.subplugins.mywarp.file.Config;
 import space.yurisi.universecorev2.UniverseCoreV2API;
 import space.yurisi.universecorev2.database.DatabaseManager;
-import space.yurisi.universecorev2.subplugins.mywarp.command.MywarpCommandManagaer;
-import space.yurisi.universecorev2.subplugins.mywarp.menu.AddMywarpInventoryMenu;
-import space.yurisi.universecorev2.subplugins.mywarp.menu.MywarpInventoryMenu;
-import space.yurisi.universecorev2.subplugins.universeland.event.player.TouchEvent;
-
 
 public final class Mywarp implements SubPlugin {
 
@@ -23,9 +19,9 @@ public final class Mywarp implements SubPlugin {
         DatabaseManager manager = UniverseCoreV2API.getInstance().getDatabaseManager();
         this.config = new Config(core);
         this.connector = new UniverseCoreAPIConnector(manager, this.config);
-        new MywarpCommandManagaer(core,  getConnector());
-        core.getServer().getPluginManager().registerEvents(new MywarpInventoryMenu(), core);
-        core.getServer().getPluginManager().registerEvents(new AddMywarpInventoryMenu(), core);
+        // FIXME: alias 機能を使ったほうが良い. 同じクラス登録はリソースが無駄になる
+        core.getCommand("mywarp").setExecutor(new MywarpCommand(connector));
+        core.getCommand("mw").setExecutor(new MywarpCommand(connector));
     }
 
     public UniverseCoreAPIConnector getConnector(){

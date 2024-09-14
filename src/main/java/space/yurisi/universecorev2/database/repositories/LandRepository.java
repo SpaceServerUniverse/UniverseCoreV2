@@ -18,24 +18,26 @@ import java.util.List;
  */
 public class LandRepository {
     private final SessionFactory sessionFactory;
+    private final LandRepository landRepository;
 
     /**
      * Instantiates a new User repository.
      *
      * @param sessionFactory session factory
      */
-    public LandRepository(SessionFactory sessionFactory) {
+    public LandRepository(SessionFactory sessionFactory, LandRepository landRepository) {
         this.sessionFactory = sessionFactory;
+        this.landRepository = landRepository;
     }
 
     /**
      * 土地保護データを作成します。
      *
-     * @param player Player
-     * @param start_x int
-     * @param start_z int
-     * @param end_x int
-     * @param end_z int
+     * @param player     Player
+     * @param start_x    int
+     * @param start_z    int
+     * @param end_x      int
+     * @param end_z      int
      * @param world_name String
      * @return land Land
      */
@@ -69,6 +71,19 @@ public class LandRepository {
             throw new LandNotFoundException("土地保護データが存在しませんでした。 ID:" + id);
         }
         return data;
+    }
+
+    /**
+     * 土地モデルに基づきデータをアップデートします。
+     *
+     * @param land Land
+     */
+    public void updateLand(Land land) {
+        Session session = this.sessionFactory.getCurrentSession();
+        session.beginTransaction();
+        session.merge(land);
+        session.getTransaction().commit();
+        session.close();
     }
 
     public List<Land> getLands() throws LandNotFoundException {

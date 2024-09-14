@@ -5,89 +5,69 @@ api-version: '1.21'
 commands:
   password:
     description: パスワードを設定します
-    usage: /password <password 大文字小文字数字含む8~36文字>
   pplayer:
     description: あなたの役職を確認します
-    usage: /pplayer
+
   #SubPlugins
   #LevelSystem
   addexp:
         description: オンラインのプレイヤーに経験値を与えます
         permission: space.yurisi.levelsystem.addexp
-        usage: /addexp [playername] [amount]
 
   #UniverseEconomy
   money:
     description: お金管理のメニューを表示します
     permission: space.yurisi.universeeconomy.money
-    usage: /money
   mymoney:
     description: 自分の持っているお金を確認します。
     permission: space.yurisi.universeeconomy.mymoney
-    usage: /mymoney
   pay:
     description: プレイヤーにお金を払います。
     permission: space.yurisi.universeeconomy.pay
-    usage: /pay <player>
   seemoney:
     description: 他のプレイヤーのお金を確認します
     permission: space.yurisi.universeeconomy.seemoney
-    usage: /seemoney <player>
   setmoney:
     description: 他のプレイヤーのお金をセットします
     permission: space.yurisi.universeeconomy.setmoney
-    usage: /setmoney <player> <amount>
   addmoney:
     description: 他のプレイヤーのお金を増やします
     permission: space.yurisi.universeeconomy.addmoney
-    usage: /addmoney <player> <amount>
   reducemoney:
     description: 他のプレイヤーのお金を減らします
     permission: space.yurisi.universeeconomy.reducemoney
-    usage: /player <player> <amount>
 
   #UniverseLand
   land:
     description: 土地を管理します
 
+  #UniverseDice
+  dice:
+    description: サイコロを振ります
+
   #Mywarp
+  mw:
+    description: マイワープを作成、ワープできます
   mywarp:
-    description: マイワープのヘルプを表示します
-    usage: /mywarp
-  mwadd:
-    description: マイワープを追加します
-    usage: /mwadd <ワープ名> <公開するかどうか する|しない>
-  mwlist:
-    description: マイワープの一覧を表示します
-    usage: /mwlist
-  mwdel:
-    description: マイワープを削除します
-    usage: /mwdel <ワープ名>
-  mwtp:
-    description: マイワープにテレポートします
-    usage: /mwtp <ワープ名>
-  mwvisit:
-    description: 他人の公開マイワープに訪問します
-    usage: /mwvisit <プレイヤー名> <ワープ名>
-  mwvisitlist:
-    description: 他人の公開マイワープの一覧を表示します
-    usage: /mwvisitlist
+    description: マイワープを作成、ワープできます
 
   #Salute
   k:
     description: こんにちはの顔文字を送信します
-    usage: /k
   oti:
     description: おちるときのの顔文字を送信します
-    usage: /oti
   otu:
     description: おつかれの顔文字を送信します
-    usage: /otu
 
   #Suicide
   su:
     description: 自殺します
-    usage: /su
+
+  xtp:
+    description: テレポートします
+
+  lobby:
+    description: ロビーに戻ります
 
   #FreeMarket
   market:
@@ -95,6 +75,10 @@ commands:
     usage: /market
 
 permissions:
+  # UniverseCoreV2
+  space.yurisi.universecorev2.interactevent.enchanttable:
+    default: op
+
   #SubPlugins
   #LevelSystem
   space.yurisi.levelsystem.addexp:
