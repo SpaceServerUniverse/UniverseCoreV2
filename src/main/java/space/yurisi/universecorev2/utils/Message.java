@@ -6,18 +6,18 @@ import org.bukkit.entity.Player;
 public class Message {
     
     public static void sendNormalMessage(Player target, String prefix, String message) {
-        target.sendMessage(Component.text("§b" + prefix + "§f" + message));
+        target.sendMessage(Component.text("§b" + prefix + " §f" + message));
     }
 
     public static void sendSuccessMessage(Player target, String prefix, String message) {
-        target.sendMessage(Component.text("§b" + prefix + "§a" + message));
+        target.sendMessage(Component.text("§b" + prefix + " §a" + message));
     }
 
     public static void sendWarningMessage(Player target, String prefix, String message) {
-        target.sendMessage(Component.text("§b" + prefix + "§6" + message));
+        target.sendMessage(Component.text("§b" + prefix + " §6" + message));
     }
 
     public static void sendErrorMessage(Player target, String prefix, String message) {
-        target.sendMessage(Component.text("§b" + prefix + "§c" + message));
+        target.sendMessage(Component.text("§b" + prefix + " §c" + message));
     }
 }
