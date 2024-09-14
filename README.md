@@ -19,10 +19,10 @@ SpaceServer Universe のコアプラグイン
 3. Bot をギルドに招待します。
 4. `config.yml` に以下の設定を追加します。
    ```yaml
-   discord:
-     token: "Bot のトークン"
-     guild: "ギルド ID"
-     channel: "チャンネル ID"
+   universe-discord:
+     token: ""
+     guild-id: ""
+     channel-id: ""
    ```
 5. サーバーを再起動します。
 
