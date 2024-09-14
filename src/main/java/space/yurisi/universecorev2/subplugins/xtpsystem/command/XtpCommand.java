@@ -21,7 +21,8 @@ public class XtpCommand implements CommandExecutor{
 
         /* TODO: 1, 配列が3こ以下か確認, 2, x y z → 小数点ある数(doubleに変換可能)かの確認, 3, ワールドの名前がサーバーに存在するか確認 */
 
-        if(args.length < 4){
+        if(args.length < 4) {
+            Message.sendNormalMessage(player, "[テレポートAI]", "/xtp <x> <y> <z> <ワールド名> : 指定された座標にテレポートします");
             return false;
         }
 

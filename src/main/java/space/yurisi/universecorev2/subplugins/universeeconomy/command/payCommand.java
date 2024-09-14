@@ -20,6 +20,7 @@ public class payCommand extends BaseCommand {
         }
 
         if (args.length != 2) {
+            from_player.sendMessage(getErrorMessage("/pay <プレイヤー名> <金額>"));
             return false;
         }
 
