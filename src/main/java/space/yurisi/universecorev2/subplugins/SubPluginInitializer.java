@@ -10,6 +10,7 @@ import space.yurisi.universecorev2.subplugins.playerinfoscoreboard.PlayerInfoSco
 import space.yurisi.universecorev2.subplugins.rankcounter.RankCounter;
 import space.yurisi.universecorev2.subplugins.salute.Salute;
 import space.yurisi.universecorev2.subplugins.signcommand.SignCommand;
+import space.yurisi.universecorev2.subplugins.sitdown.Sitdown;
 import space.yurisi.universecorev2.subplugins.suicide.Suicide;
 import space.yurisi.universecorev2.subplugins.universedice.UniverseDice;
 import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomy;
@@ -46,6 +47,7 @@ public class SubPluginInitializer {
         this.subPlugins.add(new SignCommand());
         this.subPlugins.add(new XTPSystem());
         this.subPlugins.add(new TPPSystem());
+        this.subPlugins.add(new Sitdown());
     }
 
     public void onEnable(){

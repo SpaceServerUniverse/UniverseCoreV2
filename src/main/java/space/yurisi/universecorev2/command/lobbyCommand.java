@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import space.yurisi.universecorev2.exception.CustomItemLevelNotFoundException;
 import space.yurisi.universecorev2.item.solar_system.SolarSystemSword;
+import space.yurisi.universecorev2.utils.Message;
 
 public class lobbyCommand implements CommandExecutor {
 
@@ -22,6 +23,8 @@ public class lobbyCommand implements CommandExecutor {
 
         World world = Bukkit.getServer().getWorld("lobby");
         player.teleport(new Location(world, 0, 0, 0));
+        Message.sendSuccessMessage(player, "[テレポートAI]", "ロビーにテレポートしました");
+
         return true;
     }
 }

@@ -13,7 +13,7 @@ public class SolarSystemShovel extends CustomItem {
                 "§d§lbNocturne of Uranus",
                 1,
                 2,
-                new ItemStack(Material.DIAMOND_SHOVEL)
+                ItemStack.of(Material.DIAMOND_SHOVEL)
         );
         registerBaseItemFunctions();
     }
