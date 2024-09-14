@@ -62,7 +62,8 @@ public class DatabaseConnector {
                 .addAnnotatedClass(KillDeathCount.class)
                 .addAnnotatedClass(LifeCount.class)
                 .addAnnotatedClass(OreCount.class)
-                .addAnnotatedClass(PlayerCount.class);
+                .addAnnotatedClass(PlayerCount.class)
+                .addAnnotatedClass(Market.class);
     }
 
     private Configuration registerProperties(Configuration configuration) {

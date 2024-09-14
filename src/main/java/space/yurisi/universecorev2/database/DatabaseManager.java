@@ -14,20 +14,14 @@ public class DatabaseManager {
     private final MywarpRepository mywarpRepository;
     private final PlayerLevelRepository playerLevelRepository;
     private final PlayerNormalLevelRepository playerNormalLevelRepository;
-
     private final PositionRepository positionRepository;
-
     private final UserPositionRepository userPositionRepository;
-
     private final CountRepository countRepository;
-
     private final KillDeathCountRepository killDeathCountRepository;
-
     private final LifeCountRepository lifeCountRepository;
-
     private final OreCountRepository oreCountRepository;
-
     private final PlayerCountRepository playerCountRepository;
+    private final MarketRepository marketRepository;
 
     public DatabaseManager(SessionFactory sessionFactory) {
         this.userRepository = new UserRepository(sessionFactory);
@@ -45,6 +39,7 @@ public class DatabaseManager {
         this.lifeCountRepository = new LifeCountRepository(sessionFactory);
         this.oreCountRepository = new OreCountRepository(sessionFactory);
         this.playerCountRepository = new PlayerCountRepository(sessionFactory);
+        this.marketRepository = new MarketRepository(sessionFactory);
     }
 
     /**
@@ -181,4 +176,11 @@ public class DatabaseManager {
     public PlayerCountRepository getPlayerCountRepository() {
         return playerCountRepository;
     }
+
+    /**
+     * マーケットリポジトリ取得
+     *
+     * @return MarketRepository
+     */
+    public MarketRepository getMarketRepository() { return marketRepository; }
 }

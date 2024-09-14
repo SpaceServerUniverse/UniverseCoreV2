@@ -89,6 +89,11 @@ commands:
     description: 自殺します
     usage: /su
 
+  #FreeMarket
+  market:
+    description: フリーマーケットの画面を開きます
+    usage: /market
+
 permissions:
   #SubPlugins
   #LevelSystem
