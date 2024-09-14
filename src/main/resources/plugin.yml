@@ -46,10 +46,9 @@ commands:
     description: サイコロを振ります
 
   #Mywarp
-  mw:
-    description: マイワープを作成、ワープできます
   mywarp:
     description: マイワープを作成、ワープできます
+    aliases: [mw]
 
   #Salute
   k:
