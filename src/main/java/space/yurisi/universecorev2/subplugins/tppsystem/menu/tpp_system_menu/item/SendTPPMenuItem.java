@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
-import space.yurisi.universecorev2.subplugins.tppsystem.TPPSystem;
+import space.yurisi.universecorev2.subplugins.tppsystem.manager.RequestManager;
 import space.yurisi.universecorev2.subplugins.tppsystem.connector.UniverseCoreAPIConnector;
 import space.yurisi.universecorev2.subplugins.tppsystem.menu.send_request_menu.SendRequestInventoryMenu;
 import xyz.xenondevs.invui.item.ItemProvider;
@@ -14,11 +14,11 @@ import xyz.xenondevs.invui.item.impl.AbstractItem;
 
 public class SendTPPMenuItem extends AbstractItem {
 
-    private final TPPSystem tppSystem;
+    private final RequestManager requestManager;
 
     private final UniverseCoreAPIConnector connector;
-    public SendTPPMenuItem(TPPSystem tppSystem, UniverseCoreAPIConnector connector){
-        this.tppSystem = tppSystem;
+    public SendTPPMenuItem(RequestManager requestManager, UniverseCoreAPIConnector connector){
+        this.requestManager = requestManager;
         this.connector = connector;
     }
 
@@ -29,7 +29,7 @@ public class SendTPPMenuItem extends AbstractItem {
 
     @Override
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
-        SendRequestInventoryMenu sendRequestInventoryMenu = new SendRequestInventoryMenu(this.tppSystem, this.connector);
+        SendRequestInventoryMenu sendRequestInventoryMenu = new SendRequestInventoryMenu(this.requestManager, this.connector);
         sendRequestInventoryMenu.sendMenu(player);
     }
 }

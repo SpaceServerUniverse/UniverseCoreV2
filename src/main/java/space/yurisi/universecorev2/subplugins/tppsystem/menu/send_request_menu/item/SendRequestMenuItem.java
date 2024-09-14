@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
 import space.yurisi.universecorev2.subplugins.tppsystem.TPPSystem;
+import space.yurisi.universecorev2.subplugins.tppsystem.manager.RequestManager;
 import space.yurisi.universecorev2.subplugins.tppsystem.connector.UniverseCoreAPIConnector;
 import org.jetbrains.annotations.NotNull;
 import xyz.xenondevs.invui.item.ItemProvider;
@@ -18,14 +19,14 @@ import xyz.xenondevs.invui.item.impl.AbstractItem;
 public class SendRequestMenuItem extends AbstractItem {
 
     private final Player player;
-    private final TPPSystem tppSystem;
+    private final RequestManager requestManager;
     private String playerName;
 
     private final UniverseCoreAPIConnector connector;
 
-    public SendRequestMenuItem(@NotNull Player player, TPPSystem tppSystem, String playerName, UniverseCoreAPIConnector connector){
+    public SendRequestMenuItem(@NotNull Player player, RequestManager requestManager, String playerName, UniverseCoreAPIConnector connector){
         this.player = player;
-        this.tppSystem = tppSystem;
+        this.requestManager = requestManager;
         this.playerName = playerName;
         this.connector = connector;
     }
@@ -72,7 +73,7 @@ public class SendRequestMenuItem extends AbstractItem {
         targetPlayer.playSound(targetPlayer.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 2, 1);
         targetPlayer.sendMessage("§6" + player.getName() + " §2からテレポート申請が届きました。");
         targetPlayer.sendMessage("§6/tppメニューから承認可否を選択できます。");
-        this.tppSystem.setRequest(player, targetPlayer);
-        this.tppSystem.setSearchReceiver(player, targetPlayer);
+        this.requestManager.setRequest(player, targetPlayer);
+        this.requestManager.setSearchReceiver(player, targetPlayer);
     }
 }

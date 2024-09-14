@@ -9,14 +9,13 @@ import space.yurisi.universecorev2.exception.UserNotFoundException;
 
 public class UniverseCoreAPIConnector {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     private AutoTppSettingRepository autoTPPSettingRepository;
 
 
     public UniverseCoreAPIConnector(DatabaseManager databaseManager){
-        setUserRepository(databaseManager.getUserRepository());
-        setAutoTPPSettingRepository(databaseManager.getAutoTPPSettingRepository());
+        this.userRepository = databaseManager.getUserRepository();
     }
 
     public Boolean isExistsAutoTPPSetting(Player player){
@@ -53,30 +52,10 @@ public class UniverseCoreAPIConnector {
         return autoTPPSetting.getIs_auto_accept();
     }
 
-    public void setAutoTPPSetting(Player player, Boolean is_auto_accept) throws UserNotFoundException {
+    public void createDefaultAutoTPPSetting(Player player, Boolean is_auto_accept) throws UserNotFoundException {
         Long user_id = userRepository.getPrimaryKeyFromUUID(player.getUniqueId());
         AutoTppSetting autoTPPSetting = autoTPPSettingRepository.getAutoTPPSetting(user_id);
         autoTPPSetting.setIs_auto_accept(is_auto_accept);
         autoTPPSettingRepository.updateAutoTPPSetting(autoTPPSetting);
     }
-
-
-    public void setAutoTPPSettingRepository(AutoTppSettingRepository autoTPPSettingRepository) {
-        this.autoTPPSettingRepository = autoTPPSettingRepository;
-    }
-
-    public AutoTppSettingRepository getAutoTPPSettingRepository() {
-        return autoTPPSettingRepository;
-    }
-
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    public UserRepository getUserRepository() {
-        return userRepository;
-    }
-
-
-
 }

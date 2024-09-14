@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import space.yurisi.universecorev2.menu.BaseMenu;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
 import space.yurisi.universecorev2.subplugins.tppsystem.TPPSystem;
+import space.yurisi.universecorev2.subplugins.tppsystem.manager.RequestManager;
 import space.yurisi.universecorev2.subplugins.tppsystem.connector.UniverseCoreAPIConnector;
 import space.yurisi.universecorev2.subplugins.tppsystem.menu.menu_item.*;
 import space.yurisi.universecorev2.subplugins.tppsystem.menu.receive_request_menu.item.*;
@@ -26,25 +27,25 @@ import java.util.stream.Collectors;
 
 public class ReceiveRequestInventoryMenu implements BaseMenu {
 
-    private final TPPSystem tppSystem;
+    private final RequestManager requestManager;
 
     private final UniverseCoreAPIConnector connector;
 
-    public ReceiveRequestInventoryMenu(TPPSystem tppSystem, UniverseCoreAPIConnector connector){
-        this.tppSystem = tppSystem;
+    public ReceiveRequestInventoryMenu(RequestManager requestManager, UniverseCoreAPIConnector connector){
+        this.requestManager = requestManager;
         this.connector = connector;
     }
 
     public void sendMenu(Player player){
-        if (!this.tppSystem.hasRequest(player)){
+        if (!this.requestManager.hasRequest(player)){
             player.sendMessage("現在受信しているリクエストはありません。");
             return;
         }
-//        try{
-            List<UUID> requests = this.tppSystem.getRequest(player);
-            tppSystem.updateRequest(player);
+        try{
+            List<UUID> requests = this.requestManager.getRequest(player);
+            requestManager.updateRequest(player);
             List<Item> items = requests.stream()
-                    .map(user ->  new ReceiveRequestMenuItem(player, this.tppSystem, user))
+                    .map(user ->  new ReceiveRequestMenuItem(player, this.requestManager, user))
                     .collect(Collectors.toList());
 
             Item border = new SimpleItem(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE));
@@ -58,7 +59,7 @@ public class ReceiveRequestInventoryMenu implements BaseMenu {
                             "# # # < b > # # #")
                     .addIngredient('#', border)
                     .addIngredient('x', Markers.CONTENT_LIST_SLOT_HORIZONTAL)
-                    .addIngredient('b', new TopItem(this.tppSystem, this.connector))
+                    .addIngredient('b', new TopItem(this.requestManager, this.connector))
                     .addIngredient('<', new BackItem())
                     .addIngredient('>', new ForwardItem())
                     .setContent(items)
@@ -71,9 +72,9 @@ public class ReceiveRequestInventoryMenu implements BaseMenu {
                     .build();
 
             window.open();
-/*        } catch (Exception e) {
+        } catch (Exception e) {
             player.sendMessage(Component.text("現在オンラインのユーザーが見つかりませんでした。", TextColor.color(Color.RED.asRGB())));
-        }*/
+        }
     }
 }
 

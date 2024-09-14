@@ -4,6 +4,7 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import space.yurisi.universecorev2.menu.BaseMenu;
 import space.yurisi.universecorev2.subplugins.tppsystem.TPPSystem;
+import space.yurisi.universecorev2.subplugins.tppsystem.manager.RequestManager;
 import space.yurisi.universecorev2.subplugins.tppsystem.connector.UniverseCoreAPIConnector;
 import space.yurisi.universecorev2.subplugins.tppsystem.menu.tpp_system_menu.item.*;
 import xyz.xenondevs.invui.gui.Gui;
@@ -14,11 +15,11 @@ import xyz.xenondevs.invui.window.Window;
 
 public class TPPSystemInventoryMenu implements BaseMenu {
 
-    private final TPPSystem tppSystem;
+    private final RequestManager requestManager;
 
     private final UniverseCoreAPIConnector connector;
-    public TPPSystemInventoryMenu(TPPSystem tppSystem, UniverseCoreAPIConnector connector){
-        this.tppSystem = tppSystem;
+    public TPPSystemInventoryMenu(RequestManager requestManager, UniverseCoreAPIConnector connector){
+        this.requestManager = requestManager;
         this.connector = connector;
     }
 
@@ -30,9 +31,9 @@ public class TPPSystemInventoryMenu implements BaseMenu {
                         "# # a b c d . # #",
                         "# # # # # # # # #")
                 .addIngredient('#', border)
-                .addIngredient('a', new SendTPPMenuItem(this.tppSystem, this.connector))
-                .addIngredient('b', new DeleteTPPMenuItem(player, this.tppSystem))
-                .addIngredient('c', new ReceiveTPPMenuItem(this.tppSystem, this.connector))
+                .addIngredient('a', new SendTPPMenuItem(this.requestManager, this.connector))
+                .addIngredient('b', new DeleteTPPMenuItem(player, this.requestManager))
+                .addIngredient('c', new ReceiveTPPMenuItem(this.requestManager, this.connector))
                 .addIngredient('d', new AutoAcceptTPPMenuItem(player, this.connector))
                 .build();
 

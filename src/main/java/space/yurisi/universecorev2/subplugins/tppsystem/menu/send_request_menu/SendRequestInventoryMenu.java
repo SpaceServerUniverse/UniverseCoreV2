@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import space.yurisi.universecorev2.menu.BaseMenu;
 import space.yurisi.universecorev2.subplugins.tppsystem.TPPSystem;
+import space.yurisi.universecorev2.subplugins.tppsystem.manager.RequestManager;
 import space.yurisi.universecorev2.subplugins.tppsystem.connector.UniverseCoreAPIConnector;
 import space.yurisi.universecorev2.subplugins.tppsystem.menu.menu_item.*;
 import space.yurisi.universecorev2.subplugins.tppsystem.menu.send_request_menu.item.*;
@@ -23,23 +24,23 @@ import java.util.stream.Collectors;
 
 public class SendRequestInventoryMenu implements BaseMenu {
 
-    private final TPPSystem tppSystem;
+    private final RequestManager requestManager;
 
     private final UniverseCoreAPIConnector connector;
 
-    public SendRequestInventoryMenu(TPPSystem tppSystem, UniverseCoreAPIConnector connector){
-        this.tppSystem = tppSystem;
+    public SendRequestInventoryMenu(RequestManager requestManager, UniverseCoreAPIConnector connector){
+        this.requestManager = requestManager;
         this.connector = connector;
     }
 
     public void sendMenu(Player player){
         try{
-            if(this.tppSystem.hasRequest(player)){
+            if(this.requestManager.hasRequest(player)){
                 player.sendMessage(Component.text("既にリクエストを送信しています", TextColor.color(Color.RED.asRGB())));
                 return;
             }
             List<Item> items = player.getServer().getOnlinePlayers().stream()
-                    .map(user -> new SendRequestMenuItem(player, this.tppSystem, user.getName(), this.connector))
+                    .map(user -> new SendRequestMenuItem(player, this.requestManager, user.getName(), this.connector))
                     .collect(Collectors.toList());
 
             Item border = new SimpleItem(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE));
@@ -53,7 +54,7 @@ public class SendRequestInventoryMenu implements BaseMenu {
                             "# # # < b > # # #")
                     .addIngredient('#', border)
                     .addIngredient('x', Markers.CONTENT_LIST_SLOT_HORIZONTAL)
-                    .addIngredient('b', new TopItem(this.tppSystem, this.connector))
+                    .addIngredient('b', new TopItem(this.requestManager, this.connector))
                     .addIngredient('<', new BackItem())
                     .addIngredient('>', new ForwardItem())
                     .setContent(items)

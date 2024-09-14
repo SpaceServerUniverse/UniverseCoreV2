@@ -7,6 +7,7 @@ import org.hibernate.Transaction;
 import space.yurisi.universecorev2.database.models.AutoTppSetting;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
 
+import java.util.Date;
 import java.util.List;
 
 public class AutoTppSettingRepository {
@@ -35,7 +36,7 @@ public class AutoTppSettingRepository {
             throw new RuntimeException(e);
         }
 
-        AutoTppSetting autoTPPSetting = new AutoTppSetting(null, user_id, false);
+        AutoTppSetting autoTPPSetting = new AutoTppSetting(null, user_id, false, new Date(), new Date());
 
         Session session = this.sessionFactory.getCurrentSession();
         session.beginTransaction();

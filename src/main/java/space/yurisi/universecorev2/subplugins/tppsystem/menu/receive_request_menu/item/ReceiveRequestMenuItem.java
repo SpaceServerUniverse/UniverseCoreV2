@@ -7,7 +7,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
-import space.yurisi.universecorev2.subplugins.tppsystem.TPPSystem;
+import space.yurisi.universecorev2.subplugins.tppsystem.manager.RequestManager;
 import org.jetbrains.annotations.NotNull;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
@@ -18,12 +18,12 @@ import java.util.UUID;
 public class ReceiveRequestMenuItem extends AbstractItem {
 
     private final Player player;
-    private final TPPSystem tppSystem;
+    private final RequestManager requestManager;
     private final Player targetPlayer;
 
-    public ReceiveRequestMenuItem(@NotNull Player player, TPPSystem tppSystem, UUID targetUUID){
+    public ReceiveRequestMenuItem(@NotNull Player player, RequestManager requestManager, UUID targetUUID){
         this.player = player;
-        this.tppSystem = tppSystem;
+        this.requestManager = requestManager;
         this.targetPlayer = player.getServer().getPlayer(targetUUID);
     }
 
@@ -45,9 +45,6 @@ public class ReceiveRequestMenuItem extends AbstractItem {
 
 
             String playerName = this.targetPlayer.getName();
-//            if (targetPlayer == null) {
-//                throw new UserNotFoundException("申請中のプレイヤーはいません.");
-//            }
             if (clickType == ClickType.LEFT) {
                 player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
                 player.sendMessage("§6" + playerName + " §2のテレポート申請を許可しました.");
@@ -60,11 +57,11 @@ public class ReceiveRequestMenuItem extends AbstractItem {
                 player.sendMessage("§6" + playerName + " §2のテレポート申請を拒否しました.");
                 targetPlayer.sendMessage("§6" + player.getName() + " §2にテレポートを拒否されました.");
             }
-            this.tppSystem.removeSearchReceiver(targetPlayer);
-            this.tppSystem.removeRequest(targetPlayer, player);
+            this.requestManager.removeSearchReceiver(targetPlayer);
+            this.requestManager.removeRequest(targetPlayer, player);
 
-            // メニューを更新
-            this.tppSystem.updateRequest(player);
+            // メニューを更新(出来なかった)
+            this.requestManager.updateRequest(player);
             event.getInventory().close();
     }
 }

@@ -11,6 +11,7 @@ import space.yurisi.universecorev2.subplugins.tppsystem.command.subcommand.*;
 import space.yurisi.universecorev2.subplugins.tppsystem.menu.tpp_system_menu.TPPSystemInventoryMenu;
 import space.yurisi.universecorev2.subplugins.tppsystem.connector.UniverseCoreAPIConnector;
 import space.yurisi.universecorev2.subplugins.tppsystem.TPPSystem;
+import space.yurisi.universecorev2.subplugins.tppsystem.manager.RequestManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,12 +19,11 @@ import java.util.List;
 
 public class TPPCommand implements CommandExecutor, TabCompleter {
 
-    private final TPPSystem tppSystem;
+    private final RequestManager requestManager = new RequestManager();
 
     private final UniverseCoreAPIConnector connector;
 
-    public TPPCommand(TPPSystem tppSystem, UniverseCoreAPIConnector connector){
-        this.tppSystem = tppSystem;
+    public TPPCommand(UniverseCoreAPIConnector connector){
         this.connector = connector;
     }
 
@@ -34,7 +34,7 @@ public class TPPCommand implements CommandExecutor, TabCompleter {
         }
 
         if(args.length == 0){
-            TPPSystemInventoryMenu menu = new TPPSystemInventoryMenu(this.tppSystem, this.connector);
+            TPPSystemInventoryMenu menu = new TPPSystemInventoryMenu(this.requestManager, this.connector);
             menu.sendMenu((Player) sender);
             return true;
         }
