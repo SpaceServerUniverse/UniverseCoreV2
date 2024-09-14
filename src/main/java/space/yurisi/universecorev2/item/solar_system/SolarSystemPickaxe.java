@@ -13,7 +13,7 @@ public class SolarSystemPickaxe extends CustomItem {
                 "§e§lbネプチューン・オブ・アリア",
                 1,
                 2,
-                new ItemStack(Material.DIAMOND_PICKAXE)
+                ItemStack.of(Material.DIAMOND_PICKAXE)
         );
         registerBaseItemFunctions();
     }

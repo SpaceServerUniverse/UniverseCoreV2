@@ -13,7 +13,7 @@ public class SolarSystemAxe extends CustomItem {
                 "§8§lbSaturn's Glaive",
                 1,
                 2,
-                new ItemStack(Material.DIAMOND_PICKAXE)
+                ItemStack.of(Material.DIAMOND_PICKAXE)
         );
         registerBaseItemFunctions();
     }
