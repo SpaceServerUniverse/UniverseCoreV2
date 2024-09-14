@@ -15,10 +15,6 @@ public class marketCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
         if (!(commandSender instanceof Player)) return false;
 
-        Market market;
-        market = UniverseCoreV2API.getInstance().getDatabaseManager().getMarketRepository().getItems().getFirst();
-        ItemStack itemStack = ItemStack.deserializeBytes(market.getSerializedItem());
-        ((Player) commandSender).getInventory().addItem(itemStack);
 
         return true;
     }
