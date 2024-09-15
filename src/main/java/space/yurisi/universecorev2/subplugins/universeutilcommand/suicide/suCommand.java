@@ -1,4 +1,4 @@
-package space.yurisi.universecorev2.subplugins.suicide.command;
+package space.yurisi.universecorev2.subplugins.universeutilcommand.suicide;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
