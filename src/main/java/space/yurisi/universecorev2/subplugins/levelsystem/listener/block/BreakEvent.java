@@ -1,6 +1,7 @@
 package space.yurisi.universecorev2.subplugins.levelsystem.listener.block;
 
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,7 +30,13 @@ public class BreakEvent implements Listener {
 
         Map<Enchantment, Integer> main_hand_enchantment = player.getInventory().getItemInMainHand().getEnchantments();
         if (main_hand_enchantment.containsKey(Enchantment.SILK_TOUCH)){
-            return;
+            if(event.getBlock().getType() == Material.COAL_ORE || event.getBlock().getType() == Material.DEEPSLATE_COAL_ORE
+                    || event.getBlock().getType() == Material.LAPIS_ORE || event.getBlock().getType() == Material.DEEPSLATE_LAPIS_ORE
+                    || event.getBlock().getType() == Material.REDSTONE_ORE || event.getBlock().getType() == Material.DEEPSLATE_REDSTONE_ORE
+                    || event.getBlock().getType() == Material.DIAMOND_ORE || event.getBlock().getType() == Material.DEEPSLATE_DIAMOND_ORE
+                    || event.getBlock().getType() == Material.EMERALD_ORE || event.getBlock().getType() == Material.DEEPSLATE_EMERALD_ORE){
+                return;
+            }
         }
 
         try {
