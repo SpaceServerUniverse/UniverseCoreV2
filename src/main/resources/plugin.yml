@@ -73,6 +73,10 @@ commands:
   lobby:
     description: ロビーに戻ります
 
+  #ItemHat
+  hat:
+    discription: 手に持っているアイテムを頭にかぶります
+
 permissions:
   # UniverseCoreV2
   space.yurisi.universecorev2.interactevent.enchanttable:
