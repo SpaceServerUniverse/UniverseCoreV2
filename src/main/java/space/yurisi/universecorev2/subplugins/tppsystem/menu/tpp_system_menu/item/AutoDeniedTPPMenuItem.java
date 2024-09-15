@@ -13,19 +13,19 @@ import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
 
-public class AutoAcceptTPPMenuItem extends AbstractItem {
-
+public class AutoDeniedTPPMenuItem extends AbstractItem {
 
     private final UniverseCoreAPIConnector connector;
 
-    public AutoAcceptTPPMenuItem(UniverseCoreAPIConnector connector) {
+    public AutoDeniedTPPMenuItem(UniverseCoreAPIConnector connector) {
         this.connector = connector;
     }
 
     @Override
     public ItemProvider getItemProvider() {
-        return new ItemBuilder(Material.RED_STAINED_GLASS_PANE).setDisplayName("自動受信：無効").addLoreLines(
-                "§7クリックで自動承認を§2有効§7にします。");
+        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE).setDisplayName("自動受信：有効").addLoreLines(
+                "§7クリックで自動承認を§4無効§7にします。"
+        );
     }
 
     @Override
@@ -35,7 +35,7 @@ public class AutoAcceptTPPMenuItem extends AbstractItem {
                 connector.createAutoTPPSetting(player);
             }
             AutoTppSetting isAutoAcceptTPP = connector.getAutoTPPSettingFromPlayer(player);
-            connector.changeAutoTPPSetting(isAutoAcceptTPP, true);
+            connector.changeAutoTPPSetting(isAutoAcceptTPP, false);
         } catch (UserNotFoundException e) {
             player.sendMessage("ユーザーデータが見つかりませんでした。");
         }

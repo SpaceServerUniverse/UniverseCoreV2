@@ -8,7 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.util.Date;
 
 @Entity
-@Table(name = "autotppsetting")
+@Table(name = "auto_tpp_settings")
 public class AutoTppSetting {
 
     @Id

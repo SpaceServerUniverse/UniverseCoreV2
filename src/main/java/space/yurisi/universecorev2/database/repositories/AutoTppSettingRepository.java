@@ -21,30 +21,17 @@ public class AutoTppSettingRepository {
         this.userRepository = userRepository;
     }
 
-    public AutoTppSetting createAutoTppSetting(Player player){
-        Long user_id = null;
-        try {
-            user_id = userRepository.getPrimaryKeyFromPlayerName(player.getName());
-        } catch (UserNotFoundException e) {
-            player.sendMessage("ユーザーが見つかりませんでした。");
-            Session session = sessionFactory.getCurrentSession();
-            Transaction transaction = session.getTransaction();
-            if(transaction.isActive()){
-                transaction.rollback();
-            }
+    public AutoTppSetting createAutoTppSetting(Player player) throws UserNotFoundException{
+            Long user_id = userRepository.getPrimaryKeyFromPlayerName(player.getName());
+            AutoTppSetting autoTPPSetting = new AutoTppSetting(null, user_id, false, new Date(), new Date());
+
+            Session session = this.sessionFactory.getCurrentSession();
+            session.beginTransaction();
+            session.persist(autoTPPSetting);
+            session.getTransaction().commit();
             session.close();
-            throw new RuntimeException(e);
-        }
 
-        AutoTppSetting autoTPPSetting = new AutoTppSetting(null, user_id, false, new Date(), new Date());
-
-        Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.persist(autoTPPSetting);
-        session.getTransaction().commit();
-        session.close();
-
-        return autoTPPSetting;
+            return autoTPPSetting;
     }
 
     public boolean getIsAutoAccept(Player player){

@@ -46,6 +46,11 @@ public class SendRequestMenuItem extends AbstractItem {
 
         Player targetPlayer = player.getServer().getPlayer(playerName);
 
+        if(targetPlayer == null){
+            player.sendMessage("§6" + playerName + " §3はオフラインです。");
+            return;
+        }
+
         player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
         player.sendMessage("§6" + playerName + " §2にテレポート申請を送信しました。");
 
@@ -55,7 +60,7 @@ public class SendRequestMenuItem extends AbstractItem {
         }
 
         try {
-            if (connector.getAutoTPPSetting(targetPlayer)) {
+            if (connector.getAutoTPPSettingFromPlayer(targetPlayer).getIs_auto_accept()) {
                 player.teleport(targetPlayer);
                 targetPlayer.playSound(targetPlayer.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
                 player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
@@ -65,7 +70,7 @@ public class SendRequestMenuItem extends AbstractItem {
                 this.sendRequest(player, targetPlayer);
             }
         } catch (UserNotFoundException e) {
-            e.printStackTrace();
+            player.sendMessage("相手のユーザーデータが見つかりませんでした。");
         }
     }
 

@@ -39,24 +39,23 @@ public class UniverseCoreAPIConnector {
         autoTPPSettingRepository.updateAutoTPPSetting(autoTPPSetting);
     }
 
-    public void createAutoTPPSetting(Player player){
-        autoTPPSettingRepository.createAutoTppSetting(player);
-    }
-
     public void deleteAutoTPPSetting(AutoTppSetting autoTPPSetting){
         autoTPPSettingRepository.deleteAutoTPPSetting(autoTPPSetting);
     }
 
-    public Boolean getAutoTPPSetting(Player player) throws UserNotFoundException {
+    public Boolean isAutoAccept(Player player) throws UserNotFoundException {
         Long user_id = userRepository.getPrimaryKeyFromUUID(player.getUniqueId());
         AutoTppSetting autoTPPSetting = autoTPPSettingRepository.getAutoTPPSetting(user_id);
         return autoTPPSetting.getIs_auto_accept();
     }
 
-    public void createDefaultAutoTPPSetting(Player player, Boolean is_auto_accept) throws UserNotFoundException {
-        Long user_id = userRepository.getPrimaryKeyFromUUID(player.getUniqueId());
-        AutoTppSetting autoTPPSetting = autoTPPSettingRepository.getAutoTPPSetting(user_id);
-        autoTPPSetting.setIs_auto_accept(is_auto_accept);
+    public void createAutoTPPSetting(Player player) throws UserNotFoundException {
+        AutoTppSetting autoTPPSetting = autoTPPSettingRepository.createAutoTppSetting(player);
         autoTPPSettingRepository.updateAutoTPPSetting(autoTPPSetting);
+    }
+
+    public void changeAutoTPPSetting(AutoTppSetting autoTppSetting, Boolean is_auto_accept) throws UserNotFoundException {
+        autoTppSetting.setIs_auto_accept(is_auto_accept);
+        autoTPPSettingRepository.updateAutoTPPSetting(autoTppSetting);
     }
 }
