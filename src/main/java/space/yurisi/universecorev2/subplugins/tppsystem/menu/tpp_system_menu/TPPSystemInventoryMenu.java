@@ -32,8 +32,6 @@ public class TPPSystemInventoryMenu implements BaseMenu {
                 connector.createAutoTPPSetting(player);
             }
 
-            AutoTppSetting autoTppSetting = connector.getAutoTPPSettingFromPlayer(player);
-
             Item border = new SimpleItem(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE));
             Gui.Builder.@NotNull Normal gui = Gui.normal()
                     .setStructure(
@@ -44,7 +42,7 @@ public class TPPSystemInventoryMenu implements BaseMenu {
                     .addIngredient('a', new SendTPPMenuItem(this.requestManager, this.connector))
                     .addIngredient('b', new DeleteTPPMenuItem(player, this.requestManager))
                     .addIngredient('c', new ReceiveTPPMenuItem(this.requestManager, this.connector));
-                    if(autoTppSetting.getIs_auto_accept()) {
+                    if(connector.isAutoAccept(player)) {
                         gui.addIngredient('d', new AutoDeniedTPPMenuItem(this.connector));
                     }else{
                         gui.addIngredient('d', new AutoAcceptTPPMenuItem(this.connector));

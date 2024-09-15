@@ -60,7 +60,7 @@ public class SendRequestMenuItem extends AbstractItem {
         }
 
         try {
-            if (connector.getAutoTPPSettingFromPlayer(targetPlayer).getIs_auto_accept()) {
+            if (connector.isAutoAccept(targetPlayer)) {
                 player.teleport(targetPlayer);
                 targetPlayer.playSound(targetPlayer.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
                 player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
