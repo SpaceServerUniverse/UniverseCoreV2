@@ -39,9 +39,18 @@ public class XtpCommand implements CommandExecutor{
             }
 
             Location location = new Location(world, x, y, z);
+            String xMessage = String.valueOf(location.getX());
+            String yMessage = String.valueOf(location.getY());
+            String zMessage = String.valueOf(location.getZ());
+            String worldName = location.getWorld().getName();
 
             player.teleport(location);
-            Message.sendSuccessMessage(player, "[テレポートAI]", location + "にテレポート成功しました！");
+            Message.sendSuccessMessage(player, "[テレポートAI]",
+                    " x:"+xMessage +
+                             " y:"+yMessage +
+                             " z:"+zMessage +
+                             " ワールド:"+worldName + "にテレポート成功しました！"
+            );
         } catch (NumberFormatException e){
             Message.sendErrorMessage(player, "[テレポートAI]", "座標は数値で指定して下さい。");
             return false;
