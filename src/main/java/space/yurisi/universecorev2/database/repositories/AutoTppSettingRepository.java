@@ -5,6 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import space.yurisi.universecorev2.database.models.AutoTppSetting;
+import space.yurisi.universecorev2.database.models.User;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
 
 import java.util.Date;
@@ -22,7 +23,7 @@ public class AutoTppSettingRepository {
     }
 
     public AutoTppSetting createAutoTppSetting(Player player) throws UserNotFoundException{
-            Long user_id = userRepository.getPrimaryKeyFromPlayerName(player.getName());
+            Long user_id = userRepository.getPrimaryKeyFromUUID(player.getUniqueId());
             AutoTppSetting autoTPPSetting = new AutoTppSetting(null, user_id, false, new Date(), new Date());
 
             Session session = this.sessionFactory.getCurrentSession();
@@ -34,15 +35,18 @@ public class AutoTppSettingRepository {
             return autoTPPSetting;
     }
 
-    public boolean getIsAutoAccept(Player player){
-        Long user_id = null;
+    public boolean isAutoAccept(Player player){
         try {
-            user_id = userRepository.getPrimaryKeyFromUUID(player.getUniqueId());
+            Long user_id = userRepository.getPrimaryKeyFromUUID(player.getUniqueId());
+            AutoTppSetting autoTPPSetting = getAutoTPPSetting(user_id);
+            if(autoTPPSetting == null){
+                return false;
+            }
+            return autoTPPSetting.getIs_auto_accept();
         } catch (UserNotFoundException e) {
-            throw new RuntimeException(e);
+            return false;
         }
-        AutoTppSetting autoTPPSetting = getAutoTPPSetting(user_id);
-        return autoTPPSetting.getIs_auto_accept();
+
     }
 
     public AutoTppSetting getAutoTPPSetting(Long user_id) {
