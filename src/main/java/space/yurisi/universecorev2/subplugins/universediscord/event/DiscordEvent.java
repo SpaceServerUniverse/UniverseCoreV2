@@ -8,10 +8,20 @@ import space.yurisi.universecorev2.subplugins.universediscord.UniverseDiscordMes
 
 public class DiscordEvent extends ListenerAdapter {
 
+    private String discordChannelId;
+
+    public DiscordEvent(String discordChannelId) {
+        this.discordChannelId = discordChannelId;
+    }
+
     // TODO: 画像の送信に対応する
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         if (event.getAuthor().isBot() || !event.isFromType(ChannelType.TEXT)) {
+            return;
+        }
+
+        if (!event.getChannel().getId().equals(discordChannelId)) {
             return;
         }
 
