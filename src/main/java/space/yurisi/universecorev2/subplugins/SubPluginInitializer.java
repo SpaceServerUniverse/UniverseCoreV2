@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.subplugins.changemessages.ChangeMessages;
 import space.yurisi.universecorev2.subplugins.customname.CustomName;
+import space.yurisi.universecorev2.subplugins.itemhat.ItemHat;
 import space.yurisi.universecorev2.subplugins.levelaward.LevelAward;
 import space.yurisi.universecorev2.subplugins.levelsystem.LevelSystem;
 import space.yurisi.universecorev2.subplugins.mywarp.Mywarp;
@@ -47,6 +48,7 @@ public class SubPluginInitializer {
         this.subPlugins.add(new TPPSystem());
         this.subPlugins.add(new Sitdown());
         this.subPlugins.add(new UniverseUtilCommand());
+        this.subPlugins.add(new ItemHat());
         this.subPlugins.add(new CustomName());
     }
 

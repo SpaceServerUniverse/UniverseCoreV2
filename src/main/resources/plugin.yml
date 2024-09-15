@@ -73,6 +73,10 @@ commands:
   lobby:
     description: ロビーに戻ります
 
+  #ItemHat
+  hat:
+    discription: 手に持っているアイテムを頭にかぶります
+
   #CustomName
   tag:
     description: 称号を設定します
