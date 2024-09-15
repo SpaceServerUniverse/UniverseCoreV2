@@ -34,15 +34,15 @@ public class DeleteTPPMenuItem extends AbstractItem {
             return new ItemBuilder(Material.REDSTONE_BLOCK).setDisplayName("承認待ちのリクエストはありません。");
         }
 
-        String targetPlayerName = this.player.getServer().getOfflinePlayer(this.targetPlayerUUID).getName();
+        Player targetPlayer = this.player.getServer().getPlayer(this.targetPlayerUUID);
+        String targetPlayerName = targetPlayer.getName();
         ItemStack item = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta meta = (SkullMeta) item.getItemMeta();
-        meta.setOwningPlayer(this.player);
+        meta.setOwningPlayer(targetPlayer.getServer().getOfflinePlayer(targetPlayerName));
         item.setItemMeta(meta);
 
         return new ItemBuilder(item).setDisplayName("承認待ちのリクエスト： " + targetPlayerName).addLoreLines(
                     "§4クリックでリクエストを削除します。");
-
 
     }
 

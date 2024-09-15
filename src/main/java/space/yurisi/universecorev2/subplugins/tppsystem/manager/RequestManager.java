@@ -24,7 +24,9 @@ public class RequestManager {
         UUID receiverUUID = playerToUUID(receiver);
 
         if (this.tppRequests.containsKey(receiverUUID)) {
-            this.tppRequests.get(receiverUUID).add(senderUUID);
+            List<UUID> requests = new ArrayList<>(this.tppRequests.get(receiverUUID));
+            requests.add(senderUUID);
+            this.tppRequests.put(receiverUUID, requests);
             return;
         }
 
