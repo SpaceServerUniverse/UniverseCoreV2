@@ -13,6 +13,7 @@ import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class DeleteTPPMenuItem extends AbstractItem {
@@ -35,7 +36,10 @@ public class DeleteTPPMenuItem extends AbstractItem {
         }
 
         Player targetPlayer = this.player.getServer().getPlayer(this.targetPlayerUUID);
-        String targetPlayerName = targetPlayer.getName();
+        String targetPlayerName = Objects.requireNonNull(targetPlayer).getName();
+        if (targetPlayer == null) {
+            return new ItemBuilder(Material.REDSTONE_BLOCK).setDisplayName("承認待ちのリクエストはありません。");
+        }
         ItemStack item = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta meta = (SkullMeta) item.getItemMeta();
         meta.setOwningPlayer(targetPlayer.getServer().getOfflinePlayer(targetPlayerName));
