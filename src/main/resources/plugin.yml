@@ -50,6 +50,11 @@ commands:
     description: マイワープを作成、ワープできます
     aliases: [mw]
 
+  #TPP
+  tpp:
+      description: プレイヤーをテレポートします
+      usage: /tpp
+
   #Salute
   k:
     description: こんにちはの顔文字を送信します
