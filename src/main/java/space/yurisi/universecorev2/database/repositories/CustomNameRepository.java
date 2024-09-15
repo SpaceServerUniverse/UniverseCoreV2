@@ -61,7 +61,7 @@ public class CustomNameRepository {
     }
 
     /**
-     * 称号user_idから取得します。
+     * 称号をuser_idから取得します。
      *
      * @param user_id Long
      * @return CustomName
@@ -87,7 +87,7 @@ public class CustomNameRepository {
      * @param id Long(Primary key)
      * @return boolean
      */
-    public boolean existsMoney(Long id) {
+    public boolean existsCustomName(Long id) {
         try{
             getCustomName(id);
             return true;
@@ -102,7 +102,7 @@ public class CustomNameRepository {
      * @param user_id Long
      * @return boolean
      */
-    public boolean existsMoneyFromUserId(Long user_id) {
+    public boolean existsCustomNameFromUserId(Long user_id) {
         try {
             getCustomNameFromUserId(user_id);
             return true;

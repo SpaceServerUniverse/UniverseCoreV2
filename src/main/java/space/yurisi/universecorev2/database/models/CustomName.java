@@ -7,7 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.util.Date;
 
 @Entity
-@Table(name = "custom_name")
+@Table(name = "custom_names")
 public class CustomName{
 
     @Id

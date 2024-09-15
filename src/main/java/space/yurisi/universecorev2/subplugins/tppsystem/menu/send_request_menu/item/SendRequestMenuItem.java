@@ -75,7 +75,6 @@ public class SendRequestMenuItem extends AbstractItem {
     }
 
     private void sendRequest(Player player, Player targetPlayer) {
-        targetPlayer.playSound(targetPlayer.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 2, 1);
         targetPlayer.sendMessage("§6" + player.getName() + " §2からテレポート申請が届きました。");
         targetPlayer.sendMessage("§6/tppメニューから承認可否を選択できます。");
         this.requestManager.setRequest(player, targetPlayer);

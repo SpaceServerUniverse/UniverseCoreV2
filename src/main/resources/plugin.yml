@@ -73,6 +73,10 @@ commands:
   lobby:
     description: ロビーに戻ります
 
+  #CustomName
+  tag:
+    description: 称号を設定します
+
 permissions:
   # UniverseCoreV2
   space.yurisi.universecorev2.interactevent.enchanttable:
