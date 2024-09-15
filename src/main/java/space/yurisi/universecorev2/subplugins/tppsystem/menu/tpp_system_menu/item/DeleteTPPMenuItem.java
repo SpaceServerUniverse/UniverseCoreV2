@@ -36,10 +36,11 @@ public class DeleteTPPMenuItem extends AbstractItem {
         }
 
         Player targetPlayer = this.player.getServer().getPlayer(this.targetPlayerUUID);
-        String targetPlayerName = Objects.requireNonNull(targetPlayer).getName();
-        if (targetPlayer == null) {
+        if(targetPlayer == null){
+            this.requestManager.removeSearchReceiver(player);
             return new ItemBuilder(Material.REDSTONE_BLOCK).setDisplayName("承認待ちのリクエストはありません。");
         }
+        String targetPlayerName = targetPlayer.getName();
         ItemStack item = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta meta = (SkullMeta) item.getItemMeta();
         meta.setOwningPlayer(targetPlayer.getServer().getOfflinePlayer(targetPlayerName));
