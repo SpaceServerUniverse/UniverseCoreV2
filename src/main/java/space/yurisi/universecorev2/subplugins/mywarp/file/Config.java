@@ -3,6 +3,7 @@ package space.yurisi.universecorev2.subplugins.mywarp.file;
 import org.bukkit.configuration.file.FileConfiguration;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.subplugins.mywarp.Mywarp;
+import space.yurisi.universecorev2.utils.ConfigReader;
 
 import java.util.List;
 
@@ -18,11 +19,12 @@ public class Config {
     }
 
     private void init(){
-        core.saveDefaultConfig();
+        ConfigReader configReader= new ConfigReader(core,"subplugins/", "mywarp.yml");
+        configReader.saveDefaultConfig();
         if (config != null) {
-            core.reloadConfig();
+            configReader.reloadConfig();
         }
-        this.config = core.getConfig();
+        this.config = configReader.getConfig();
     }
 
     public List<String> getDenyWorlds(){

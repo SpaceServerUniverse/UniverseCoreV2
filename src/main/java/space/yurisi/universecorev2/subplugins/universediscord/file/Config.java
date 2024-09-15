@@ -1,10 +1,8 @@
-package space.yurisi.universecorev2.subplugins.universeland.utils;
+package space.yurisi.universecorev2.subplugins.universediscord.file;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.utils.ConfigReader;
-
-import java.util.List;
 
 public class Config {
 
@@ -18,7 +16,7 @@ public class Config {
     }
 
     private void init() {
-        ConfigReader configReader= new ConfigReader(core,"subplugins/", "universe-land.yml");
+        ConfigReader configReader= new ConfigReader(core,"subplugins/", "universe-discord.yml");
         configReader.saveDefaultConfig();
         if (config != null) {
             configReader.reloadConfig();
@@ -26,11 +24,15 @@ public class Config {
         this.config = configReader.getConfig();
     }
 
-    public Long getLandPrice() {
-        return this.config.getLong("land-price");
+    public String getDiscordBotToken(){
+        return this.config.getString("token");
     }
 
-    public List<String> getDenyWorlds() {
-        return this.config.getStringList("deny-worlds");
+    public String getDiscordGuildId(){
+        return this.config.getString("guild-id");
+    }
+
+    public String getDiscordChannelId(){
+        return this.config.getString("channel-id");
     }
 }

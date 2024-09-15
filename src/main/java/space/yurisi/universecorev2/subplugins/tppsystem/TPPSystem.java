@@ -1,6 +1,5 @@
 package space.yurisi.universecorev2.subplugins.tppsystem;
 
-import org.bukkit.entity.Player;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.UniverseCoreV2API;
 import space.yurisi.universecorev2.database.DatabaseManager;
