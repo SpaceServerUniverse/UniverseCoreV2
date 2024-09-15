@@ -16,6 +16,7 @@ public class UniverseCoreAPIConnector {
 
     public UniverseCoreAPIConnector(DatabaseManager databaseManager){
         this.userRepository = databaseManager.getUserRepository();
+        this.autoTPPSettingRepository = databaseManager.getAutoTPPSettingRepository();
     }
 
     public Boolean isExistsAutoTPPSetting(Player player){

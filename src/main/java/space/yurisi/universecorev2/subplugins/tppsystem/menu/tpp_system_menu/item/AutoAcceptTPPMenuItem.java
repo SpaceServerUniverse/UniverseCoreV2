@@ -27,7 +27,6 @@ public class AutoAcceptTPPMenuItem extends AbstractItem {
         Boolean isAutoAcceptTPP = false;
 
         if (!connector.isExistsAutoTPPSetting(player)) {
-            player.sendMessage("§2設定を作成します。");
             try {
                 connector.createDefaultAutoTPPSetting(player, false);
             } catch (Exception e) {
