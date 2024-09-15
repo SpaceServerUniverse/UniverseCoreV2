@@ -26,14 +26,19 @@ public class AutoAcceptTPPMenuItem extends AbstractItem {
     public ItemProvider getItemProvider() {
         Boolean isAutoAcceptTPP = false;
 
-        try {
-            if (!connector.isExistsAutoTPPSetting(player)) {
+        if (!connector.isExistsAutoTPPSetting(player)) {
+            player.sendMessage("§2設定を作成します。");
+            try {
                 connector.createDefaultAutoTPPSetting(player, false);
-            } else {
-                isAutoAcceptTPP = connector.getAutoTPPSetting(player);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        }else{
+            try {
+                isAutoAcceptTPP = connector.getAutoTPPSetting(player);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         if (isAutoAcceptTPP) {
