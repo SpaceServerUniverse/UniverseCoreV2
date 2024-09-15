@@ -77,6 +77,10 @@ commands:
   hat:
     discription: 手に持っているアイテムを頭にかぶります
 
+  #CustomName
+  tag:
+    description: 称号を設定します
+
 permissions:
   # UniverseCoreV2
   space.yurisi.universecorev2.interactevent.enchanttable:
