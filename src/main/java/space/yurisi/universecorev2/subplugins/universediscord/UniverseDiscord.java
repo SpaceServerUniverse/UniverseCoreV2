@@ -11,9 +11,9 @@ import space.yurisi.universecorev2.subplugins.SubPlugin;
 import space.yurisi.universecorev2.subplugins.universediscord.event.DiscordEvent;
 import space.yurisi.universecorev2.subplugins.universediscord.event.EventManager;
 import space.yurisi.universecorev2.file.Config;
-import space.yurisi.universecorev2.subplugins.universediscord.exception.ChannelNotFoundException;
-import space.yurisi.universecorev2.subplugins.universediscord.exception.GuildNotFoundException;
-import space.yurisi.universecorev2.subplugins.universediscord.exception.JDANotReadyException;
+import space.yurisi.universecorev2.subplugins.universediscord.exception.DiscordChannelNotFoundException;
+import space.yurisi.universecorev2.subplugins.universediscord.exception.DiscordGuildNotFoundException;
+import space.yurisi.universecorev2.subplugins.universediscord.exception.DiscordJDANotReadyException;
 
 import java.util.List;
 
@@ -31,17 +31,17 @@ public class UniverseDiscord implements SubPlugin {
         try {
             jda.awaitReady();
         } catch (InterruptedException e) {
-            throw new JDANotReadyException("JDA is not ready!");
+            throw new DiscordJDANotReadyException("JDA is not ready!");
         }
 
         Guild guild = jda.getGuildById(config.getDiscordGuildId());
         if (guild == null) {
-            throw new GuildNotFoundException("Guild not found with ID: " + config.getDiscordGuildId());
+            throw new DiscordGuildNotFoundException("Guild not found with ID: " + config.getDiscordGuildId());
         }
 
         TextChannel channel = guild.getTextChannelById(config.getDiscordChannelId());
         if (channel == null) {
-            throw new ChannelNotFoundException("Channel not found with ID: " + config.getDiscordChannelId());
+            throw new DiscordChannelNotFoundException("Channel not found with ID: " + config.getDiscordChannelId());
         }
 
         new EventManager(core, channel);
