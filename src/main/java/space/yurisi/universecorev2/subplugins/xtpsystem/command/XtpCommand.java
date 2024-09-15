@@ -9,6 +9,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import space.yurisi.universecorev2.utils.Message;
 
 public class XtpCommand implements CommandExecutor{
 
@@ -18,15 +19,10 @@ public class XtpCommand implements CommandExecutor{
             return false;
         }
 
-        /* TODO
-         * 1, 配列が3こ以下か確認
-         * 2, x y z → 小数点ある数(doubleに変換可能)かの確認
-         *
-         * 3, ワールドの名前がサーバーに存在するか確認
-         */
+        /* TODO: 1, 配列が3こ以下か確認, 2, x y z → 小数点ある数(doubleに変換可能)かの確認, 3, ワールドの名前がサーバーに存在するか確認 */
 
-        // 1
-        if(args.length < 4){
+        if(args.length < 4) {
+            Message.sendNormalMessage(player, "[テレポートAI]", "/xtp <x> <y> <z> <ワールド名> : 指定された座標にテレポートします");
             return false;
         }
 
@@ -38,18 +34,28 @@ public class XtpCommand implements CommandExecutor{
             World world = Bukkit.getServer().getWorld(args[3]);
 
             if(world == null){
-                player.sendMessage(Component.text("§a[テレポートAI]　§cワールド名が存在しません。"));
+                Message.sendErrorMessage(player, "[テレポートAI]", "ワールド名が存在しません。");
                 return false;
             }
 
             Location location = new Location(world, x, y, z);
+            String xMessage = String.valueOf(location.getX());
+            String yMessage = String.valueOf(location.getY());
+            String zMessage = String.valueOf(location.getZ());
+            String worldName = location.getWorld().getName();
 
             player.teleport(location);
-            player.sendMessage(Component.text("§a[テレポートAI]　§6" + location + "にテレポート成功しました！"));
+            Message.sendSuccessMessage(player, "[テレポートAI]",
+                    " x:"+xMessage +
+                             " y:"+yMessage +
+                             " z:"+zMessage +
+                             " ワールド:"+worldName + "にテレポート成功しました！"
+            );
         } catch (NumberFormatException e){
-            player.sendMessage(Component.text("§a[テレポートAI]　§c座標は数値で指定して下さい。"));
+            Message.sendErrorMessage(player, "[テレポートAI]", "座標は数値で指定して下さい。");
             return false;
         }
+
         return true;
     }
 }

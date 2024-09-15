@@ -54,6 +54,7 @@ public class DatabaseConnector {
                 .addAnnotatedClass(Land.class)
                 .addAnnotatedClass(LandPermission.class)
                 .addAnnotatedClass(Mywarp.class)
+                .addAnnotatedClass(AutoTppSetting.class)
                 .addAnnotatedClass(PlayerLevel.class)
                 .addAnnotatedClass(PlayerNormalLevel.class)
                 .addAnnotatedClass(Position.class)

@@ -11,6 +11,7 @@ import space.yurisi.universecorev2.menu.BaseMenu;
 import space.yurisi.universecorev2.subplugins.mywarp.connector.UniverseCoreAPIConnector;
 import space.yurisi.universecorev2.subplugins.mywarp.menu.menu_item.*;
 import space.yurisi.universecorev2.subplugins.mywarp.menu.visit_menu.item.VisitMenuItem;
+import space.yurisi.universecorev2.subplugins.mywarp.utils.MessageHelper;
 import xyz.xenondevs.invui.gui.Gui;
 import xyz.xenondevs.invui.gui.PagedGui;
 import xyz.xenondevs.invui.gui.structure.Markers;
@@ -62,9 +63,9 @@ public class VisitMywarpInventoryMenu implements BaseMenu {
 
                 window.open();
             } catch (UserNotFoundException e){
-                player.sendMessage(Component.text("[テレポートAI] " + "プレイヤーが存在しないようです。 コード MV1").color(TextColor.color(Color.RED.asRGB())));
+                player.sendMessage(MessageHelper.getErrorMessage("プレイヤーが存在しないようです。"));
             } catch (MywarpNotFoundException e){
-                player.sendMessage(Component.text("[テレポートAI] " + "ワープポイントが見つかりませんでした。コード MV2").color(TextColor.color(Color.RED.asRGB())));
+                player.sendMessage(MessageHelper.getErrorMessage("ワープポイントが見つかりませんでした。"));
             }
     }
 

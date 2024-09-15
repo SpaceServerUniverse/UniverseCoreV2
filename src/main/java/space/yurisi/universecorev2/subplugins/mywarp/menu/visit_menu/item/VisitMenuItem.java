@@ -39,6 +39,7 @@ public class VisitMenuItem extends AbstractItem {
         try {
             this.connector.teleportMywarp(player, mywarp);
             player.sendMessage(MessageHelper.getSuccessMessage("§6" + mywarp.getName()+ " §2にワープしました。"));
+
         } catch (MywarpNotFoundException e) {
             player.sendMessage(MessageHelper.getErrorMessage("ワープポイントが見つかりませんでした。"));
         }

@@ -24,6 +24,5 @@ public class QuitEvent implements Listener {
 
         main.getTaskManager().destroyBossBarTask(player);
         main.getPlayerBossBarManager().unregister(player);
-
     }
 }

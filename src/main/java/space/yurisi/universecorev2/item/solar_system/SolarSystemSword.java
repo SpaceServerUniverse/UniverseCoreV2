@@ -13,7 +13,7 @@ public class SolarSystemSword extends CustomItem {
                 "§e§lノヴァ・クラッシャー",
                 1,
                 2,
-                new ItemStack(Material.DIAMOND_SWORD)
+                ItemStack.of(Material.DIAMOND_SWORD)
         );
         registerBaseItemFunctions();
     }

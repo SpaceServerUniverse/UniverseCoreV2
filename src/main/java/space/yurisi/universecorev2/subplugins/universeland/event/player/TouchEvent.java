@@ -20,6 +20,7 @@ import space.yurisi.universecorev2.subplugins.universeland.store.LandData;
 import space.yurisi.universecorev2.subplugins.universeland.store.LandStore;
 import space.yurisi.universecorev2.subplugins.universeland.utils.BoundingBox;
 import space.yurisi.universecorev2.subplugins.universeland.utils.Vector2;
+import space.yurisi.universecorev2.utils.Message;
 
 import java.util.UUID;
 
@@ -69,7 +70,8 @@ public class TouchEvent implements Listener {
             if (landData.getStartPosition() == null) {
                 landData.setStartPosition(new Vector2(x, z));
                 landData.setWorldName(player.getWorld().getWorldFolder().getName());
-                player.sendMessage(Component.text("StartPositionを設定しました (X: " + x + ", Z: " + z + ")"));
+
+                Message.sendNormalMessage(player, "[土地保護AI]", "始点を設定しました (X: " + x + ", Z: " + z + ")");
             } else {
                 landData.setEndPosition(new Vector2(x, z));
                 landData.setSelectLand(false);
@@ -77,11 +79,11 @@ public class TouchEvent implements Listener {
                 int size = landData.getLand().getSize();
 
                 if (size <= 1) {
-                    player.sendMessage(Component.text("保護する範囲は、2マス以上にしてください"));
+                    Message.sendNormalMessage(player, "[土地保護AI]", "保護する範囲は、2マス以上にしてください");
                     landData.resetLandData();
                     return;
                 } else if (!player.getWorld().getWorldFolder().getName().equals(landData.getWorldName())) {
-                    player.sendMessage(Component.text("同じワールドで範囲を指定してください"));
+                    Message.sendWarningMessage(player, "[土地保護AI]", "同じワールドで範囲を指定してください");
                     landData.resetLandData();
                     return;
                 }
@@ -90,20 +92,17 @@ public class TouchEvent implements Listener {
 
                 if (overlapLandData != null) {
                     OfflinePlayer p = Bukkit.getServer().getOfflinePlayer(overlapLandData.getOwnerUUID());
-                    player.sendMessage(Component.text("選択した範囲は、" + p.getName() + "によって保護されています"));
+                    Message.sendErrorMessage(player, "[土地保護AI]", "選択した範囲は、" + p.getName() + "によって保護されています");
                     return;
                 }
 
-                player.sendMessage(Component.text("EndPositionを設定しました (X: " + x + ", Z: " + z + ")"));
-                player.sendMessage(Component.text("サイズ: " + size + "ブロック (値段: " + landData.getPrice() + "star)"));
-                if (player.getName().startsWith("*")) {
-                    player.sendMessage(Component.text("指定した範囲の土地を購入する際は、/land buyを実行してください"));
-                } else {
-                    Component component = Component.text("[ここをクリックで土地を購入]")
-                            .clickEvent(ClickEvent.runCommand("/land buy"))
-                            .hoverEvent(HoverEvent.showText(Component.text("クリックすると土地を購入します")));
-                    player.sendMessage(component);
-                }
+                Message.sendSuccessMessage(player, "[土地保護AI]", "終点を設定しました (X: " + x + ", Z: " + z + ")");
+                Message.sendSuccessMessage(player, "[土地保護AI]", "サイズ: " + size + "ブロック (値段: " + landData.getPrice() + "star)");
+
+                Component component = Component.text("§a[ここをクリックで土地を購入]")
+                        .clickEvent(ClickEvent.runCommand("/land buy"))
+                        .hoverEvent(HoverEvent.showText(Component.text("クリックすると土地を購入します")));
+                player.sendMessage(component);
             }
         }
     }

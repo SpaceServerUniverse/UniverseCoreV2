@@ -28,6 +28,7 @@ import space.yurisi.universecorev2.subplugins.universeland.manager.LandDataManag
 import space.yurisi.universecorev2.subplugins.universeland.store.LandData;
 import space.yurisi.universecorev2.subplugins.universeland.store.LandStore;
 import space.yurisi.universecorev2.subplugins.universeland.utils.BoundingBox;
+import space.yurisi.universecorev2.utils.Message;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,6 @@ public class LandCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage(Component.text("このコマンドはゲーム内で実行してください"));
             return false;
         }
 
@@ -51,18 +51,19 @@ public class LandCommand implements CommandExecutor, TabCompleter {
         if (args.length == 0) {
             landData.setSelectLand(true);
             landData.resetLandData();
-            player.sendMessage(Component.text("範囲を指定してください"));
+
+            Message.sendWarningMessage(player, "[土地管理AI]", "範囲を指定してください");
             return false;
         } else if (args[0].equals("buy")) {
             BoundingBox land = landData.getLand();
 
             if (land == null) {
-                player.sendMessage(Component.text("土地を購入する場合は /land で土地を指定してください"));
+                Message.sendWarningMessage(player, "[土地管理AI]", "土地を購入する場合は /land で土地を指定してください");
                 return false;
             }
 
             if (UniverseLand.getInstance().getPluginConfig().getDenyWorlds().contains(land.getWorldName())) {
-                player.sendMessage(Component.text("このワールドでは土地を保護することはできません"));
+                Message.sendWarningMessage(player, "[土地管理AI]", "このワールドでは土地を保護することはできません");
                 return false;
             }
 
@@ -70,7 +71,7 @@ public class LandCommand implements CommandExecutor, TabCompleter {
 
             if (overlapLandData != null) {
                 OfflinePlayer p = Bukkit.getServer().getOfflinePlayer(overlapLandData.getOwnerUUID());
-                player.sendMessage(Component.text("選択した範囲は、" + p.getName() + "によって保護されています"));
+                Message.sendErrorMessage(player, "[土地管理AI]", "選択した範囲は、" + p.getName() + "によって保護されています");
                 return false;
             }
 
@@ -79,31 +80,32 @@ public class LandCommand implements CommandExecutor, TabCompleter {
             try {
                 Long money = UniverseEconomyAPI.getInstance().getMoney(player);
                 if (price > money) {
-                    player.sendMessage(Component.text("購入失敗: お金が足りません(不足金: " + (price - money) + "star"));
+                    Message.sendErrorMessage(player, "[土地管理AI]", "お金が足りません (不足金: " + (price - money) + "star)");
                 } else {
                     UniverseEconomyAPI.getInstance().reduceMoney(player, price, "土地の購入");
                     database.getLandRepository().createLand(player, land.getMinX(), land.getMinZ(), land.getMaxX(), land.getMaxZ(), land.getWorldName(), price);
 
-                    player.sendMessage(Component.text("指定した土地の購入に成功しました"));
+                    Message.sendSuccessMessage(player, "[土地管理AI]", "指定した土地を [" + price + "star] で購入しました");
                 }
             } catch (UserNotFoundException | MoneyNotFoundException e) {
-                player.sendMessage(Component.text("購入失敗: データが見つかりませんでした"));
+                Message.sendErrorMessage(player, "[土地管理AI]", "購入できませんでした。データが見つかりません");
             } catch (ParameterException e) {
-                player.sendMessage(Component.text("購入失敗: 土地の値段が不正です"));
+                Message.sendErrorMessage(player, "[土地管理AI]", "購入できませんでした。土地の値段が不正です");
             } catch (CanNotReduceMoneyException e) {
-                player.sendMessage(Component.text("購入失敗: 決済処理に失敗しました"));
+                Message.sendErrorMessage(player, "[土地管理AI]", "購入できませんでした。決済処理に失敗しました");
             }
+
         } else if (args[0].equals("sell")) {
             LandData land = LandDataManager.getInstance().ultimateChickenHorseMaximumTheHormoneGetYutakaOzakiGreatGodUniverseWonderfulSpecialExpertPerfectHumanVerySuperGeri(player);
 
             if (land == null) {
-                player.sendMessage(Component.text("この土地の情報がみつかりませんでした"));
+                Message.sendWarningMessage(player, "[土地管理AI]", "この土地の情報がみつかりませんでした");
                 return false;
             }
 
             UUID ownerUUID = land.getOwnerUUID();
             if (!ownerUUID.toString().equals(player.getUniqueId().toString())) {
-                player.sendMessage(Component.text("あなたはこの土地の所有者ではありません"));
+                Message.sendWarningMessage(player, "[土地管理AI]", "あなたはこの土地の所有者ではありません");
                 return false;
             }
 
@@ -120,10 +122,10 @@ public class LandCommand implements CommandExecutor, TabCompleter {
             player.sendMessage(Component.text("土地を [" + land.getPrice() + "star] で売却しました"));
         } else if (args[0].equals("invite")) {
             if (args.length == 1) {
-                player.sendMessage(Component.text("招待するプレイヤー名を指定してください"));
+                Message.sendNormalMessage(player, "[土地管理AI]", "招待するプレイヤー名を指定してください");
                 return false;
             } else if (args[1].equals(player.getName())) {
-                player.sendMessage(Component.text("自分を招待することはできません"));
+                Message.sendErrorMessage(player, "[土地管理AI]", "自分を招待することはできません");
                 return false;
             }
 
@@ -134,24 +136,27 @@ public class LandCommand implements CommandExecutor, TabCompleter {
 
                 LandData land = LandDataManager.getInstance().ultimateChickenHorseMaximumTheHormoneGetYutakaOzakiGreatGodUniverseWonderfulSpecialExpertPerfectHumanVerySuperGeri(player);
                 if (land == null || !land.getOwnerUUID().toString().equals(player.getUniqueId().toString())) {
-                    player.sendMessage("現在いる場所は、あなたの土地ではないため招待できません");
+                    Message.sendWarningMessage(player, "[土地管理AI]", "現在いる場所は、あなたの土地ではないため招待できません");
                     return false;
                 }
                 Land dbland = database.getLandRepository().getLand(land.getId());
                 database.getLandPermissionRepository().createLandPermission(user, dbland);
 
-                player.sendMessage(Component.text(args[1] + "をこの土地に招待しました"));
+                Message.sendSuccessMessage(player, "[土地管理AI]", args[1] + " がこの土地を利用できるようになりました");
+                return false;
             } catch (UserNotFoundException e) {
-                player.sendMessage(Component.text("ユーザーが見つかりませんでした"));
+                Message.sendErrorMessage(player, "[土地管理AI]", "ユーザーが見つかりませんでした");
+                return false;
             } catch (LandNotFoundException e) {
-                player.sendMessage(Component.text("土地データが見つかりませんでした"));
+                Message.sendErrorMessage(player, "[土地管理AI]", "土地データが見つかりませんでした");
+                return false;
             }
         } else if (args[0].equals("kick")) {
             if (args.length == 1) {
-                player.sendMessage(Component.text("招待を取り消すプレイヤー名を指定してください"));
+                Message.sendWarningMessage(player, "[土地管理AI]", "招待を取り消すプレイヤー名を指定してください");
                 return false;
             } else if (args[1].equals(player.getName())) {
-                player.sendMessage(Component.text("自分を取り消すことはできません"));
+                Message.sendWarningMessage(player, "[土地管理AI]", "自分を取り消すことはできません");
                 return false;
             }
 
@@ -162,27 +167,30 @@ public class LandCommand implements CommandExecutor, TabCompleter {
 
                 LandData land = LandDataManager.getInstance().ultimateChickenHorseMaximumTheHormoneGetYutakaOzakiGreatGodUniverseWonderfulSpecialExpertPerfectHumanVerySuperGeri(player);
                 if (land == null || !land.getOwnerUUID().toString().equals(player.getUniqueId().toString())) {
-                    player.sendMessage("現在いる場所は、あなたの土地ではないため招待を取り消すことができません");
+                    Message.sendWarningMessage(player, "[土地管理AI]", "現在いる場所は、あなたの土地ではないため招待を取り消すことができません");
                     return false;
                 }
                 Land landRepository = database.getLandRepository().getLand(land.getId());
                 LandPermission landPermission = database.getLandPermissionRepository().getLandPermission(user, landRepository);
                 database.getLandPermissionRepository().deleteLandPermission(landPermission);
 
-                player.sendMessage("この土地から " + args[1] + " の招待を削除しました");
+                Message.sendSuccessMessage(player, "[土地管理AI]", "この土地から " + args[1] + " の招待を削除しました");
             } catch (UserNotFoundException e) {
-                player.sendMessage(Component.text("ユーザーが見つかりませんでした"));
+                Message.sendErrorMessage(player, "[土地管理AI]", "ユーザーが見つかりませんでした");
+                return false;
             } catch (LandNotFoundException e) {
-                player.sendMessage(Component.text("土地データが見つかりませんでした"));
+                Message.sendErrorMessage(player, "[土地管理AI]", "土地データが見つかりませんでした");
+                return false;
             } catch (LandPermissionNotFoundException e) {
-                player.sendMessage(Component.text("指定したプレイヤーと土地を共有していません"));
+                Message.sendWarningMessage(player, "[土地管理AI]", "指定したプレイヤーと土地を共有していません");
+                return false;
             }
         } else if (args[0].equals("transfer")) {
             if (args.length == 1) {
-                player.sendMessage(Component.text("土地を譲渡するプレイヤー名を指定してください"));
+                Message.sendWarningMessage(player, "[土地管理AI]", "土地を譲渡するプレイヤー名を指定してください");
                 return false;
             } else if (args[1].equals(player.getName())) {
-                player.sendMessage(Component.text("自分自身に土地を譲渡することはできません"));
+                Message.sendErrorMessage(player, "[土地管理AI]", "自分自身に土地を譲渡することはできません");
                 return false;
             }
 
@@ -191,7 +199,7 @@ public class LandCommand implements CommandExecutor, TabCompleter {
             try {
                 LandData land = LandDataManager.getInstance().ultimateChickenHorseMaximumTheHormoneGetYutakaOzakiGreatGodUniverseWonderfulSpecialExpertPerfectHumanVerySuperGeri(player);
                 if (land == null || !land.getOwnerUUID().toString().equals(player.getUniqueId().toString())) {
-                    player.sendMessage("現在いる場所は、あなたの土地ではないため土地を譲渡することができません");
+                    Message.sendErrorMessage(player, "[土地管理AI]", "現在いる場所は、あなたの土地ではないため土地を譲渡することができません");
                     return false;
                 }
 
@@ -201,7 +209,7 @@ public class LandCommand implements CommandExecutor, TabCompleter {
                 landRepository.setUuid(user.getUuid());
                 database.getLandRepository().updateLand(landRepository);
 
-                player.sendMessage(args[1] + " に土地を譲渡しました");
+                Message.sendSuccessMessage(player, "[土地管理AI]", args[1] + " に土地を譲渡しました");
 
                 User beforeOwner = database.getUserRepository().getUserFromUUID(player.getUniqueId());
 
@@ -209,22 +217,22 @@ public class LandCommand implements CommandExecutor, TabCompleter {
                 LandPermission landPermission = database.getLandPermissionRepository().getLandPermission(beforeOwner, newLand);
                 database.getLandPermissionRepository().deleteLandPermission(landPermission);
             } catch (UserNotFoundException e) {
-                player.sendMessage(Component.text("ユーザーが見つかりませんでした"));
+                Message.sendErrorMessage(player, "[土地管理AI]", "ユーザーが見つかりませんでした");
+                return false;
             } catch (LandNotFoundException e) {
-                player.sendMessage(Component.text("土地データが見つかりませんでした"));
+                Message.sendErrorMessage(player, "[土地管理AI]", "土地データが見つかりませんでした");
+                return false;
             } catch (LandPermissionNotFoundException ignored) {//パーミッションを持っていなかった場合は無視
             }
         } else if (args[0].equals("here")) {
             LandData land = LandDataManager.getInstance().ultimateChickenHorseMaximumTheHormoneGetYutakaOzakiGreatGodUniverseWonderfulSpecialExpertPerfectHumanVerySuperGeri(player);
             if (land == null) {
-                player.sendMessage(Component.text("この土地の情報がみつかりませんでした"));
+                Message.sendWarningMessage(player, "[土地管理AI]", "この土地の情報がみつかりませんでした");
                 return false;
             }
 
             OfflinePlayer offlinePlayer = Bukkit.getServer().getOfflinePlayer(land.getOwnerUUID());
-            player.sendMessage(Component.text("情報"));
-            player.sendMessage(Component.text("土地ID: " + land.getId()));
-            player.sendMessage(Component.text("所有者: " + offlinePlayer.getName()));
+            Message.sendNormalMessage(player, "[土地管理AI]", "土地情報 -- 土地ID: [" + land.getId() + "]  所有者: [" + offlinePlayer.getName() + "]");
         }
 
         return true;
