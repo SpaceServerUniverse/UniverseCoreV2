@@ -38,15 +38,4 @@ public class Config {
         return this.config.getString("db.password");
     }
 
-    public String getDiscordBotToken(){
-        return this.config.getString("universe-discord.token");
-    }
-
-    public String getDiscordGuildId(){
-        return this.config.getString("universe-discord.guild-id");
-    }
-
-    public String getDiscordChannelId(){
-        return this.config.getString("universe-discord.channel-id");
-    }
 }

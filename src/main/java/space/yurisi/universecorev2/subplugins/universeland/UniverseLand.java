@@ -7,6 +7,7 @@ import space.yurisi.universecorev2.subplugins.SubPlugin;
 import space.yurisi.universecorev2.subplugins.universeland.command.LandCommand;
 import space.yurisi.universecorev2.subplugins.universeland.manager.EventManager;
 import space.yurisi.universecorev2.subplugins.universeland.utils.Config;
+import space.yurisi.universecorev2.utils.ConfigReader;
 
 import java.util.Objects;
 
@@ -22,7 +23,7 @@ public final class UniverseLand implements SubPlugin {
 
     public void onEnable(UniverseCoreV2 core) {
         instance = this;
-        this.config =  new Config(core);
+        this.config = new Config(core);
         Objects.requireNonNull(core.getCommand("land")).setExecutor(new LandCommand());
         EventManager.init(core);
 
