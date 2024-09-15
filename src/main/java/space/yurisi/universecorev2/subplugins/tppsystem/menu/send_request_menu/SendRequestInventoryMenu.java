@@ -40,6 +40,7 @@ public class SendRequestInventoryMenu implements BaseMenu {
                 return;
             }
             List<Item> items = player.getServer().getOnlinePlayers().stream()
+                    .filter(user -> !user.getName().equals(player.getName()))
                     .map(user -> new SendRequestMenuItem(player, this.requestManager, user.getName(), this.connector))
                     .collect(Collectors.toList());
 
