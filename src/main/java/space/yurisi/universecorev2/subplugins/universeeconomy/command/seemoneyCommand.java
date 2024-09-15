@@ -16,6 +16,7 @@ public class seemoneyCommand extends BaseCommand {
         }
 
         if (args.length != 1) {
+            player.sendMessage(getErrorMessage("/seemoney <プレイヤー名>"));
             return false;
         }
 

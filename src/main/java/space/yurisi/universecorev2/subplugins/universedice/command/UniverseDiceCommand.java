@@ -6,18 +6,19 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import space.yurisi.universecorev2.utils.Message;
 
 import java.util.Random;
 
 public class UniverseDiceCommand implements CommandExecutor {
 
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             return false;
         }
 
         if (args.length == 0 || args.length == 1) {
-            sender.sendMessage("§a[DiceAI] §f/dice <最小値> <最大値> : 指定された範囲内の乱数を生成します");
+            Message.sendNormalMessage(player, "[DiceAI]", "/dice <最小値> <最大値> : 指定された範囲内の乱数を生成します");
             return false;
         }
 
@@ -26,12 +27,12 @@ public class UniverseDiceCommand implements CommandExecutor {
             int max = Integer.parseInt(args[1]);
 
             if (min > max) {
-                sender.sendMessage("§c[DiceAI] §f最小値は最大値よりも小さくすることはできません");
+                Message.sendWarningMessage(player, "[DiceAI]", "最小値は最大値より小さくしてください");
                 return false;
             }
 
             if (max > 10000) {
-                sender.sendMessage("§c[DiceAI] §f最大値は10000以下にしてください");
+                Message.sendWarningMessage(player, "[DiceAI]", "最大値は10000以下にしてください");
                 return false;
             }
 
@@ -39,7 +40,7 @@ public class UniverseDiceCommand implements CommandExecutor {
             sender.getServer().broadcast(Component.text("§a[DiceAI] §6" + sender.getName() + " が " + min + " から " + max + " の範囲でダイスを振りました。結果は " + result + " です"));
             return true;
         } catch (NumberFormatException e) {
-            sender.sendMessage("§c[DiceAI] §f数値を指定してください");
+            Message.sendErrorMessage(player, "[DiceAI]", "数値を指定してください");
             return false;
         }
     }

@@ -10,12 +10,14 @@ import space.yurisi.universecorev2.subplugins.playerinfoscoreboard.PlayerInfoSco
 import space.yurisi.universecorev2.subplugins.rankcounter.RankCounter;
 import space.yurisi.universecorev2.subplugins.salute.Salute;
 import space.yurisi.universecorev2.subplugins.signcommand.SignCommand;
+import space.yurisi.universecorev2.subplugins.sitdown.Sitdown;
 import space.yurisi.universecorev2.subplugins.suicide.Suicide;
 import space.yurisi.universecorev2.subplugins.universedice.UniverseDice;
+import space.yurisi.universecorev2.subplugins.universediscord.UniverseDiscord;
 import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomy;
 import space.yurisi.universecorev2.subplugins.universeland.UniverseLand;
-import space.yurisi.universecorev2.subplugins.xtpsystem.XTPSystem;
 import space.yurisi.universecorev2.subplugins.tppsystem.TPPSystem;
+import space.yurisi.universecorev2.subplugins.xtpsystem.XtpSystem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,13 +41,15 @@ public class SubPluginInitializer {
         this.subPlugins.add(new LevelAward());
         this.subPlugins.add(new UniverseLand());
         this.subPlugins.add(new UniverseDice());
+        this.subPlugins.add(new UniverseDiscord());
         this.subPlugins.add(new Mywarp());
         this.subPlugins.add(new RankCounter());
         this.subPlugins.add(new Salute());
         this.subPlugins.add(new Suicide());
         this.subPlugins.add(new SignCommand());
-        this.subPlugins.add(new XTPSystem());
+        this.subPlugins.add(new XtpSystem());
         this.subPlugins.add(new TPPSystem());
+        this.subPlugins.add(new Sitdown());
     }
 
     public void onEnable(){
