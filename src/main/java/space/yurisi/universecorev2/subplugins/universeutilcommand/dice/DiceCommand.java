@@ -1,4 +1,4 @@
-package space.yurisi.universecorev2.subplugins.universedice.command;
+package space.yurisi.universecorev2.subplugins.universeutilcommand.dice;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.Command;
@@ -10,7 +10,7 @@ import space.yurisi.universecorev2.utils.Message;
 
 import java.util.Random;
 
-public class UniverseDiceCommand implements CommandExecutor {
+public class DiceCommand implements CommandExecutor {
 
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player player)) {

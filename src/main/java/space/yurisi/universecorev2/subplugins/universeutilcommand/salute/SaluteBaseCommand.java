@@ -1,4 +1,4 @@
-package space.yurisi.universecorev2.subplugins.salute.command;
+package space.yurisi.universecorev2.subplugins.universeutilcommand.salute;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.Command;
