@@ -13,5 +13,10 @@ mywarp:
   settings:
     deny-worlds: [ ]
 
+universe-discord:
+  token: ""
+  guild-id: ""
+  channel-id: ""
+
 customname:
   "yurisi": "yurisi"
