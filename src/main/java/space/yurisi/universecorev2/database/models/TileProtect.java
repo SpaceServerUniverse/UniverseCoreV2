@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Table(name = "tile_protect")
+@Table(name = "tile_protects")
 public class TileProtect {
 
     @Id

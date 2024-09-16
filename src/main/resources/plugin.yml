@@ -81,6 +81,10 @@ commands:
   tag:
     description: 称号を設定します
 
+  #TileProtect
+  lock:
+    description: チェスト等を保護します
+
 permissions:
   # UniverseCoreV2
   space.yurisi.universecorev2.interactevent.enchanttable:

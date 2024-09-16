@@ -8,6 +8,7 @@ import space.yurisi.universecorev2.database.models.TileProtect;
 import space.yurisi.universecorev2.exception.TileProtectNotFoundException;
 
 import java.util.Date;
+import java.util.UUID;
 
 public class TileProtectRepository {
 
@@ -88,6 +89,70 @@ public class TileProtectRepository {
         }
 
         return data;
+    }
+
+    /**
+     * タイル保護データをロケーションから取得
+     *
+     * @param location チェストのロケーション
+     * @param player プレイヤー
+     * @return TileProtect
+     * @throws TileProtectNotFoundException タイル保護データが見つからない場合
+     */
+    public TileProtect getTileProtectFromLocation(Location location, Player player) throws TileProtectNotFoundException {
+        String uuid = player.getUniqueId().toString();
+        Session session = this.sessionFactory.getCurrentSession();
+        session.beginTransaction();
+        TileProtect data = session.createQuery("FROM TileProtect WHERE x = :x AND y = :y AND z = :z AND world_name = :world_name AND uuid = :uuid", TileProtect.class)
+                .setParameter("x", (long) Math.floor(location.getX()))
+                .setParameter("y", (long) Math.floor(location.getY()))
+                .setParameter("z", (long) Math.floor(location.getZ()))
+                .setParameter("world_name", location.getWorld().getWorldFolder().getName())
+                .setParameter("uuid", uuid)
+                .uniqueResult();
+        session.getTransaction().commit();
+        session.close();
+
+        if (data == null) {
+            throw new TileProtectNotFoundException("タイル保護データが見つかりません");
+        }
+
+        return data;
+    }
+
+    /**
+     * タイル保護データをロケーションから存在するか確認
+     *
+     * @param location チェストのロケーション
+     * @return Boolean
+     * @throws TileProtectNotFoundException タイル保護データが見つからない場合
+     */
+
+    public Boolean existsTileProtectFromLocation(Location location) {
+        try{
+            getTileProtectFromLocation(location);
+        }catch(TileProtectNotFoundException e){
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * タイル保護データをロケーションとプレイヤーから存在するか確認
+     *
+     * @param location チェストのロケーション
+     * @param player プレイヤー
+     * @return Boolean
+     * @throws TileProtectNotFoundException タイル保護データが見つからない場合
+     */
+
+    public Boolean existsTileProtectFromLocation(Location location, Player player) {
+        try{
+            getTileProtectFromLocation(location, player);
+        }catch(TileProtectNotFoundException e){
+            return false;
+        }
+        return true;
     }
 
     /**

@@ -14,6 +14,7 @@ import space.yurisi.universecorev2.subplugins.universeutilcommand.UniverseUtilCo
 import space.yurisi.universecorev2.subplugins.signcommand.SignCommand;
 import space.yurisi.universecorev2.subplugins.sitdown.Sitdown;
 import space.yurisi.universecorev2.subplugins.universediscord.UniverseDiscord;
+import space.yurisi.universecorev2.subplugins.tileprotect.TileProtect;
 import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomy;
 import space.yurisi.universecorev2.subplugins.universeland.UniverseLand;
 import space.yurisi.universecorev2.subplugins.tppsystem.TPPSystem;
@@ -50,6 +51,8 @@ public class SubPluginInitializer {
         this.subPlugins.add(new UniverseUtilCommand());
         this.subPlugins.add(new ItemHat());
         this.subPlugins.add(new CustomName());
+        this.subPlugins.add(new TileProtect());
+
     }
 
     public void onEnable(){
