@@ -58,7 +58,7 @@ public class TouchEvent implements Listener {
 
         if (tileProtectRepo.existsTileProtectFromLocation(blockLocation, player)) {
             TileProtect tileProtect = tileProtectRepo.getTileProtectFromLocation(blockLocation);
-            if (Objects.equals(tileProtect.getUuid(), player.getUniqueId().toString())) {
+            if (!Objects.equals(tileProtect.getUuid(), player.getUniqueId().toString())) {
                 event.setCancelled(true);
             }
         }
