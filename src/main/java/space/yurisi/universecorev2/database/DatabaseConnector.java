@@ -54,6 +54,7 @@ public class DatabaseConnector {
                 .addAnnotatedClass(Land.class)
                 .addAnnotatedClass(LandPermission.class)
                 .addAnnotatedClass(Mywarp.class)
+                .addAnnotatedClass(AutoTppSetting.class)
                 .addAnnotatedClass(PlayerLevel.class)
                 .addAnnotatedClass(PlayerNormalLevel.class)
                 .addAnnotatedClass(Position.class)
@@ -63,7 +64,8 @@ public class DatabaseConnector {
                 .addAnnotatedClass(KillDeathCount.class)
                 .addAnnotatedClass(LifeCount.class)
                 .addAnnotatedClass(OreCount.class)
-                .addAnnotatedClass(PlayerCount.class);
+                .addAnnotatedClass(PlayerCount.class)
+                .addAnnotatedClass(CustomName.class);
     }
 
     private Configuration registerProperties(Configuration configuration) {

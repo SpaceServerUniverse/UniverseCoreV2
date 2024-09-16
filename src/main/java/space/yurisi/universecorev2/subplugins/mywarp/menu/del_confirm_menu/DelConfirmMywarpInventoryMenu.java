@@ -15,6 +15,7 @@ import space.yurisi.universecorev2.subplugins.mywarp.menu.menu_item.TopItem;
 import space.yurisi.universecorev2.subplugins.mywarp.menu.del_confirm_menu.item.NoItem;
 import space.yurisi.universecorev2.subplugins.mywarp.menu.del_confirm_menu.item.YesItem;
 import space.yurisi.universecorev2.subplugins.mywarp.menu.list_menu.item.WarpMenuItem;
+import space.yurisi.universecorev2.subplugins.mywarp.utils.MessageHelper;
 import xyz.xenondevs.invui.gui.Gui;
 import xyz.xenondevs.invui.gui.PagedGui;
 import xyz.xenondevs.invui.item.Item;
@@ -66,9 +67,9 @@ public class DelConfirmMywarpInventoryMenu implements BaseMenu {
 
             window.open();
         } catch (UserNotFoundException e) {
-            player.sendMessage(Component.text("[テレポートAI] " + "ユーザーデータが存在しないようです。管理者に報告してください。 コード MW1").color(TextColor.color(Color.RED.asRGB())));
+            player.sendMessage(MessageHelper.getErrorMessage("ユーザーデータが存在しないようです。管理者に報告してください。"));
         } catch (MywarpNotFoundException e) {
-            player.sendMessage(Component.text("[テレポートAI] " + "ワープポイントが見つかりませんでした。コード MW2").color(TextColor.color(Color.RED.asRGB())));
+            player.sendMessage(MessageHelper.getErrorMessage("ワープポイントが見つかりませんでした。"));
         }
     }
 }

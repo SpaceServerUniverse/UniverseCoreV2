@@ -13,6 +13,7 @@ import space.yurisi.universecorev2.database.models.UserPosition;
 import space.yurisi.universecorev2.exception.PositionNotFoundException;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
 import space.yurisi.universecorev2.exception.UserPositionNotFoundException;
+import space.yurisi.universecorev2.utils.Message;
 
 public class pplayerCommand implements CommandExecutor {
 
@@ -28,14 +29,19 @@ public class pplayerCommand implements CommandExecutor {
             User user = manager.getUserRepository().getUserFromUUID(player.getUniqueId());
             UserPosition userPosition = manager.getUserPositionRepository().getUserPositionFromUser(user);
             String position = manager.getPositionRepository().getNameFromUserPosition(userPosition);
-            player.sendMessage(Component.text(player.getName()+"さんの役職は"+position+"です。"));
+
+            Message.sendSuccessMessage(player, "[管理AI]", player.getName() + "さんの役職は" + position + "です");
         } catch (UserPositionNotFoundException e) {
-            player.sendMessage(Component.text(player.getName()+"さんの役職はなしです。"));
+            Message.sendErrorMessage(player, "[管理AI]", player.getName() + "さんの役職は設定されていません");
+            return false;
         } catch (UserNotFoundException e) {
-            player.sendMessage(Component.text("エラーが発生しました ユーザーデータが存在しません。 エラーコード:UP0001"));
+            Message.sendErrorMessage(player, "[管理AI]", "ユーザーデータが存在しません");
+            return false;
         } catch (PositionNotFoundException e) {
-            player.sendMessage(Component.text("エラーが発生しました 役職データが存在しません。 エラーコード:UP0002"));
+            Message.sendErrorMessage(player, "[管理AI]", "役職データが存在しません");
+            return false;
         }
+
         return true;
     }
 }

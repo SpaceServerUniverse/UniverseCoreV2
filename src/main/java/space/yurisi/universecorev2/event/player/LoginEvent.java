@@ -34,7 +34,7 @@ public class LoginEvent implements Listener {
         try{
             user = userRepository.getUserFromUUID(uuid);
         } catch (UserNotFoundException e){
-            player.kick(Component.text("ユーザーデータの読み込み時にエラーが発生しました。管理者に報告してください。"));
+            player.kick(Component.text("§cユーザーデータの読み込み時にエラーが発生しました。管理者に報告してください。"));
             return;
         }
 

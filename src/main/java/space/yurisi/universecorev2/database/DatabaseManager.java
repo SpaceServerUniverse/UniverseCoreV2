@@ -12,6 +12,7 @@ public class DatabaseManager {
     private final LandRepository landRepository;
     private final LandPermissionRepository landPermissionRepository;
     private final MywarpRepository mywarpRepository;
+    private final AutoTppSettingRepository autoTPPSettingRepository;
     private final PlayerLevelRepository playerLevelRepository;
     private final PlayerNormalLevelRepository playerNormalLevelRepository;
 
@@ -31,6 +32,8 @@ public class DatabaseManager {
 
     private final PlayerCountRepository playerCountRepository;
 
+    private final CustomNameRepository customNameRepository;
+
     public DatabaseManager(SessionFactory sessionFactory) {
         this.userRepository = new UserRepository(sessionFactory);
         this.moneyHistoryRepository = new MoneyHistoryRepository(sessionFactory);
@@ -38,6 +41,7 @@ public class DatabaseManager {
         this.landRepository = new LandRepository(sessionFactory, getLandRepository());
         this.landPermissionRepository = new LandPermissionRepository(sessionFactory);
         this.mywarpRepository = new MywarpRepository(sessionFactory, getUserRepository());
+        this.autoTPPSettingRepository = new AutoTppSettingRepository(sessionFactory, getUserRepository());
         this.playerLevelRepository = new PlayerLevelRepository(sessionFactory);
         this.playerNormalLevelRepository = new PlayerNormalLevelRepository(sessionFactory);
         this.positionRepository = new PositionRepository(sessionFactory);
@@ -48,6 +52,7 @@ public class DatabaseManager {
         this.lifeCountRepository = new LifeCountRepository(sessionFactory);
         this.oreCountRepository = new OreCountRepository(sessionFactory);
         this.playerCountRepository = new PlayerCountRepository(sessionFactory);
+        this.customNameRepository = new CustomNameRepository(sessionFactory);
     }
 
     /**
@@ -102,6 +107,15 @@ public class DatabaseManager {
      */
     public MywarpRepository getMywarpRepository() {
         return mywarpRepository;
+    }
+
+    /**
+     * 自動TPP設定リポジトリを取得
+     *
+     * @return AutoTPPSettingRepository
+     */
+    public AutoTppSettingRepository getAutoTPPSettingRepository() {
+        return autoTPPSettingRepository;
     }
 
     /**
@@ -192,5 +206,14 @@ public class DatabaseManager {
      */
     public PlayerCountRepository getPlayerCountRepository() {
         return playerCountRepository;
+    }
+
+    /**
+     * 称号リポジトリを取得
+     *
+     * @return PlayerNormalLevelRepository
+     */
+    public CustomNameRepository getCustomNameRepository(){
+        return customNameRepository;
     }
 }

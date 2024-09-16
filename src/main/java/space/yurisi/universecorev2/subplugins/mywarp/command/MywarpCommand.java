@@ -32,18 +32,8 @@ public class MywarpCommand implements CommandExecutor, TabCompleter {
         if(args.length == 0){
             MywarpInventoryMenu menu = new MywarpInventoryMenu(connector);
             menu.sendMenu((Player) sender);
-            return true;
+            return false;
         }
-
-        /*sender.sendMessage("Mywarp Help");
-        sender.sendMessage("/mywarp : このヘルプを表示します。<>内は必須で、()内は必須ではありません");
-        sender.sendMessage("/mwlist : ワープポイントの一覧を表示します");
-        sender.sendMessage("/mwadd <ワープ名> <公開可否:する, しない> : ワープポイントを追加します");
-        sender.sendMessage("/mwdel <ワープ名> : 指定したワープポイントを削除します");
-        sender.sendMessage("/mwtp <ワープ名> : 指定したワープポイントにテレポートします");
-        sender.sendMessage("/mwvisit <プレイヤー名> <ワープ名> : 指定したプレイヤーの公開ワープポイントにテレポートできます");
-        sender.sendMessage("/mwvisitlist <プレイヤー名> : 指定したプレイヤーの公開ワープポイントの一覧を表示します");
-        */
 
         switch (args[0]){
             case "list":
@@ -64,8 +54,22 @@ public class MywarpCommand implements CommandExecutor, TabCompleter {
             case "visitlist":
                 new visitlistSubCommand().execute(connector, sender, args);
                 break;
+            // それ以外のコマンド引数ではヘルプを表示する
             default:
-                return false;
+                String[] helpMessage = """
+            §6-- Mywarp Help --
+            ☆ §b全てのコマンドは "/mw" でも実行できます ☆
+               §7/mywarp : Mywarpのメニューを開きます
+               §7/mywarp list : ワープポイントの一覧を表示します
+               §7/mywarp add <ワープ名> <公開可否:する, しない> : ワープポイントを追加します
+               §7/mywarp del <ワープ名> : 指定したワープポイントを削除します
+               §7/mywarp tp <ワープ名> : 指定したワープポイントにテレポートします
+               §7/mywarp visit <プレイヤー名> <ワープ名> : 指定したプレイヤーの公開ワープポイントにテレポートできます
+               §7/mywarp visitlist <プレイヤー名> : 指定したプレイヤーの公開ワープポイントの一覧を表示します
+               §7/mywarp help : このヘルプを表示します
+            """.split("\n");
+                sender.sendMessage(helpMessage);
+                break;
         }
         return true;
     }
@@ -77,7 +81,7 @@ public class MywarpCommand implements CommandExecutor, TabCompleter {
         }
 
         String input = args[0];
-        List<String> options = Arrays.asList("list", "add", "del", "tp", "visit", "visitlist");
+        List<String> options = Arrays.asList("list", "add", "del", "tp", "visit", "visitlist", "help");
 
         if (input.isEmpty()) {
             return options;

@@ -1,9 +1,8 @@
 package space.yurisi.universecorev2.subplugins.universeland.utils;
 
-import org.apache.logging.log4j.core.Core;
 import org.bukkit.configuration.file.FileConfiguration;
 import space.yurisi.universecorev2.UniverseCoreV2;
-import space.yurisi.universecorev2.subplugins.universeland.UniverseLand;
+import space.yurisi.universecorev2.utils.ConfigReader;
 
 import java.util.List;
 
@@ -19,18 +18,19 @@ public class Config {
     }
 
     private void init() {
-        core.saveDefaultConfig();
+        ConfigReader configReader= new ConfigReader(core,"subplugins/", "universe-land.yml");
+        configReader.saveDefaultConfig();
         if (config != null) {
-            core.reloadConfig();
+            configReader.reloadConfig();
         }
-        this.config = core.getConfig();
+        this.config = configReader.getConfig();
     }
 
     public Long getLandPrice() {
-        return this.config.getLong("universe-land.land-price");
+        return this.config.getLong("land-price");
     }
 
     public List<String> getDenyWorlds() {
-        return this.config.getStringList("universe-land.deny-worlds");
+        return this.config.getStringList("deny-worlds");
     }
 }
