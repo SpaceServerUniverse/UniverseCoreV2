@@ -88,6 +88,10 @@ public class RequestManager {
     }
 
     public boolean hasRequest(Player sender) {
-        return this.tppRequests.containsKey(playerToUUID(sender));
+        return this.searchReceiver.containsKey(playerToUUID(sender));
+    }
+
+    public boolean hasReceivedRequest(Player receiver) {
+        return this.tppRequests.containsKey(playerToUUID(receiver));
     }
 }
