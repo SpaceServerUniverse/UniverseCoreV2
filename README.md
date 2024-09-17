@@ -1,6 +1,7 @@
 # UniverseCoreV2
 
 [![CI](https://github.com/SpaceServerUniverse/UniverseCoreV2/actions/workflows/ci.yaml/badge.svg)](https://github.com/SpaceServerUniverse/UniverseCoreV2/actions/workflows/ci.yaml)
+[![CodeFactor](https://www.codefactor.io/repository/github/spaceserveruniverse/universecorev2/badge)](https://www.codefactor.io/repository/github/spaceserveruniverse/universecorev2)
 
 SpaceServer Universe のコアプラグイン
 
