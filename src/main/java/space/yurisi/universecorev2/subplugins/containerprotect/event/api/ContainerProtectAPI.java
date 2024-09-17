@@ -83,9 +83,12 @@ public class ContainerProtectAPI {
     public void removeContainerProtect(Location location) {
         ContainerProtect containerProtect = null;
 
-        if (containerProtectCache.containsKey(location)) containerProtect = containerProtectCache.get(location);
-        if (containerProtectRepository.existsContainerProtectFromLocation(location))
+        if (containerProtectCache.containsKey(location)){
+            containerProtect = containerProtectCache.get(location);
+        } else if (containerProtectRepository.existsContainerProtectFromLocation(location)) {
             containerProtect = containerProtectRepository.getContainerProtectFromLocation(location);
+        }
+
         if (containerProtect != null){
             containerProtectRepository.deleteContainerProtect(containerProtect);
             containerProtectCache.remove(location);
