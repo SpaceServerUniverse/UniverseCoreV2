@@ -14,8 +14,8 @@ public class LockManager {
     private final Map<UUID, Integer> playerStates = new HashMap<>();
 
     public boolean hasFlag(Player player, int flag) {
-        Integer flags = playerStates.get(player.getUniqueId());
-        return (flags == null) || ((flags & flag) == 0);
+        Integer flags = playerStates.getOrDefault(player.getUniqueId(), 0);
+        return (flags & flag) != 0;
     }
 
     public void setFlag(Player player, int flag) {
