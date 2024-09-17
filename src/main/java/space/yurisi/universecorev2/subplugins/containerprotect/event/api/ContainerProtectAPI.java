@@ -89,6 +89,19 @@ public class ContainerProtectAPI {
         if (containerProtect != null){
             containerProtectRepository.deleteContainerProtect(containerProtect);
             containerProtectCache.remove(location);
+        }else{
+            Block block = location.getBlock();
+            InventoryHolder holder = (InventoryHolder) block.getState();
+
+            if (!(holder instanceof Chest chest)) return;
+            BlockFace face = DoubleChestFinder.getNeighborBlockFace((org.bukkit.block.data.type.Chest) chest.getBlockData());
+            if (face == null) return;
+            Block neighborBlock = block.getRelative(face);
+            if (!(neighborBlock.getState() instanceof Chest)) return;
+            if (!containerProtectRepository.existsContainerProtectFromLocation(neighborBlock.getLocation())) return;
+            ContainerProtect anotherContainerProtect = containerProtectRepository.getContainerProtectFromLocation(neighborBlock.getLocation());
+            containerProtectRepository.deleteContainerProtect(anotherContainerProtect);
+            containerProtectCache.remove(neighborBlock.getLocation());
         }
     }
 
