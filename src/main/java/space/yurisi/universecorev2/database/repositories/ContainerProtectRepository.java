@@ -18,7 +18,7 @@ public class ContainerProtectRepository {
     }
 
     /**
-     * タイル保護データを作成する
+     * コンテナ保護データを作成する
      *
      * @param player プレイヤー
      * @param location チェストのロケーション
@@ -44,11 +44,11 @@ public class ContainerProtectRepository {
     }
 
     /**
-     * タイル保護データを取得する
+     * コンテナ保護データを取得する
      *
-     * @param id タイル保護データID
+     * @param id コンテナ保護データID
      * @return ContainerProtect
-     * @throws ContainerProtectNotFoundException タイル保護データが見つからない場合
+     * @throws ContainerProtectNotFoundException コンテナ保護データが見つからない場合
      */
     public ContainerProtect getContainerProtect(Long id) throws ContainerProtectNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
@@ -58,18 +58,18 @@ public class ContainerProtectRepository {
         session.close();
 
         if (data == null) {
-            throw new ContainerProtectNotFoundException("タイル保護データが見つかりません");
+            throw new ContainerProtectNotFoundException("コンテナ保護データが見つかりません");
         }
 
         return data;
     }
 
     /**
-     * タイル保護データをロケーションから取得
+     * コンテナ保護データをロケーションから取得
      *
      * @param location チェストのロケーション
      * @return ContainerProtect
-     * @throws ContainerProtectNotFoundException タイル保護データが見つからない場合
+     * @throws ContainerProtectNotFoundException コンテナ保護データが見つからない場合
      */
     public ContainerProtect getContainerProtectFromLocation(Location location) throws ContainerProtectNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
@@ -84,19 +84,19 @@ public class ContainerProtectRepository {
         session.close();
 
         if (data == null) {
-            throw new ContainerProtectNotFoundException("タイル保護データが見つかりません");
+            throw new ContainerProtectNotFoundException("コンテナ保護データが見つかりません");
         }
 
         return data;
     }
 
     /**
-     * タイル保護データをロケーションから取得
+     * コンテナ保護データをロケーションから取得
      *
      * @param location チェストのロケーション
      * @param player プレイヤー
      * @return ContainerProtect
-     * @throws ContainerProtectNotFoundException タイル保護データが見つからない場合
+     * @throws ContainerProtectNotFoundException コンテナ保護データが見つからない場合
      */
     public ContainerProtect getContainerProtectFromLocation(Location location, Player player) throws ContainerProtectNotFoundException {
         String uuid = player.getUniqueId().toString();
@@ -113,18 +113,18 @@ public class ContainerProtectRepository {
         session.close();
 
         if (data == null) {
-            throw new ContainerProtectNotFoundException("タイル保護データが見つかりません");
+            throw new ContainerProtectNotFoundException("コンテナ保護データが見つかりません");
         }
 
         return data;
     }
 
     /**
-     * タイル保護データをロケーションから存在するか確認
+     * コンテナ保護データをロケーションから存在するか確認
      *
      * @param location チェストのロケーション
      * @return Boolean
-     * @throws ContainerProtectNotFoundException タイル保護データが見つからない場合
+     * @throws ContainerProtectNotFoundException コンテナ保護データが見つからない場合
      */
 
     public Boolean existsContainerProtectFromLocation(Location location) {
@@ -137,12 +137,12 @@ public class ContainerProtectRepository {
     }
 
     /**
-     * タイル保護データをロケーションとプレイヤーから存在するか確認
+     * コンテナ保護データをロケーションとプレイヤーから存在するか確認
      *
      * @param location チェストのロケーション
      * @param player プレイヤー
      * @return Boolean
-     * @throws ContainerProtectNotFoundException タイル保護データが見つからない場合
+     * @throws ContainerProtectNotFoundException コンテナ保護データが見つからない場合
      */
 
     public Boolean existsContainerProtectFromLocation(Location location, Player player) {
@@ -155,11 +155,11 @@ public class ContainerProtectRepository {
     }
 
     /**
-     * タイル保護データを更新
+     * コンテナ保護データを更新
      *
-     * @param containerProtect タイル保護データ
+     * @param containerProtect コンテナ保護データ
      * @return ContainerProtect
-     * @throws ContainerProtectNotFoundException タイル保護データが見つからない場合
+     * @throws ContainerProtectNotFoundException コンテナ保護データが見つからない場合
      */
     public ContainerProtect updateContainerProtect(ContainerProtect containerProtect) throws ContainerProtectNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
@@ -171,10 +171,10 @@ public class ContainerProtectRepository {
     }
 
     /**
-     * タイル保護データを削除
+     * コンテナ保護データを削除
      *
-     * @param containerProtect タイル保護データ
-     * @throws ContainerProtectNotFoundException タイル保護データが見つからない場合
+     * @param containerProtect コンテナ保護データ
+     * @throws ContainerProtectNotFoundException コンテナ保護データが見つからない場合
      */
     public void deleteContainerProtect(ContainerProtect containerProtect) throws ContainerProtectNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();

@@ -155,7 +155,7 @@ public class DatabaseManager {
     }
 
     /**
-     * タイル保護リポジトリを取得
+     * コンテナ保護リポジトリを取得
      *
      * @return PlayerNormalLevelRepository
      */
