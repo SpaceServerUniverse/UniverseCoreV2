@@ -81,7 +81,7 @@ commands:
   tag:
     description: 称号を設定します
 
-  #TileProtect
+  #ContainerProtect
   lock:
     description: チェスト等を保護します
 

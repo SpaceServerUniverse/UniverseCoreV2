@@ -1,6 +1,9 @@
-package space.yurisi.universecorev2.subplugins.tileprotect.event.player;
+package space.yurisi.universecorev2.subplugins.containerprotect.event.player;
 
+import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
@@ -10,16 +13,16 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.InventoryHolder;
-import space.yurisi.universecorev2.UniverseCoreV2API;
-import space.yurisi.universecorev2.database.models.TileProtect;
-import space.yurisi.universecorev2.database.repositories.TileProtectRepository;
-import space.yurisi.universecorev2.subplugins.tileprotect.manager.LockManager;
+import space.yurisi.universecorev2.database.models.ContainerProtect;
+import space.yurisi.universecorev2.subplugins.containerprotect.manager.LockManager;
+import space.yurisi.universecorev2.subplugins.containerprotect.manager.ContainerProtectManager;
 
-import java.util.Objects;
+import java.util.UUID;
 
 
 public class TouchEvent implements Listener {
-    private LockManager lockManager;
+
+    private final LockManager lockManager;
 
     public TouchEvent(LockManager lockManager) {
         this.lockManager = lockManager;
@@ -42,25 +45,25 @@ public class TouchEvent implements Listener {
             return;
         }
 
-        TileProtectRepository tileProtectRepo = UniverseCoreV2API.getInstance().getDatabaseManager().getTileProtectRepository();
+        ContainerProtectManager containerProtectManager = ContainerProtectManager.getInstance();
 
         if (lockManager.isSetState(player)) {
-            if (tileProtectRepo.existsTileProtectFromLocation(blockLocation, player)) {
+            if (containerProtectManager.getContainerProtect(blockLocation) != null) {
                 player.sendMessage("ここにはすでに存在しております");
             } else {
                 player.sendMessage("このブロックをロックしました！");
-                tileProtectRepo.createTileProtect(player, blockLocation);
+                containerProtectManager.addContainerProtect(player, blockLocation);
             }
             event.setCancelled(true);
             lockManager.deleteState(player);
             return;
         }
 
-        if (tileProtectRepo.existsTileProtectFromLocation(blockLocation, player)) {
-            TileProtect tileProtect = tileProtectRepo.getTileProtectFromLocation(blockLocation);
-            if (!Objects.equals(tileProtect.getUuid(), player.getUniqueId().toString())) {
-                event.setCancelled(true);
-            }
+        if (!containerProtectManager.canAccessContainer(player, blockLocation)) {
+            event.setCancelled(true);
+            ContainerProtect containerProtect = containerProtectManager.getContainerProtect(blockLocation);
+            player.playSound(player.getLocation(), Sound.BLOCK_IRON_DOOR_CLOSE, 1, 1);
+            player.sendActionBar(Component.text("このチェストは " + Bukkit.getOfflinePlayer(UUID.fromString(containerProtect.getUuid())).getName() + " によって保護されています"));
         }
     }
 }

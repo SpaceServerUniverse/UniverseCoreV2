@@ -5,11 +5,10 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
-import java.util.UUID;
 
 @Entity
-@Table(name = "tile_protects")
-public class TileProtect {
+@Table(name = "container_protects")
+public class ContainerProtect {
 
     @Id
     @Column(name = "id", unique = true, columnDefinition = "BIGINT UNSIGNED")
@@ -39,7 +38,7 @@ public class TileProtect {
     @Column(name = "updated_at", nullable = false)
     private Date updated_at;
 
-    public TileProtect(
+    public ContainerProtect(
             Long id,
             String uuid,
             Long x,
@@ -59,7 +58,7 @@ public class TileProtect {
         this.updated_at = updated_at;
     }
 
-    public TileProtect() {}
+    public ContainerProtect() {}
 
     public Long getId() {
         return id;

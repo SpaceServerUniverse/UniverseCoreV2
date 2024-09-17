@@ -58,7 +58,7 @@ public class DatabaseConnector {
                 .addAnnotatedClass(PlayerLevel.class)
                 .addAnnotatedClass(PlayerNormalLevel.class)
                 .addAnnotatedClass(Position.class)
-                .addAnnotatedClass(TileProtect.class)
+                .addAnnotatedClass(ContainerProtect.class)
                 .addAnnotatedClass(UserPosition.class)
                 .addAnnotatedClass(Count.class)
                 .addAnnotatedClass(KillDeathCount.class)

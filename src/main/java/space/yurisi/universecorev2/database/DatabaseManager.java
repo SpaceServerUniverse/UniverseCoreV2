@@ -18,7 +18,7 @@ public class DatabaseManager {
 
     private final PositionRepository positionRepository;
 
-    private final TileProtectRepository tileProtectRepository;
+    private final ContainerProtectRepository tileProtectRepository;
 
     private final UserPositionRepository userPositionRepository;
 
@@ -45,7 +45,7 @@ public class DatabaseManager {
         this.playerLevelRepository = new PlayerLevelRepository(sessionFactory);
         this.playerNormalLevelRepository = new PlayerNormalLevelRepository(sessionFactory);
         this.positionRepository = new PositionRepository(sessionFactory);
-        this.tileProtectRepository = new TileProtectRepository(sessionFactory);
+        this.tileProtectRepository = new ContainerProtectRepository(sessionFactory);
         this.userPositionRepository = new UserPositionRepository(sessionFactory);
         this.countRepository = new CountRepository(sessionFactory);
         this.killDeathCountRepository = new KillDeathCountRepository(sessionFactory);
@@ -159,7 +159,7 @@ public class DatabaseManager {
      *
      * @return PlayerNormalLevelRepository
      */
-    public TileProtectRepository getTileProtectRepository() {
+    public ContainerProtectRepository getContainerProtectRepository() {
         return tileProtectRepository;
     }
 

@@ -1,11 +1,11 @@
-package space.yurisi.universecorev2.subplugins.tileprotect.command;
+package space.yurisi.universecorev2.subplugins.containerprotect.command;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import space.yurisi.universecorev2.subplugins.tileprotect.manager.LockManager;
+import space.yurisi.universecorev2.subplugins.containerprotect.manager.LockManager;
 
 public class lockCommand implements CommandExecutor {
 
