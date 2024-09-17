@@ -41,7 +41,6 @@ public class BreakEvent implements Listener {
             Message.sendSuccessMessage(player, "[金庫AI]", "このコンテナの保護を解除しました");
         }else{
             event.setCancelled(true);
-            player.playSound(player.getLocation(), Sound.BLOCK_IRON_DOOR_CLOSE, 1, 1);
             player.sendActionBar(Component.text("このコンテナは " + Bukkit.getOfflinePlayer(UUID.fromString(containerProtect.getUuid())).getName() + " によって保護されています"));
         }
     }
