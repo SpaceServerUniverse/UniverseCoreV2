@@ -22,7 +22,7 @@ public class lockCommand implements CommandExecutor {
             return false;
         }
 
-        if(lockManager.hasFlag(player, LockManager.LOCK)) {
+        if(!lockManager.hasFlag(player, LockManager.LOCK)) {
             lockManager.setFlag(player, LockManager.LOCK);
             Message.sendNormalMessage(player, "[金庫AI]", "保護したいコンテナをクリックしてください");
         }else{

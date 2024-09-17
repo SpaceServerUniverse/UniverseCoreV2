@@ -22,7 +22,7 @@ public class unlockCommand implements CommandExecutor {
             return false;
         }
 
-        if(lockManager.hasFlag(player, LockManager.UNLOCK)) {
+        if(!lockManager.hasFlag(player, LockManager.UNLOCK)) {
             lockManager.setFlag(player, LockManager.UNLOCK);
             Message.sendNormalMessage(player, "[金庫AI]", "保護を解除したいコンテナをクリックしてください");
         }else{
