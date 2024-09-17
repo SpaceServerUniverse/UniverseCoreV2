@@ -83,7 +83,9 @@ commands:
 
   #ContainerProtect
   lock:
-    description: チェスト等を保護します
+    description: コンテナ等を保護します
+  unlock:
+    description: コンテナ等の保護を解除します
 
 permissions:
   # UniverseCoreV2
