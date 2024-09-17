@@ -5,10 +5,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.InventoryHolder;
 import space.yurisi.universecorev2.database.models.ContainerProtect;
 import space.yurisi.universecorev2.subplugins.containerprotect.event.api.ContainerProtectAPI;
 import space.yurisi.universecorev2.utils.Message;
@@ -21,6 +23,11 @@ public class BreakEvent implements Listener {
     public void onBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
         Block block = event.getBlock();
+        BlockState state = block.getState();
+
+        if (!(state instanceof InventoryHolder)) {
+            return;
+        }
         Location blockLocation = block.getLocation();
 
         ContainerProtectAPI api = ContainerProtectAPI.getInstance();
