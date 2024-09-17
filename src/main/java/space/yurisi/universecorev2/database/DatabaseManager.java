@@ -18,6 +18,8 @@ public class DatabaseManager {
 
     private final PositionRepository positionRepository;
 
+    private final ContainerProtectRepository containerProtectRepository;
+
     private final UserPositionRepository userPositionRepository;
 
     private final CountRepository countRepository;
@@ -43,6 +45,7 @@ public class DatabaseManager {
         this.playerLevelRepository = new PlayerLevelRepository(sessionFactory);
         this.playerNormalLevelRepository = new PlayerNormalLevelRepository(sessionFactory);
         this.positionRepository = new PositionRepository(sessionFactory);
+        this.containerProtectRepository = new ContainerProtectRepository(sessionFactory);
         this.userPositionRepository = new UserPositionRepository(sessionFactory);
         this.countRepository = new CountRepository(sessionFactory);
         this.killDeathCountRepository = new KillDeathCountRepository(sessionFactory);
@@ -149,6 +152,15 @@ public class DatabaseManager {
      */
     public UserPositionRepository getUserPositionRepository() {
         return userPositionRepository;
+    }
+
+    /**
+     * コンテナ保護リポジトリを取得
+     *
+     * @return PlayerNormalLevelRepository
+     */
+    public ContainerProtectRepository getContainerProtectRepository() {
+        return containerProtectRepository;
     }
 
     /**

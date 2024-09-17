@@ -81,6 +81,12 @@ commands:
   tag:
     description: 称号を設定します
 
+  #ContainerProtect
+  lock:
+    description: コンテナ等を保護します
+  unlock:
+    description: コンテナ等の保護を解除します
+
 permissions:
   # UniverseCoreV2
   space.yurisi.universecorev2.interactevent.enchanttable:
