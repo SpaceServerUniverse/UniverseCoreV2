@@ -2,23 +2,27 @@ package space.yurisi.universecorev2.subplugins.containerprotect.manager;
 
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class LockManager {
 
-    private final List<UUID> playerList = new ArrayList<>();
+    public static final int LOCK = 1;
+    public static final int UNLOCK = 1 << 1;
 
-    public void setState(Player player) {
-        playerList.add(player.getUniqueId());
+    private final Map<UUID, Integer> playerStates = new HashMap<>();
+
+    public boolean hasFlag(Player player, int flag) {
+        Integer flags = playerStates.get(player.getUniqueId());
+        return (flags == null) || ((flags & flag) == 0);
     }
 
-    public Boolean isSetState(Player player) {
-        return playerList.contains(player.getUniqueId());
+    public void setFlag(Player player, int flag) {
+        playerStates.put(player.getUniqueId(), flag);
     }
 
-    public void deleteState(Player player) {//FIXME: deleteなのに内部ではremove
-        playerList.remove(player.getUniqueId());
+    public void removeFlag(Player player) {
+        playerStates.put(player.getUniqueId(), 0);
     }
 }

@@ -14,8 +14,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.InventoryHolder;
 import space.yurisi.universecorev2.database.models.ContainerProtect;
+import space.yurisi.universecorev2.subplugins.containerprotect.event.api.ContainerProtectAPI;
 import space.yurisi.universecorev2.subplugins.containerprotect.manager.LockManager;
-import space.yurisi.universecorev2.subplugins.containerprotect.manager.ContainerProtectManager;
+import space.yurisi.universecorev2.utils.Message;
 
 import java.util.UUID;
 
@@ -45,25 +46,46 @@ public class TouchEvent implements Listener {
             return;
         }
 
-        ContainerProtectManager containerProtectManager = ContainerProtectManager.getInstance();
+        ContainerProtectAPI api = ContainerProtectAPI.getInstance();
 
-        if (lockManager.isSetState(player)) {
-            if (containerProtectManager.getContainerProtect(blockLocation) != null) {
-                player.sendMessage("ここにはすでに存在しております");
-            } else {
-                player.sendMessage("このブロックをロックしました！");
-                containerProtectManager.addContainerProtect(player, blockLocation);
-            }
+        if (lockManager.hasFlag(player, LockManager.LOCK)) {
             event.setCancelled(true);
-            lockManager.deleteState(player);
+
+            if (api.getContainerProtect(blockLocation) != null) {
+                Message.sendErrorMessage(player, "[金庫AI]", "既にこのコンテナは保護されています");
+            } else {
+                Message.sendSuccessMessage(player, "[金庫AI]", "コンテナの保護に成功しました");
+                api.addContainerProtect(player, blockLocation);
+            }
+
+            lockManager.removeFlag(player);
+            return;
+        } else if (lockManager.hasFlag(player, LockManager.UNLOCK)) {
+            event.setCancelled(true);
+
+            ContainerProtect containerProtect = api.getContainerProtect(blockLocation);
+
+            if(containerProtect == null) {
+                Message.sendErrorMessage(player, "[金庫AI]", "このコンテナは保護されていません");
+                return;
+            }
+
+            if (api.canAccessContainer(player, blockLocation)) {
+                Message.sendSuccessMessage(player, "[金庫AI]", "このコンテナの保護を解除しました");
+                api.removeContainerProtect(blockLocation);
+            } else {
+                Message.sendErrorMessage(player, "[金庫AI]", "このコンテナへのアクセス権限がありません");
+            }
+
+            lockManager.removeFlag(player);
             return;
         }
 
-        if (!containerProtectManager.canAccessContainer(player, blockLocation)) {
+        if (!api.canAccessContainer(player, blockLocation)) {
             event.setCancelled(true);
-            ContainerProtect containerProtect = containerProtectManager.getContainerProtect(blockLocation);
+            ContainerProtect containerProtect = api.getContainerProtect(blockLocation);
             player.playSound(player.getLocation(), Sound.BLOCK_IRON_DOOR_CLOSE, 1, 1);
-            player.sendActionBar(Component.text("このチェストは " + Bukkit.getOfflinePlayer(UUID.fromString(containerProtect.getUuid())).getName() + " によって保護されています"));
+            player.sendActionBar(Component.text("このコンテナは " + Bukkit.getOfflinePlayer(UUID.fromString(containerProtect.getUuid())).getName() + " によって保護されています"));
         }
     }
 }

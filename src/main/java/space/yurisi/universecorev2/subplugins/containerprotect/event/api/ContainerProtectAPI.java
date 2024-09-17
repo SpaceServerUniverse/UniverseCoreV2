@@ -1,9 +1,9 @@
-package space.yurisi.universecorev2.subplugins.containerprotect.manager;
+package space.yurisi.universecorev2.subplugins.containerprotect.event.api;
 
-import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.block.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
 import space.yurisi.universecorev2.UniverseCoreV2API;
@@ -14,18 +14,18 @@ import space.yurisi.universecorev2.subplugins.containerprotect.util.DoubleChestF
 import java.util.HashMap;
 import java.util.Objects;
 
-public class ContainerProtectManager {
+public class ContainerProtectAPI {
 
-    private static ContainerProtectManager instance;
+    private static ContainerProtectAPI instance;
 
     private final ContainerProtectRepository containerProtectRepository = UniverseCoreV2API.getInstance().getDatabaseManager().getContainerProtectRepository();
     private final HashMap<Location, ContainerProtect> containerProtectCache = new HashMap<>();
 
-    public ContainerProtectManager() {
+    public ContainerProtectAPI() {
         instance = this;
     }
 
-    public static ContainerProtectManager getInstance() {
+    public static ContainerProtectAPI getInstance() {
         return instance;
     }
 
@@ -33,13 +33,17 @@ public class ContainerProtectManager {
         Block block = location.getBlock();
         InventoryHolder holder = (InventoryHolder) block.getState();
 
-        if(getContainerProtect(location) != null) return true;
+        if (!(holder instanceof Chest chest)) return false;
 
-        if(holder instanceof Chest chest) {
-            BlockFace face = DoubleChestFinder.getNeighborBlockFace((org.bukkit.block.data.type.Chest) chest.getBlockData());
-            if(face != null){
-                Block neighborBlock = block.getRelative(face);
-                if(neighborBlock.getState() instanceof Chest) return getContainerProtect(neighborBlock.getLocation()) != null;
+        ContainerProtect containerProtect = getContainerProtect(location);
+        if (containerProtect != null) return true;
+
+        BlockFace face = DoubleChestFinder.getNeighborBlockFace((org.bukkit.block.data.type.Chest) chest.getBlockData());
+        if (face != null) {
+            Block neighborBlock = block.getRelative(face);
+            if (neighborBlock.getState() instanceof Chest) {
+                ContainerProtect neighborContainerProtect = getContainerProtect(neighborBlock.getLocation());
+                return neighborContainerProtect != null;
             }
         }
 
@@ -50,17 +54,21 @@ public class ContainerProtectManager {
         Block block = location.getBlock();
         InventoryHolder holder = (InventoryHolder) block.getState();
 
-        if(!(holder instanceof Chest chest)) return true;
+        if (!(holder instanceof Chest chest)) return true;
 
         ContainerProtect containerProtect = getContainerProtect(location);
-        if(containerProtect == null || Objects.equals(containerProtect.getUuid(), player.getUniqueId().toString())) return true;
+        if (containerProtect != null && Objects.equals(containerProtect.getUuid(), player.getUniqueId().toString())) {
+            return true;
+        }
 
         BlockFace face = DoubleChestFinder.getNeighborBlockFace((org.bukkit.block.data.type.Chest) chest.getBlockData());
-        if(face != null){
+        if (face != null) {
             Block neighborBlock = block.getRelative(face);
-            if(neighborBlock.getState() instanceof Chest) {
-                ContainerProtect anotherContainerProtect = getContainerProtect(neighborBlock.getLocation());
-                return anotherContainerProtect == null || Objects.equals(anotherContainerProtect.getUuid(), player.getUniqueId().toString());
+            if (neighborBlock.getState() instanceof Chest) {
+                ContainerProtect neighborContainerProtect = getContainerProtect(neighborBlock.getLocation());
+                if (neighborContainerProtect != null) {
+                    return Objects.equals(neighborContainerProtect.getUuid(), player.getUniqueId().toString());
+                }
             }
         }
 
@@ -83,7 +91,7 @@ public class ContainerProtectManager {
 
     public ContainerProtect getContainerProtect(Location location) {
         if (containerProtectCache.containsKey(location)) return containerProtectCache.get(location);
-        if (containerProtectRepository.existsContainerProtectFromLocation(location)){
+        if (containerProtectRepository.existsContainerProtectFromLocation(location)) {
             ContainerProtect containerProtect = containerProtectRepository.getContainerProtectFromLocation(location);
             containerProtectCache.put(location, containerProtect);
             return containerProtect;
@@ -92,17 +100,14 @@ public class ContainerProtectManager {
         Block block = location.getBlock();
         InventoryHolder holder = (InventoryHolder) block.getState();
 
-        if(holder instanceof Chest chest) {
-            BlockFace face = DoubleChestFinder.getNeighborBlockFace((org.bukkit.block.data.type.Chest) chest.getBlockData());
-            if(face != null){
-                Block neighborBlock = block.getRelative(face);
-                if(neighborBlock.getState() instanceof Chest){
-                    ContainerProtect containerProtect = containerProtectRepository.getContainerProtectFromLocation(neighborBlock.getLocation());
-                    containerProtectCache.put(neighborBlock.getLocation(), containerProtect);
-                    return containerProtect;
-                }
-            }
-        }
-        return null;
+        if (!(holder instanceof Chest chest)) return null;
+        BlockFace face = DoubleChestFinder.getNeighborBlockFace((org.bukkit.block.data.type.Chest) chest.getBlockData());
+        if (face == null) return null;
+        Block neighborBlock = block.getRelative(face);
+        if (!(neighborBlock.getState() instanceof Chest)) return null;
+        if (!containerProtectRepository.existsContainerProtectFromLocation(neighborBlock.getLocation())) return null;
+        ContainerProtect containerProtect = containerProtectRepository.getContainerProtectFromLocation(neighborBlock.getLocation());
+        containerProtectCache.put(neighborBlock.getLocation(), containerProtect);
+        return containerProtect;
     }
 }

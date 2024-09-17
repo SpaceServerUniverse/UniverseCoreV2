@@ -8,11 +8,11 @@ import org.jetbrains.annotations.NotNull;
 import space.yurisi.universecorev2.subplugins.containerprotect.manager.LockManager;
 import space.yurisi.universecorev2.utils.Message;
 
-public class lockCommand implements CommandExecutor {
+public class unlockCommand implements CommandExecutor {
 
     private LockManager lockManager;
 
-    public lockCommand(LockManager lockManager) {
+    public unlockCommand(LockManager lockManager) {
         this.lockManager = lockManager;
     }
 
@@ -22,9 +22,9 @@ public class lockCommand implements CommandExecutor {
             return false;
         }
 
-        if(lockManager.hasFlag(player, LockManager.LOCK)) {
-            lockManager.setFlag(player, LockManager.LOCK);
-            Message.sendNormalMessage(player, "[金庫AI]", "保護したいコンテナをクリックしてください");
+        if(lockManager.hasFlag(player, LockManager.UNLOCK)) {
+            lockManager.setFlag(player, LockManager.UNLOCK);
+            Message.sendNormalMessage(player, "[金庫AI]", "保護を解除したいコンテナをクリックしてください");
         }else{
             Message.sendSuccessMessage(player, "[金庫AI]", "キャンセルしました");
         }
