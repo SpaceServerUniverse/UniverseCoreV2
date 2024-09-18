@@ -1,9 +1,8 @@
-package space.yurisi.universecorev2.subplugins.containerprotect.event.player;
+package space.yurisi.universecorev2.subplugins.containerprotect.event.block;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
