@@ -34,15 +34,15 @@ public final class ScoreBoardTask extends BukkitRunnable {
     public void run() {
         Scoreboard scoreboard = createScoreboard();
         Objective objective = scoreboard.getObjective("score");
-        setMoney(objective, 10);
-        setLocation(objective, 9);
-        setWorld(objective, 8);
-        setTime(objective, 7);
+        setMoney(objective, -1);
+        setLocation(objective, -2);
+        setWorld(objective, -3);
+        setTime(objective, -4);
         //blank
-        Objects.requireNonNull(objective).getScore("§r　").setScore(6);
-        setOnline(objective, 5);
-        setJob(objective, 4);
-        setSpaceShipPoint(objective, 4);
+        Objects.requireNonNull(objective).getScore("§r　").setScore(-5);
+        setOnline(objective, -6);
+        setJob(objective, -7);
+        setSpaceShipPoint(objective, -8);
         player.setScoreboard(scoreboard);
         changeTick();
     }
