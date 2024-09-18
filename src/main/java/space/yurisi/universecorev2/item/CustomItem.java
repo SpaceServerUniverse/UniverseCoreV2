@@ -39,12 +39,16 @@ public abstract class CustomItem {
         return this.id;
     }
 
-    // 名前を取得する
+    /**
+     * 名前を取得する
+     */
     public String getName() {
         return name;
     }
 
-    // ベースアイテムを取得する
+    /**
+     * ベースアイテムを取得する
+     */
     public ItemStack getBaseItem() {
         return base_item;
     }
@@ -76,17 +80,24 @@ public abstract class CustomItem {
         return !(min_level == max_level);
     }
 
-    // 最小レベルを取得する
+    /**
+     *  最小レベルを取得する
+     */
     public int getMinLevel() {
         return min_level;
     }
 
-    // 最大レベルを取得する
+    /**
+     *  最大レベルを取得する
+     */
+
     public int getMaxLevel() {
         return max_level;
     }
 
-    // レベルに応じたアイテムを取得する
+    /**
+     * レベルに応じたアイテムを取得する
+     */
     public ItemStack getItemFromLevel(int level) throws CustomItemLevelNotFoundException {
         if(!executes.containsKey(level)){
             throw new CustomItemLevelNotFoundException("レベルが登録されていません。");
@@ -94,6 +105,9 @@ public abstract class CustomItem {
         return executes.get(level).apply(getItem(level));
     }
 
-    // 無名関数を登録するメソッドをサブクラスで実装
+    /**
+     * レベル別の無名関数を登録するメソッドをサブクラスで実装
+     */
+
     public abstract void registerBaseItemFunctions();
 }

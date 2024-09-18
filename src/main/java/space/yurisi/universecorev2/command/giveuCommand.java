@@ -64,7 +64,7 @@ public class giveuCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        if (!command.getName().equalsIgnoreCase("mywarp") || args.length != 1) {
+        if (!command.getName().equalsIgnoreCase("giveu") || args.length != 1) {
             return null;
         }
 
