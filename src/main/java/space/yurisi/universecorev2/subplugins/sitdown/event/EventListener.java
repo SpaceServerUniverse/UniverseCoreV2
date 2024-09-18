@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.event.block.BlockBreakEvent;
 import space.yurisi.universecorev2.subplugins.sitdown.Sitdown;
 
 public final class EventListener implements Listener {
@@ -136,6 +137,19 @@ public final class EventListener implements Listener {
         armorStand.addPassenger(player);
 
         main.setVehicle(player, armorStand);
+    }
+
+    @EventHandler
+    public void onBreak(BlockBreakEvent event) {
+        BlockData data = event.getBlock().getBlockData();
+        if (data instanceof Stairs) {
+            Location StairsLocation = event.getBlock().getLocation();
+            for (Player player : StairsLocation.getWorld().getPlayers()) {
+                if (player.getLocation().distance(StairsLocation) < 1.0) {
+                    exitVehicle(player);
+                }
+            }
+        }
     }
 
     private void exitVehicle(Player player) {
