@@ -7,6 +7,9 @@ commands:
     description: パスワードを設定します
   pplayer:
     description: あなたの役職を確認します
+  giveu:
+    description: オンラインのプレイヤーに経験値を与えます
+    permission: space.yurisi.universecorev2.giveu
 
   #SubPlugins
   #LevelSystem
@@ -91,6 +94,9 @@ permissions:
   # UniverseCoreV2
   space.yurisi.universecorev2.interactevent.enchanttable:
     default: op
+  space.yurisi.universecorev2.giveu:
+    description: op command
+    default: op
 
   #SubPlugins
   #LevelSystem
@@ -107,7 +113,6 @@ permissions:
       space.yurisi.universeeconomy.mymoney: true
       space.yurisi.universeeconomy.pay: true
       space.yurisi.universeeconomy.seemoney: true
-
   space.yurisi.universeeconomy.setmoney:
     description: op command
     default: op

@@ -8,8 +8,11 @@ import space.yurisi.universecorev2.item.CustomItem;
 
 public class SolarSystemSword extends CustomItem {
 
+    public static final String id = "solar_system_sword";
+
     public SolarSystemSword() {
         super(
+                id,
                 "§e§lノヴァ・クラッシャー",
                 1,
                 2,
