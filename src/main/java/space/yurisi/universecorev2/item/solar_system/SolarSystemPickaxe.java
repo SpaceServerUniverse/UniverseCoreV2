@@ -8,9 +8,12 @@ import space.yurisi.universecorev2.item.CustomItem;
 
 public class SolarSystemPickaxe extends CustomItem {
 
+    public static final String id = "solar_system_pickaxe";
+
     public SolarSystemPickaxe() {
         super(
-                "§e§lbネプチューン・オブ・アリア",
+                id,
+                "§e§lネプチューン・オブ・アリア",
                 1,
                 2,
                 ItemStack.of(Material.DIAMOND_PICKAXE)
