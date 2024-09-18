@@ -18,6 +18,8 @@ public class DatabaseManager {
 
     private final PositionRepository positionRepository;
 
+    private final ContainerProtectRepository containerProtectRepository;
+
     private final UserPositionRepository userPositionRepository;
 
     private final CountRepository countRepository;
@@ -30,6 +32,8 @@ public class DatabaseManager {
 
     private final PlayerCountRepository playerCountRepository;
 
+    private final CustomNameRepository customNameRepository;
+
     public DatabaseManager(SessionFactory sessionFactory) {
         this.userRepository = new UserRepository(sessionFactory);
         this.moneyHistoryRepository = new MoneyHistoryRepository(sessionFactory);
@@ -41,12 +45,14 @@ public class DatabaseManager {
         this.playerLevelRepository = new PlayerLevelRepository(sessionFactory);
         this.playerNormalLevelRepository = new PlayerNormalLevelRepository(sessionFactory);
         this.positionRepository = new PositionRepository(sessionFactory);
+        this.containerProtectRepository = new ContainerProtectRepository(sessionFactory);
         this.userPositionRepository = new UserPositionRepository(sessionFactory);
         this.countRepository = new CountRepository(sessionFactory);
         this.killDeathCountRepository = new KillDeathCountRepository(sessionFactory);
         this.lifeCountRepository = new LifeCountRepository(sessionFactory);
         this.oreCountRepository = new OreCountRepository(sessionFactory);
         this.playerCountRepository = new PlayerCountRepository(sessionFactory);
+        this.customNameRepository = new CustomNameRepository(sessionFactory);
     }
 
     /**
@@ -149,6 +155,15 @@ public class DatabaseManager {
     }
 
     /**
+     * コンテナ保護リポジトリを取得
+     *
+     * @return PlayerNormalLevelRepository
+     */
+    public ContainerProtectRepository getContainerProtectRepository() {
+        return containerProtectRepository;
+    }
+
+    /**
      * カウントリポジトリを取得
      *
      * @return PlayerNormalLevelRepository
@@ -191,5 +206,14 @@ public class DatabaseManager {
      */
     public PlayerCountRepository getPlayerCountRepository() {
         return playerCountRepository;
+    }
+
+    /**
+     * 称号リポジトリを取得
+     *
+     * @return PlayerNormalLevelRepository
+     */
+    public CustomNameRepository getCustomNameRepository(){
+        return customNameRepository;
     }
 }

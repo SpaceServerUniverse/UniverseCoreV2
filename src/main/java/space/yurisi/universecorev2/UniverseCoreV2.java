@@ -7,6 +7,7 @@ import space.yurisi.universecorev2.command.CommandManager;
 import space.yurisi.universecorev2.database.DatabaseConnector;
 import space.yurisi.universecorev2.event.EventManager;
 import space.yurisi.universecorev2.file.Config;
+import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.logs.filter.PasswordFilter;
 import space.yurisi.universecorev2.subplugins.SubPlugin;
 import space.yurisi.universecorev2.subplugins.SubPluginInitializer;
@@ -40,6 +41,7 @@ public final class UniverseCoreV2 extends JavaPlugin {
         new EventManager(this);
         new CommandManager(this);
         new WorldInitializer();
+        new UniverseItem();
         this.sub_plugin = new SubPluginInitializer(this);
         this.sub_plugin.onEnable();
 

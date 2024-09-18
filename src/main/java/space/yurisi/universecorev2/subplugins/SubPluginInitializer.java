@@ -3,6 +3,7 @@ package space.yurisi.universecorev2.subplugins;
 import org.bukkit.Bukkit;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.subplugins.changemessages.ChangeMessages;
+import space.yurisi.universecorev2.subplugins.customname.CustomName;
 import space.yurisi.universecorev2.subplugins.damagemanager.DamageManager;
 import space.yurisi.universecorev2.subplugins.itemhat.ItemHat;
 import space.yurisi.universecorev2.subplugins.levelaward.LevelAward;
@@ -14,6 +15,7 @@ import space.yurisi.universecorev2.subplugins.universeutilcommand.UniverseUtilCo
 import space.yurisi.universecorev2.subplugins.signcommand.SignCommand;
 import space.yurisi.universecorev2.subplugins.sitdown.Sitdown;
 import space.yurisi.universecorev2.subplugins.universediscord.UniverseDiscord;
+import space.yurisi.universecorev2.subplugins.containerprotect.ContainerProtect;
 import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomy;
 import space.yurisi.universecorev2.subplugins.universeland.UniverseLand;
 import space.yurisi.universecorev2.subplugins.tppsystem.TPPSystem;
@@ -49,6 +51,9 @@ public class SubPluginInitializer {
         this.subPlugins.add(new Sitdown());
         this.subPlugins.add(new UniverseUtilCommand());
         this.subPlugins.add(new ItemHat());
+        this.subPlugins.add(new CustomName());
+        this.subPlugins.add(new ContainerProtect());
+
     }
 
     public void onEnable(){

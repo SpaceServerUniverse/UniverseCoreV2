@@ -72,6 +72,7 @@ public class SendRequestMenuItem extends AbstractItem {
         } catch (UserNotFoundException e) {
             player.sendMessage("相手のユーザーデータが見つかりませんでした。");
         }
+        event.getInventory().close();
     }
 
     private void sendRequest(Player player, Player targetPlayer) {

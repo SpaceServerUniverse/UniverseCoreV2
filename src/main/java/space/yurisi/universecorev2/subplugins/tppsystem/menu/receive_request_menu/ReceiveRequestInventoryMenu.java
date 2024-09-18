@@ -37,7 +37,7 @@ public class ReceiveRequestInventoryMenu implements BaseMenu {
     }
 
     public void sendMenu(Player player){
-        if (!this.requestManager.hasRequest(player)){
+        if (!this.requestManager.hasReceivedRequest(player)){
             player.sendMessage("現在受信しているリクエストはありません。");
             return;
         }
