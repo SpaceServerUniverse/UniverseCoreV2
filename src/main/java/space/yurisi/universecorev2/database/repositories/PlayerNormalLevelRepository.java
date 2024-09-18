@@ -50,7 +50,7 @@ public class PlayerNormalLevelRepository {
      *
      * @param id Long(PrimaryKey)
      * @return User | null
-     * @exception PlayerLevelNotFoundException レベルデータが存在しない
+     * @exception PlayerNormalLevelNotFoundException レベルデータが存在しない
      */
     public PlayerNormalLevel getPlayerNormalLevel(Long id) throws PlayerNormalLevelNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
@@ -69,7 +69,7 @@ public class PlayerNormalLevelRepository {
      *
      * @param user User
      * @return User | null
-     * @exception PlayerLevelNotFoundException レベルデータが存在しない
+     * @exception PlayerNormalLevelNotFoundException レベルデータが存在しない
      */
     public PlayerNormalLevel getPlayerNormalLevelFromUser(User user) throws PlayerNormalLevelNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();

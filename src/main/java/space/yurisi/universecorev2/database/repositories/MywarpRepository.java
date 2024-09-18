@@ -87,7 +87,7 @@ public class MywarpRepository {
      * マイワープをuser_idから取得します。
      *
      * @param user_id Long
-     * @return List<Mywarp>
+     * @return List
      * @throws MywarpNotFoundException マイワープデータが存在しない
      */
     public List<Mywarp> getMywarpFromUserId(Long user_id) throws MywarpNotFoundException {
@@ -138,7 +138,7 @@ public class MywarpRepository {
      * publicなマイワープを取得します。
      *
      * @param user_id Long
-     * @return List<Mywarp>
+     * @return List
      * @throws MywarpNotFoundException マイワープデータが存在しない
      */
     public List<Mywarp> getPublicMywarpFromUserId(Long user_id) throws MywarpNotFoundException {
