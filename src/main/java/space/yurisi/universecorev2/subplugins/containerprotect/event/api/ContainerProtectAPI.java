@@ -57,8 +57,8 @@ public class ContainerProtectAPI {
         if (!(holder instanceof Chest chest)) return true;
 
         ContainerProtect containerProtect = getContainerProtect(location);
-        if (containerProtect != null && Objects.equals(containerProtect.getUuid(), player.getUniqueId().toString())) {
-            return true;
+        if (containerProtect != null) {
+            return Objects.equals(containerProtect.getUuid(), player.getUniqueId().toString());
         }
 
         BlockFace face = DoubleChestFinder.getNeighborBlockFace((org.bukkit.block.data.type.Chest) chest.getBlockData());
