@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import space.yurisi.universecorev2.utils.Message;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
 import space.yurisi.universecorev2.subplugins.tppsystem.manager.RequestManager;
 import space.yurisi.universecorev2.subplugins.tppsystem.connector.UniverseCoreAPIConnector;
@@ -20,20 +21,20 @@ public class denySubCommand implements TPPSubCommand {
         }
 
         if (args.length < 2) {
-            player.sendMessage("プレイヤー名を入力してください。");
-            return true;
+            Message.sendWarningMessage(player, "[テレポートAI]", "プレイヤー名を入力してください．");
+            return false;
         }
 
         Player targetPlayer = Bukkit.getPlayer(args[1]);
         if (targetPlayer == null) {
-            player.sendMessage("プレイヤーが見つかりませんでした。");
-            return true;
+            Message.sendErrorMessage(player, "[テレポートAI]", "プレイヤーが見つかりませんでした．");
+            return false;
         }
 
         String playerName = targetPlayer.getName();
         targetPlayer.playSound(targetPlayer.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
-        player.sendMessage("§6" + playerName + " §2のテレポート申請を拒否しました.");
-        targetPlayer.sendMessage("§6" + player.getName() + " §2にテレポートを拒否されました.");
+        Message.sendNormalMessage(player, "[テレポートAI]", "§6" + playerName + " §fのテレポート申請を拒否しました.");
+        Message.sendNormalMessage(targetPlayer, "[テレポートAI]", "テレポート申請が拒否されました.");
 
         requestManager.removeSearchReceiver(targetPlayer);
         requestManager.removeRequest(targetPlayer, player);

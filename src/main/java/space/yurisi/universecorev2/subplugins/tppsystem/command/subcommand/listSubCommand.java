@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import space.yurisi.universecorev2.subplugins.tppsystem.manager.RequestManager;
+import space.yurisi.universecorev2.utils.Message;
 import space.yurisi.universecorev2.subplugins.tppsystem.connector.UniverseCoreAPIConnector;
 import space.yurisi.universecorev2.subplugins.tppsystem.menu.receive_request_menu.ReceiveRequestInventoryMenu;
 
@@ -19,7 +20,7 @@ public class listSubCommand implements TPPSubCommand {
 
         List<UUID> requests = requestManager.getRequest(player);
         if (!requestManager.hasReceivedRequest(player)) {
-            player.sendMessage("現在受信しているリクエストはありません。");
+            Message.sendNormalMessage(player, "[テレポートAI]", "現在受信しているテレポート申請はありません．");
             return true;
         }
 

@@ -11,6 +11,7 @@ import space.yurisi.universecorev2.subplugins.tppsystem.manager.RequestManager;
 import space.yurisi.universecorev2.subplugins.tppsystem.connector.UniverseCoreAPIConnector;
 import space.yurisi.universecorev2.subplugins.tppsystem.menu.menu_item.*;
 import space.yurisi.universecorev2.subplugins.tppsystem.menu.send_request_menu.item.*;
+import space.yurisi.universecorev2.utils.Message;
 import xyz.xenondevs.invui.gui.Gui;
 import xyz.xenondevs.invui.gui.PagedGui;
 import xyz.xenondevs.invui.gui.structure.Markers;
@@ -36,7 +37,7 @@ public class SendRequestInventoryMenu implements BaseMenu {
     public void sendMenu(Player player){
         try{
             if(this.requestManager.hasRequest(player)){
-                player.sendMessage(Component.text("既にリクエストを送信しています", TextColor.color(Color.RED.asRGB())));
+                Message.sendErrorMessage(player, "[テレポートAI]", "既にテレポート申請を送信しています．");
                 return;
             }
             List<Item> items = player.getServer().getOnlinePlayers().stream()
@@ -69,8 +70,7 @@ public class SendRequestInventoryMenu implements BaseMenu {
 
             window.open();
         } catch (Exception e) {
-            player.sendMessage(Component.text("現在オンラインのユーザーが見つかりませんでした。", TextColor.color(Color.RED.asRGB())));
-
+            Message.sendWarningMessage(player, "[テレポートAI]", "現在オンラインのユーザーが見つかりませんでした．");
         }
     }
 }

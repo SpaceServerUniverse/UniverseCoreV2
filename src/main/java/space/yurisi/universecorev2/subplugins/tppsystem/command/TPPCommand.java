@@ -39,15 +39,6 @@ public class TPPCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        /*
-        sender.sendMessage("TPP Help");
-        sender.sendMessage("/tpp help : このヘルプを表示します。<>内は必須で、()内は必須ではありません");
-        sender.sendMessage("/tpp send <プレイヤー名> : テレポート申請を送信します");
-        sender.sendMessage("/tpp list　: テレポート申請一覧を表示します");
-        sender.sendMessage("/tpp accept　<プレイヤー名> : テレポート申請を受け入れます");
-        sender.sendMessage("/tpp deny　<プレイヤー名>  : テレポート申請を拒否します");
-        */
-
         switch (args[0]){
             case "send":
                 new sendSubCommand().execute(this.connector, this.requestManager, sender, args);

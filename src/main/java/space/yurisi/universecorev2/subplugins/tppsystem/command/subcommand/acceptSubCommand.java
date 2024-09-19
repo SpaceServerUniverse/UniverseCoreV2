@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import space.yurisi.universecorev2.utils.Message;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
 import space.yurisi.universecorev2.subplugins.tppsystem.manager.RequestManager;
 import space.yurisi.universecorev2.subplugins.tppsystem.connector.UniverseCoreAPIConnector;
@@ -20,22 +21,22 @@ public class acceptSubCommand implements TPPSubCommand {
         }
 
         if (args.length < 2) {
-            player.sendMessage("プレイヤー名を入力してください。");
-            return true;
+            Message.sendWarningMessage(player, "[テレポートAI]", "プレイヤー名を入力してください．");
+            return false;
         }
 
         Player targetPlayer = Bukkit.getPlayer(args[1]);
         if (targetPlayer == null) {
-            player.sendMessage("プレイヤーが見つかりませんでした。");
-            return true;
+            Message.sendErrorMessage(player, "[テレポートAI]", "プレイヤーが見つかりませんでした．");
+            return false;
         }
 
         String playerName = targetPlayer.getName();
 
         player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
-        player.sendMessage("§6" + playerName + " §2のテレポート申請を許可しました.");
+        Message.sendSuccessMessage(player, "[テレポートAI]", "§6" + playerName + " §aのテレポート申請を許可しました.");
 
-        targetPlayer.sendMessage("§6" + player.getName() + " §2にテレポートします.");
+        Message.sendSuccessMessage(targetPlayer, "[テレポートAI]", "§6" + player.getName() + " §aにテレポートします．");
         targetPlayer.teleport(player);
         targetPlayer.playSound(targetPlayer.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
 

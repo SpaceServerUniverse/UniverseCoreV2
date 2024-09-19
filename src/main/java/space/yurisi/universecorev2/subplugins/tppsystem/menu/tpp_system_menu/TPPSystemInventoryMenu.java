@@ -9,6 +9,7 @@ import space.yurisi.universecorev2.menu.BaseMenu;
 import space.yurisi.universecorev2.subplugins.tppsystem.manager.RequestManager;
 import space.yurisi.universecorev2.subplugins.tppsystem.connector.UniverseCoreAPIConnector;
 import space.yurisi.universecorev2.subplugins.tppsystem.menu.tpp_system_menu.item.*;
+import space.yurisi.universecorev2.utils.Message;
 import xyz.xenondevs.invui.gui.Gui;
 import xyz.xenondevs.invui.item.Item;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
@@ -57,7 +58,7 @@ public class TPPSystemInventoryMenu implements BaseMenu {
 
             window.open();
         } catch (UserNotFoundException e) {
-            player.sendMessage("エラー: ユーザーデータが見つかりませんでした。");
+            Message.sendWarningMessage(player, "[テレポートAI]", "相手のユーザーデータが見つかりませんでした．");
         }
     }
 
