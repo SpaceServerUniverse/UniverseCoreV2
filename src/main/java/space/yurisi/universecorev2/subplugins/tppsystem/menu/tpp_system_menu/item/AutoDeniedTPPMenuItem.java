@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import space.yurisi.universecorev2.database.models.AutoTppSetting;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
 import space.yurisi.universecorev2.subplugins.tppsystem.connector.UniverseCoreAPIConnector;
+import space.yurisi.universecorev2.utils.Message;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
@@ -37,7 +38,7 @@ public class AutoDeniedTPPMenuItem extends AbstractItem {
             AutoTppSetting isAutoAcceptTPP = connector.getAutoTPPSettingFromPlayer(player);
             connector.changeAutoTPPSetting(isAutoAcceptTPP, false);
         } catch (UserNotFoundException e) {
-            player.sendMessage("ユーザーデータが見つかりませんでした。");
+            Message.sendWarningMessage(player, "[テレポートAI]", "相手のユーザーデータが見つかりませんでした．");
         }
         player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1, 1);
         event.getInventory().close();

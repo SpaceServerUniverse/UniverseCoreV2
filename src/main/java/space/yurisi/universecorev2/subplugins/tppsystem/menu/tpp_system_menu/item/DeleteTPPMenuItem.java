@@ -9,6 +9,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 import space.yurisi.universecorev2.subplugins.tppsystem.TPPSystem;
 import space.yurisi.universecorev2.subplugins.tppsystem.manager.RequestManager;
+import space.yurisi.universecorev2.utils.Message;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
@@ -56,12 +57,12 @@ public class DeleteTPPMenuItem extends AbstractItem {
         if (this.targetPlayerUUID != null) {
             Player targetPlayer = player.getServer().getPlayer(this.targetPlayerUUID);
             if (targetPlayer == null) {
-                player.sendMessage("§4プレイヤーが見つかりませんでした。");
+                Message.sendErrorMessage(player, "[テレポートAI]", "現在オンラインのユーザーが見つかりませんでした。");
                 this.requestManager.removeAllRequest(this.targetPlayerUUID);
                 this.requestManager.removeSearchReceiver(player);
                 return;
             }
-            player.sendMessage("§4リクエストを削除しました。");
+            Message.sendSuccessMessage(player, "[テレポートAI]", "リクエストを削除しました。");
             this.requestManager.removeRequest(player, targetPlayer);
             this.requestManager.removeSearchReceiver(player);
             event.getInventory().close();

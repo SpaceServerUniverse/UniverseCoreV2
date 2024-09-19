@@ -12,6 +12,7 @@ import space.yurisi.universecorev2.subplugins.tppsystem.TPPSystem;
 import space.yurisi.universecorev2.subplugins.tppsystem.manager.RequestManager;
 import space.yurisi.universecorev2.subplugins.tppsystem.connector.UniverseCoreAPIConnector;
 import org.jetbrains.annotations.NotNull;
+import space.yurisi.universecorev2.utils.Message;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
@@ -47,15 +48,16 @@ public class SendRequestMenuItem extends AbstractItem {
         Player targetPlayer = player.getServer().getPlayer(playerName);
 
         if(targetPlayer == null){
-            player.sendMessage("§6" + playerName + " §3はオフラインです。");
+            Message.sendErrorMessage(player, "[テレポートAI]", "プレイヤーが見つかりませんでした．");
             return;
         }
 
         player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
-        player.sendMessage("§6" + playerName + " §2にテレポート申請を送信しました。");
+        Message.sendNormalMessage(player, "[テレポートAI]", "§6" + playerName + " §fにテレポート申請を送信しました．");
 
         if (!connector.isExistsAutoTPPSetting(targetPlayer)) {
             this.sendRequest(player, targetPlayer);
+            event.getInventory().close();
             return;
         }
 
@@ -64,21 +66,25 @@ public class SendRequestMenuItem extends AbstractItem {
                 player.teleport(targetPlayer);
                 targetPlayer.playSound(targetPlayer.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
                 player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
-                targetPlayer.sendMessage("§6" + player.getName() + " §2からのテレポート申請を自動承認しました。");
-                player.sendMessage("§6" + targetPlayer.getName() + " §2にテレポートしました。");
+                Message.sendSuccessMessage(targetPlayer, "[テレポートAI]", "§6" + player.getName() + " §aからのテレポート申請を自動承認しました。");
+                Message.sendSuccessMessage(player, "[テレポートAI]", "§6" + targetPlayer.getName() + " §aにテレポートしました。");
             } else {
                 this.sendRequest(player, targetPlayer);
             }
+            event.getInventory().close();
         } catch (UserNotFoundException e) {
-            player.sendMessage("相手のユーザーデータが見つかりませんでした。");
+            Message.sendWarningMessage(player, "[テレポートAI]", "相手のユーザーデータが見つかりませんでした．");
         }
         event.getInventory().close();
     }
 
     private void sendRequest(Player player, Player targetPlayer) {
         targetPlayer.playSound(targetPlayer.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 2, 1);
-        targetPlayer.sendMessage("§6" + player.getName() + " §2からテレポート申請が届きました。");
-        targetPlayer.sendMessage("§6/tppメニューから承認可否を選択できます。");
+        Message.sendNormalMessage(targetPlayer, "[テレポートAI]", "§6" + player.getName() + " §fからテレポート申請が届きました．");
+        Message.sendNormalMessage(targetPlayer, "[テレポートAI]", "§6/tpp§fメニューから承認可否を選択できます．");
+        Message.sendNormalMessage(targetPlayer, "[テレポートAI]", "コマンドからも承認可能です．");
+        Message.sendNormalMessage(player, "[テレポートAI]", "§6/tpp accept " + targetPlayer.getName() + " §fで承認");
+        Message.sendNormalMessage(player, "[テレポートAI]", "§6/tpp deny " + targetPlayer.getName() + " §fで拒否");
         this.requestManager.setRequest(player, targetPlayer);
         this.requestManager.setSearchReceiver(player, targetPlayer);
     }

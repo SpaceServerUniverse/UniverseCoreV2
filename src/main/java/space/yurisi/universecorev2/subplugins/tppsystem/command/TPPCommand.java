@@ -39,37 +39,29 @@ public class TPPCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        /*
-        sender.sendMessage("TPP Help");
-        sender.sendMessage("/tpp help : このヘルプを表示します。<>内は必須で、()内は必須ではありません");
-        sender.sendMessage("/tpp send <プレイヤー名> : テレポート申請を送信します");
-        sender.sendMessage("/tpp accept　<プレイヤー名> : テレポート申請を受け入れます");
-        sender.sendMessage("/tpp deny　<プレイヤー名>  : テレポート申請を拒否します");
-        */
+        switch (args[0]){
+            case "send":
+                new sendSubCommand().execute(this.connector, this.requestManager, sender, args);
+                break;
+            case "accept":
+                new acceptSubCommand().execute(this.connector, this.requestManager, sender, args);
+                break;
+            case "deny":
+                new denySubCommand().execute(this.connector, this.requestManager, sender, args);
+                break;
+            case "list":
+                new listSubCommand().execute(this.connector, this.requestManager, sender, args);
+                break;
+            default:
+                sender.sendMessage("TPP Help");
+                sender.sendMessage("<>内は必須で、()内は必須ではありません");
+                sender.sendMessage("/tpp send <プレイヤー名> : テレポート申請を送信します");
+                sender.sendMessage("/tpp accept　<プレイヤー名> : テレポート申請を受け入れます");
+                sender.sendMessage("/tpp deny　<プレイヤー名>  : テレポート申請を拒否します");
+                sender.sendMessage("/tpp list : テレポート申請の一覧を表示します");
+                return false;
+        }
 
-//        switch (args[0]){
-//            case "send":
-//                new sendSubCommand().execute(sender, args);
-//                break;
-//            case "accept":
-//                new acceptSubCommand().execute(sender, args);
-//                break;
-//            case "deny":
-//                new denySubCommand().execute(sender, args);
-//                break;
-//            case "list":
-//                new listSubCommand().execute(sender, args);
-//                break;
-//            default:
-//                sender.sendMessage("TPP Help");
-//                sender.sendMessage("<>内は必須で、()内は必須ではありません");
-//                sender.sendMessage("/tpp send <プレイヤー名> : テレポート申請を送信します");
-//                sender.sendMessage("/tpp accept　<プレイヤー名> : テレポート申請を受け入れます");
-//                sender.sendMessage("/tpp deny　<プレイヤー名>  : テレポート申請を拒否します");
-//                sender.sendMessage("/tpp list : テレポート申請の一覧を表示します");
-//                return false;
-//        }
-//
         return true;
     }
 
