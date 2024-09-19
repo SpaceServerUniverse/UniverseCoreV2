@@ -56,6 +56,7 @@ public class SendRequestMenuItem extends AbstractItem {
 
         if (!connector.isExistsAutoTPPSetting(targetPlayer)) {
             this.sendRequest(player, targetPlayer);
+            event.getInventory().close();
             return;
         }
 
@@ -69,6 +70,7 @@ public class SendRequestMenuItem extends AbstractItem {
             } else {
                 this.sendRequest(player, targetPlayer);
             }
+            event.getInventory().close();
         } catch (UserNotFoundException e) {
             player.sendMessage("相手のユーザーデータが見つかりませんでした。");
         }
@@ -79,6 +81,9 @@ public class SendRequestMenuItem extends AbstractItem {
         targetPlayer.playSound(targetPlayer.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 2, 1);
         targetPlayer.sendMessage("§6" + player.getName() + " §2からテレポート申請が届きました。");
         targetPlayer.sendMessage("§6/tppメニューから承認可否を選択できます。");
+        targetPlayer.sendMessage("§6コマンドからも承認可能です。");
+        targetPlayer.sendMessage("§6/tpp accept " + player.getName() + " §2で承認");
+        targetPlayer.sendMessage("§6/tpp deny " + player.getName() + " §2で拒否");
         this.requestManager.setRequest(player, targetPlayer);
         this.requestManager.setSearchReceiver(player, targetPlayer);
     }
