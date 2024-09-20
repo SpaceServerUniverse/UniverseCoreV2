@@ -1,6 +1,7 @@
 package space.yurisi.universecorev2.subplugins.universeutilcommand.dice;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -37,7 +38,9 @@ public class DiceCommand implements CommandExecutor {
             }
 
             int result = new Random().nextInt((max - min) + 1) + min;
-            sender.getServer().broadcast(Component.text("§a[DiceAI] §6" + sender.getName() + " が " + min + " から " + max + " の範囲でダイスを振りました。結果は " + result + " です"));
+            sender.getServer().broadcast(Component.text("§d[DiceAI] §6" + sender.getName() + "§d が §6" + min + " から " + max + " §dの範囲でダイスを振りました。結果は §6" + result + " §dです"));
+            Message.sendNormalMessage(player, "[DiceAI]", "§nもう一度引く場合はクリックしてください", ClickEvent.runCommand("/dice " + min + " " + max), "クリックすると再度 §d[" + min + " 〜 " + max + "] §fの範囲でダイスを振ります");
+
             return true;
         } catch (NumberFormatException e) {
             Message.sendErrorMessage(player, "[DiceAI]", "数値を指定してください");
