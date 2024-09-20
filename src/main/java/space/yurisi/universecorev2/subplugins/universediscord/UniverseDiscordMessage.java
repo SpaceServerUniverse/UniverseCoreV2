@@ -34,6 +34,14 @@ public class UniverseDiscordMessage {
         discordChannel.sendMessage("[" + player.getName() + " | " + world_name + "]" + " " + message).queue();
     }
 
+    public static void sendEventMessageToDiscord(TextChannel discordChannel, String message, int color) {
+        EmbedBuilder embed = new EmbedBuilder();
+        embed.setDescription(message);
+        embed.setColor(color);
+
+        discordChannel.sendMessageEmbeds(embed.build()).queue();
+    }
+
     public static void sendJoinMessageToDiscord(Player player, TextChannel discordChannel) {
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("入室");
@@ -48,7 +56,7 @@ public class UniverseDiscordMessage {
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("退出");
         embed.setDescription(player.getName() + " がログアウトしました");
-        embed.setThumbnail("https://mc-heads.net/avatar/" + player.getUniqueId() + "/100/nohelm.png");
+        embed.setThumbnail("https://mc-heads.net/avatar/" + player.getUniqueId() + "/100/");
         embed.setColor(0x687EFF);
 
         discordChannel.sendMessageEmbeds(embed.build()).queue();
