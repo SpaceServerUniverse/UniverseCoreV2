@@ -32,6 +32,12 @@ public class denySubCommand implements TPPSubCommand {
         }
 
         String playerName = targetPlayer.getName();
+
+        if (!requestManager.isRequestExists(targetPlayer, player)) {
+            Message.sendErrorMessage(player, "[テレポートAI]", "§c" + playerName + "からのテレポート申請はありません．");
+            return false;
+        }
+
         targetPlayer.playSound(targetPlayer.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
         Message.sendNormalMessage(player, "[テレポートAI]", "§6" + playerName + " §fのテレポート申請を拒否しました.");
         Message.sendNormalMessage(targetPlayer, "[テレポートAI]", "テレポート申請が拒否されました.");

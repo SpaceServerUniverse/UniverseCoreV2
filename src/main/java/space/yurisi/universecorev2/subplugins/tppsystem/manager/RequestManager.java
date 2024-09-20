@@ -83,6 +83,10 @@ public class RequestManager {
         return this.searchReceiver.get(playerToUUID(sender));
     }
 
+    public boolean isRequestExists(Player sender, Player receiver) {
+        return this.tppRequests.containsKey(playerToUUID(receiver)) && this.tppRequests.get(playerToUUID(receiver)).contains(playerToUUID(sender));
+    }
+
     public void removeSearchReceiver(Player sender) {
         this.searchReceiver.remove(playerToUUID(sender));
     }
