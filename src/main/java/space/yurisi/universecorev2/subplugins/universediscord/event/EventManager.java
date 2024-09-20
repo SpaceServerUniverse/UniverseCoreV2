@@ -2,9 +2,6 @@ package space.yurisi.universecorev2.subplugins.universediscord.event;
 
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import space.yurisi.universecorev2.UniverseCoreV2;
-import space.yurisi.universecorev2.subplugins.universediscord.event.player.ChatEvent;
-import space.yurisi.universecorev2.subplugins.universediscord.event.player.JoinEvent;
-import space.yurisi.universecorev2.subplugins.universediscord.event.player.QuitEvent;
 
 public class EventManager {
 
@@ -13,8 +10,7 @@ public class EventManager {
     }
 
     private void init(UniverseCoreV2 core, TextChannel channel){
-        core.getServer().getPluginManager().registerEvents(new ChatEvent(channel), core);
-        core.getServer().getPluginManager().registerEvents(new JoinEvent(channel), core);
-        core.getServer().getPluginManager().registerEvents(new QuitEvent(channel), core);
+        core.getServer().getPluginManager().registerEvents(new PlayerEvent(channel), core);
+        core.getServer().getPluginManager().registerEvents(new ServerEvent(channel), core);
     }
 }
