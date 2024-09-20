@@ -33,6 +33,11 @@ public class acceptSubCommand implements TPPSubCommand {
 
         String playerName = targetPlayer.getName();
 
+        if (!requestManager.isRequestExists(targetPlayer, player)) {
+            Message.sendErrorMessage(player, "[テレポートAI]", "§c" + playerName + "からのテレポート申請はありません．");
+            return false;
+        }
+
         player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
         Message.sendSuccessMessage(player, "[テレポートAI]", "§6" + playerName + " §aのテレポート申請を許可しました.");
 

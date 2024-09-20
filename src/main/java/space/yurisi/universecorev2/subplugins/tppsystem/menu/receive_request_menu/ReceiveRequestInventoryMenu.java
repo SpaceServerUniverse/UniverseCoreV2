@@ -39,7 +39,7 @@ public class ReceiveRequestInventoryMenu implements BaseMenu {
 
     public void sendMenu(Player player){
         if (!this.requestManager.hasReceivedRequest(player)){
-            Message.sendNormalMessage(player, "[テレポートAI]", "現在受信しているテレポート申請はありません．");Message.sendNormalMessage(player, "[テレポートAI]", "現在受信しているテレポート申請はありません．");
+            Message.sendNormalMessage(player, "[テレポートAI]", "現在受信しているテレポート申請はありません．");
             return;
         }
         try{

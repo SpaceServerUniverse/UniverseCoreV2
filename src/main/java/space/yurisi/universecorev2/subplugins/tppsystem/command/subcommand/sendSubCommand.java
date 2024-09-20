@@ -72,8 +72,8 @@ public class sendSubCommand implements TPPSubCommand {
         Message.sendNormalMessage(targetPlayer, "[テレポートAI]", "§6" + player.getName() + " §fからテレポート申請が届きました．");
         Message.sendNormalMessage(targetPlayer, "[テレポートAI]", "§6/tpp§fメニューから承認可否を選択できます．");
         Message.sendNormalMessage(targetPlayer, "[テレポートAI]", "コマンドからも承認可能です．");
-        Message.sendNormalMessage(player, "[テレポートAI]", "§6/tpp accept " + targetPlayer.getName() + " §fで承認");
-        Message.sendNormalMessage(player, "[テレポートAI]", "§6/tpp deny " + targetPlayer.getName() + " §fで拒否");
+        Message.sendNormalMessage(targetPlayer, "[テレポートAI]", "§6/tpp accept " + player.getName() + " §fで承認");
+        Message.sendNormalMessage(targetPlayer, "[テレポートAI]", "§6/tpp deny " + player.getName() + " §fで拒否");
         requestManager.setRequest(player, targetPlayer);
         requestManager.setSearchReceiver(player, targetPlayer);
     }
