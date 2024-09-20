@@ -56,7 +56,7 @@ public class UniverseDiscordMessage {
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("退出");
         embed.setDescription(player.getName() + " がログアウトしました");
-        embed.setThumbnail("https://mc-heads.net/avatar/" + player.getUniqueId() + "/100/");
+        embed.setThumbnail("https://mc-heads.net/avatar/" + player.getUniqueId() + "/100/nohelm.png");
         embed.setColor(0x687EFF);
 
         discordChannel.sendMessageEmbeds(embed.build()).queue();
