@@ -34,7 +34,7 @@ public class UniverseDiscord implements SubPlugin {
         }
 
         List<GatewayIntent> intents = List.of(GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT);
-        JDA jda = JDABuilder.createDefault(config.getDiscordBotToken(), intents).addEventListeners(new DiscordEvent(config.getDiscordChannelId())).setAutoReconnect(true).build();
+        JDA jda = JDABuilder.createLight(config.getDiscordBotToken(), intents).addEventListeners(new DiscordEvent(config.getDiscordChannelId())).setAutoReconnect(true).build();
 
         try {
             jda.awaitReady();
