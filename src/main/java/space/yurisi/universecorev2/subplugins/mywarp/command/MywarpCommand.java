@@ -19,6 +19,7 @@ import java.util.List;
 public class MywarpCommand implements CommandExecutor, TabCompleter {
 
     private UniverseCoreAPIConnector connector;
+
     public MywarpCommand(UniverseCoreAPIConnector connector) {
         this.connector = connector;
     }
@@ -58,6 +59,7 @@ public class MywarpCommand implements CommandExecutor, TabCompleter {
             default:
                 String[] helpMessage = """
             §6-- Mywarp Help --
+            ☆ §b全てのコマンドは "/mw" でも実行できます ☆
                §7/mywarp : Mywarpのメニューを開きます
                §7/mywarp list : ワープポイントの一覧を表示します
                §7/mywarp add <ワープ名> <公開可否:する, しない> : ワープポイントを追加します
@@ -80,7 +82,7 @@ public class MywarpCommand implements CommandExecutor, TabCompleter {
         }
 
         String input = args[0];
-        List<String> options = Arrays.asList("list", "add", "del", "tp", "visit", "visitlist");
+        List<String> options = Arrays.asList("list", "add", "del", "tp", "visit", "visitlist", "help");
 
         if (input.isEmpty()) {
             return options;

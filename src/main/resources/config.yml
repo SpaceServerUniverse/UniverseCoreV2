@@ -3,15 +3,3 @@ db:
   port: 3306
   username: "root"
   password: "password"
-
-universe-land:
-  land-price: 5
-  deny-worlds:
-    - hoge
-
-mywarp:
-  settings:
-    deny-worlds: [ ]
-
-customname:
-  "yurisi": "yurisi"

@@ -8,9 +8,12 @@ import space.yurisi.universecorev2.item.CustomItem;
 
 public class SolarSystemShovel extends CustomItem {
 
+    public static final String id = "solar_system_shovel";
+
     public SolarSystemShovel() {
         super(
-                "§d§lbNocturne of Uranus",
+                id,
+                "§d§lNocturne of Uranus",
                 1,
                 2,
                 ItemStack.of(Material.DIAMOND_SHOVEL)

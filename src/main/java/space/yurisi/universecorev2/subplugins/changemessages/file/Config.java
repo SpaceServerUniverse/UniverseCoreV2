@@ -5,6 +5,7 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.subplugins.changemessages.ChangeMessages;
+import space.yurisi.universecorev2.utils.ConfigReader;
 
 public final class Config {
 
@@ -18,20 +19,21 @@ public final class Config {
     }
 
     private void init(){
-        core.saveDefaultConfig();
+        ConfigReader configReader = new ConfigReader(core,"subplugins/", "changemessages.yml");
+        configReader.saveDefaultConfig();
         if (config != null) {
-            core.reloadConfig();
+            configReader.reloadConfig();
         }
-        this.config = core.getConfig();
+        this.config = configReader.getConfig();
     }
 
     public Boolean existsCustomJoinMessage(Player player){
-        String result = this.config.getString("customname."+player.getName());
+        String result = this.config.getString("names."+player.getName());
         return result != null;
     }
 
     public String getCustomJoinMessage(Player player){
-        return this.config.getString("customname."+player.getName());
+        return this.config.getString("names."+player.getName());
     }
 
 }

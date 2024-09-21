@@ -19,9 +19,7 @@ public final class Mywarp implements SubPlugin {
         DatabaseManager manager = UniverseCoreV2API.getInstance().getDatabaseManager();
         this.config = new Config(core);
         this.connector = new UniverseCoreAPIConnector(manager, this.config);
-        // FIXME: alias 機能を使ったほうが良い. 同じクラス登録はリソースが無駄になる
         core.getCommand("mywarp").setExecutor(new MywarpCommand(connector));
-        core.getCommand("mw").setExecutor(new MywarpCommand(connector));
     }
 
     public UniverseCoreAPIConnector getConnector(){

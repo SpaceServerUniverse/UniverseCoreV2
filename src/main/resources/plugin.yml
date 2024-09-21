@@ -7,6 +7,9 @@ commands:
     description: パスワードを設定します
   pplayer:
     description: あなたの役職を確認します
+  giveu:
+    description: オンラインのプレイヤーに経験値を与えます
+    permission: space.yurisi.universecorev2.giveu
 
   #SubPlugins
   #LevelSystem
@@ -46,10 +49,14 @@ commands:
     description: サイコロを振ります
 
   #Mywarp
-  mw:
-    description: マイワープを作成、ワープできます
   mywarp:
     description: マイワープを作成、ワープできます
+    aliases: [mw]
+
+  #TPP
+  tpp:
+      description: プレイヤーをテレポートします
+      usage: /tpp
 
   #Salute
   k:
@@ -69,6 +76,20 @@ commands:
   lobby:
     description: ロビーに戻ります
 
+  #ItemHat
+  hat:
+    discription: 手に持っているアイテムを頭にかぶります
+
+  #CustomName
+  tag:
+    description: 称号を設定します
+
+  #ContainerProtect
+  lock:
+    description: コンテナ等を保護します
+  unlock:
+    description: コンテナ等の保護を解除します
+
   #FreeMarket
   market:
     description: フリーマーケットの画面を開きます
@@ -77,6 +98,9 @@ commands:
 permissions:
   # UniverseCoreV2
   space.yurisi.universecorev2.interactevent.enchanttable:
+    default: op
+  space.yurisi.universecorev2.giveu:
+    description: op command
     default: op
 
   #SubPlugins
@@ -94,7 +118,6 @@ permissions:
       space.yurisi.universeeconomy.mymoney: true
       space.yurisi.universeeconomy.pay: true
       space.yurisi.universeeconomy.seemoney: true
-
   space.yurisi.universeeconomy.setmoney:
     description: op command
     default: op

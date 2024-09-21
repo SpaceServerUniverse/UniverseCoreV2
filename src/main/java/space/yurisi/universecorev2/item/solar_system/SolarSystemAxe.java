@@ -8,12 +8,15 @@ import space.yurisi.universecorev2.item.CustomItem;
 
 public class SolarSystemAxe extends CustomItem {
 
+    public static final String id = "solar_system_axe";
+
     public SolarSystemAxe() {
         super(
-                "§8§lbSaturn's Glaive",
+                id,
+                "§8§lSaturn's Glaive",
                 1,
                 2,
-                ItemStack.of(Material.DIAMOND_PICKAXE)
+                ItemStack.of(Material.DIAMOND_AXE)
         );
         registerBaseItemFunctions();
     }

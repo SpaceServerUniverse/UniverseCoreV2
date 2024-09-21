@@ -37,4 +37,5 @@ public class Config {
     public String getDBUserPassword(){
         return this.config.getString("db.password");
     }
+
 }

@@ -12,15 +12,18 @@ public class DatabaseManager {
     private final LandRepository landRepository;
     private final LandPermissionRepository landPermissionRepository;
     private final MywarpRepository mywarpRepository;
+    private final AutoTppSettingRepository autoTPPSettingRepository;
     private final PlayerLevelRepository playerLevelRepository;
     private final PlayerNormalLevelRepository playerNormalLevelRepository;
     private final PositionRepository positionRepository;
+    private final ContainerProtectRepository containerProtectRepository;
     private final UserPositionRepository userPositionRepository;
     private final CountRepository countRepository;
     private final KillDeathCountRepository killDeathCountRepository;
     private final LifeCountRepository lifeCountRepository;
     private final OreCountRepository oreCountRepository;
     private final PlayerCountRepository playerCountRepository;
+    private final CustomNameRepository customNameRepository;
     private final MarketRepository marketRepository;
 
     public DatabaseManager(SessionFactory sessionFactory) {
@@ -30,15 +33,18 @@ public class DatabaseManager {
         this.landRepository = new LandRepository(sessionFactory, getLandRepository());
         this.landPermissionRepository = new LandPermissionRepository(sessionFactory);
         this.mywarpRepository = new MywarpRepository(sessionFactory, getUserRepository());
+        this.autoTPPSettingRepository = new AutoTppSettingRepository(sessionFactory, getUserRepository());
         this.playerLevelRepository = new PlayerLevelRepository(sessionFactory);
         this.playerNormalLevelRepository = new PlayerNormalLevelRepository(sessionFactory);
         this.positionRepository = new PositionRepository(sessionFactory);
+        this.containerProtectRepository = new ContainerProtectRepository(sessionFactory);
         this.userPositionRepository = new UserPositionRepository(sessionFactory);
         this.countRepository = new CountRepository(sessionFactory);
         this.killDeathCountRepository = new KillDeathCountRepository(sessionFactory);
         this.lifeCountRepository = new LifeCountRepository(sessionFactory);
         this.oreCountRepository = new OreCountRepository(sessionFactory);
         this.playerCountRepository = new PlayerCountRepository(sessionFactory);
+        this.customNameRepository = new CustomNameRepository(sessionFactory);
         this.marketRepository = new MarketRepository(sessionFactory);
     }
 
@@ -97,6 +103,15 @@ public class DatabaseManager {
     }
 
     /**
+     * 自動TPP設定リポジトリを取得
+     *
+     * @return AutoTPPSettingRepository
+     */
+    public AutoTppSettingRepository getAutoTPPSettingRepository() {
+        return autoTPPSettingRepository;
+    }
+
+    /**
      * プレイヤーレベルリポジトリを取得
      *
      * @return PlayerLevelRepository
@@ -130,6 +145,15 @@ public class DatabaseManager {
      */
     public UserPositionRepository getUserPositionRepository() {
         return userPositionRepository;
+    }
+
+    /**
+     * コンテナ保護リポジトリを取得
+     *
+     * @return PlayerNormalLevelRepository
+     */
+    public ContainerProtectRepository getContainerProtectRepository() {
+        return containerProtectRepository;
     }
 
     /**
@@ -183,4 +207,13 @@ public class DatabaseManager {
      * @return MarketRepository
      */
     public MarketRepository getMarketRepository() { return marketRepository; }
+
+    /**
+     * 称号リポジトリを取得
+     *
+     * @return PlayerNormalLevelRepository
+     */
+    public CustomNameRepository getCustomNameRepository(){
+        return customNameRepository;
+    }
 }
