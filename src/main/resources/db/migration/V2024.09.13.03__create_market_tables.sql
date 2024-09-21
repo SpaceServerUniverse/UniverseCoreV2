@@ -11,5 +11,5 @@ CREATE TABLE IF NOT EXISTS market (
     price BIGINT NOT NULL,
     is_sold CHAR(1) NOT NULL DEFAULT 0,
     is_received_item CHAR(1) NOT NULL DEFAULT 0,
-    purchaser_uuid VARCHAR(255),
+    purchaser_uuid VARCHAR(255)
 );
