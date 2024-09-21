@@ -34,6 +34,15 @@ public class Market {
     @Column(name = "price", nullable = false)
     private Long price;
 
+    @Column(name = "is_sold")
+    private boolean isSold;
+
+    @Column(name = "is_received_item")
+    private boolean isReceivedItem;
+
+    @Column(name = "purchaser_uuid", columnDefinition = "VARCHAR(255)")
+    private String purchaserUuid;
+
     public Market(
             Long id,
             String playerUuid,
@@ -42,7 +51,10 @@ public class Market {
             byte[] serializedItem,
             String serializedItemStackJson,
             String serializedItemStackMetaJson,
-            Long price
+            Long price,
+            int isSold,
+            int isReceivedItem,
+            String purchaserUuid
     ) {
         this.id = id;
         this.playerUuid = playerUuid;
@@ -52,6 +64,9 @@ public class Market {
         this.serializedItemStackJson = serializedItemStackJson;
         this.serializedItemStackMetaJson = serializedItemStackMetaJson;
         this.price = price;
+        this.isSold = (isSold != 0);
+        this.isReceivedItem = (isReceivedItem != 0);
+        this.purchaserUuid = purchaserUuid;
     }
 
     public Market() {
@@ -120,5 +135,29 @@ public class Market {
 
     public void setPrice(Long price) {
         this.price = price;
+    }
+
+    public boolean isSold() {
+        return isSold;
+    }
+
+    public void setSold(boolean isSold) {
+        this.isSold = isSold;
+    }
+
+    public boolean isReceivedItem() {
+        return isReceivedItem;
+    }
+
+    public void setReceivedItem(boolean isReceivedItem) {
+        this.isReceivedItem = isReceivedItem;
+    }
+
+    public String getPurchaserUuid() {
+        return purchaserUuid;
+    }
+
+    public void setPurchaserUuid(String purchaserUuid) {
+        this.purchaserUuid = purchaserUuid;
     }
 }

@@ -1,10 +1,17 @@
 package space.yurisi.universecorev2.database.repositories;
 
+import org.bukkit.entity.Player;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.yaml.snakeyaml.error.Mark;
+import space.yurisi.universecorev2.UniverseCoreV2API;
 import space.yurisi.universecorev2.database.models.Market;
 import space.yurisi.universecorev2.exception.MarketItemNotFoundException;
+import space.yurisi.universecorev2.exception.MoneyNotFoundException;
+import space.yurisi.universecorev2.exception.UserNotFoundException;
+import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomyAPI;
+import space.yurisi.universecorev2.subplugins.universeeconomy.exception.CanNotReduceMoneyException;
+import space.yurisi.universecorev2.subplugins.universeeconomy.exception.ParameterException;
 
 import java.util.List;
 
@@ -78,7 +85,7 @@ public class MarketRepository {
      */
     public Market createItemData(String uuid, String itemName, String displayName, byte[] serializedItemStack, String serializedItemStackJson, String serializedItemStackMetaJson, Long price){
         Session session = this.sessionFactory.getCurrentSession();
-        Market market = new Market(null, uuid, itemName, displayName, serializedItemStack, serializedItemStackJson, serializedItemStackMetaJson, price);
+        Market market = new Market(null, uuid, itemName, displayName, serializedItemStack, serializedItemStackJson, serializedItemStackMetaJson, price, 0, 0, null);
         session.beginTransaction();
         session.persist(market);
         session.getTransaction().commit();
@@ -96,12 +103,10 @@ public class MarketRepository {
      */
     public Market updateItemPrice(Long id, Long price) throws MarketItemNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
-        Market market = this.getItemFromId(id);
+        Market market = removeItem(id);
         market.setPrice(price);
         session.beginTransaction();
-        session.createSelectionQuery("update Market set price = :price where id = :id", Market.class)
-            .setParameter("price", price)
-            .setParameter("id", id);
+        session.persist(market);
         session.getTransaction().commit();
         session.close();
         return market;
@@ -118,10 +123,41 @@ public class MarketRepository {
         Session session = this.sessionFactory.getCurrentSession();
         Market market = this.getItemFromId(id);
         session.beginTransaction();
-        session.createSelectionQuery("delete from Market where id = :id", Market.class)
-                .setParameter("id", id);
+        session.remove(market);
         session.getTransaction().commit();
         session.close();
         return market;
+    }
+
+    public void buyItem(Long id, Player player) throws MarketItemNotFoundException, UserNotFoundException, ParameterException, MoneyNotFoundException, CanNotReduceMoneyException {
+        Market market = removeItem(id);
+        UniverseEconomyAPI.getInstance().reduceMoney(player, market.getPrice());
+        market.setSold(true);
+        market.setReceivedItem(false);
+        market.setPurchaserUuid(player.getUniqueId().toString());
+        Session session = this.sessionFactory.getCurrentSession();
+        session.beginTransaction();
+        session.persist(market);
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    public List<Market> getItemFromPurchaser(String uuid) {
+        Session session = this.sessionFactory.getCurrentSession();
+        List<Market> markets = session.createSelectionQuery("from Market where purchaserUuid = :uuid and isReceivedItem = :is_received", Market.class)
+                .setParameter("uuid", uuid)
+                .setParameter("is_received", 0)
+                .getResultList();
+        return markets;
+    }
+
+    public void receiveItem(Long id, Player player) throws MarketItemNotFoundException {
+        Market market = removeItem(id);
+        Session session = this.sessionFactory.getCurrentSession();
+        session.beginTransaction();
+        market.setReceivedItem(true);
+        session.persist(market);
+        session.getTransaction().commit();
+        session.close();
     }
 }

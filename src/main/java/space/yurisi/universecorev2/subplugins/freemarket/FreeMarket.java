@@ -9,6 +9,7 @@ public final class FreeMarket implements SubPlugin {
     @Override
     public void onEnable(UniverseCoreV2 core) {
         core.getCommand("market").setExecutor(new marketCommand());
+        core.getCommand("market").setTabCompleter(new marketCommand());
     }
 
     @Override
