@@ -5,11 +5,16 @@ api-version: '1.21'
 commands:
   password:
     description: パスワードを設定します
+
   pplayer:
     description: あなたの役職を確認します
+
   giveu:
     description: オンラインのプレイヤーに経験値を与えます
     permission: space.yurisi.universecorev2.giveu
+
+  earth:
+    description: "地球に行く"
 
   #SubPlugins
   #LevelSystem
