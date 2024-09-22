@@ -14,7 +14,7 @@ public final class SolarSystemPickaxe extends LevellingCustomItem {
     public SolarSystemPickaxe() {
         super(
                 id,
-                "§b§lEarth's Heart",
+                "§b§lEarth's Core",
                 1,
                 5,
                 ItemStack.of(Material.DIAMOND_PICKAXE)
