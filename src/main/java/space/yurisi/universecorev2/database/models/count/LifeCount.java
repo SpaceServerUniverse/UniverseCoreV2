@@ -29,7 +29,16 @@ public class LifeCount {
     @Column(name = "wood_break", columnDefinition = "BIGINT UNSIGNED", nullable = false)
     private Long wood_break;
 
-    public LifeCount(Long id, Long count_id, Long fishing, Long block_break, Long block_place, Long flower_place, Long wood_break) {
+    @Column(name = "gacha", columnDefinition = "BIGINT UNSIGNED", nullable = false)
+    private Long gacha;
+
+    @Column(name = "gacha_rarity_count", columnDefinition = "BIGINT UNSIGNED", nullable = false)
+    private Long gacha_rarity_count;
+
+    @Column(name = "gacha_ceiling_count", columnDefinition = "BIGINT UNSIGNED", nullable = false)
+    private Long gacha_ceiling_count;
+
+    public LifeCount(Long id, Long count_id, Long fishing, Long block_break, Long block_place, Long flower_place, Long wood_break, Long gacha, Long gacha_rarity_count, Long gacha_ceiling_count) {
         this.id = id;
         this.count_id = count_id;
         this.fishing = fishing;
@@ -37,6 +46,9 @@ public class LifeCount {
         this.block_place = block_place;
         this.flower_place = flower_place;
         this.wood_break = wood_break;
+        this.gacha = gacha;
+        this.gacha_rarity_count = gacha_rarity_count;
+        this.gacha_ceiling_count = gacha_ceiling_count;
     }
 
     public LifeCount() {
@@ -97,4 +109,29 @@ public class LifeCount {
     public void setWood_break(Long wood_break) {
         this.wood_break = wood_break;
     }
+
+    public Long getGacha() {
+        return this.gacha;
+    }
+
+    public void setGacha(Long gacha) {
+        this.gacha = gacha;
+    }
+
+    public Long getGacha_rarity_count() {
+        return this.gacha_rarity_count;
+    }
+
+    public void setGacha_rarity_count(Long gacha_rarity_count) {
+       this.gacha_rarity_count = gacha_rarity_count;
+    }
+
+    public Long getGacha_ceiling_count(){
+        return this.gacha_ceiling_count;
+    }
+
+    public void setGacha_ceiling_count(Long gacha_ceiling_count) {
+        this.gacha_ceiling_count = gacha_ceiling_count;
+    }
+
 }
