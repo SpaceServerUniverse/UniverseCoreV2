@@ -6,7 +6,7 @@ import space.yurisi.universecorev2.subplugins.containerprotect.command.lockComma
 import space.yurisi.universecorev2.subplugins.containerprotect.command.unlockCommand;
 import space.yurisi.universecorev2.subplugins.containerprotect.event.api.ContainerProtectAPI;
 import space.yurisi.universecorev2.subplugins.containerprotect.event.inventory.MoveItemEvent;
-import space.yurisi.universecorev2.subplugins.containerprotect.event.player.BreakEvent;
+import space.yurisi.universecorev2.subplugins.containerprotect.event.block.BreakEvent;
 import space.yurisi.universecorev2.subplugins.containerprotect.event.player.TouchEvent;
 import space.yurisi.universecorev2.subplugins.containerprotect.manager.LockManager;
 

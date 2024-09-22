@@ -12,6 +12,7 @@ import space.yurisi.universecorev2.subplugins.tppsystem.manager.RequestManager;
 import space.yurisi.universecorev2.subplugins.tppsystem.connector.UniverseCoreAPIConnector;
 import space.yurisi.universecorev2.subplugins.tppsystem.menu.menu_item.*;
 import space.yurisi.universecorev2.subplugins.tppsystem.menu.receive_request_menu.item.*;
+import space.yurisi.universecorev2.utils.Message;
 import xyz.xenondevs.invui.gui.Gui;
 import xyz.xenondevs.invui.gui.PagedGui;
 import xyz.xenondevs.invui.gui.structure.Markers;
@@ -38,7 +39,7 @@ public class ReceiveRequestInventoryMenu implements BaseMenu {
 
     public void sendMenu(Player player){
         if (!this.requestManager.hasReceivedRequest(player)){
-            player.sendMessage("現在受信しているリクエストはありません。");
+            Message.sendNormalMessage(player, "[テレポートAI]", "現在受信しているテレポート申請はありません．");
             return;
         }
         try{
@@ -73,7 +74,7 @@ public class ReceiveRequestInventoryMenu implements BaseMenu {
 
             window.open();
         } catch (Exception e) {
-            player.sendMessage(Component.text("現在オンラインのユーザーが見つかりませんでした。", TextColor.color(Color.RED.asRGB())));
+            Message.sendWarningMessage(player, "[テレポートAI]", "現在オンラインのユーザーが見つかりませんでした。");
         }
     }
 }

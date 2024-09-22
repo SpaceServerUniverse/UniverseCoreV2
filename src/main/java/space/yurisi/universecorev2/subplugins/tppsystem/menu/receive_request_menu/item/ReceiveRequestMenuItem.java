@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import space.yurisi.universecorev2.subplugins.tppsystem.manager.RequestManager;
 import org.jetbrains.annotations.NotNull;
+import space.yurisi.universecorev2.utils.Message;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
@@ -47,15 +48,15 @@ public class ReceiveRequestMenuItem extends AbstractItem {
             String playerName = this.targetPlayer.getName();
             if (clickType == ClickType.LEFT) {
                 player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
-                player.sendMessage("§6" + playerName + " §2のテレポート申請を許可しました.");
+                Message.sendSuccessMessage(player, "[テレポートAI]", "§6" + playerName + " §aのテレポート申請を許可しました.");
 
-                targetPlayer.sendMessage("§6" + player.getName() + " §2にテレポートします.");
+                Message.sendSuccessMessage(targetPlayer, "[テレポートAI]", "§6" + player.getName() + " §aにテレポートします．");
                 targetPlayer.teleport(player);
                 targetPlayer.playSound(targetPlayer.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
             }else if (clickType == ClickType.RIGHT) {
                 targetPlayer.playSound(targetPlayer.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
-                player.sendMessage("§6" + playerName + " §2のテレポート申請を拒否しました.");
-                targetPlayer.sendMessage("§6" + player.getName() + " §2にテレポートを拒否されました.");
+                Message.sendNormalMessage(player, "[テレポートAI]", "§6" + playerName + " §fのテレポート申請を拒否しました.");
+                Message.sendNormalMessage(targetPlayer, "[テレポートAI]", "テレポート申請が拒否されました.");
             }
             this.requestManager.removeSearchReceiver(targetPlayer);
             this.requestManager.removeRequest(targetPlayer, player);

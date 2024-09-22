@@ -34,6 +34,14 @@ public class UniverseDiscordMessage {
         discordChannel.sendMessage("[" + player.getName() + " | " + world_name + "]" + " " + message).queue();
     }
 
+    public static void sendEventMessageToDiscord(TextChannel discordChannel, String message, int color) {
+        EmbedBuilder embed = new EmbedBuilder();
+        embed.setDescription(message);
+        embed.setColor(color);
+
+        discordChannel.sendMessageEmbeds(embed.build()).queue();
+    }
+
     public static void sendJoinMessageToDiscord(Player player, TextChannel discordChannel) {
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("入室");
