@@ -131,20 +131,19 @@ public abstract class EventGacha {
             if (rarity == GachaRarity.Normal || rarity == GachaRarity.Rare) {
                 Message.sendSuccessMessage(player, "[ガチャAI]", "ガチャで" + itemStack.getType().toString() + "§rを入手しました！");
                 lifeCount.setGacha_ceiling_count(lifeCount.getGacha_ceiling_count() + 1);
-                return;
             }
 
             if (rarity == GachaRarity.SuperRare) {
                 Message.sendSuccessMessage(player, "[ガチャAI]", "ガチャで" + meta.getDisplayName() + "§rを入手しました！");
-                Bukkit.getServer().sendActionBar(Component.text("§eガチャで§b" + player.getName() + "§eが §cスーパーレア" + meta.getDisplayName() + "§cを引きました。§a(" + lifeCount.getGacha_ceiling_count() + "回目)"));
                 lifeCount.setGacha_rarity_count(lifeCount.getGacha_rarity_count() + 1);
+                Bukkit.getServer().sendActionBar(Component.text("§eガチャで§b" + player.getName() + "§eが §cスーパーレア" + meta.getDisplayName() + "§cを引きました。§a(" + lifeCount.getGacha_ceiling_count() + "回目)"));
                 lifeCount.setGacha_ceiling_count(0L);
             }
 
             if (rarity == GachaRarity.UltraRare) {
                 Message.sendSuccessMessage(player, "[ガチャAI]", "ガチャで" + meta.getDisplayName() + "§rを入手しました！");
-                Bukkit.getServer().sendActionBar(Component.text("§eガチャで§b" + player.getName() + "§eが §cスーパーレア" + meta.getDisplayName() + "§cを引きました。§a(" + lifeCount.getGacha_ceiling_count() + "回目)"));
                 lifeCount.setGacha_rarity_count(lifeCount.getGacha_rarity_count() + 1);
+                Bukkit.getServer().sendActionBar(Component.text("§eガチャで§b" + player.getName() + "§eが §cスーパーレア" + meta.getDisplayName() + "§cを引きました。§a(" + lifeCount.getGacha_ceiling_count() + "回目)"));
                 lifeCount.setGacha_ceiling_count(0L);
             }
 

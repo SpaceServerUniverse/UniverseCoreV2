@@ -130,8 +130,8 @@ public class LifeCount {
         return this.gacha_ceiling_count;
     }
 
-    public void setGacha_ceiling_count(Long gacha_rarity_count) {
-        this.gacha_rarity_count = gacha_rarity_count;
+    public void setGacha_ceiling_count(Long gacha_ceiling_count) {
+        this.gacha_ceiling_count = gacha_ceiling_count;
     }
 
 }
