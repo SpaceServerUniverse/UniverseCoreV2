@@ -6,10 +6,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
-import space.yurisi.universecorev2.item.solar_system.SolarSystemAxe;
-import space.yurisi.universecorev2.item.solar_system.SolarSystemPickaxe;
-import space.yurisi.universecorev2.item.solar_system.SolarSystemShovel;
-import space.yurisi.universecorev2.item.solar_system.SolarSystemSword;
+import space.yurisi.universecorev2.item.solar_system.*;
 
 import java.util.HashMap;
 
@@ -25,7 +22,10 @@ public class UniverseItem {
         items.put(SolarSystemShovel.id, new SolarSystemShovel());
         items.put(SolarSystemAxe.id, new SolarSystemAxe());
         items.put(SolarSystemPickaxe.id, new SolarSystemPickaxe());
-
+        items.put(SolarSystemHead.id, new SolarSystemHead());
+        items.put(SolarSystemChestplate.id, new SolarSystemChestplate());
+        items.put(SolarSystemLeggings.id, new SolarSystemLeggings());
+        items.put(SolarSystemBoots.id, new SolarSystemBoots());
     }
 
     public static CustomItem getItem(String id){
