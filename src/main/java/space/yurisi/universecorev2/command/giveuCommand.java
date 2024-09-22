@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import space.yurisi.universecorev2.exception.CustomItemLevelNotFoundException;
 import space.yurisi.universecorev2.item.CustomItem;
+import space.yurisi.universecorev2.item.LevellingCustomItem;
 import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.utils.Message;
 
@@ -42,9 +43,9 @@ public class giveuCommand implements CommandExecutor, TabCompleter {
             return false;
         }
 
-        if(item.isLevelingItem()){
+        if(item instanceof LevellingCustomItem levellingItem){
             try {
-                ItemStack itemStack = item.getItemFromLevel(level);
+                ItemStack itemStack = levellingItem.getItem(level);
                 player.getInventory().addItem(itemStack);
             } catch (CustomItemLevelNotFoundException e) {
                 Message.sendErrorMessage(player, "[管理AI]", "レベルが存在しませんでした。");
