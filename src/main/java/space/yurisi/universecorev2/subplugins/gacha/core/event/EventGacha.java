@@ -19,8 +19,10 @@ import space.yurisi.universecorev2.exception.UserNotFoundException;
 import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.subplugins.gacha.constrants.GachaRarity;
 import space.yurisi.universecorev2.utils.Message;
+import space.yurisi.universecorev2.utils.PlayerState;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -48,6 +50,11 @@ public abstract class EventGacha {
 
         if(!ticket){
             Message.sendErrorMessage(player, "[ガチャAI]", "チケットが足りません。");
+            return;
+        }
+
+        if(!PlayerState.hasInventorySpace(player)){
+            Message.sendErrorMessage(player, "[ガチャAI]", "インベントリに空きがありません");
             return;
         }
         Random rand = new Random();

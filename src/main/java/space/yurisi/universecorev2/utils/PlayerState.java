@@ -1,6 +1,5 @@
 package space.yurisi.universecorev2.utils;
 
-import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import space.yurisi.universecorev2.UniverseCoreV2API;
 import space.yurisi.universecorev2.database.DatabaseManager;
@@ -53,5 +52,10 @@ public final class PlayerState {
 
         name += player.getName();
         player.setDisplayName(name);
+    }
+
+    public static boolean hasInventorySpace(Player player) {
+        int emptySlot = player.getInventory().firstEmpty();
+        return emptySlot != -1;
     }
 }
