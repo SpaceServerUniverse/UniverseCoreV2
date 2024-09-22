@@ -172,6 +172,23 @@ public class UniverseEconomyAPI extends UniverseCoreAPIConnector{
     }
 
     /**
+     * お金を送ります。エラーが出たらもとに戻します。
+     *
+     * @param from   元ユーザー
+     * @param to     送られるユーザー
+     * @param amount お金の量
+     * @param reason 理由
+     * @throws UserNotFoundException      ユーザーデータが存在しない
+     * @throws MoneyNotFoundException     お金データが存在しない
+     * @throws CanNotReduceMoneyException 元ユーザーのお金が足りない
+     * @throws CanNotAddMoneyException    送られるユーザーの所持金がいっぱい
+     * @throws ParameterException         マイナスを指定している
+     */
+    public void sendMoneyTransaction(Player from, Player to, Long amount, String reason) throws UserNotFoundException, MoneyNotFoundException, CanNotReduceMoneyException, CanNotAddMoneyException, ParameterException {
+
+    }
+
+    /**
      * お金を追加できるか確認します
      *
      * @param money  Moneyモデル

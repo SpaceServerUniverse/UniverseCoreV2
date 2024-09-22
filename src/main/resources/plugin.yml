@@ -94,6 +94,11 @@ commands:
   gacha:
     description: ガチャを引きます！
 
+  #FreeMarket
+  market:
+    description: フリーマーケットの画面を開きます
+    usage: /market
+
 permissions:
   # UniverseCoreV2
   space.yurisi.universecorev2.interactevent.enchanttable:
