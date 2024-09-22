@@ -55,6 +55,7 @@ public class SubPluginInitializer {
         this.subPlugins.add(new CustomName());
         this.subPlugins.add(new ContainerProtect());
         this.subPlugins.add(new Gacha());
+        //this.subPlugins.add(new DamageManager());
     }
 
     public void onEnable(){
