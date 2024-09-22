@@ -49,9 +49,10 @@ public class MarketItem extends AbstractItem {
 
     @Override
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent inventoryClickEvent) {
-        Component component = Component.text("§a§l§n[ここをクリックで購入]")
+        Component component = Component.text("§a[フリーマーケット]§l§n[ここをクリックで購入]")
                 .clickEvent(ClickEvent.runCommand("/market buy "+ this.item.getId()))
                 .hoverEvent(HoverEvent.showText(Component.text("クリックで購入")));
         player.sendMessage(component);
+        inventoryClickEvent.getInventory().close();
     }
 }

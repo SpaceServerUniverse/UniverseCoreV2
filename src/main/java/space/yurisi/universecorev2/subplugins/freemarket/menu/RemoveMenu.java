@@ -47,7 +47,7 @@ public class RemoveMenu implements BaseMenu {
         Window window = Window.single()
                 .setViewer(player)
                 .setGui(gui)
-                .setTitle("Market_Remove")
+                .setTitle("Market_出品削除")
                 .build();
 
         window.open();

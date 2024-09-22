@@ -194,6 +194,31 @@ public class MoneyRepository {
     }
 
     /**
+     * トランザクション付きで2人のプレイヤーのお金を増減します。
+     *
+     * @param send_money Money
+     * @param receive_money Money
+     * @param money_change お金の増減
+     * @param reason 理由
+     */
+    public Boolean moveMoney(Money send_money, Money receive_money, Long money_change, String reason){
+        try {
+            Session session = this.sessionFactory.getCurrentSession();
+            session.beginTransaction();
+            session.merge(send_money);
+            session.merge(receive_money);
+            session.getTransaction().commit();
+            this.moneyHistoryRepository.createMoneyHistory(send_money, money_change, reason);
+            this.moneyHistoryRepository.createMoneyHistory(receive_money, money_change, reason);
+            session.close();
+        } catch (Exception ignored){
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * お金モデルに基づきデータを削除します。
      *
      * @param money Money

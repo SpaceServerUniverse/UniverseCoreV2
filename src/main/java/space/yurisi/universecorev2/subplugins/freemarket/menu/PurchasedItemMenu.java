@@ -47,7 +47,7 @@ public class PurchasedItemMenu implements BaseMenu {
         Window window = Window.single()
                 .setViewer(player)
                 .setGui(gui)
-                .setTitle("Market_Purchased")
+                .setTitle("Market_受取")
                 .build();
 
         window.open();

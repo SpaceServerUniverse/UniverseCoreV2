@@ -12,6 +12,7 @@ import space.yurisi.universecorev2.UniverseCoreV2API;
 import space.yurisi.universecorev2.database.models.Market;
 import space.yurisi.universecorev2.exception.MarketItemNotFoundException;
 import space.yurisi.universecorev2.subplugins.freemarket.command.marketCommand;
+import space.yurisi.universecorev2.subplugins.freemarket.menu.PurchasedItemMenu;
 import space.yurisi.universecorev2.utils.Message;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
@@ -41,7 +42,7 @@ public class PurchasedItem extends AbstractItem {
     }
 
     @Override
-    public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent inventoryClickEvent) {
+    public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
         if (player.getInventory().firstEmpty() != -1) {
             try {
                 UniverseCoreV2API.getInstance().getDatabaseManager().getMarketRepository().receiveItem(this.item.getId(), player);
@@ -49,8 +50,8 @@ public class PurchasedItem extends AbstractItem {
             } catch (MarketItemNotFoundException e) {
                 Message.sendErrorMessage(player, marketCommand.FreeMarketMessage, "アイテムが存在しません");
             }
-        }else{
-
         }
+
+        new PurchasedItemMenu().sendMenu(player);
     }
 }

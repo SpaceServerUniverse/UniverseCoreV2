@@ -24,14 +24,16 @@ public class MarketRepository {
 
     private final SessionFactory sessionFactory;
 
-    public MarketRepository(SessionFactory sessionFactory) { this.sessionFactory = sessionFactory; }
+    public MarketRepository(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     /**
      * フリーマーケット内のアイテムを取得します
      *
      * @return Market
      */
-    public List<Market> getItems(){
+    public List<Market> getItems() {
         Session session = this.sessionFactory.getCurrentSession();
         session.beginTransaction();
         List<Market> market = session.createSelectionQuery("from Market where isSold != :is_sold", Market.class)
@@ -45,13 +47,13 @@ public class MarketRepository {
     /**
      * フリーマーケットからIDを用いて情報を取得します
      *
-     * @param id Long
+     * @param id                      Long
      * @param isPurchaseSearchEnabled bool true:売れてないアイテムのみから検索します false:すべての情報から検索します
      * @return Market
      * @throws MarketItemNotFoundException アイテムがない
      */
     public Market getItemFromId(Long id, boolean isPurchaseSearchEnabled) throws MarketItemNotFoundException {
-        if(isPurchaseSearchEnabled){
+        if (isPurchaseSearchEnabled) {
             Session session = this.sessionFactory.getCurrentSession();
             session.beginTransaction();
             List<Market> data = session.createSelectionQuery("from Market where isSold != :is_sold and id = :id", Market.class)
@@ -60,18 +62,18 @@ public class MarketRepository {
                     .getResultList();
             session.getTransaction().commit();
             session.close();
-            if(data.isEmpty()) {
-                throw new MarketItemNotFoundException("マーケットにアイテムが存在しませんでした。id: "+id);
+            if (data.isEmpty()) {
+                throw new MarketItemNotFoundException("マーケットにアイテムが存在しませんでした。id: " + id);
             }
             return data.getFirst();
-        }else{
+        } else {
             Session session = this.sessionFactory.getCurrentSession();
             session.beginTransaction();
             Market data = session.get(Market.class, id);
             session.getTransaction().commit();
             session.close();
-            if(data == null) {
-                throw new MarketItemNotFoundException("マーケットにアイテムが存在しませんでした。id: "+id);
+            if (data == null) {
+                throw new MarketItemNotFoundException("マーケットにアイテムが存在しませんでした。id: " + id);
             }
             return data;
         }
@@ -84,7 +86,7 @@ public class MarketRepository {
      * @return List<Market>
      */
     public List<Market> getItemFromPlayer(String uuid, boolean isPurchaseSearchEnabled) {
-        if(isPurchaseSearchEnabled){
+        if (isPurchaseSearchEnabled) {
             Session session = this.sessionFactory.getCurrentSession();
             session.beginTransaction();
             List<Market> data = session.createSelectionQuery("from Market where playerUuid = :uuid and isSold != :is_sold", Market.class)
@@ -94,7 +96,7 @@ public class MarketRepository {
             session.getTransaction().commit();
             session.close();
             return data;
-        }else{
+        } else {
             Session session = this.sessionFactory.getCurrentSession();
             session.beginTransaction();
             List<Market> data = session.createSelectionQuery("from Market where playerUuid = :uuid", Market.class)
@@ -109,15 +111,15 @@ public class MarketRepository {
     /**
      * アイテムを出品します
      *
-     * @param uuid player_uuid
-     * @param itemName display_name
-     * @param serializedItemStack serialized itemStack
-     * @param serializedItemStackJson serialized json
+     * @param uuid                        player_uuid
+     * @param itemName                    display_name
+     * @param serializedItemStack         serialized itemStack
+     * @param serializedItemStackJson     serialized json
      * @param serializedItemStackMetaJson serialized json
-     * @param price price
+     * @param price                       price
      * @return Market
      */
-    public Market createItemData(String uuid, String itemName, String displayName, byte[] serializedItemStack, String serializedItemStackJson, String serializedItemStackMetaJson, Long price){
+    public Market createItemData(String uuid, String itemName, String displayName, byte[] serializedItemStack, String serializedItemStackJson, String serializedItemStackMetaJson, Long price) {
         Session session = this.sessionFactory.getCurrentSession();
         Market market = new Market(null, uuid, itemName, displayName, serializedItemStack, serializedItemStackJson, serializedItemStackMetaJson, price, 0, 0, null);
         session.beginTransaction();
@@ -145,7 +147,7 @@ public class MarketRepository {
     }
 
     public void buyItem(Long id, Player player) throws MarketItemNotFoundException, UserNotFoundException, ParameterException, MoneyNotFoundException, CanNotReduceMoneyException, CanNotAddMoneyException {
-        Market market = removeItem(id, true);
+        Market market = getItemFromId(id, true);
         UniverseEconomyAPI.getInstance().reduceMoney(player, market.getPrice(), "フリーマーケット[購入]");
         User user = UniverseCoreV2API.getInstance().getDatabaseManager().getUserRepository().getUserFromUUID(UUID.fromString(market.getPlayerUuid()));
         Money money = UniverseCoreV2API.getInstance().getDatabaseManager().getMoneyRepository().getMoneyFromUserId(user.getId());
@@ -161,7 +163,7 @@ public class MarketRepository {
         session.close();
     }
 
-    public void addPurchased(Market market, Player player){
+    public void addPurchased(Market market, Player player) {
         market.setSold(true);
         market.setReceivedItem(false);
         market.setPurchaserUuid(player.getUniqueId().toString());
@@ -179,7 +181,8 @@ public class MarketRepository {
                 .setParameter("uuid", uuid)
                 .setParameter("is_received", false)
                 .getResultList();
-        session.getTransaction().commit();;
+        session.getTransaction().commit();
+        ;
         session.close();
         return markets;
     }
