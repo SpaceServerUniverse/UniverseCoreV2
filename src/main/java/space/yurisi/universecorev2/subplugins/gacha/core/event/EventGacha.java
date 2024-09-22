@@ -129,7 +129,7 @@ public abstract class EventGacha {
             LifeCount lifeCount = lifeCountRepo.getLifeCount(count);
 
             if (rarity == GachaRarity.Normal || rarity == GachaRarity.Rare) {
-                Message.sendSuccessMessage(player, "[ガチャAI]", "ガチャで" + meta.getItemName() + "§rを入手しました！");
+                Message.sendSuccessMessage(player, "[ガチャAI]", "ガチャで" + itemStack.getType().toString() + "§rを入手しました！");
                 lifeCount.setGacha_ceiling_count(lifeCount.getGacha_ceiling_count() + 1);
                 return;
             }
@@ -149,6 +149,9 @@ public abstract class EventGacha {
             }
 
             lifeCount.setGacha(lifeCount.getGacha() + 1);
+
+
+            lifeCountRepo.updateLifeCount(lifeCount);
 
         } catch (UserNotFoundException userNotFoundException) {
             Message.sendErrorMessage(player, "[異常なエラー]", "ユーザーのデータが存在しませんでした。");
