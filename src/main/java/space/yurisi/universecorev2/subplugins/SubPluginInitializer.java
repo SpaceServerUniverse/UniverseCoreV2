@@ -11,6 +11,7 @@ import space.yurisi.universecorev2.subplugins.freemarket.FreeMarket;
 import space.yurisi.universecorev2.subplugins.levelaward.LevelAward;
 import space.yurisi.universecorev2.subplugins.levelsystem.LevelSystem;
 import space.yurisi.universecorev2.subplugins.mywarp.Mywarp;
+import space.yurisi.universecorev2.subplugins.playerhead.PlayerHead;
 import space.yurisi.universecorev2.subplugins.playerinfoscoreboard.PlayerInfoScoreBoard;
 import space.yurisi.universecorev2.subplugins.rankcounter.RankCounter;
 import space.yurisi.universecorev2.subplugins.universeutilcommand.UniverseUtilCommand;
@@ -55,6 +56,7 @@ public class SubPluginInitializer {
         this.subPlugins.add(new ItemHat());
         this.subPlugins.add(new CustomName());
         this.subPlugins.add(new ContainerProtect());
+        this.subPlugins.add(new PlayerHead());
         this.subPlugins.add(new FreeMarket());
         this.subPlugins.add(new Gacha());
         //this.subPlugins.add(new DamageManager());
