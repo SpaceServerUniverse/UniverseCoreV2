@@ -15,7 +15,7 @@ public class LifeCountRepository {
     }
 
     public LifeCount createLifeCount(Count count) {
-        LifeCount LifeCount = new LifeCount(null, count.getId(), 0L, 0L, 0L, 0L, 0L);
+        LifeCount LifeCount = new LifeCount(null, count.getId(), 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L);
 
         Session session = this.sessionFactory.getCurrentSession();
 

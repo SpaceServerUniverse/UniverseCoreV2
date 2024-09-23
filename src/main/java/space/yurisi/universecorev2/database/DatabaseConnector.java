@@ -65,7 +65,8 @@ public class DatabaseConnector {
                 .addAnnotatedClass(LifeCount.class)
                 .addAnnotatedClass(OreCount.class)
                 .addAnnotatedClass(PlayerCount.class)
-                .addAnnotatedClass(CustomName.class);
+                .addAnnotatedClass(CustomName.class)
+                .addAnnotatedClass(Market.class);
     }
 
     private Configuration registerProperties(Configuration configuration) {
