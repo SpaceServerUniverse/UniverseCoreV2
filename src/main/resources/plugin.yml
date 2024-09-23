@@ -103,6 +103,11 @@ commands:
     description: フリーマーケットの画面を開きます
     usage: /market
 
+  #LevelAward
+  levelaward:
+    description: レベルアワードの画面を開きます
+    usage: /levelaward
+
 permissions:
   # UniverseCoreV2
   space.yurisi.universecorev2.interactevent.enchanttable:

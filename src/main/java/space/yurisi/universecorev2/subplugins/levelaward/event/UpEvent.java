@@ -8,11 +8,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import space.yurisi.universecorev2.exception.MoneyNotFoundException;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
+import space.yurisi.universecorev2.subplugins.levelaward.LevelAward;
 import space.yurisi.universecorev2.subplugins.levelsystem.event.level.LevelUpEvent;
 import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomyAPI;
 import space.yurisi.universecorev2.subplugins.universeeconomy.exception.CanNotAddMoneyException;
 import space.yurisi.universecorev2.subplugins.universeeconomy.exception.ParameterException;
 import space.yurisi.universecorev2.utils.Message;
+
+import java.io.IOException;
 
 public final class UpEvent implements Listener {
 
@@ -24,7 +27,7 @@ public final class UpEvent implements Listener {
         if (newLevel % 5 == 0 && newLevel % 100 != 0) {
             // 5レベルずつ上がった場合の処理をここに書く
             try {
-                UniverseEconomyAPI.getInstance().addMoney(player,1000L, "レベルアップ報酬");
+                UniverseEconomyAPI.getInstance().addMoney(player,3000L, "レベルアップ報酬");
             } catch (UserNotFoundException e) {
                 Message.sendErrorMessage(player, "[銀行管理AI]", "プレイヤーデータが存在しません。管理者に報告してください");
             } catch (MoneyNotFoundException e) {
@@ -34,7 +37,6 @@ public final class UpEvent implements Listener {
             } catch (ParameterException e) {
                 Message.sendErrorMessage(player, "[銀行管理AI]", "マイナスの値を指定しています。管理者に報告してください");
             }
-            return;
         }
 
         switch(newLevel){
@@ -83,6 +85,22 @@ public final class UpEvent implements Listener {
 
         if (newLevel % 100 == 0) {
             player.getWorld().playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1, 1);
+        }
+        if (newLevel % 10 == 0 && newLevel % 100 != 0) {
+            int ticket = LevelAward.getInstance().getConfig().getTicket(player.getUniqueId().toString());
+            try {
+                LevelAward.getInstance().getConfig().setTicket(player.getUniqueId().toString(), ticket + 3);
+            }catch (IOException e){
+                Message.sendErrorMessage(event.getPlayer(), "[れべうｐ]", "うぇらー、吐いてますよー（笑）");
+            }
+        }
+        if (newLevel % 100 == 0) {
+            int ticket = LevelAward.getInstance().getConfig().getTicket(player.getUniqueId().toString());
+            try {
+                LevelAward.getInstance().getConfig().setTicket(player.getUniqueId().toString(), ticket + 10);
+            } catch (IOException e) {
+                Message.sendErrorMessage(event.getPlayer(), "[れべうｐ]", "うぇらー、吐いてますよー（笑）");
+            }
         }
     }
 }
