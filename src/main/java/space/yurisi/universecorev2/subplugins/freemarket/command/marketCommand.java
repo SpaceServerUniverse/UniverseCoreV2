@@ -66,7 +66,7 @@ public class marketCommand implements CommandExecutor, TabCompleter {
                                 JsonConverter.ItemMetaSerializer(item),
                                 price
                         );
-                        player.getInventory().remove(item);
+                        player.getInventory().getItemInMainHand().setAmount(0);
                         Message.sendSuccessMessage(player, FreeMarketMessage, "出品しました");
                     } catch (NumberFormatException e) {
                         Message.sendErrorMessage(player, FreeMarketMessage, "値段は整数を入力してください");
