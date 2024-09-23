@@ -93,6 +93,7 @@ commands:
   #PlayerHead
   head:
     description: プレイヤーヘッドを購入します(WIP)
+
   #gacha
   gacha:
     description: ガチャを引きます！
