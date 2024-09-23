@@ -16,6 +16,7 @@ import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.SimpleItem;
 import xyz.xenondevs.invui.window.Window;
 
+import java.util.Collections;
 import java.util.List;
 
 public class MarketMenu implements BaseMenu {
