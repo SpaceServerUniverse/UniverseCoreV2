@@ -2,6 +2,7 @@ package space.yurisi.universecorev2.subplugins;
 
 import org.bukkit.Bukkit;
 import space.yurisi.universecorev2.UniverseCoreV2;
+import space.yurisi.universecorev2.subplugins.blockcopystick.BlockCopyStick;
 import space.yurisi.universecorev2.subplugins.changemessages.ChangeMessages;
 import space.yurisi.universecorev2.subplugins.customname.CustomName;
 import space.yurisi.universecorev2.subplugins.gacha.Gacha;
@@ -11,6 +12,7 @@ import space.yurisi.universecorev2.subplugins.freemarket.FreeMarket;
 import space.yurisi.universecorev2.subplugins.levelaward.LevelAward;
 import space.yurisi.universecorev2.subplugins.levelsystem.LevelSystem;
 import space.yurisi.universecorev2.subplugins.mywarp.Mywarp;
+import space.yurisi.universecorev2.subplugins.playerhead.PlayerHead;
 import space.yurisi.universecorev2.subplugins.playerinfoscoreboard.PlayerInfoScoreBoard;
 import space.yurisi.universecorev2.subplugins.rankcounter.RankCounter;
 import space.yurisi.universecorev2.subplugins.repaircream.RepairCream;
@@ -55,10 +57,12 @@ public class SubPluginInitializer {
         this.subPlugins.add(new UniverseUtilCommand());
         this.subPlugins.add(new ItemHat());
         this.subPlugins.add(new CustomName());
-        this.subPlugins.add(new ContainerProtect());
+        //this.subPlugins.add(new ContainerProtect());
+        this.subPlugins.add(new PlayerHead());
         this.subPlugins.add(new FreeMarket());
         this.subPlugins.add(new Gacha());
         this.subPlugins.add(new RepairCream());
+        this.subPlugins.add(new BlockCopyStick());
         //this.subPlugins.add(new DamageManager());
     }
 
