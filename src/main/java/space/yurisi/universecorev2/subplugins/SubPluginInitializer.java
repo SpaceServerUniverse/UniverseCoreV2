@@ -13,6 +13,7 @@ import space.yurisi.universecorev2.subplugins.levelsystem.LevelSystem;
 import space.yurisi.universecorev2.subplugins.mywarp.Mywarp;
 import space.yurisi.universecorev2.subplugins.playerinfoscoreboard.PlayerInfoScoreBoard;
 import space.yurisi.universecorev2.subplugins.rankcounter.RankCounter;
+import space.yurisi.universecorev2.subplugins.repaircream.RepairCream;
 import space.yurisi.universecorev2.subplugins.universeutilcommand.UniverseUtilCommand;
 import space.yurisi.universecorev2.subplugins.signcommand.SignCommand;
 import space.yurisi.universecorev2.subplugins.sitdown.Sitdown;
@@ -57,6 +58,7 @@ public class SubPluginInitializer {
         this.subPlugins.add(new ContainerProtect());
         this.subPlugins.add(new FreeMarket());
         this.subPlugins.add(new Gacha());
+        this.subPlugins.add(new RepairCream());
         //this.subPlugins.add(new DamageManager());
     }
 

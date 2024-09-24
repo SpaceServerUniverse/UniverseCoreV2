@@ -99,6 +99,10 @@ commands:
     description: フリーマーケットの画面を開きます
     usage: /market
 
+  #RepairCream
+  repair:
+    description: アイテムを修復します
+
 permissions:
   # UniverseCoreV2
   space.yurisi.universecorev2.interactevent.enchanttable:

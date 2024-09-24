@@ -9,6 +9,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
+import space.yurisi.universecorev2.item.repair_cream.RepairCream;
 import space.yurisi.universecorev2.item.solar_system.*;
 import space.yurisi.universecorev2.item.ticket.GachaTicket;
 
@@ -32,6 +33,7 @@ public class UniverseItem {
         items.put(SolarSystemLeggings.id, new SolarSystemLeggings());
         items.put(SolarSystemBoots.id, new SolarSystemBoots());
         items.put(GachaTicket.id, new GachaTicket());
+        items.put(RepairCream.id, new RepairCream());
     }
 
     public static CustomItem getItem(String id){
