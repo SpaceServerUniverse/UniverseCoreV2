@@ -1,5 +1,6 @@
 package space.yurisi.universecorev2.subplugins.containerprotect.event.inventory;
 
+import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
@@ -14,7 +15,9 @@ public class MoveItemEvent implements Listener {
 
         ContainerProtectAPI containerProtectManager = ContainerProtectAPI.getInstance();
 
-        if (!containerProtectManager.isContainerProtect(holder.getInventory().getLocation())) return;
+        Location location = holder.getInventory().getLocation();
+        if(location == null) return;
+        if (!containerProtectManager.isContainerProtect(location)) return;
 
         event.setCancelled(true);
     }
