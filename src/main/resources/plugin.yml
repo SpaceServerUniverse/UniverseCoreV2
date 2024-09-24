@@ -103,6 +103,11 @@ commands:
     description: フリーマーケットの画面を開きます
     usage: /market
 
+  #UniverseGuns
+  givegun:
+    description: 銃をプレイヤーに与えます
+    premission: space.yurisi.universeguns.givegun
+
 permissions:
   # UniverseCoreV2
   space.yurisi.universecorev2.interactevent.enchanttable:
@@ -135,4 +140,9 @@ permissions:
   space.yurisi.universeeconomy.reducemoney:
     description: op command
     default: op
+
+  #UniverseGuns
+    space.yurisi.universeguns.givegun:
+        description: op command
+        default: op
 
