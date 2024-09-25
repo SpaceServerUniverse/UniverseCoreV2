@@ -51,7 +51,7 @@ public class VisitMywarpAnvilMenu implements BaseMenu {
 
                     String playerName = stateSnapshot.getText();
                     try {
-                        Player targetPlayer = Bukkit.getPlayer(playerName);
+                        Player targetPlayer = Bukkit.getOfflinePlayer(playerName).getPlayer();
                         if (targetPlayer == null) {
                             throw new UserNotFoundException("プレイヤーが見つかりませんでした。");
                         }
