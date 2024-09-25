@@ -9,6 +9,7 @@ import org.bukkit.persistence.PersistentDataType;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.exception.CustomItemLevelNotFoundException;
+import space.yurisi.universecorev2.subplugins.universeguns.item.gun_item.R4C;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,16 +21,16 @@ public abstract class GunItem {
 
     private final String name;
 
-    private final int magazineSize;
+    private final String type;
 
-    private final int maxAmmo;
+    private final int magazineSize;
 
     private final int burst;
 
     // リロード時間 (tick)
     private final int reloadTime;
 
-    private final boolean isZoom;
+    private final int isZoomWalkSpeed;
 
     private final int baseDamage;
 
@@ -42,6 +43,7 @@ public abstract class GunItem {
     // 0~10で指定　数字が大きくなるほど重くなり移動速度低下が入る
     private final int weight;
 
+    // 連射速度 (クールダウンのtick)
     private final int fireRate;
 
     private final int recoil;
@@ -55,14 +57,14 @@ public abstract class GunItem {
 
     private final ItemStack baseItem;
 
-    public GunItem(String id, String name, int magazineSize, int maxAmmo, int burst, int reloadTime, boolean isZoom, int baseDamage, boolean isExplosive, int explosionRadius, int explosionDamage, int weight, int fireRate, int recoil, int spread, int bulletNumber, int bulletSpeed, ItemStack baseItem) {
+    public GunItem(String id, String name, String type, int magazineSize, int burst, int reloadTime, int isZoomWalkSpeed, int baseDamage, boolean isExplosive, int explosionRadius, int explosionDamage, int weight, int fireRate, int recoil, int spread, int bulletNumber, int bulletSpeed, ItemStack baseItem) {
         this.id = id;
         this.name = name;
+        this.type = type;
         this.magazineSize = magazineSize;
-        this.maxAmmo = maxAmmo;
         this.burst = burst;
         this.reloadTime = reloadTime;
-        this.isZoom = isZoom;
+        this.isZoomWalkSpeed = isZoomWalkSpeed;
         this.baseDamage = baseDamage;
         this.isExplosive = isExplosive;
         this.explosionRadius = explosionRadius;
@@ -82,6 +84,66 @@ public abstract class GunItem {
 
     public String getName() {
         return name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public int getMagazineSize() {
+        return magazineSize;
+    }
+
+    public int getBurst() {
+        return burst;
+    }
+
+    public int getReloadTime() {
+        return reloadTime;
+    }
+
+    public int getIsZoomWalkSpeed() {
+        return isZoomWalkSpeed;
+    }
+
+    public int getBaseDamage() {
+        return baseDamage;
+    }
+
+    public boolean getIsExplosive() {
+        return isExplosive;
+    }
+
+    public int getExplosionRadius() {
+        return explosionRadius;
+    }
+
+    public int getExplosionDamage() {
+        return explosionDamage;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public int getFireRate() {
+        return fireRate;
+    }
+
+    public int getRecoil() {
+        return recoil;
+    }
+
+    public int getSpread() {
+        return spread;
+    }
+
+    public int getBulletNumber() {
+        return bulletNumber;
+    }
+
+    public int getBulletSpeed() {
+        return bulletSpeed;
     }
 
     public ItemStack getBaseItem() {

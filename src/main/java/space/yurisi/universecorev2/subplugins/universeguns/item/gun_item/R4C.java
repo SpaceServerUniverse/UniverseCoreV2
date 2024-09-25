@@ -12,21 +12,21 @@ public class R4C extends GunItem {
         super(
                 id,
                 "R4-C",
+                "AR",
                 30,
-                210,
-                0,
+                30,
                 2000,
-                false,
-                39,
+                0,
+                2,
                 false,
                 0,
                 0,
                 2,
-                800,
+                3,
                 0,
                 0,
                 1,
-                0,
+                10,
                 ItemStack.of(Material.DIAMOND_HOE)
         );
     }
