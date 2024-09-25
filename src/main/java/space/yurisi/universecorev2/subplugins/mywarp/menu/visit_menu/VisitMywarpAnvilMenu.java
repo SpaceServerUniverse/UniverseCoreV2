@@ -1,6 +1,7 @@
 package space.yurisi.universecorev2.subplugins.mywarp.menu.visit_menu;
 
 import net.wesjd.anvilgui.AnvilGUI;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.menu.BaseMenu;
@@ -50,7 +51,7 @@ public class VisitMywarpAnvilMenu implements BaseMenu {
 
                     String playerName = stateSnapshot.getText();
                     try {
-                        Player targetPlayer = UniverseCoreV2.getInstance().getServer().getPlayer(playerName);
+                        Player targetPlayer = Bukkit.getPlayer(playerName);
                         if (targetPlayer == null) {
                             throw new UserNotFoundException("プレイヤーが見つかりませんでした。");
                         }
