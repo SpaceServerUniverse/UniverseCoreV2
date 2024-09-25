@@ -103,6 +103,10 @@ commands:
     description: フリーマーケットの画面を開きます
     usage: /market
 
+  #RepairCream
+  repair:
+    description: アイテムを修復します
+
   #UniverseGuns
   givegun:
     description: 銃をプレイヤーに与えます
@@ -140,9 +144,4 @@ permissions:
   space.yurisi.universeeconomy.reducemoney:
     description: op command
     default: op
-
-  #UniverseGuns
-    space.yurisi.universeguns.givegun:
-        description: op command
-        default: op
 
