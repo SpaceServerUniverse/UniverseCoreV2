@@ -33,19 +33,20 @@ public class GunEvent implements Listener {
     private static Plugin plugin;
 
     public GunEvent(Plugin plugin){
-        this.plugin = plugin;
+        GunEvent.plugin = plugin;
     }
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event){
         Player player = event.getPlayer();
+        // 歩行速度をデフォルトに戻す
         Action action = event.getAction();
+        ItemStack itemInHand = player.getInventory().getItemInMainHand();
+        if (!itemInHand.hasItemMeta()) {
+            return;
+        }
 
         if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
-            ItemStack itemInHand = player.getInventory().getItemInMainHand();
-            if (!itemInHand.hasItemMeta()) {
-                return;
-            }
             ItemMeta meta = itemInHand.getItemMeta();
             PersistentDataContainer container = meta.getPersistentDataContainer();
             String handItemID = container.get(new NamespacedKey(plugin, UniverseItemKeyString.ITEM_NAME), PersistentDataType.STRING);
@@ -77,11 +78,6 @@ public class GunEvent implements Listener {
                 }
             }
         } else if (action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) {
-            // ズーム
-            ItemStack itemInHand = player.getInventory().getItemInMainHand();
-            if (!itemInHand.hasItemMeta()) {
-                return;
-            }
             ItemMeta meta = itemInHand.getItemMeta();
             PersistentDataContainer container = meta.getPersistentDataContainer();
             String handItemID = container.get(new NamespacedKey(plugin, UniverseItemKeyString.ITEM_NAME), PersistentDataType.STRING);
@@ -98,7 +94,6 @@ public class GunEvent implements Listener {
                     player.setWalkSpeed(gun.getIsZoomWalkSpeed());
                     isZoom.add(player);
                 }
-
             }
         }
     }

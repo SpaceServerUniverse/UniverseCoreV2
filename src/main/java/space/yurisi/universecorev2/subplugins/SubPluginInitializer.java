@@ -64,6 +64,7 @@ public class SubPluginInitializer {
         this.subPlugins.add(new Gacha());
         this.subPlugins.add(new BlockCopyStick());
         //this.subPlugins.add(new DamageManager());
+        this.subPlugins.add(new UniverseGuns());
     }
 
     public void onEnable(){
