@@ -15,7 +15,6 @@ public final class ChestShop implements SubPlugin {
         new EventManager(core);
         this.databaseManager = UniverseCoreV2API.getInstance().getDatabaseManager();
         core.getCommand("item").setExecutor(new ItemNameCommand());
-
     }
 
     @Override
