@@ -15,6 +15,8 @@ public class DatabaseManager {
     private final AutoTppSettingRepository autoTPPSettingRepository;
     private final PlayerLevelRepository playerLevelRepository;
     private final PlayerNormalLevelRepository playerNormalLevelRepository;
+    private final ChestShopRepository chestShopRepository;
+
     private final PositionRepository positionRepository;
     private final ContainerProtectRepository containerProtectRepository;
     private final UserPositionRepository userPositionRepository;
@@ -46,6 +48,7 @@ public class DatabaseManager {
         this.playerCountRepository = new PlayerCountRepository(sessionFactory);
         this.customNameRepository = new CustomNameRepository(sessionFactory);
         this.marketRepository = new MarketRepository(sessionFactory);
+        this.chestShopRepository = new ChestShopRepository(sessionFactory);
     }
 
     /**
@@ -215,5 +218,14 @@ public class DatabaseManager {
      */
     public CustomNameRepository getCustomNameRepository(){
         return customNameRepository;
+    }
+
+    /**
+     * チェストショップリポジトリーを取得
+     *
+     * @return
+     */
+    public ChestShopRepository getChestShopRepository() {
+        return chestShopRepository;
     }
 }

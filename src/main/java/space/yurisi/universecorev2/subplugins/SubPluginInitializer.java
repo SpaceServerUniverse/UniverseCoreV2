@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.subplugins.blockcopystick.BlockCopyStick;
 import space.yurisi.universecorev2.subplugins.changemessages.ChangeMessages;
+import space.yurisi.universecorev2.subplugins.chestshop.ChestShop;
 import space.yurisi.universecorev2.subplugins.customname.CustomName;
 import space.yurisi.universecorev2.subplugins.evolutionitem.EvolutionItem;
 import space.yurisi.universecorev2.subplugins.gacha.Gacha;
@@ -47,7 +48,7 @@ public class SubPluginInitializer {
         this.subPlugins.add(new UniverseEconomy());
         this.subPlugins.add(new ChangeMessages());
         this.subPlugins.add(new LevelAward());
-        this.subPlugins.add(new UniverseLand());
+        //this.subPlugins.add(new UniverseLand());
         this.subPlugins.add(new UniverseDiscord());
         this.subPlugins.add(new Mywarp());
         this.subPlugins.add(new RankCounter());
@@ -62,10 +63,12 @@ public class SubPluginInitializer {
         this.subPlugins.add(new PlayerHead());
         this.subPlugins.add(new FreeMarket());
         this.subPlugins.add(new Gacha());
+        //this.subPlugins.add(new BlockCopyStick());
         this.subPlugins.add(new RepairCream());
         this.subPlugins.add(new BlockCopyStick());
         this.subPlugins.add(new EvolutionItem());
         //this.subPlugins.add(new DamageManager());
+        this.subPlugins.add(new ChestShop());
     }
 
     public void onEnable(){
