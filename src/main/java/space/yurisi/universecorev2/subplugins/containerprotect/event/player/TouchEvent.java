@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.InventoryHolder;
@@ -86,6 +87,20 @@ public class TouchEvent implements Listener {
             ContainerProtect containerProtect = api.getContainerProtect(blockLocation);
             player.playSound(player.getLocation(), Sound.BLOCK_IRON_DOOR_CLOSE, 1, 1);
             player.sendActionBar(Component.text("このコンテナは " + Bukkit.getOfflinePlayer(UUID.fromString(containerProtect.getUuid())).getName() + " によって保護されています"));
+        }
+    }
+
+    @EventHandler
+    public void onTouchEntity(PlayerInteractEntityEvent event){
+
+    }
+
+    @EventHandler
+    public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+        if (event.getRightClicked() instanceof ItemFrame itemFrame) {
+            if (isAtTargetLocation(itemFrame.getLocation())) {
+                event.setCancelled(true); // 操作をキャンセル
+            }
         }
     }
 }

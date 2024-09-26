@@ -7,10 +7,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import space.yurisi.universecorev2.exception.LandNotFoundException;
@@ -105,6 +107,25 @@ public class TouchEvent implements Listener {
                 player.sendMessage(component);
             }
         }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+        Player player = event.getPlayer();
+
+        if (!(event.getRightClicked() instanceof ItemFrame itemFrame)) return;
+
+        LandDataManager landDataManager = LandDataManager.getInstance();
+        BoundingBox bb = new BoundingBox((int) itemFrame.getX(), (int) itemFrame.getZ(), (int) itemFrame.getX(), (int) itemFrame.getZ(), itemFrame.getWorld().getName());
+
+        if (landDataManager.canAccess(player, bb)) return;
+
+        event.setCancelled(true);
+
+        LandData data = landDataManager.getLandData(bb);
+
+        OfflinePlayer p = Bukkit.getServer().getOfflinePlayer(data.getOwnerUUID());
+        player.sendActionBar(Component.text("この土地は" + p.getName() + "によって保護されています"));
     }
 
     private void initLandData(Player player) {
