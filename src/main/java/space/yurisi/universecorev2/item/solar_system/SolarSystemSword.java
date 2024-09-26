@@ -67,7 +67,7 @@ public final class SolarSystemSword extends LevellingCustomItem {
         leveling_settings.put(5, (item) -> {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
-                meta.addEnchant(Enchantment.SHARPNESS, 5, true);
+                meta.addEnchant(Enchantment.SHARPNESS, 4, true);
                 meta.addEnchant(Enchantment.KNOCKBACK, 2, true);
                 meta.addEnchant(Enchantment.UNBREAKING, 2, true);
                 item.setItemMeta(meta);

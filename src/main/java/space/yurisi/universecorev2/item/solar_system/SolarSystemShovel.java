@@ -57,8 +57,8 @@ public final class SolarSystemShovel extends LevellingCustomItem {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
                 meta.addEnchant(Enchantment.EFFICIENCY, 4, true);
-                meta.addEnchant(Enchantment.SHARPNESS, 3, true);
-                meta.addEnchant(Enchantment.UNBREAKING, 2, true);
+                meta.addEnchant(Enchantment.SHARPNESS, 1, true);
+                meta.addEnchant(Enchantment.UNBREAKING, 1, true);
                 item.setItemMeta(meta);
             }
             return item;
@@ -67,7 +67,7 @@ public final class SolarSystemShovel extends LevellingCustomItem {
         leveling_settings.put(5, (item) -> {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
-                meta.addEnchant(Enchantment.EFFICIENCY, 5, true);
+                meta.addEnchant(Enchantment.EFFICIENCY, 4, true);
                 meta.addEnchant(Enchantment.SHARPNESS, 3, true);
                 meta.addEnchant(Enchantment.UNBREAKING, 3, true);
                 item.setItemMeta(meta);

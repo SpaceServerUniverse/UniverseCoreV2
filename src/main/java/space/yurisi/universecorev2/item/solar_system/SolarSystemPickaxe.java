@@ -67,7 +67,7 @@ public final class SolarSystemPickaxe extends LevellingCustomItem {
         leveling_settings.put(5, (item) -> {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
-                meta.addEnchant(Enchantment.EFFICIENCY, 5, true);
+                meta.addEnchant(Enchantment.EFFICIENCY, 4, true);
                 meta.addEnchant(Enchantment.SILK_TOUCH, 1, true);
                 meta.addEnchant(Enchantment.UNBREAKING, 3, true);
                 item.setItemMeta(meta);
