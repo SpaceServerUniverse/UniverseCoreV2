@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -32,12 +33,12 @@ public class GunEvent implements Listener {
 
     private static Plugin plugin;
 
-    public GunEvent(Plugin plugin){
+    public GunEvent(Plugin plugin) {
         GunEvent.plugin = plugin;
     }
 
     @EventHandler
-    public void onPlayerInteract(PlayerInteractEvent event){
+    public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         // 歩行速度をデフォルトに戻す
         Action action = event.getAction();
@@ -47,9 +48,7 @@ public class GunEvent implements Listener {
         }
 
         if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
-            ItemMeta meta = itemInHand.getItemMeta();
-            PersistentDataContainer container = meta.getPersistentDataContainer();
-            String handItemID = container.get(new NamespacedKey(plugin, UniverseItemKeyString.ITEM_NAME), PersistentDataType.STRING);
+            String handItemID = getGunID(itemInHand);
             if (handItemID == null) {
                 return;
             }
@@ -57,7 +56,7 @@ public class GunEvent implements Listener {
             if (ItemRegister.isGun(handItemID) && !isCooldown.contains(player)) {
 
                 GunItem gun = ItemRegister.getItem(handItemID);
-                if((gun.getType().equals("SR") || gun.getType().equals("EX")) && !isZoom.contains(player)){
+                if ((gun.getType().equals("SR") || gun.getType().equals("EX")) && !isZoom.contains(player)) {
                     Message.sendWarningMessage(player, "[武器AI]", "スコープを覗いてください。");
                     return;
                 }
@@ -67,7 +66,7 @@ public class GunEvent implements Listener {
 
                 // クールダウン
                 int tick = gun.getFireRate();
-                if(tick != 0){
+                if (tick != 0) {
                     isCooldown.add(player);
                     new BukkitRunnable() {
                         @Override
@@ -78,19 +77,17 @@ public class GunEvent implements Listener {
                 }
             }
         } else if (action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) {
-            ItemMeta meta = itemInHand.getItemMeta();
-            PersistentDataContainer container = meta.getPersistentDataContainer();
-            String handItemID = container.get(new NamespacedKey(plugin, UniverseItemKeyString.ITEM_NAME), PersistentDataType.STRING);
+            String handItemID = getGunID(itemInHand);
             if (handItemID == null) {
                 return;
             }
             // GunItemのIDのどれかに一致するか
             if (ItemRegister.isGun(handItemID)) {
                 GunItem gun = ItemRegister.getItem(handItemID);
-                if(isZoom.contains(player)){
+                if (isZoom.contains(player)) {
                     player.setWalkSpeed(gun.getWeight());
                     isZoom.remove(player);
-                }else{
+                } else {
                     player.setWalkSpeed(gun.getIsZoomWalkSpeed());
                     isZoom.add(player);
                 }
@@ -99,8 +96,8 @@ public class GunEvent implements Listener {
     }
 
     @EventHandler
-    public void onPlayerHit(EntityDamageByEntityEvent event){
-        if(event.getDamager() instanceof Snowball snowball) {
+    public void onPlayerHit(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Snowball snowball) {
             if (projectileData.containsKey(snowball)) {
                 GunItem gun = projectileData.get(snowball);
                 // TODO: 爆発系の分岐
@@ -111,4 +108,39 @@ public class GunEvent implements Listener {
             }
         }
     }
+
+    @EventHandler
+    public void onPlayerItemHeld(PlayerItemHeldEvent event) {
+        Player player = event.getPlayer();
+        ItemStack newInHand = player.getInventory().getItem(event.getNewSlot());
+        if(newInHand == null){
+            player.setWalkSpeed(0.2f);
+        }else{
+            if(!newInHand.hasItemMeta()){
+                return;
+            }
+            String newHandItemID = getGunID(newInHand);
+            if(newHandItemID == null){
+                return;
+            }
+            if(ItemRegister.isGun(newHandItemID)){
+                GunItem gun = ItemRegister.getItem(newHandItemID);
+                player.setWalkSpeed(gun.getWeight());
+            }
+        }
+        if(isZoom.contains(player)){
+            isZoom.remove(player);
+        }
+
+    }
+
+    private String getGunID(ItemStack itemStack) {
+        ItemMeta meta = itemStack.getItemMeta();
+        if (meta == null) {
+            return null;
+        }
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        return container.get(new NamespacedKey(plugin, UniverseItemKeyString.ITEM_NAME), PersistentDataType.STRING);
+    }
 }
+

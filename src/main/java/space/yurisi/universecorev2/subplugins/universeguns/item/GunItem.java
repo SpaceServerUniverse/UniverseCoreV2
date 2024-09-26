@@ -30,6 +30,7 @@ public abstract class GunItem {
     // リロード時間 (tick)
     private final int reloadTime;
 
+    // マイナスにすると動けなくなる -0.15が一番拡大するらしい
     private final float isZoomWalkSpeed;
 
     private final int baseDamage;
