@@ -30,7 +30,7 @@ public abstract class GunItem {
     // リロード時間 (tick)
     private final int reloadTime;
 
-    private final int isZoomWalkSpeed;
+    private final float isZoomWalkSpeed;
 
     private final int baseDamage;
 
@@ -40,8 +40,8 @@ public abstract class GunItem {
 
     private final int explosionDamage;
 
-    // 0~10で指定　数字が大きくなるほど重くなり移動速度低下が入る
-    private final int weight;
+    // 0~1 武器を持っているときの移動速度
+    private final float weight;
 
     // 連射速度 (クールダウンのtick)
     private final int fireRate;
@@ -57,7 +57,7 @@ public abstract class GunItem {
 
     private final ItemStack baseItem;
 
-    public GunItem(String id, String name, String type, int magazineSize, int burst, int reloadTime, int isZoomWalkSpeed, int baseDamage, boolean isExplosive, int explosionRadius, int explosionDamage, int weight, int fireRate, int recoil, int spread, int bulletNumber, int bulletSpeed, ItemStack baseItem) {
+    public GunItem(String id, String name, String type, int magazineSize, int burst, int reloadTime, float isZoomWalkSpeed, int baseDamage, boolean isExplosive, int explosionRadius, int explosionDamage, float weight, int fireRate, int recoil, int spread, int bulletNumber, int bulletSpeed, ItemStack baseItem) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -102,7 +102,7 @@ public abstract class GunItem {
         return reloadTime;
     }
 
-    public int getIsZoomWalkSpeed() {
+    public float getIsZoomWalkSpeed() {
         return isZoomWalkSpeed;
     }
 
@@ -122,7 +122,7 @@ public abstract class GunItem {
         return explosionDamage;
     }
 
-    public int getWeight() {
+    public float getWeight() {
         return weight;
     }
 

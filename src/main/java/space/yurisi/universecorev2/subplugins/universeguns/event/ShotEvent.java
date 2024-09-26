@@ -1,5 +1,6 @@
 package space.yurisi.universecorev2.subplugins.universeguns.event;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.Location;
 import org.bukkit.entity.Snowball;
@@ -16,6 +17,9 @@ public class ShotEvent {
 
         projectile = player.launchProjectile(Snowball.class);
         projectile.setVelocity(velocity);
+    }
 
+    public Entity getProjectile() {
+        return projectile;
     }
 }
