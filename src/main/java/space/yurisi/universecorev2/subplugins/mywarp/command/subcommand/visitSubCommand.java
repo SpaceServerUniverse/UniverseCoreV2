@@ -19,7 +19,7 @@ public class visitSubCommand implements MywarpSubCommand {
             return false;
         }
 
-        if(args.length <= 2){
+        if(args.length <= 3){
             player.sendMessage("/mw visit <プレイヤー名> <ワープ名>");
             return false;
         }
@@ -30,7 +30,7 @@ public class visitSubCommand implements MywarpSubCommand {
             // デバッグ用
             // TODO: クエリから取得
             for(Mywarp mywarp : data){
-                if(mywarp.getName().equals(args[1])){
+                if(mywarp.getName().equals(args[2])){
                     connector.teleportMywarp(player, mywarp);
                     player.sendMessage(MessageHelper.getSuccessMessage("§b" + args[1] + "§2さんの§6" + args[2] + " §2にワープしました。"));
                     return true;

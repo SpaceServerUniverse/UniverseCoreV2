@@ -1,6 +1,7 @@
 package space.yurisi.universecorev2.subplugins.evolutionitem.event;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -27,6 +28,10 @@ public class PrepareAnvil implements Listener {
         AnvilInventory inventory = event.getInventory();
         ItemStack firstItem = inventory.getItem(0);
         ItemStack secondItem = inventory.getItem(1);
+
+        if(firstItem != null && firstItem.getType() == Material.PAPER){
+            return;
+        }
 
         if (firstItem == null && secondItem != null) {
             if (Weapon.isWeapon(secondItem.getType()) || Armor.isArmor(secondItem.getType())) {
