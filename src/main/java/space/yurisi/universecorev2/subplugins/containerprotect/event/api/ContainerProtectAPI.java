@@ -53,9 +53,9 @@ public class ContainerProtectAPI {
 
     public boolean canAccessContainer(Player player, Location location) {
         Block block = location.getBlock();
-        InventoryHolder holder = (InventoryHolder) block.getState();
+        InventoryHolder state = (InventoryHolder) block.getState();
 
-        if (!(holder instanceof Chest chest)) return true;
+        if (!(state instanceof Chest chest)) return true;
 
         ContainerProtect containerProtect = getContainerProtect(location);
         if (containerProtect != null) {
