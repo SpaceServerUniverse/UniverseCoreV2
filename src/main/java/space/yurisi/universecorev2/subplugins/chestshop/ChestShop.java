@@ -8,12 +8,10 @@ import space.yurisi.universecorev2.subplugins.chestshop.command.ItemNameCommand;
 import space.yurisi.universecorev2.subplugins.chestshop.event.EventManager;
 
 public final class ChestShop implements SubPlugin {
-    private DatabaseManager databaseManager;
 
     @Override
     public void onEnable(UniverseCoreV2 core) {
         new EventManager(core);
-        this.databaseManager = UniverseCoreV2API.getInstance().getDatabaseManager();
         core.getCommand("item").setExecutor(new ItemNameCommand());
     }
 
