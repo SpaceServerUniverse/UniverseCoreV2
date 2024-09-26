@@ -17,7 +17,7 @@ public class ItemDeserializer {
             Map<String, Object> itemMap = gson.fromJson(json, Map.class);
             return ItemStack.deserialize(itemMap);
         } catch (JsonSyntaxException e) {
-            throw new IllegalArgumentException("JSONの構文が無効です: " + e.getMessage());
+            throw new JsonSyntaxException("JSONの構文が無効です: " + e.getMessage());
         }
     }
 }
