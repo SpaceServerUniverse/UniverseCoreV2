@@ -57,7 +57,7 @@ public class SubPluginInitializer {
         this.subPlugins.add(new UniverseUtilCommand());
         this.subPlugins.add(new ItemHat());
         this.subPlugins.add(new CustomName());
-        //this.subPlugins.add(new ContainerProtect());
+        this.subPlugins.add(new ContainerProtect());
         this.subPlugins.add(new PlayerHead());
         this.subPlugins.add(new FreeMarket());
         this.subPlugins.add(new Gacha());
