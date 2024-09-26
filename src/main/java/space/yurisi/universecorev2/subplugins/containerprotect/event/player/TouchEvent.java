@@ -89,18 +89,4 @@ public class TouchEvent implements Listener {
             player.sendActionBar(Component.text("このコンテナは " + Bukkit.getOfflinePlayer(UUID.fromString(containerProtect.getUuid())).getName() + " によって保護されています"));
         }
     }
-
-    @EventHandler
-    public void onTouchEntity(PlayerInteractEntityEvent event){
-
-    }
-
-    @EventHandler
-    public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-        if (event.getRightClicked() instanceof ItemFrame itemFrame) {
-            if (isAtTargetLocation(itemFrame.getLocation())) {
-                event.setCancelled(true); // 操作をキャンセル
-            }
-        }
-    }
 }
