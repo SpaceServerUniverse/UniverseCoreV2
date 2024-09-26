@@ -3,6 +3,7 @@ package space.yurisi.universecorev2.subplugins.containerprotect.event.api;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
@@ -31,7 +32,7 @@ public class ContainerProtectAPI {
 
     public boolean isContainerProtect(Location location) {
         Block block = location.getBlock();
-        InventoryHolder holder = (InventoryHolder) block.getState();
+        BlockState holder = block.getState();
 
         if (!(holder instanceof Chest chest)) return false;
 
