@@ -56,7 +56,7 @@ public class UniverseItem {
         return container.has(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.LEVEL));
     }
 
-    public static Boolean removeItem(Player player, String item_name){
+    public static Boolean removeItem(Player player, String item_name, int remove_amount){
         PlayerInventory inventory = player.getInventory();
         NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
 
@@ -69,11 +69,12 @@ public class UniverseItem {
                     String isGachaTicket = container.get(itemKey, PersistentDataType.STRING);
 
                     if (Objects.equals(isGachaTicket, item_name)) {
-                        if (item.getAmount() > 1) {
-                            item.setAmount(item.getAmount() - 1);
-                        } else {
-                            inventory.remove(item);
+
+                        if (item.getAmount() < remove_amount) {
+                            return false;
                         }
+
+                        item.setAmount(item.getAmount() - remove_amount);
                         return true;
                     }
                 }

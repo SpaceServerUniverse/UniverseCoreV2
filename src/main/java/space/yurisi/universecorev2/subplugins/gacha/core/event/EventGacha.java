@@ -43,38 +43,51 @@ public abstract class EventGacha {
         initializeUltraRareList();
     }
 
-    public void turn() {
-        Boolean ticket = UniverseItem.removeItem(player, "gacha_ticket");
+    public void turn(int frequency) {
+        // FIXME: 多分ちゃんと調べたほうがいい
+        if (player.getInventory().firstEmpty() == -1) {
+            Message.sendErrorMessage(player, "[ガチャAI]", "インベントリに空きがありません。");
+            return;
+        }
 
-        if(!ticket){
+        Boolean ticket = UniverseItem.removeItem(player, "gacha_ticket", frequency);
+
+        if (!ticket){
             Message.sendErrorMessage(player, "[ガチャAI]", "チケットが足りません。");
             return;
         }
-        Random rand = new Random();
-        int num = rand.nextInt(1000);
 
-        ItemStack reward = null;
+        for (int i = 0; i <= frequency; i++) {
+            Random rand = new Random();
+            int num = rand.nextInt(1000);
 
-        if (num < 30 && !ultra_rare.isEmpty()) { // 3%
-            reward = getRandomItem(ultra_rare);
-            sendMessages(player, reward, GachaRarity.UltraRare);
-        } else if (num < 80 && !super_rare.isEmpty()) { // 5%の確率
-            reward = getRandomItem(super_rare);
-            sendMessages(player, reward, GachaRarity.SuperRare);
-        } else if (num < 480 && !rare.isEmpty()) { // 40%
-            reward = getRandomItem(rare);
-            sendMessages(player, reward, GachaRarity.Rare);
-        } else if (!normal.isEmpty()) {
-            reward = getRandomItem(normal);
-            sendMessages(player, reward, GachaRarity.Normal);
+            ItemStack reward = null;
+
+            if (num < 30 && !ultra_rare.isEmpty()) { // 3%
+                reward = getRandomItem(ultra_rare);
+                sendMessages(player, reward, GachaRarity.UltraRare);
+            } else if (num < 80 && !super_rare.isEmpty()) { // 5%の確率
+                reward = getRandomItem(super_rare);
+                sendMessages(player, reward, GachaRarity.SuperRare);
+            } else if (num < 480 && !rare.isEmpty()) { // 40%
+                reward = getRandomItem(rare);
+                sendMessages(player, reward, GachaRarity.Rare);
+            } else if (!normal.isEmpty()) {
+                reward = getRandomItem(normal);
+                sendMessages(player, reward, GachaRarity.Normal);
+            }
+
+            if (reward == null) {
+                Message.sendErrorMessage(player, "[ガチャAI]", "エラーが発生しました。");
+                return;
+            }
+
+            player.getInventory().addItem(reward);
         }
 
-        if (reward == null) {
-            Message.sendErrorMessage(player, "[ガチャAI]", "エラーが発生しました。");
-            return;
+        if (frequency > 1) {
+            Message.sendSuccessMessage(player, "[ガチャAI]", "ガチャを" + frequency + "回引きました");
         }
-
-        player.getInventory().addItem(reward);
 
     }
 
