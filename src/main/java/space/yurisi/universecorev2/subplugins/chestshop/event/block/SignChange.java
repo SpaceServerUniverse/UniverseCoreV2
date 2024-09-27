@@ -3,6 +3,8 @@ package space.yurisi.universecorev2.subplugins.chestshop.event.block;
 import com.google.gson.JsonSyntaxException;
 import io.papermc.paper.event.player.PlayerOpenSignEvent;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.translation.Translator;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.block.data.BlockData;
@@ -15,7 +17,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 import space.yurisi.universecorev2.UniverseCoreV2API;
 import space.yurisi.universecorev2.database.models.ChestShop;
 import space.yurisi.universecorev2.database.models.Money;
@@ -27,7 +28,7 @@ import space.yurisi.universecorev2.exception.ChestShopNotFoundException;
 import space.yurisi.universecorev2.exception.MoneyNotFoundException;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
 import space.yurisi.universecorev2.subplugins.chestshop.utils.DoubleChestFinder;
-import space.yurisi.universecorev2.subplugins.chestshop.utils.ItemDeserializer;
+import space.yurisi.universecorev2.subplugins.chestshop.utils.ItemUtils;
 import space.yurisi.universecorev2.subplugins.chestshop.utils.NumberUtils;
 import space.yurisi.universecorev2.subplugins.chestshop.utils.SuperMessageHelper;
 import space.yurisi.universecorev2.subplugins.containerprotect.event.api.ContainerProtectAPI;
@@ -76,7 +77,7 @@ public class SignChange implements Listener {
             org.bukkit.block.Chest chest = (org.bukkit.block.Chest) chestBlock.getState();
             ItemStack itemStack;
             try {
-                itemStack = ItemDeserializer.deserialize(chestShop.getItem());
+                itemStack = ItemUtils.deserialize(chestShop.getItem());
             } catch (IllegalArgumentException | JsonSyntaxException e) {
                 player.sendMessage(SuperMessageHelper.getErrorMessage("不明なエラーが発生しました"));
                 event.setCancelled(true);
@@ -124,7 +125,7 @@ public class SignChange implements Listener {
             }
 
             try {
-                universeEconomyAPI.reduceMoney(player, chestShop.getPrice(), "チェストショップでの購入:" + itemStack.getType().name() + ":" + itemStack.getAmount());
+                universeEconomyAPI.reduceMoney(player, chestShop.getPrice(), "チェストショップでの購入:" + ItemUtils.name(itemStack) + ":" + itemStack.getAmount());
             } catch (UserNotFoundException | MoneyNotFoundException e) {
                 event.setCancelled(true);
                 return;
@@ -138,14 +139,14 @@ public class SignChange implements Listener {
                 User owner = userRepository.getUserFromUUID(UUID.fromString(chestShop.getUuid()));
                 Money ownerMoney = moneyRepository.getMoneyFromUserId(owner.getId());
                 ownerMoney.setMoney(ownerMoney.getMoney() + chestShop.getPrice());
-                moneyRepository.updateMoney(ownerMoney, chestShop.getPrice(), "チェストショップでの売却:" + itemStack.getType().name() + ":" + itemStack.getAmount());
+                moneyRepository.updateMoney(ownerMoney, chestShop.getPrice(), "チェストショップでの売却:" + ItemUtils.name(itemStack) + ":" + itemStack.getAmount());
             } catch (UserNotFoundException | MoneyNotFoundException e) {
                 event.setCancelled(true);
                 return;
             }
 
             player.getInventory().addItem(itemStack);
-            player.sendMessage(SuperMessageHelper.getSuccessMessage("チェストショップから" + itemStack.getType().name() + "を" + itemStack.getAmount() + "こ購入しました"));
+            player.sendMessage(SuperMessageHelper.getSuccessMessage("チェストショップから" + ItemUtils.name(itemStack) + "を" + itemStack.getAmount() + "こ購入しました"));
             event.setCancelled(true);
         } else {
             BlockData signBlockData = sign.getBlockData();
@@ -188,8 +189,11 @@ public class SignChange implements Listener {
             signLine.line(0, Component.text(player.getName()));
             signLine.line(1, Component.text("値段:" + price));
             signLine.line(2, Component.text("個数:" + amount));
-            signLine.line(3, Component.text(itemStack2.getType().name().replace("_", " ")));
-            UniverseCoreV2API.getInstance().getDatabaseManager().getChestShopRepository().createChestShop(player, itemStack2, (long) price, sign.getBlock(), mainChest);
+            signLine.line(3, Component.text(ItemUtils.name(itemStack2)));
+
+            itemStack2.setItemMeta(null);
+
+            UniverseCoreV2API.getInstance().getDatabaseManager().getChestShopRepository().createChestShop(player,itemStack2 , (long) price, sign.getBlock(), mainChest);
             ContainerProtectAPI.getInstance().addContainerProtect(player, mainChest.getLocation());
             player.sendMessage(SuperMessageHelper.getSuccessMessage("チェストショップを作成しました"));
             sign.update(true, false);
