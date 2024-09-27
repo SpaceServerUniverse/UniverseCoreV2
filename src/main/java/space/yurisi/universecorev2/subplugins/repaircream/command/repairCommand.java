@@ -39,7 +39,7 @@ public class repairCommand implements CommandExecutor {
             return false;
         }
 
-        Boolean ticket = UniverseItem.removeItem(player, "repair_cream", 1);
+        Boolean ticket = UniverseItem.removeItem(player, "repair_cream");
 
         if (!ticket) {
             Message.sendErrorMessage(player, "[修復AI]", "修復クリームが足りません。");

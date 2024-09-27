@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.subplugins.gacha.core.event.SolarSystemEventGacha;
 import space.yurisi.universecorev2.subplugins.gacha.menu.gacha_menu.GachaInventoryMenu;
-import space.yurisi.universecorev2.utils.Message;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,32 +28,9 @@ public class gachaCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        int frequency = 1;
-
-        if(args.length == 2){
-            try {
-                frequency = Integer.parseInt(args[1]);
-
-                if (frequency <= 0) {
-                    Message.sendErrorMessage(player, "[ガチャAI]", "引数が不正です。");
-                    return true;
-                }
-
-                // 多分40回以上回されるとインベントリがフルになり得るので、それを防ぐための処理
-                if (frequency >= 40) {
-                    Message.sendErrorMessage(player, "[ガチャAI]", "一度に引ける回数は40回までです。");
-                    return true;
-                }
-
-            } catch (NumberFormatException e) {
-                Message.sendErrorMessage(player, "[ガチャAI]", "回数は数字で入力してください。");
-                return true;
-            }
-        }
-
         switch (args[0]){
             case "solar_system":
-                new SolarSystemEventGacha(player).turn(frequency);
+                new SolarSystemEventGacha(player).turn();
         }
 
 

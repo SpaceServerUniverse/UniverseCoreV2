@@ -26,7 +26,7 @@ public class SolarSystemGachaMenuItem extends AbstractItem {
 
     @Override
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
-        new SolarSystemEventGacha(player).turn(1);
+        new SolarSystemEventGacha(player).turn();
         event.getInventory().close();
     }
 }
