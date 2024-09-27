@@ -1,5 +1,6 @@
 package space.yurisi.universecorev2.subplugins.tppsystem.command.subcommand;
 
+import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
@@ -70,10 +71,9 @@ public class sendSubCommand implements TPPSubCommand {
     private void sendRequest(RequestManager requestManager, Player player, Player targetPlayer) {
         targetPlayer.playSound(targetPlayer.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 2, 1);
         Message.sendNormalMessage(targetPlayer, "[テレポートAI]", "§6" + player.getName() + " §fからテレポート申請が届きました．");
-        Message.sendNormalMessage(targetPlayer, "[テレポートAI]", "§6/tpp§fメニューから承認可否を選択できます．");
-        Message.sendNormalMessage(targetPlayer, "[テレポートAI]", "コマンドからも承認可能です．");
-        Message.sendNormalMessage(targetPlayer, "[テレポートAI]", "§6/tpp accept " + player.getName() + " §fで承認");
-        Message.sendNormalMessage(targetPlayer, "[テレポートAI]", "§6/tpp deny " + player.getName() + " §fで拒否");
+        Message.sendNormalMessage(targetPlayer, "[テレポートAI]", "§6/tpp§fメニューかコマンドで承認可否を選択できます．");
+        Message.sendNormalMessage(targetPlayer, "[テレポートAI]", "§a[承認する]", ClickEvent.runCommand("/tpp accept " + player.getName()), player.getName() + " からのテレポート申請を承認します");
+        Message.sendNormalMessage(targetPlayer, "[テレポートAI]", "§c[拒否する]", ClickEvent.runCommand("/tpp deny " + player.getName()), player.getName() + " からのテレポート申請を拒否します");
         requestManager.setRequest(player, targetPlayer);
         requestManager.setSearchReceiver(player, targetPlayer);
     }
