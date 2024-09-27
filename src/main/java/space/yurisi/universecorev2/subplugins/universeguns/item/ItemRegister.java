@@ -1,10 +1,7 @@
 package space.yurisi.universecorev2.subplugins.universeguns.item;
 
-import org.bukkit.NamespacedKey;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.subplugins.universeguns.item.gun_item.R4C;
+import space.yurisi.universecorev2.subplugins.universeguns.item.gun_item.RPG;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +16,9 @@ public class ItemRegister {
 
     public void register() {
         items.put(R4C.id, new R4C());
+        items.put(RPG.id, new RPG());
         itemNames.add(R4C.id);
+        itemNames.add(RPG.id);
     }
 
     public static GunItem getItem(String id){

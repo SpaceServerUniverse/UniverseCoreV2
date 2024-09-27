@@ -10,6 +10,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -46,66 +47,76 @@ public class GunEvent implements Listener {
         if (!itemInHand.hasItemMeta()) {
             return;
         }
+        String handItemID = getGunID(itemInHand);
+        if(handItemID == null || !ItemRegister.isGun(handItemID)){
+            return;
+        }
+
+        GunItem gun = ItemRegister.getItem(handItemID);
 
         if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
-            String handItemID = getGunID(itemInHand);
-            if (handItemID == null) {
+
+            event.setCancelled(true);
+            if(isCooldown.contains(player)){
                 return;
             }
-            // GunItemのIDのどれかに一致するか
-            if (ItemRegister.isGun(handItemID) && !isCooldown.contains(player)) {
-
-                GunItem gun = ItemRegister.getItem(handItemID);
-                if ((gun.getType().equals("SR") || gun.getType().equals("EX")) && !isZoom.contains(player)) {
-                    Message.sendWarningMessage(player, "[武器AI]", "スコープを覗いてください。");
-                    return;
-                }
-                // 発射
-                ShotEvent shotEvent = new ShotEvent(player, gun);
-                projectileData.put(shotEvent.getProjectile(), gun);
-
-                // クールダウン
-                int tick = gun.getFireRate();
-                if (tick != 0) {
-                    isCooldown.add(player);
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            isCooldown.remove(player);
-                        }
-                    }.runTaskLater(plugin, tick);
-                }
+            if ((gun.getType().equals("SR") || gun.getType().equals("EX")) && !isZoom.contains(player)) {
+                Message.sendWarningMessage(player, "[武器AI]", "スコープを覗いてください。");
+                return;
             }
+
+            // 発射
+            ShotEvent shotEvent = new ShotEvent(player, gun, isZoom);
+            projectileData.put(shotEvent.getProjectile(), gun);
+
+            // クールダウン
+            int tick = gun.getFireRate();
+            if (tick != 0) {
+                isCooldown.add(player);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {isCooldown.remove(player);}
+                }.runTaskLater(plugin, tick);
+            }
+
+
         } else if (action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) {
-            String handItemID = getGunID(itemInHand);
-            if (handItemID == null) {
-                return;
+
+            event.setCancelled(true);
+            if (isZoom.contains(player)) {
+                player.setWalkSpeed(gun.getWeight());
+                isZoom.remove(player);
+            } else {
+                player.setWalkSpeed(gun.getIsZoomWalkSpeed());
+                isZoom.add(player);
             }
-            // GunItemのIDのどれかに一致するか
-            if (ItemRegister.isGun(handItemID)) {
-                GunItem gun = ItemRegister.getItem(handItemID);
-                if (isZoom.contains(player)) {
-                    player.setWalkSpeed(gun.getWeight());
-                    isZoom.remove(player);
-                } else {
-                    player.setWalkSpeed(gun.getIsZoomWalkSpeed());
-                    isZoom.add(player);
-                }
-            }
+
         }
     }
 
     @EventHandler
     public void onPlayerHit(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Snowball snowball) {
-            if (projectileData.containsKey(snowball)) {
-                GunItem gun = projectileData.get(snowball);
-                // TODO: 爆発系の分岐
-                // TODO: ヘッドショット処理
-                event.setDamage(gun.getBaseDamage());
-                projectileData.remove(snowball);
-                // TODO: ヒットエフェクト
+            if (!projectileData.containsKey(snowball)) {
+                return;
             }
+            GunItem gun = projectileData.get(snowball);
+            double damage = gun.getBaseDamage();
+
+            if(gun.getIsExplosive()){
+                float radius = gun.getExplosionRadius();
+                snowball.getWorld().createExplosion(snowball.getLocation(), radius, false, false, snowball);
+            }
+
+            double neckHeight = 1.35;
+            double headShotTimes = 1.5;
+            if(snowball.getLocation().getY() > neckHeight){
+                damage *= headShotTimes;
+            }
+
+            event.setDamage(damage);
+            projectileData.remove(snowball);
+            // TODO: ヒットエフェクト
         }
     }
 
@@ -132,6 +143,19 @@ public class GunEvent implements Listener {
             isZoom.remove(player);
         }
 
+    }
+
+    @EventHandler
+    public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
+        ItemStack mainHandItem = event.getMainHandItem();
+        if (mainHandItem != null && mainHandItem.hasItemMeta()) {
+            String handItemID = getGunID(mainHandItem);
+
+            if (handItemID != null && ItemRegister.isGun(handItemID)) {
+                event.setCancelled(true);
+                event.getPlayer().sendMessage("オフハンドに武器を持つことはできません。");
+            }
+        }
     }
 
     private String getGunID(ItemStack itemStack) {

@@ -37,9 +37,7 @@ public abstract class GunItem {
 
     private final boolean isExplosive;
 
-    private final int explosionRadius;
-
-    private final int explosionDamage;
+    private final float explosionRadius;
 
     // 0~1 武器を持っているときの移動速度
     private final float weight;
@@ -49,16 +47,16 @@ public abstract class GunItem {
 
     private final int recoil;
 
-    private final int spread;
+    private final double spread;
 
     private final int bulletNumber;
 
-    // 弾速 弾の垂れ下がりに影響 0なら垂れ下がりなし
-    private final int bulletSpeed;
+    // 弾速 4.0Dが限界
+    private final double bulletSpeed;
 
     private final ItemStack baseItem;
 
-    public GunItem(String id, String name, String type, int magazineSize, int burst, int reloadTime, float isZoomWalkSpeed, int baseDamage, boolean isExplosive, int explosionRadius, int explosionDamage, float weight, int fireRate, int recoil, int spread, int bulletNumber, int bulletSpeed, ItemStack baseItem) {
+    public GunItem(String id, String name, String type, int magazineSize, int burst, int reloadTime, float isZoomWalkSpeed, int baseDamage, boolean isExplosive, float explosionRadius, float weight, int fireRate, int recoil, double spread, int bulletNumber, double bulletSpeed, ItemStack baseItem) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -69,7 +67,6 @@ public abstract class GunItem {
         this.baseDamage = baseDamage;
         this.isExplosive = isExplosive;
         this.explosionRadius = explosionRadius;
-        this.explosionDamage = explosionDamage;
         this.weight = weight;
         this.fireRate = fireRate;
         this.recoil = recoil;
@@ -115,12 +112,8 @@ public abstract class GunItem {
         return isExplosive;
     }
 
-    public int getExplosionRadius() {
+    public float getExplosionRadius() {
         return explosionRadius;
-    }
-
-    public int getExplosionDamage() {
-        return explosionDamage;
     }
 
     public float getWeight() {
@@ -135,7 +128,7 @@ public abstract class GunItem {
         return recoil;
     }
 
-    public int getSpread() {
+    public double getSpread() {
         return spread;
     }
 
@@ -143,7 +136,7 @@ public abstract class GunItem {
         return bulletNumber;
     }
 
-    public int getBulletSpeed() {
+    public double getBulletSpeed() {
         return bulletSpeed;
     }
 

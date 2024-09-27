@@ -25,16 +25,14 @@ public class giveGunCommand implements CommandExecutor {
         }
 
         if(args.length == 0){
-            sender.sendMessage("Please specify the gun name.");
+            sender.sendMessage("有効な銃の名前を指定してください。");
             return false;
         }
 
+        String gunId = "";
         switch (args[0]){
-            case "R4C":
-                // Give R4C
-                GunItem item = ItemRegister.getItem("r4c");
-                ItemStack itemStack = item.getItem();
-                ((Player) sender).getInventory().addItem(itemStack);
+            case "R4C", "r4c":
+                gunId = "r4c";
                 break;
             case "SMG11":
                 // Give M4
@@ -42,10 +40,17 @@ public class giveGunCommand implements CommandExecutor {
             case "AK48":
                 // Give AK47
                 break;
+            case "RPG","rpg":
+                // Give RPG7
+                gunId = "rpg";
+                break;
             default:
-                sender.sendMessage("Please specify the gun name.");
+                sender.sendMessage("有効な銃の名前を指定してください。");
                 return false;
         }
+        GunItem item = ItemRegister.getItem(gunId);
+        ItemStack itemStack = item.getItem();
+        ((Player) sender).getInventory().addItem(itemStack);
         return true;
     }
 }
