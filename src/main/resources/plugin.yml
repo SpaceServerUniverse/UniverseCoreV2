@@ -107,6 +107,10 @@ commands:
   repair:
     description: アイテムを修復します
 
+  #FishRod
+  fishrod:
+    description: 釣り竿を与えます(引数によってレア度が変わります)
+
 permissions:
   # UniverseCoreV2
   space.yurisi.universecorev2.interactevent.enchanttable:

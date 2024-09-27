@@ -6,6 +6,7 @@ import space.yurisi.universecorev2.subplugins.blockcopystick.BlockCopyStick;
 import space.yurisi.universecorev2.subplugins.changemessages.ChangeMessages;
 import space.yurisi.universecorev2.subplugins.customname.CustomName;
 import space.yurisi.universecorev2.subplugins.evolutionitem.EvolutionItem;
+import space.yurisi.universecorev2.subplugins.fishingsystem.FishingSystem;
 import space.yurisi.universecorev2.subplugins.gacha.Gacha;
 import space.yurisi.universecorev2.subplugins.damagemanager.DamageManager;
 import space.yurisi.universecorev2.subplugins.itemhat.ItemHat;
@@ -26,6 +27,7 @@ import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomy;
 import space.yurisi.universecorev2.subplugins.universeland.UniverseLand;
 import space.yurisi.universecorev2.subplugins.tppsystem.TPPSystem;
 import space.yurisi.universecorev2.subplugins.xtpsystem.XtpSystem;
+import space.yurisi.universecorev2.subplugins.fishingsystem.FishingSystem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +68,7 @@ public class SubPluginInitializer {
         this.subPlugins.add(new BlockCopyStick());
         this.subPlugins.add(new EvolutionItem());
         //this.subPlugins.add(new DamageManager());
+        this.subPlugins.add(new FishingSystem());
     }
 
     public void onEnable(){
