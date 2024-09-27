@@ -34,7 +34,7 @@ public class BreakEvent implements Listener {
                 return;
             }
             UniverseCoreV2API.getInstance().getDatabaseManager().getChestShopRepository().deleteChestShop(chestShop);
-            player.sendMessage(SuperMessageHelper.getSuccessMessage("チェストショップを正常に撤去しました"));
+            SuperMessageHelper.sendSuccessMessage(player,"チェストショップを正常に撤去しました");
         }
         if (block.getBlockData() instanceof WallSign) {
             try {
@@ -43,7 +43,7 @@ public class BreakEvent implements Listener {
                 return;
             }
             if (!(player.getUniqueId().toString().equals(chestShop.getUuid())) && !player.isOp()) {
-                player.sendMessage(SuperMessageHelper.getErrorMessage("オーナーじゃない為壊すことができません"));
+                SuperMessageHelper.sendErrorMessage(player,"オーナーじゃない為壊すことができません");
                 event.setCancelled(true);
                 return;
             }
@@ -51,7 +51,7 @@ public class BreakEvent implements Listener {
             Location chestLocation = new Location(world, chestShop.getMainChest_x(), chestShop.getMainChest_y(), chestShop.getMainChest_z());
             ContainerProtectAPI.getInstance().removeContainerProtect(chestLocation);
             UniverseCoreV2API.getInstance().getDatabaseManager().getChestShopRepository().deleteChestShop(chestShop);
-            player.sendMessage(SuperMessageHelper.getSuccessMessage("チェストショップを正常に撤去しました"));
+            SuperMessageHelper.sendSuccessMessage(player,"チェストショップを正常に撤去しました");
         }
     }
 }

@@ -18,16 +18,15 @@ public class ItemNameCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(SuperMessageHelper.getSuccessMessage("このコマンドはゲーム内で実行してください"));
             return false;
         }
         PlayerInventory inventory = ((Player) sender).getInventory();
         ItemStack item = inventory.getItemInMainHand();
         if (item == null) {
-            sender.sendMessage(SuperMessageHelper.getSuccessMessage("メインハンドに持ったアイテムの名前を表示します"));
+            SuperMessageHelper.sendErrorMessage(sender,"メインハンドに持ったアイテムの名前を表示します");
             return false;
         } else {
-            sender.sendMessage(SuperMessageHelper.getSuccessMessage("§a" + item.getType().name().toLowerCase()));
+            SuperMessageHelper.sendErrorMessage(sender,"§aアイテムの情報: " + item.getType().name().toLowerCase());
             return true;
         }
     }

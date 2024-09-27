@@ -59,14 +59,14 @@ public class SignChange implements Listener {
         }
         if (chestShop != null) {
             if (player.getUniqueId().toString().equals(chestShop.getUuid())) {
-                player.sendMessage(SuperMessageHelper.getErrorMessage("このチェストショップはあなたがオーナーなため買うことができません"));
+                SuperMessageHelper.sendErrorMessage(player,"このチェストショップはあなたがオーナーなため買うことができません");
                 event.setCancelled(true);
                 return;
             }
             Integer emptySlot = player.getInventory().firstEmpty();
 
             if (emptySlot == -1) {
-                player.sendMessage(SuperMessageHelper.getErrorMessage("インベントリーがいっぱいです"));
+                SuperMessageHelper.sendErrorMessage(player,"インベントリーがいっぱいです");
                 event.setCancelled(true);
                 return;
             }
@@ -79,7 +79,7 @@ public class SignChange implements Listener {
             try {
                 itemStack = ItemUtils.deserialize(chestShop.getItem());
             } catch (IllegalArgumentException | JsonSyntaxException e) {
-                player.sendMessage(SuperMessageHelper.getErrorMessage("不明なエラーが発生しました"));
+                SuperMessageHelper.sendErrorMessage(player,"不明なエラーが発生しました");
                 event.setCancelled(true);
                 return;
             }
@@ -119,7 +119,7 @@ public class SignChange implements Listener {
                 }
             }
             if (!(doItemRemove)) {
-                player.sendMessage(SuperMessageHelper.getErrorMessage("チェスト内の在庫が不足しています"));
+                SuperMessageHelper.sendErrorMessage(player,"チェスト内の在庫が不足しています");
                 event.setCancelled(true);
                 return;
             }
@@ -130,7 +130,7 @@ public class SignChange implements Listener {
                 event.setCancelled(true);
                 return;
             } catch (CanNotReduceMoneyException e) {
-                player.sendMessage(SuperMessageHelper.getSuccessMessage("お金が不足しています"));
+                SuperMessageHelper.sendErrorMessage(player,"お金が不足しています");
                 event.setCancelled(true);
                 return;
             }
@@ -146,7 +146,7 @@ public class SignChange implements Listener {
             }
 
             player.getInventory().addItem(itemStack);
-            player.sendMessage(SuperMessageHelper.getSuccessMessage("チェストショップから" + ItemUtils.name(itemStack) + "を" + itemStack.getAmount() + "こ購入しました"));
+            SuperMessageHelper.sendSuccessMessage(player,"チェストショップから" + ItemUtils.name(itemStack) + "を" + itemStack.getAmount() + "こ購入しました");
             event.setCancelled(true);
         } else {
             BlockData signBlockData = sign.getBlockData();
@@ -170,12 +170,12 @@ public class SignChange implements Listener {
             ItemStack itemStack2;
             if(ItemText.equals("?")){
                 itemStack2 = new ItemStack(player.getInventory().getItemInMainHand());
-                player.sendMessage("手持ちにあるアイテムを売るアイテムに設定しました");
+                SuperMessageHelper.sendSuccessMessage(player,"手持ちにあるアイテムを売るアイテムに設定しました");
             }else {
                 try {
                     itemStack2 = ItemStack.of(Objects.requireNonNull(Material.getMaterial(ItemText.toUpperCase())), amount);
                 } catch (IllegalArgumentException | NullPointerException e) {
-                    Message.sendErrorMessage(player, "ChestShop", "アイテム名から調べたけどアイテムが見つからないよ");
+                    SuperMessageHelper.sendErrorMessage(player,"アイテム名から調べたけどアイテムが見つからないよ\n/itemを使うか\n看板の4行目を?にして売りたいアイテムをメインハンドにもってクリックしてね");
                     event.setCancelled(true);
                     return;
                 }
@@ -195,7 +195,7 @@ public class SignChange implements Listener {
 
             UniverseCoreV2API.getInstance().getDatabaseManager().getChestShopRepository().createChestShop(player,itemStack2 , (long) price, sign.getBlock(), mainChest);
             ContainerProtectAPI.getInstance().addContainerProtect(player, mainChest.getLocation());
-            player.sendMessage(SuperMessageHelper.getSuccessMessage("チェストショップを作成しました"));
+            SuperMessageHelper.sendSuccessMessage(player,"チェストショップを作成しました");
             sign.update(true, false);
             event.setCancelled(true);
         }
