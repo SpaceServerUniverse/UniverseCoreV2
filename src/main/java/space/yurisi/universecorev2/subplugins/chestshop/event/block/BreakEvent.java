@@ -29,7 +29,7 @@ public class BreakEvent implements Listener {
             } catch (ChestShopNotFoundException e) {
                 return;
             }
-            if (!(player.getUniqueId().toString().equals(chestShop.getUuid()))) {
+            if (!(player.getUniqueId().toString().equals(chestShop.getUuid())) && !player.isOp()) {
                 event.setCancelled(true);
                 return;
             }
@@ -42,7 +42,7 @@ public class BreakEvent implements Listener {
             } catch (ChestShopNotFoundException e) {
                 return;
             }
-            if (!(player.getUniqueId().toString().equals(chestShop.getUuid()))) {
+            if (!(player.getUniqueId().toString().equals(chestShop.getUuid())) && !player.isOp()) {
                 player.sendMessage(SuperMessageHelper.getErrorMessage("オーナーじゃない為壊すことができません"));
                 event.setCancelled(true);
                 return;
