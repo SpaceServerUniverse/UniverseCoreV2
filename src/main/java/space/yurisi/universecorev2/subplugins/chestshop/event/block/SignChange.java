@@ -167,12 +167,17 @@ public class SignChange implements Listener {
             int price = Integer.parseInt(PriceText);
             int amount = Integer.parseInt(AmountText);
             ItemStack itemStack2;
-            try {
-                itemStack2 = ItemStack.of(Objects.requireNonNull(Material.getMaterial(ItemText)), amount);
-            } catch (IllegalArgumentException | NullPointerException e) {
-                Message.sendErrorMessage(player, "ChestShop", "アイテム名から調べたけどアイテムが見つからないよ");
-                event.setCancelled(true);
-                return;
+            if(ItemText.equals("?")){
+                itemStack2 = new ItemStack(player.getInventory().getItemInMainHand());
+                player.sendMessage("手持ちにあるアイテムを売るアイテムに設定しました");
+            }else {
+                try {
+                    itemStack2 = ItemStack.of(Objects.requireNonNull(Material.getMaterial(ItemText.toUpperCase())), amount);
+                } catch (IllegalArgumentException | NullPointerException e) {
+                    Message.sendErrorMessage(player, "ChestShop", "アイテム名から調べたけどアイテムが見つからないよ");
+                    event.setCancelled(true);
+                    return;
+                }
             }
             BlockFace signFace = ((WallSign) signBlockData).getFacing().getOppositeFace();
             Block mainChest = sign.getBlock().getRelative(signFace);
