@@ -18,6 +18,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.subplugins.universeguns.item.GunItem;
@@ -190,26 +191,29 @@ public class GunEvent implements Listener {
         }
     }
 
-//    @EventHandler
-//    public void onPlayerJump(PlayerMoveEvent event) {
-//        Player player = event.getPlayer();
-//        if (event.getFrom().getY() >= event.getTo().getY()) {
-//            return;
-//        }
-//        ItemStack itemInHand = player.getInventory().getItemInMainHand();
-//        if (!itemInHand.hasItemMeta()) {
-//            return;
-//        }
-//
-//        String handItemID = getGunID(itemInHand);
-//        if (handItemID != null && ItemRegister.isGun(handItemID)) {
-//            GunItem gun = ItemRegister.getItem(handItemID);
-//            if (!gun.getIsJumpEnabled()) {
-//                event.setCancelled(true);
-//                Message.sendWarningMessage(player, "[武器AI]", "この武器は重すぎてジャンプ出来ません。");
-//            }
-//        }
-//    }
+    @EventHandler
+    public void onPlayerJump(PlayerMoveEvent event) {
+        Player player = event.getPlayer();
+        if (event.getFrom().getY() >= event.getTo().getY()) {
+            return;
+        }
+        ItemStack itemInHand = player.getInventory().getItemInMainHand();
+        if (!itemInHand.hasItemMeta()) {
+            return;
+        }
+
+        String handItemID = getGunID(itemInHand);
+        if (handItemID != null && ItemRegister.isGun(handItemID)) {
+            GunItem gun = ItemRegister.getItem(handItemID);
+            if (!gun.getIsJumpEnabled()) {
+                Vector velocity = player.getVelocity();
+                double weight = gun.getWeight();
+                velocity.setX(velocity.getX() * weight);
+                velocity.setZ(velocity.getZ() * weight);
+                player.setVelocity(velocity);
+            }
+        }
+    }
 
     private String getGunID(ItemStack itemStack) {
         ItemMeta meta = itemStack.getItemMeta();
