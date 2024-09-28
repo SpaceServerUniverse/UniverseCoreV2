@@ -149,10 +149,10 @@ public class SignChange implements Listener {
             int price = Integer.parseInt(PriceText);
             int amount = Integer.parseInt(AmountText);
             ItemStack itemStack2;
-            if(ItemText.equals("?")){
-                itemStack2 = new ItemStack(player.getInventory().getItemInMainHand());
-                SuperMessageHelper.sendSuccessMessage(player,"手持ちにあるアイテムを売るアイテムに設定しました");
-            }else {
+            if (ItemText.equals("?")) {
+                itemStack2 = ItemStack.of(player.getInventory().getItemInMainHand().getType(), amount);
+                SuperMessageHelper.sendSuccessMessage(player, "手持ちにあるアイテムを売るアイテムに設定しました");
+            } else {
                 try {
                     itemStack2 = ItemStack.of(Objects.requireNonNull(Material.getMaterial(ItemText.toUpperCase())), amount);
                 } catch (IllegalArgumentException | NullPointerException e) {
