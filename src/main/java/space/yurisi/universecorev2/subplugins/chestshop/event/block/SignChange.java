@@ -3,8 +3,6 @@ package space.yurisi.universecorev2.subplugins.chestshop.event.block;
 import com.google.gson.JsonSyntaxException;
 import io.papermc.paper.event.player.PlayerOpenSignEvent;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TranslatableComponent;
-import net.kyori.adventure.translation.Translator;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.block.data.BlockData;
@@ -15,7 +13,6 @@ import org.bukkit.block.sign.SignSide;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import space.yurisi.universecorev2.UniverseCoreV2API;
 import space.yurisi.universecorev2.database.models.ChestShop;
@@ -27,15 +24,12 @@ import space.yurisi.universecorev2.database.repositories.UserRepository;
 import space.yurisi.universecorev2.exception.ChestShopNotFoundException;
 import space.yurisi.universecorev2.exception.MoneyNotFoundException;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
-import space.yurisi.universecorev2.subplugins.chestshop.utils.DoubleChestFinder;
-import space.yurisi.universecorev2.subplugins.chestshop.utils.ItemUtils;
-import space.yurisi.universecorev2.subplugins.chestshop.utils.NumberUtils;
-import space.yurisi.universecorev2.subplugins.chestshop.utils.SuperMessageHelper;
+import space.yurisi.universecorev2.subplugins.chestshop.utils.*;
 import space.yurisi.universecorev2.subplugins.containerprotect.event.api.ContainerProtectAPI;
 import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomyAPI;
 import space.yurisi.universecorev2.subplugins.universeeconomy.exception.CanNotReduceMoneyException;
 import space.yurisi.universecorev2.subplugins.universeeconomy.exception.ParameterException;
-import space.yurisi.universecorev2.utils.Message;
+import space.yurisi.universecorev2.utils.NumberUtils;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -46,12 +40,14 @@ public class SignChange implements Listener {
         Player player = event.getPlayer();
         Sign sign = event.getSign();
         if (!(sign.getBlockData() instanceof WallSign)) return;
+
         ChestShopRepository chestShopRepository = UniverseCoreV2API.getInstance().getDatabaseManager().getChestShopRepository();
         UniverseEconomyAPI universeEconomyAPI = UniverseEconomyAPI.getInstance();
         UserRepository userRepository = UniverseCoreV2API.getInstance().getDatabaseManager().getUserRepository();
         MoneyRepository moneyRepository = UniverseCoreV2API.getInstance().getDatabaseManager().getMoneyRepository();
         Location location = sign.getLocation();
         ChestShop chestShop = null;
+
         try {
             chestShop = chestShopRepository.getChestShopBySignLocation(location);
         } catch (ChestShopNotFoundException ignored) {
@@ -59,14 +55,14 @@ public class SignChange implements Listener {
         }
         if (chestShop != null) {
             if (player.getUniqueId().toString().equals(chestShop.getUuid())) {
-                SuperMessageHelper.sendErrorMessage(player,"このチェストショップはあなたがオーナーなため買うことができません");
+                SuperMessageHelper.sendErrorMessage(player, "このチェストショップはあなたがオーナーなため買うことができません");
                 event.setCancelled(true);
                 return;
             }
             Integer emptySlot = player.getInventory().firstEmpty();
 
             if (emptySlot == -1) {
-                SuperMessageHelper.sendErrorMessage(player,"インベントリーがいっぱいです");
+                SuperMessageHelper.sendErrorMessage(player, "インベントリーがいっぱいです");
                 event.setCancelled(true);
                 return;
             }
@@ -79,7 +75,7 @@ public class SignChange implements Listener {
             try {
                 itemStack = ItemUtils.deserialize(chestShop.getItem());
             } catch (IllegalArgumentException | JsonSyntaxException e) {
-                SuperMessageHelper.sendErrorMessage(player,"不明なエラーが発生しました");
+                SuperMessageHelper.sendErrorMessage(player, "不明なエラーが発生しました");
                 event.setCancelled(true);
                 return;
             }
@@ -100,7 +96,7 @@ public class SignChange implements Listener {
                 }
             }
             if (!(doItemRemove)) {
-                SuperMessageHelper.sendErrorMessage(player,"チェスト内の在庫が不足しています");
+                SuperMessageHelper.sendErrorMessage(player, "チェスト内の在庫が不足しています");
                 event.setCancelled(true);
                 return;
             }
@@ -111,7 +107,7 @@ public class SignChange implements Listener {
                 event.setCancelled(true);
                 return;
             } catch (CanNotReduceMoneyException e) {
-                SuperMessageHelper.sendErrorMessage(player,"お金が不足しています");
+                SuperMessageHelper.sendErrorMessage(player, "お金が不足しています");
                 event.setCancelled(true);
                 return;
             }
@@ -127,7 +123,7 @@ public class SignChange implements Listener {
             }
 
             player.getInventory().addItem(itemStack);
-            SuperMessageHelper.sendSuccessMessage(player,"チェストショップから" + ItemUtils.name(itemStack) + "を" + itemStack.getAmount() + "こ購入しました");
+            SuperMessageHelper.sendSuccessMessage(player, "チェストショップから" + ItemUtils.name(itemStack) + "を" + itemStack.getAmount() + "こ購入しました");
             event.setCancelled(true);
         } else {
             BlockData signBlockData = sign.getBlockData();
@@ -156,7 +152,7 @@ public class SignChange implements Listener {
                 try {
                     itemStack2 = ItemStack.of(Objects.requireNonNull(Material.getMaterial(ItemText.toUpperCase())), amount);
                 } catch (IllegalArgumentException | NullPointerException e) {
-                    SuperMessageHelper.sendErrorMessage(player,"アイテム名から調べたけどアイテムが見つからないよ\n/itemを使うか\n看板の4行目を?にして売りたいアイテムをメインハンドにもってクリックしてね");
+                    SuperMessageHelper.sendErrorMessage(player, "アイテム名から調べたけどアイテムが見つからないよ\n/itemを使うか\n看板の4行目を?にして売りたいアイテムをメインハンドにもってクリックしてね");
                     event.setCancelled(true);
                     return;
                 }
@@ -172,13 +168,12 @@ public class SignChange implements Listener {
             signLine.line(2, Component.text("個数:" + amount));
             signLine.line(3, Component.text(ItemUtils.name(itemStack2)));
 
-            itemStack2.setItemMeta(null);
-
-            UniverseCoreV2API.getInstance().getDatabaseManager().getChestShopRepository().createChestShop(player,itemStack2 , (long) price, sign.getBlock(), mainChest);
+            UniverseCoreV2API.getInstance().getDatabaseManager().getChestShopRepository().createChestShop(player, itemStack2, (long) price, sign.getBlock(), mainChest);
             ContainerProtectAPI.getInstance().addContainerProtect(player, mainChest.getLocation());
-            SuperMessageHelper.sendSuccessMessage(player,"チェストショップを作成しました");
+            SuperMessageHelper.sendSuccessMessage(player, "チェストショップを作成しました");
             sign.update(true, false);
             event.setCancelled(true);
         }
+
     }
 }

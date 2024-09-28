@@ -10,22 +10,18 @@ import java.util.Objects;
 
 public class ItemUtils {
     public static ItemStack deserialize(String json) {
-        Gson gson = new Gson();
         if (json == null || json.isEmpty()) {
             throw new IllegalArgumentException("JSON文字列がnullまたは空です");
         }
-
-        try {
-            Map<String, Object> itemMap = gson.fromJson(json, Map.class);
-            return ItemStack.deserialize(itemMap);
-        } catch (JsonSyntaxException e) {
-            throw new JsonSyntaxException("JSONの構文が無効です: " + e.getMessage());
-        }
+        Gson gson = new Gson();
+        Map<String, Object> itemMap = gson.fromJson(json, Map.class);
+        return ItemStack.deserialize(itemMap);
     }
+
     public static String name(ItemStack item) {
-        if (item.getItemMeta().hasDisplayName()){
+        if (item.getItemMeta().hasDisplayName()) {
             return Objects.requireNonNull(item.getItemMeta().displayName()).toString();
-        }else{
+        } else {
             return item.getType().name().replace("_", " ").toLowerCase();
         }
     }
