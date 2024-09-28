@@ -50,21 +50,8 @@ public class VisitMywarpAnvilMenu implements BaseMenu {
                     }
 
                     String playerName = stateSnapshot.getText();
-                    try {
-                        Player targetPlayer = Bukkit.getOfflinePlayer(playerName).getPlayer();
-                        if (targetPlayer == null) {
-                            throw new UserNotFoundException("プレイヤーが見つかりませんでした。");
-                        }
-                        List<Item> items = this.connector.getMywarpList(targetPlayer).stream()
-                                .map(mywarp -> new WarpMenuItem(connector, mywarp))
-                                .collect(Collectors.toList());
-                        VisitMywarpInventoryMenu visitMenu = new VisitMywarpInventoryMenu(this.connector, playerName);
-                        visitMenu.sendMenu(player);
-                    } catch (MywarpNotFoundException e) {
-                        return Arrays.asList(AnvilGUI.ResponseAction.updateTitle("ワープが見つかりませんでした。", true));
-                    }  catch (UserNotFoundException e) {
-                        return Arrays.asList(AnvilGUI.ResponseAction.updateTitle("プレイヤーが見つかりませんでした。", true));
-                    }
+                    VisitMywarpInventoryMenu visitMenu = new VisitMywarpInventoryMenu(this.connector, playerName);
+                    visitMenu.sendMenu(player);
                     return Arrays.asList(AnvilGUI.ResponseAction.close());
                 })
                 .text("プレイヤー名を入力して下さい")
