@@ -1,15 +1,16 @@
 package space.yurisi.universecorev2.subplugins.universeguns.event;
 
+import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Snowball;
-import org.bukkit.entity.Entity;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -31,6 +32,8 @@ public class GunEvent implements Listener {
     ArrayList<Player> isCooldown = new ArrayList<>();
     ArrayList<Player> isZoom = new ArrayList<>();
     public final HashMap<Entity, GunItem> projectileData = new HashMap<>();
+    private static final ThreadLocal<Boolean> isHandlingExplosion = ThreadLocal.withInitial(() -> false);
+
 
     private static Plugin plugin;
 
@@ -96,27 +99,56 @@ public class GunEvent implements Listener {
 
     @EventHandler
     public void onPlayerHit(EntityDamageByEntityEvent event) {
+        if (isHandlingExplosion.get()) {
+            return;
+        }
         if (event.getDamager() instanceof Snowball snowball) {
             if (!projectileData.containsKey(snowball)) {
                 return;
             }
             GunItem gun = projectileData.get(snowball);
             double damage = gun.getBaseDamage();
+            Location loc = snowball.getLocation();
 
             if(gun.getIsExplosive()){
                 float radius = gun.getExplosionRadius();
-                snowball.getWorld().createExplosion(snowball.getLocation(), radius, false, false, snowball);
+                isHandlingExplosion.set(true);
+                try {
+                    snowball.getWorld().createExplosion(loc, radius, false, false, snowball);
+                } finally {
+                    isHandlingExplosion.set(false);
+                }
             }
 
-            double neckHeight = 1.35;
+            double neckHeight = 1.5;
             double headShotTimes = 1.5;
-            if(snowball.getLocation().getY() > neckHeight){
+            if(loc.getY() > event.getEntity().getLocation().getY() + neckHeight){
                 damage *= headShotTimes;
             }
 
             event.setDamage(damage);
             projectileData.remove(snowball);
             // TODO: ヒットエフェクト
+        }
+    }
+
+    @EventHandler
+    public void onBlockHit(ProjectileHitEvent event) {
+        if (event.getEntity() instanceof Snowball snowball) {
+            if (!projectileData.containsKey(snowball)) {
+                return;
+            }
+            GunItem gun = projectileData.get(snowball);
+            if(gun.getIsExplosive()){
+                float radius = gun.getExplosionRadius();
+                Location loc = snowball.getLocation();
+                isHandlingExplosion.set(true);
+                try {
+                    snowball.getWorld().createExplosion(loc, radius, false, false, snowball);
+                } finally {
+                    isHandlingExplosion.set(false);
+                }
+            }
         }
     }
 
@@ -148,15 +180,36 @@ public class GunEvent implements Listener {
     @EventHandler
     public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
         ItemStack mainHandItem = event.getMainHandItem();
-        if (mainHandItem != null && mainHandItem.hasItemMeta()) {
+        if (mainHandItem.hasItemMeta()) {
             String handItemID = getGunID(mainHandItem);
 
             if (handItemID != null && ItemRegister.isGun(handItemID)) {
                 event.setCancelled(true);
-                event.getPlayer().sendMessage("オフハンドに武器を持つことはできません。");
+                Message.sendWarningMessage(event.getPlayer(), "[武器AI]", "オフハンドに武器を持つことはできません。");
             }
         }
     }
+
+//    @EventHandler
+//    public void onPlayerJump(PlayerMoveEvent event) {
+//        Player player = event.getPlayer();
+//        if (event.getFrom().getY() >= event.getTo().getY()) {
+//            return;
+//        }
+//        ItemStack itemInHand = player.getInventory().getItemInMainHand();
+//        if (!itemInHand.hasItemMeta()) {
+//            return;
+//        }
+//
+//        String handItemID = getGunID(itemInHand);
+//        if (handItemID != null && ItemRegister.isGun(handItemID)) {
+//            GunItem gun = ItemRegister.getItem(handItemID);
+//            if (!gun.getIsJumpEnabled()) {
+//                event.setCancelled(true);
+//                Message.sendWarningMessage(player, "[武器AI]", "この武器は重すぎてジャンプ出来ません。");
+//            }
+//        }
+//    }
 
     private String getGunID(ItemStack itemStack) {
         ItemMeta meta = itemStack.getItemMeta();

@@ -41,10 +41,8 @@ public class ShotEvent {
     }
 
     private void Knockback(Player player, GunItem gun, Vector direction) {
-        // 水平方向のベクトルを取得
-        Vector horizontalKnockback = direction.clone().setY(0).normalize().multiply(gun.getRecoil());
-        //　このベクトルと逆方向にノックバック
-        horizontalKnockback = horizontalKnockback.multiply(-1);
+        // 水平方向ベクトル
+        Vector horizontalKnockback = direction.clone().setY(0).normalize().multiply(-1);
         player.setVelocity(player.getVelocity().add(horizontalKnockback));
     }
 

@@ -54,9 +54,11 @@ public abstract class GunItem {
     // 弾速 4.0Dが限界
     private final double bulletSpeed;
 
+    private final boolean isJumpEnabled;
+
     private final ItemStack baseItem;
 
-    public GunItem(String id, String name, String type, int magazineSize, int burst, int reloadTime, float isZoomWalkSpeed, int baseDamage, boolean isExplosive, float explosionRadius, float weight, int fireRate, int recoil, double spread, int bulletNumber, double bulletSpeed, ItemStack baseItem) {
+    public GunItem(String id, String name, String type, int magazineSize, int burst, int reloadTime, float isZoomWalkSpeed, int baseDamage, boolean isExplosive, float explosionRadius, float weight, int fireRate, int recoil, double spread, int bulletNumber, double bulletSpeed, boolean isJumpEnabled, ItemStack baseItem) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -73,6 +75,7 @@ public abstract class GunItem {
         this.spread = spread;
         this.bulletNumber = bulletNumber;
         this.bulletSpeed = bulletSpeed;
+        this.isJumpEnabled = isJumpEnabled;
         this.baseItem = baseItem;
     }
 
@@ -138,6 +141,10 @@ public abstract class GunItem {
 
     public double getBulletSpeed() {
         return bulletSpeed;
+    }
+
+    public boolean getIsJumpEnabled() {
+        return isJumpEnabled;
     }
 
     public ItemStack getBaseItem() {

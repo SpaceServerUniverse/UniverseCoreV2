@@ -23,9 +23,10 @@ public class R4C extends GunItem {
                 0.18F,
                 3,
                 0,
-                0.2D,
+                0.25D,
                 1,
                 3.5D,
+                true,
                 ItemStack.of(Material.DIAMOND_HOE)
         );
     }
