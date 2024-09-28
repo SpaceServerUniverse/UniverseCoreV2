@@ -21,9 +21,9 @@ public class tpSubCommand implements MywarpSubCommand {
                 return true;
             }
             try {
-                Mywarp mywarp = connector.getMywarpFromName(player, args[0]);
+                Mywarp mywarp = connector.getMywarpFromName(player, args[1]);
                 connector.teleportMywarp(player, mywarp);
-                player.sendMessage(MessageHelper.getSuccessMessage("§6" + args[0] + " §2にワープしました。"));
+                player.sendMessage(MessageHelper.getSuccessMessage("§6" + args[1] + " §2にワープしました。"));
             } catch (UserNotFoundException e) {
                 player.sendMessage(MessageHelper.getErrorMessage("ユーザーデータが存在しないようです。管理者に報告してください。 コード-MWT1"));
             } catch (MywarpNotFoundException e) {

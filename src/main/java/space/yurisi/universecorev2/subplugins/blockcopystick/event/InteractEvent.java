@@ -32,6 +32,11 @@ public class InteractEvent implements Listener {
         NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
         ItemStack handItem = player.getInventory().getItemInMainHand();
         ItemMeta meta = handItem.getItemMeta();
+
+        if(meta == null){
+            return;
+        }
+
         PersistentDataContainer container = meta.getPersistentDataContainer();
 
         if(container.has(itemKey, PersistentDataType.STRING) && Objects.equals(container.get(itemKey, PersistentDataType.STRING), "block_copy_stick")){

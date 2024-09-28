@@ -5,6 +5,7 @@ import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.subplugins.blockcopystick.BlockCopyStick;
 import space.yurisi.universecorev2.subplugins.changemessages.ChangeMessages;
 import space.yurisi.universecorev2.subplugins.customname.CustomName;
+import space.yurisi.universecorev2.subplugins.evolutionitem.EvolutionItem;
 import space.yurisi.universecorev2.subplugins.gacha.Gacha;
 import space.yurisi.universecorev2.subplugins.damagemanager.DamageManager;
 import space.yurisi.universecorev2.subplugins.itemhat.ItemHat;
@@ -58,11 +59,12 @@ public class SubPluginInitializer {
         this.subPlugins.add(new UniverseUtilCommand());
         this.subPlugins.add(new ItemHat());
         this.subPlugins.add(new CustomName());
-        //this.subPlugins.add(new ContainerProtect());
+        this.subPlugins.add(new ContainerProtect());
         this.subPlugins.add(new PlayerHead());
         this.subPlugins.add(new FreeMarket());
         this.subPlugins.add(new Gacha());
         this.subPlugins.add(new BlockCopyStick());
+        this.subPlugins.add(new EvolutionItem());
         //this.subPlugins.add(new DamageManager());
         this.subPlugins.add(new UniverseGuns());
     }
