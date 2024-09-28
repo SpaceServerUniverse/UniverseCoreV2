@@ -54,7 +54,7 @@ public class SignChange implements Listener {
         ChestShop chestShop = null;
         try {
             chestShop = chestShopRepository.getChestShopBySignLocation(location);
-        } catch (ChestShopNotFoundException e) {
+        } catch (ChestShopNotFoundException ignored) {
             //NOOP
         }
         if (chestShop != null) {
