@@ -48,7 +48,7 @@ public class SubPluginInitializer {
         this.subPlugins.add(new UniverseEconomy());
         this.subPlugins.add(new ChangeMessages());
         this.subPlugins.add(new LevelAward());
-        //this.subPlugins.add(new UniverseLand());
+        this.subPlugins.add(new UniverseLand());
         this.subPlugins.add(new UniverseDiscord());
         this.subPlugins.add(new Mywarp());
         this.subPlugins.add(new RankCounter());
@@ -63,7 +63,7 @@ public class SubPluginInitializer {
         this.subPlugins.add(new PlayerHead());
         this.subPlugins.add(new FreeMarket());
         this.subPlugins.add(new Gacha());
-        //this.subPlugins.add(new BlockCopyStick());
+        this.subPlugins.add(new BlockCopyStick());
         this.subPlugins.add(new RepairCream());
         this.subPlugins.add(new BlockCopyStick());
         this.subPlugins.add(new EvolutionItem());
