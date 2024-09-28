@@ -1,4 +1,4 @@
-package space.yurisi.universecorev2.subplugins.chestshop.utils;
+package space.yurisi.universecorev2.utils;
 
 
 public class NumberUtils {
