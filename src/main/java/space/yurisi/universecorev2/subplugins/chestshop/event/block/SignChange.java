@@ -83,19 +83,9 @@ public class SignChange implements Listener {
                 event.setCancelled(true);
                 return;
             }
-
-            Inventory chestInventory = chest.getBlockInventory();
-            boolean doItemRemove = false;
+            boolean doItemRemove;
             int remaining = itemStack.getAmount();
-            for (ItemStack chestItemSlot : chestInventory.getContents()) {
-                if (chestItemSlot != null && chestItemSlot.getType() == itemStack.getType()) {
-                    if (chestItemSlot.getAmount() >= remaining) {
-                        chestItemSlot.setAmount(chestItemSlot.getAmount() - remaining);
-                        doItemRemove = true;
-                        break;
-                    }
-                }
-            }
+            doItemRemove = InventoryUtils.RemoveItemFormChest(chest, itemStack, remaining);
 
             Chest chestBlockData = (Chest) chest.getBlockData();
             if (!doItemRemove) {
@@ -104,16 +94,7 @@ public class SignChange implements Listener {
                     if (face != null) {
                         Block neighborBlock = chestBlock.getRelative(face);
                         if (neighborBlock.getState() instanceof org.bukkit.block.Chest) {
-                            Inventory chestInventory2 = ((org.bukkit.block.Chest) neighborBlock.getState()).getBlockInventory();
-                            for (ItemStack chestItemSlot : chestInventory2.getContents()) {
-                                if (chestItemSlot != null && chestItemSlot.getType() == itemStack.getType()) {
-                                    if (chestItemSlot.getAmount() >= remaining) {
-                                        chestItemSlot.setAmount(chestItemSlot.getAmount() - remaining);
-                                        doItemRemove = true;
-                                        break;
-                                    }
-                                }
-                            }
+                            doItemRemove = InventoryUtils.RemoveItemFormChest((org.bukkit.block.Chest) neighborBlock, itemStack, remaining);
                         }
                     }
                 }
