@@ -33,6 +33,10 @@ public class PrepareAnvil implements Listener {
             return;
         }
 
+        if(firstItem != null && firstItem.getType() == Material.NAME_TAG){
+            return;
+        }
+
         if (firstItem == null && secondItem != null) {
             if (Weapon.isWeapon(secondItem.getType()) || Armor.isArmor(secondItem.getType())) {
                 event.setResult(null);

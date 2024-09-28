@@ -17,7 +17,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import space.yurisi.universecorev2.item.UniverseItem;
+import space.yurisi.universecorev2.subplugins.fishingsystem.Fish;
+import space.yurisi.universecorev2.subplugins.fishingsystem.constants.FishFeed;
+import space.yurisi.universecorev2.subplugins.fishingsystem.constants.FishingRarity;
+import space.yurisi.universecorev2.subplugins.fishingsystem.fishlist.EarthFishList;
+
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class FishEvent implements Listener {
 
@@ -25,7 +32,6 @@ public class FishEvent implements Listener {
     public void FishEvent(PlayerFishEvent event){
 
         Player player = event.getPlayer();
-        FishHook hook = event.getHook();
         ItemStack fishitem = new ItemStack(Material.COD);
         ItemMeta fishmeta = fishitem.getItemMeta();
         fishmeta.setDisplayName("§eたらたら");
@@ -41,7 +47,6 @@ public class FishEvent implements Listener {
             int num = rand.nextInt(500);
             int iur = getRareFishingHook(player)[0];
             int isr = getRareFishingHook(player)[1];
-            int ir = getRareFishingHook(player)[2];
             int ur = getRareFishingHook(player)[3];
             int sr = getRareFishingHook(player)[4];
             int r = getRareFishingHook(player)[5];
@@ -61,42 +66,6 @@ public class FishEvent implements Listener {
             }else if(num <= isr){
                 caught.setItemStack(UniverseItem.getItem("repair_cream").getItem());
                 player.sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("[釣りAI]§aねばねばの§c§l修復クリーム§r§aが釣れた！"));
-            }else if(num <= ir){
-                int num_record = rand.nextInt(16);
-                if(num_record == 0){
-                    item.setType(Material.MUSIC_DISC_13);
-                }else if(num_record == 1){
-                    item.setType(Material.MUSIC_DISC_CAT);
-                }else if(num_record == 2){
-                    item.setType(Material.MUSIC_DISC_BLOCKS);
-                }else if(num_record == 3){
-                    item.setType(Material.MUSIC_DISC_CHIRP);
-                }else if(num_record == 4){
-                    item.setType(Material.MUSIC_DISC_FAR);
-                }else if(num_record == 5){
-                    item.setType(Material.MUSIC_DISC_MALL);
-                }else if(num_record == 6){
-                    item.setType(Material.MUSIC_DISC_MELLOHI);
-                }else if(num_record == 7){
-                    item.setType(Material.MUSIC_DISC_STAL);
-                }else if(num_record == 8){
-                    item.setType(Material.MUSIC_DISC_STRAD);
-                }else if(num_record == 9){
-                    item.setType(Material.MUSIC_DISC_WARD);
-                }else if(num_record == 10){
-                    item.setType(Material.MUSIC_DISC_11);
-                }else if(num_record == 11){
-                    item.setType(Material.MUSIC_DISC_WAIT);
-                }else if(num_record == 12){
-                    item.setType(Material.MUSIC_DISC_PIGSTEP);
-                }else if(num_record == 13){
-                    item.setType(Material.MUSIC_DISC_OTHERSIDE);
-                }else if(num_record == 14){
-                    item.setType(Material.MUSIC_DISC_5);
-                }else if(num_record == 15){
-                    item.setType(Material.MUSIC_DISC_RELIC);
-                }
-                player.sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("[釣りAI]§aん？これは...§c§lレコード§r§aが釣れた！"));
             }else{
                 num = rand.nextInt(101) + 1;
                 int size = 0;
@@ -104,79 +73,15 @@ public class FishEvent implements Listener {
 
                 switch(player.getLocation().getWorld().getName()){
                     case "earth":
+                        List<Fish> fishes = new EarthFishList().getFishes();
+
                         if(num <= ur){
-                            switch(rand.nextInt(5)){
-                                case 0:
-                                    item.setType(clown);
-                                    size = rand.nextInt(151) + 100;
-                                    meta.setDisplayName("§eマグロ §f" + size + "cm");
-                                    name = "マグロ";
-                                    break;
-                                case 1:
-                                    item.setType(clown);
-                                    size = rand.nextInt(301) + 300;
-                                    meta.setDisplayName("§eホオジロザメ §f" + size + "cm");
-                                    name = "ホオジロザメ";
-                                    break;
-                                case 2:
-                                    item.setType(clown);
-                                    size = rand.nextInt(81) + 280;
-                                    meta.setDisplayName("§eカジキ §f" + size + "cm");
-                                    name = "カジキ";
-                                    break;
-                                case 3:
-                                    item.setType(clown);
-                                    size = rand.nextInt(231) + 750;
-                                    meta.setDisplayName("§eシャチ §f" + size + "cm");
-                                    name = "シャチ";
-                                    break;
-                                case 4:
-                                    switch(getPlayerFishFeed(player)){
-                                        case 0:
-                                            item.setType(clown);
-                                            size = rand.nextInt(81) + 280;
-                                            meta.setDisplayName("§eカジキ §f" + size + "cm");
-                                            name = "カジキ";
-                                            break;
-                                        case 1:
-                                            item.setType(clown);
-                                            size = rand.nextInt(26) + 15;
-                                            meta.setDisplayName("§eドリアスピス §f" + size + "cm");
-                                            name = "ドリアスピス";
-                                            break;
-                                        case 2:
-                                            item.setType(clown);
-                                            size = rand.nextInt(301) + 300;
-                                            meta.setDisplayName("§eエデスタス §f" + size + "cm");
-                                            name = "エデスタス";
-                                            break;
-                                        case 3:
-                                            item.setType(clown);
-                                            size = rand.nextInt(101) + 250;
-                                            meta.setDisplayName("§eヘリコプリオン §f" + size + "cm");
-                                            name = "ヘリコプリオン";
-                                            break;
-                                        case 4:
-                                            item.setType(clown);
-                                            size = rand.nextInt(1301) + 1200;
-                                            meta.setDisplayName("§eリオプレウロドン §f" + size + "cm");
-                                            name = "リオプレウロドン";
-                                            break;
-                                        case 5:
-                                            item.setType(clown);
-                                            size = rand.nextInt(1001) + 10000;
-                                            meta.setDisplayName("§eニューネッシー §f" + size + "cm");
-                                            name = "ニューネッシー";
-                                            break;
-                                        case 6:
-                                            item.setType(clown);
-                                            size = rand.nextInt(14101) + 900;
-                                            meta.setDisplayName("§eキャディ §f" + size + "cm");
-                                            name = "キャディ";
-                                            break;
-                                    }
-                            }
-                            item.setItemMeta(meta);
+                            List<Fish> ultraRareFishes = fishes.stream()
+                                    .filter(fish -> fish.rarity() == FishingRarity.UltraRare)
+                                    .filter(fish -> fish.feed() == FishFeed.NOTHING)
+                                    .collect(Collectors.toList());
+
+
                             Bukkit.broadcastMessage("§a" + player.getName() + "§eが地球で激レア海魚の§l§c" + name + "(" + size + "cm)§r§eを釣りあげた！！！！！");
                             player.sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("[釣りAI]§eこれは！！とんでもない海魚の§5§l" + name + "(" + size + "cm)§r§eが釣れた！"));
 
