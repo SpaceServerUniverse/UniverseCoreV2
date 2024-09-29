@@ -5,11 +5,14 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import space.yurisi.universecorev2.exception.CustomItemLevelNotFoundException;
 import space.yurisi.universecorev2.item.CustomItem;
+import space.yurisi.universecorev2.item.LevellingCustomItem;
 import space.yurisi.universecorev2.item.UniverseItem;
+import space.yurisi.universecorev2.item.ticket.GachaTicket;
 import space.yurisi.universecorev2.utils.Message;
 
 import java.util.ArrayList;
@@ -23,62 +26,124 @@ public class giveuCommand implements CommandExecutor, TabCompleter {
             return false;
         }
 
-        int level = 1;
+        String[] helpMessage = """
+            §6-- Give Universe Item Help --
+               §7/giveu add <ID> [レベル] [アイテム数] : 指定されたIDのアイテムをインベントリに追加します
+               §7/giveu list : 入手可能なアイテムのリストを表示します
+               §7/giveu ticket [枚数] : チケットを指定した枚数分インベントリに追加します
+               §7/giveu help : このヘルプを表示します
+            """.split("\n");
 
-        if(args.length < 1){
-            Message.sendErrorMessage(player,"[管理AI]", "/giveu id level");
-        }
-
-        if(args.length >= 2){
-            try {
-                level = Integer.parseInt(args[1]);
-            } catch (NumberFormatException ignored){
-            }
-        }
-
-        CustomItem item = UniverseItem.getItem(args[0]);
-        if(item == null){
-            Message.sendErrorMessage(player,"[管理AI]", "idが存在しませんでした。");
+        if(args.length < 1) {
+            sender.sendMessage(helpMessage);
             return false;
         }
 
-        if(item.isLevelingItem()){
-            try {
-                ItemStack itemStack = item.getItemFromLevel(level);
-                player.getInventory().addItem(itemStack);
-            } catch (CustomItemLevelNotFoundException e) {
-                Message.sendErrorMessage(player, "[管理AI]", "レベルが存在しませんでした。");
-                return false;
-            }
-        } else {
-            ItemStack itemStack = item.getItem();
-            player.getInventory().addItem(itemStack);
+        int level = 1;
+
+        switch (args[0]) {
+            case "add":
+                if(args.length >= 3){
+                    try {
+                        level = Integer.parseInt(args[2]);
+                    } catch (NumberFormatException e){
+                        Message.sendErrorMessage(player, "[管理AI]", "レベルは数値で指定してください。");
+                        return false;
+                    }
+                }
+
+                CustomItem item = UniverseItem.getItem(args[1]);
+                if(item == null){
+                    Message.sendErrorMessage(player,"[管理AI]", "指定されたIDにはアイテムが存在しません。\nヒント: /giveu list でアイテムのリストを確認できます。");
+                    return false;
+                }
+
+                Inventory inv = player.getInventory();
+
+                if (inv.firstEmpty() == -1) {
+                    Message.sendErrorMessage(player, "[管理AI]", "インベントリに空きがありません。");
+                    return false;
+                }
+
+                if(item instanceof LevellingCustomItem levellingItem){
+                    try {
+                        ItemStack itemStack = levellingItem.getItem(level);
+                        inv.addItem(itemStack);
+                    } catch (CustomItemLevelNotFoundException e) {
+                        Message.sendErrorMessage(player, "[管理AI]", "指定されたアイテムにレベルは存在しません。");
+                        return false;
+                    }
+                } else {
+                    ItemStack itemStack = item.getItem();
+                    player.getInventory().addItem(itemStack);
+                }
+
+                Message.sendSuccessMessage(player, "[管理AI]", item.getName() + "を与えました！");
+                break;
+            case "list":
+                StringBuilder itemList = new StringBuilder("§6-- Universe Item List --\n");
+
+                for (String itemId : UniverseItem.getItemIds()) {
+                    itemList.append("§7").append(itemId).append("\n");
+                }
+
+                player.sendMessage(itemList.toString());
+                break;
+            case "ticket":
+                int amount;
+
+                if (args.length < 2) {
+                    Message.sendErrorMessage(player, "[管理AI]", "枚数を指定してください。");
+                    return false;
+                }
+
+                try {
+                    amount = Integer.parseInt(args[1]);
+                } catch (NumberFormatException e) {
+                    Message.sendErrorMessage(player, "[管理AI]", "枚数は数値で指定してください。");
+                    return false;
+                }
+
+                if (player.getInventory().firstEmpty() == -amount) {
+                    Message.sendErrorMessage(player, "[管理AI]", "インベントリに空きがありません。");
+                    return false;
+                }
+
+                ItemStack ticket = UniverseItem.getItem(GachaTicket.id).getItem();
+                for (int i = 1; i <= amount; i++) {
+                    player.getInventory().addItem(ticket);
+                }
+
+                Message.sendSuccessMessage(player, "[管理AI]", "チケットを" + amount + "枚与えました！");
+                break;
+            default:
+                player.sendMessage(helpMessage);
+                break;
         }
-
-
-
-        Message.sendSuccessMessage(player, "[管理AI]", item.getName() + "を与えました！");
 
         return true;
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        if (!command.getName().equalsIgnoreCase("giveu") || args.length != 1) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, Command command, @NotNull String alias, String[] args) {
+        if (!command.getName().equalsIgnoreCase("giveu")) {
             return null;
         }
 
-        String input = args[0];
+        List<String> commands = List.of("add", "list", "ticket", "help");
         List<String> options = List.of(UniverseItem.getItemIds());
 
-        if (input.isEmpty()) {
-            return options;
+        if (args.length == 1) {
+            return commands;
         }
 
-        // 入力に基づいて候補を絞り込む
+        if (args.length == 2 && !args[0].equalsIgnoreCase("add")) {
+            return null;
+        }
+
         List<String> matchedOptions = new ArrayList<>();
         for (String option : options) {
-            if (option.startsWith(input)) {
+            if (option.startsWith(args[1])) {
                 matchedOptions.add(option);
             }
         }

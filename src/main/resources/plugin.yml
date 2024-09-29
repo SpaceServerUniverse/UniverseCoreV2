@@ -1,5 +1,5 @@
 name: UniverseCoreV2
-version: '${project.version}'
+version: '1.0'
 main: space.yurisi.universecorev2.UniverseCoreV2
 api-version: '1.21'
 commands:
@@ -89,6 +89,27 @@ commands:
     description: コンテナ等を保護します
   unlock:
     description: コンテナ等の保護を解除します
+
+  #PlayerHead
+  head:
+    description: プレイヤーヘッドを購入します(WIP)
+
+  #gacha
+  gacha:
+    description: ガチャを引きます！
+
+  #FreeMarket
+  market:
+    description: フリーマーケットの画面を開きます
+    usage: /market
+
+  #RepairCream
+  repair:
+    description: アイテムを修復します
+
+  #ChestShop
+  item:
+    description: メインハンドに持ったアイテムの名前を表示します
 
 permissions:
   # UniverseCoreV2

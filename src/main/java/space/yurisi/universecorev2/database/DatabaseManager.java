@@ -15,24 +15,18 @@ public class DatabaseManager {
     private final AutoTppSettingRepository autoTPPSettingRepository;
     private final PlayerLevelRepository playerLevelRepository;
     private final PlayerNormalLevelRepository playerNormalLevelRepository;
+    private final ChestShopRepository chestShopRepository;
 
     private final PositionRepository positionRepository;
-
     private final ContainerProtectRepository containerProtectRepository;
-
     private final UserPositionRepository userPositionRepository;
-
     private final CountRepository countRepository;
-
     private final KillDeathCountRepository killDeathCountRepository;
-
     private final LifeCountRepository lifeCountRepository;
-
     private final OreCountRepository oreCountRepository;
-
     private final PlayerCountRepository playerCountRepository;
-
     private final CustomNameRepository customNameRepository;
+    private final MarketRepository marketRepository;
 
     public DatabaseManager(SessionFactory sessionFactory) {
         this.userRepository = new UserRepository(sessionFactory);
@@ -53,6 +47,8 @@ public class DatabaseManager {
         this.oreCountRepository = new OreCountRepository(sessionFactory);
         this.playerCountRepository = new PlayerCountRepository(sessionFactory);
         this.customNameRepository = new CustomNameRepository(sessionFactory);
+        this.marketRepository = new MarketRepository(sessionFactory);
+        this.chestShopRepository = new ChestShopRepository(sessionFactory);
     }
 
     /**
@@ -209,11 +205,27 @@ public class DatabaseManager {
     }
 
     /**
+     * マーケットリポジトリ取得
+     *
+     * @return MarketRepository
+     */
+    public MarketRepository getMarketRepository() { return marketRepository; }
+
+    /**
      * 称号リポジトリを取得
      *
      * @return PlayerNormalLevelRepository
      */
     public CustomNameRepository getCustomNameRepository(){
         return customNameRepository;
+    }
+
+    /**
+     * チェストショップリポジトリーを取得
+     *
+     * @return
+     */
+    public ChestShopRepository getChestShopRepository() {
+        return chestShopRepository;
     }
 }

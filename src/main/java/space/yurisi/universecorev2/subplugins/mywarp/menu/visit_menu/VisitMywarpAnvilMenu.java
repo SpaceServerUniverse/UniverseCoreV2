@@ -1,6 +1,7 @@
 package space.yurisi.universecorev2.subplugins.mywarp.menu.visit_menu;
 
 import net.wesjd.anvilgui.AnvilGUI;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.menu.BaseMenu;
@@ -49,21 +50,8 @@ public class VisitMywarpAnvilMenu implements BaseMenu {
                     }
 
                     String playerName = stateSnapshot.getText();
-                    try {
-                        Player targetPlayer = UniverseCoreV2.getInstance().getServer().getPlayer(playerName);
-                        if (targetPlayer == null) {
-                            throw new UserNotFoundException("プレイヤーが見つかりませんでした。");
-                        }
-                        List<Item> items = this.connector.getMywarpList(targetPlayer).stream()
-                                .map(mywarp -> new WarpMenuItem(connector, mywarp))
-                                .collect(Collectors.toList());
-                        VisitMywarpInventoryMenu visitMenu = new VisitMywarpInventoryMenu(this.connector, playerName);
-                        visitMenu.sendMenu(player);
-                    } catch (MywarpNotFoundException e) {
-                        return Arrays.asList(AnvilGUI.ResponseAction.updateTitle("ワープが見つかりませんでした。", true));
-                    }  catch (UserNotFoundException e) {
-                        return Arrays.asList(AnvilGUI.ResponseAction.updateTitle("プレイヤーが見つかりませんでした。", true));
-                    }
+                    VisitMywarpInventoryMenu visitMenu = new VisitMywarpInventoryMenu(this.connector, playerName);
+                    visitMenu.sendMenu(player);
                     return Arrays.asList(AnvilGUI.ResponseAction.close());
                 })
                 .text("プレイヤー名を入力して下さい")
