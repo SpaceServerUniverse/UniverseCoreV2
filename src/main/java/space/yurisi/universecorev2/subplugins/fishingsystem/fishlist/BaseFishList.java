@@ -2,6 +2,7 @@ package space.yurisi.universecorev2.subplugins.fishingsystem.fishlist;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -63,15 +64,18 @@ public abstract class BaseFishList {
         ItemStack item;
         if (num < pickaxe) {
             item = UniverseItem.getItem(FishingPickaxe.id).getItem();
+            player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_TWINKLE_FAR, 1, 1);
             Bukkit.broadcast(Component.text("§a" + player.getName() + "§eが謎のピッケルを釣り上げた！"));
             player.sendActionBar(Component.text("[釣りAI]§a輝いてる§c§l謎のピッケル§r§aが釣れた！"));
         } else if (num < cream) {
             item = UniverseItem.getItem(RepairCream.id).getItem();
+            player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_TWINKLE_FAR, 1, 1);
             Bukkit.broadcast(Component.text("§a" + player.getName() + "§eが修復クリームを釣り上げた！"));
             player.sendActionBar(Component.text("[釣りAI]§aねばねばの§c§l修復クリーム§r§aが釣れた！"));
         } else if (num < ur) {
             Fish fish = getFishByRarityAndFeed(FishingRarity.UltraRare, feed);
             item = fish.getBaseItem(worldName);
+            player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_TWINKLE_FAR, 1, 1);
             Bukkit.broadcast(Component.text("§a" + player.getName() + "§eが地球で激レア海魚の§l§c" + fish.getName() + "(" + fish.getSize() + "cm)§r§eを釣りあげた！！！！！"));
             player.sendActionBar(Component.text("[釣りAI]§eこれは！！とんでもない海魚の§5§l" + fish.getName() + "(" + fish.getSize() + "cm)§r§eが釣れた！"));
         } else if (num < sr) {
