@@ -76,7 +76,7 @@ public class FishEvent implements Listener {
         if (feed == FishFeed.NOTHING) return true;
 
         if (item.getAmount() <= 0) {
-            Bukkit.broadcastMessage("§a餌(" + FishFeed.getFishFeedJapanese(item.getType()) + ")が切れています。");
+            player.sendMessage(Component.text("§a餌(" + FishFeed.getFishFeedJapanese(item.getType()) + ")が切れています。"));
             return false;
         }
 
