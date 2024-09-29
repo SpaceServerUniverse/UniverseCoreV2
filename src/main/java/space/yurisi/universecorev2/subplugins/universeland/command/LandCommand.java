@@ -114,12 +114,12 @@ public class LandCommand implements CommandExecutor, TabCompleter {
 
             try {
                 database.getLandRepository().deleteLand(database.getLandRepository().getLand(land.getId()));
-                economy.addMoney(player, land.getPrice(), "土地の売却");
+                economy.addMoney(player, land.getPrice() / 2, "土地の売却");
             } catch (LandNotFoundException | UserNotFoundException | MoneyNotFoundException | CanNotAddMoneyException |
                      ParameterException ignored) {
             }
 
-            player.sendMessage(Component.text("土地を [" + land.getPrice() + "star] で売却しました"));
+            player.sendMessage(Component.text("土地を [" + land.getPrice() / 2 + "star] で売却しました"));
         } else if (args[0].equals("invite")) {
             if (args.length == 1) {
                 Message.sendNormalMessage(player, "[土地管理AI]", "招待するプレイヤー名を指定してください");
