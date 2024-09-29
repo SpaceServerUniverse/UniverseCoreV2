@@ -20,12 +20,19 @@ import java.util.List;
 
 public class Fish {
     private String name;
-    private double min;
-    private double max;
+    private double min = 0;
+    private double max = 0;
     private double size = 0;
     private FishingRarity rarity;
     private FishFeed feed;
     private ItemStack baseItem;
+
+    public Fish(String name, FishingRarity rarity, FishFeed feed, ItemStack baseItem) {
+        this.name = name;
+        this.rarity = rarity;
+        this.feed = feed;
+        this.baseItem = baseItem;
+    }
 
     // コンストラクタ
     public Fish(String name, double min, double max, FishingRarity rarity, FishFeed feed, ItemStack baseItem) {
