@@ -2,7 +2,6 @@ package space.yurisi.universecorev2.subplugins.changemessages.event;
 
 import org.bukkit.Bukkit;
 import space.yurisi.universecorev2.subplugins.changemessages.ChangeMessages;
-import space.yurisi.universecorev2.subplugins.changemessages.event.entity.DamageByEntityEvent;
 import space.yurisi.universecorev2.subplugins.changemessages.event.player.DeathEvent;
 import space.yurisi.universecorev2.subplugins.changemessages.event.player.JoinEvent;
 import space.yurisi.universecorev2.subplugins.changemessages.event.player.QuitEvent;
@@ -24,6 +23,5 @@ public class EventManager {
         Bukkit.getPluginManager().registerEvents(new JoinEvent(this.main.getConfigClass()), core);
         Bukkit.getPluginManager().registerEvents(new QuitEvent(), core);
         Bukkit.getPluginManager().registerEvents(new DeathEvent(), core);
-        Bukkit.getPluginManager().registerEvents(new DamageByEntityEvent(), core);
     }
 }
