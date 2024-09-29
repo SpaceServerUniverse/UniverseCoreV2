@@ -1,6 +1,7 @@
 package space.yurisi.universecorev2.subplugins.universeguns.item.gun_item;
 
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 import space.yurisi.universecorev2.subplugins.universeguns.item.GunItem;
 
@@ -23,10 +24,13 @@ public class R4C extends GunItem {
                 0.18F,
                 3,
                 0,
-                0.25D,
+                0.20D,
                 1,
                 3.5D,
                 true,
+                Sound.BLOCK_PISTON_EXTEND,
+                2.0F,
+                1.8F,
                 ItemStack.of(Material.DIAMOND_HOE)
         );
     }
