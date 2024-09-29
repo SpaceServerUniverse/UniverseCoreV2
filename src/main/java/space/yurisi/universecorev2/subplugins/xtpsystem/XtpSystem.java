@@ -2,6 +2,7 @@ package space.yurisi.universecorev2.subplugins.xtpsystem;
 
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.subplugins.SubPlugin;
+import space.yurisi.universecorev2.subplugins.xtpsystem.file.Config;
 import space.yurisi.universecorev2.subplugins.xtpsystem.command.XtpCommand;
 
 public class XtpSystem implements SubPlugin {
@@ -9,7 +10,8 @@ public class XtpSystem implements SubPlugin {
 
     @Override
     public void onEnable(UniverseCoreV2 core) {
-        core.getCommand("xtp").setExecutor(new XtpCommand());
+        Config config = new Config(core);
+        core.getCommand("xtp").setExecutor(new XtpCommand(config));
     }
 
     @Override

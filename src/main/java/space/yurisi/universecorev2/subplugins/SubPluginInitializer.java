@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.subplugins.blockcopystick.BlockCopyStick;
 import space.yurisi.universecorev2.subplugins.changemessages.ChangeMessages;
+import space.yurisi.universecorev2.subplugins.chestshop.ChestShop;
 import space.yurisi.universecorev2.subplugins.customname.CustomName;
 import space.yurisi.universecorev2.subplugins.evolutionitem.EvolutionItem;
 import space.yurisi.universecorev2.subplugins.fishingsystem.FishingSystem;
@@ -27,7 +28,6 @@ import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomy;
 import space.yurisi.universecorev2.subplugins.universeland.UniverseLand;
 import space.yurisi.universecorev2.subplugins.tppsystem.TPPSystem;
 import space.yurisi.universecorev2.subplugins.xtpsystem.XtpSystem;
-import space.yurisi.universecorev2.subplugins.fishingsystem.FishingSystem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,11 +64,13 @@ public class SubPluginInitializer {
         this.subPlugins.add(new PlayerHead());
         this.subPlugins.add(new FreeMarket());
         this.subPlugins.add(new Gacha());
+        this.subPlugins.add(new BlockCopyStick());
         this.subPlugins.add(new RepairCream());
         this.subPlugins.add(new BlockCopyStick());
         this.subPlugins.add(new EvolutionItem());
         //this.subPlugins.add(new DamageManager());
         this.subPlugins.add(new FishingSystem());
+        this.subPlugins.add(new ChestShop());
     }
 
     public void onEnable(){

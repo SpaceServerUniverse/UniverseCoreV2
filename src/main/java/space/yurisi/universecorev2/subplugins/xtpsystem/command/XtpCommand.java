@@ -1,17 +1,25 @@
 package space.yurisi.universecorev2.subplugins.xtpsystem.command;
 
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.WorldBorder;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import space.yurisi.universecorev2.subplugins.xtpsystem.file.Config;
 import space.yurisi.universecorev2.utils.Message;
 
+
 public class XtpCommand implements CommandExecutor{
+
+    private Config config;
+
+    public XtpCommand(Config config){
+        this.config = config;
+    }
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -19,9 +27,7 @@ public class XtpCommand implements CommandExecutor{
             return false;
         }
 
-        /* TODO: 1, 配列が3こ以下か確認, 2, x y z → 小数点ある数(doubleに変換可能)かの確認, 3, ワールドの名前がサーバーに存在するか確認 */
-
-        if(args.length < 4) {
+        if (args.length < 4) {
             Message.sendNormalMessage(player, "[テレポートAI]", "/xtp <x> <y> <z> <ワールド名> : 指定された座標にテレポートします");
             return false;
         }
@@ -33,12 +39,25 @@ public class XtpCommand implements CommandExecutor{
 
             World world = Bukkit.getServer().getWorld(args[3]);
 
-            if(world == null){
+            if (world == null) {
                 Message.sendErrorMessage(player, "[テレポートAI]", "ワールド名が存在しません。");
                 return false;
             }
 
+            if(config.getDenyWorlds().contains(world.getName())){
+                Message.sendErrorMessage(player, "[テレポートAI]", "このワールドにはワープできません。");
+                return false;
+            }
+
+            WorldBorder border = world.getWorldBorder();
+
             Location location = new Location(world, x, y, z);
+
+            if (!border.isInside(location)) {
+                Message.sendErrorMessage(player, "[テレポートAI]", "指定された座標はボーダー外のためワープできません。");
+                return false;
+            }
+
             String xMessage = String.valueOf(location.getX());
             String yMessage = String.valueOf(location.getY());
             String zMessage = String.valueOf(location.getZ());
@@ -46,12 +65,12 @@ public class XtpCommand implements CommandExecutor{
 
             player.teleport(location);
             Message.sendSuccessMessage(player, "[テレポートAI]",
-                    " x:"+xMessage +
-                             " y:"+yMessage +
-                             " z:"+zMessage +
-                             " ワールド:"+worldName + "にテレポート成功しました！"
+                    " x:" + xMessage +
+                            " y:" + yMessage +
+                            " z:" + zMessage +
+                            " ワールド:" + worldName + "にテレポート成功しました！"
             );
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             Message.sendErrorMessage(player, "[テレポートAI]", "座標は数値で指定して下さい。");
             return false;
         }
