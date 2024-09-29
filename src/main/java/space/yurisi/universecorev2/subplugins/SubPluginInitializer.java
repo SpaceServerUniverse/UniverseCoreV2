@@ -7,6 +7,7 @@ import space.yurisi.universecorev2.subplugins.changemessages.ChangeMessages;
 import space.yurisi.universecorev2.subplugins.chestshop.ChestShop;
 import space.yurisi.universecorev2.subplugins.customname.CustomName;
 import space.yurisi.universecorev2.subplugins.evolutionitem.EvolutionItem;
+import space.yurisi.universecorev2.subplugins.fishingsystem.FishingSystem;
 import space.yurisi.universecorev2.subplugins.gacha.Gacha;
 import space.yurisi.universecorev2.subplugins.damagemanager.DamageManager;
 import space.yurisi.universecorev2.subplugins.itemhat.ItemHat;
@@ -68,6 +69,7 @@ public class SubPluginInitializer {
         this.subPlugins.add(new BlockCopyStick());
         this.subPlugins.add(new EvolutionItem());
         //this.subPlugins.add(new DamageManager());
+        this.subPlugins.add(new FishingSystem());
         this.subPlugins.add(new ChestShop());
     }
 
