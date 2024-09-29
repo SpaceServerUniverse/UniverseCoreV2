@@ -9,6 +9,8 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
+import space.yurisi.universecorev2.item.fishingrod.FishingRod;
+import space.yurisi.universecorev2.item.pickaxe.FishingPickaxe;
 import space.yurisi.universecorev2.item.repair_cream.RepairCream;
 import space.yurisi.universecorev2.item.solar_system.*;
 import space.yurisi.universecorev2.item.stick.BlockCopyStick;
@@ -36,6 +38,8 @@ public class UniverseItem {
         items.put(GachaTicket.id, new GachaTicket());
         items.put(RepairCream.id, new RepairCream());
         items.put(BlockCopyStick.id, new BlockCopyStick());
+        items.put(FishingRod.id, new FishingRod());
+        items.put(FishingPickaxe.id, new FishingPickaxe());
     }
 
     public static CustomItem getItem(String id){
@@ -53,12 +57,25 @@ public class UniverseItem {
         return container.has(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME));
     }
 
+    public static Boolean isUniverseItemFromId(ItemStack itemStack, String id){
+        ItemMeta meta = itemStack.getItemMeta();
+        if(meta == null) return false;
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        NamespacedKey key = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
+        if(!container.has(key)){
+            return false;
+        };
+        String universeItemName = container.get(key, PersistentDataType.STRING);
+        return Objects.equals(id, universeItemName);
+    }
+
     public static Boolean isLevelingItem(ItemStack itemStack){
         ItemMeta meta = itemStack.getItemMeta();
         if(meta == null) return false;
         PersistentDataContainer container = meta.getPersistentDataContainer();
         return container.has(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.LEVEL));
     }
+
 
     public static Boolean removeItem(Player player, String item_name){
         PlayerInventory inventory = player.getInventory();
