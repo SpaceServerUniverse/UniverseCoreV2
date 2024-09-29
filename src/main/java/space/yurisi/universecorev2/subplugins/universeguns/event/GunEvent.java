@@ -17,6 +17,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
@@ -24,6 +25,7 @@ import space.yurisi.universecorev2.subplugins.universeguns.item.GunItem;
 import space.yurisi.universecorev2.subplugins.universeguns.item.ItemRegister;
 import space.yurisi.universecorev2.utils.Message;
 
+import javax.xml.transform.Result;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -78,8 +80,26 @@ public class GunEvent implements Listener {
 
             gun.shoot();
 
-            ShotEvent shotEvent = new ShotEvent(player, gun, isZoom);
-            projectileData.put(shotEvent.getProjectile(), gun);
+            if(!gun.getType().equals("SR")) {
+                GunShot gunShot = new GunShot(player, gun, isZoom);
+                projectileData.put(gunShot.getProjectile(), gun);
+            } else {
+                SniperShot sniperShot = new SniperShot(player, gun);
+                RayTraceResult result = sniperShot.detectEntities(player);
+                if(result == null){
+                    return;
+                }
+                Entity entity = result.getHitEntity();
+                if (entity instanceof LivingEntity livingEntity) {
+                    double height = result.getHitPosition().getY();
+                    double damage = gun.getBaseDamage();
+                    if (isHeadShot(height, entity)) {
+                        damage *= 1.5D;
+                    }
+                    livingEntity.damage(damage, player);
+                }
+
+            }
 
             // クールダウン
             int tick = gun.getFireRate();
@@ -136,9 +156,8 @@ public class GunEvent implements Listener {
                 }
             }
 
-            double neckHeight = 1.5;
             double headShotTimes = 1.5;
-            if(loc.getY() > event.getEntity().getLocation().getY() + neckHeight){
+            if (isHeadShot(loc.getY(), event.getEntity())) {
                 damage *= headShotTimes;
             }
 
@@ -146,6 +165,11 @@ public class GunEvent implements Listener {
             projectileData.remove(snowball);
             // TODO: ヒットエフェクト
         }
+    }
+
+    private boolean isHeadShot(double height, Entity entity){
+        double neckHeight = 1.5;
+        return height > entity.getLocation().getY() + neckHeight;
     }
 
     @EventHandler
