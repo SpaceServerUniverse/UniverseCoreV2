@@ -36,6 +36,10 @@ public class FishEvent implements Listener {
             return;
         }
 
+        if(event.getHook().getHookedEntity() != null){
+            return;
+        }
+
         Item caught = (Item) event.getCaught();
         ItemStack item = caught.getItemStack();
         ItemMeta meta = item.getItemMeta();
