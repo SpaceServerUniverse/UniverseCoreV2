@@ -5,32 +5,32 @@ import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 import space.yurisi.universecorev2.subplugins.universeguns.item.GunItem;
 
-public class R4C extends GunItem {
+public class SMG11 extends GunItem {
 
-    public static final String id = "r4c";
+    public static final String id = "smg11";
 
-    public R4C() {
+    public SMG11() {
         super(
                 id,
-                "R4-C",
-                "AR",
-                30,
-                30,
-                2000,
-                0.05F,
-                4.0D,
+                "SMG-11",
+                "SMG",
+                16,
+                16,
+                800,
+                0.17F,
+                1.5,
                 false,
                 0.0F,
-                0.17F,
-                3,
+                0.19F,
                 0,
-                0.20D,
+                0,
+                0.0D,
                 1,
-                3.5D,
+                3.0D,
                 true,
-                Sound.BLOCK_PISTON_EXTEND,
-                2.0F,
-                1.8F,
+                Sound.ENTITY_FIREWORK_ROCKET_BLAST,
+                5.0F,
+                0.5F,
                 ItemStack.of(Material.DIAMOND_HOE)
         );
     }

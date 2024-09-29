@@ -28,7 +28,7 @@ public class RPG extends GunItem {
                 1,
                 2.0D,
                 false,
-                Sound.BLOCK_BARREL_OPEN,
+                Sound.ENTITY_FIREWORK_ROCKET_LAUNCH,
                 10.0F,
                 0.5F,
                 ItemStack.of(Material.DIAMOND_HOE)

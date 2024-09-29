@@ -21,7 +21,7 @@ public class GunShot {
         inventory.setItemInMainHand(gun.getItem());
         Vector direction = player.getEyeLocation().getDirection().normalize();
 
-        if((gun.getType().equals("SG") || gun.getType().equals("SR") || gun.getType().equals("EX")) && !player.isSneaking()){
+        if((gun.getType().equals("SG") || gun.getType().equals("EX")) && !player.isSneaking()){
             Knockback(player, direction);
         }
         // ADSしていない場合は精度を下げる

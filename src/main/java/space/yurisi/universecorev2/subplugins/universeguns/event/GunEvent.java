@@ -1,5 +1,6 @@
 package space.yurisi.universecorev2.subplugins.universeguns.event;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
@@ -47,7 +48,6 @@ public class GunEvent implements Listener {
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        // 歩行速度をデフォルトに戻す
         Action action = event.getAction();
         ItemStack itemInHand = player.getInventory().getItemInMainHand();
         if (!itemInHand.hasItemMeta()) {
@@ -95,6 +95,7 @@ public class GunEvent implements Listener {
                     double damage = gun.getBaseDamage();
                     if (isHeadShot(height, entity)) {
                         damage *= 1.5D;
+                        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 2.0F, 1.0F);
                     }
                     livingEntity.damage(damage, player);
                 }
@@ -302,23 +303,18 @@ public class GunEvent implements Listener {
             return;
         }
         isReloading.add(player);
-        if(gun.getCurrentAmmo() == gun.getMagazineSize()){
-            return;
-        }
         gun.startReload();
         if(isZoom.contains(player)){
             player.setWalkSpeed(gun.getWeight());
             isZoom.remove(player);
         }
-        Message.sendWarningMessage(player, "[武器AI]", "リロード中...");
         player.getWorld().playSound(player.getLocation(), Sound.BLOCK_IRON_DOOR_OPEN, 1.0F, 1.0F);
         new BukkitRunnable() {
             @Override
             public void run() {
                 if (!player.isOnline() || !isReloading.contains(player)) {
-                    Message.sendWarningMessage(player, "[武器AI]", "リロードがキャンセルされました。");
                     gun.cancelReload();
-                    gun.getItem();
+                    cancel();
                     return;
                 }
                 gun.finishReload();
@@ -362,6 +358,7 @@ public class GunEvent implements Listener {
         }
         GunItem gun = ItemRegister.getItem(itemID);
         if(gun.getCurrentAmmo() == gun.getMagazineSize()){
+            player.setWalkSpeed(0.2f);
             return;
         }
         event.setCancelled(true);

@@ -28,9 +28,9 @@ public class L96 extends GunItem {
                 1,
                 2.0D,
                 false,
-                Sound.BLOCK_PISTON_EXTEND,
+                Sound.UI_STONECUTTER_TAKE_RESULT,
                 10.0F,
-                2.0F,
+                0.8F,
                 ItemStack.of(Material.DIAMOND_HOE)
         );
     }

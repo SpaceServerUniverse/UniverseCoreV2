@@ -34,7 +34,7 @@ public abstract class GunItem {
     // マイナスにすると動けなくなる -0.15が一番拡大するらしい
     private final float isZoomWalkSpeed;
 
-    private final int baseDamage;
+    private final double baseDamage;
 
     private final boolean isExplosive;
 
@@ -65,7 +65,7 @@ public abstract class GunItem {
 
     private final ItemStack baseItem;
 
-    public GunItem(String id, String name, String type, int magazineSize, int burst, int reloadTime, float isZoomWalkSpeed, int baseDamage, boolean isExplosive, float explosionRadius, float weight, int fireRate, int recoil, double spread, int bulletNumber, double bulletSpeed, boolean isJumpEnabled, Sound shotSound, float volumeSound, float pitchSound, ItemStack baseItem) {
+    public GunItem(String id, String name, String type, int magazineSize, int burst, int reloadTime, float isZoomWalkSpeed, double baseDamage, boolean isExplosive, float explosionRadius, float weight, int fireRate, int recoil, double spread, int bulletNumber, double bulletSpeed, boolean isJumpEnabled, Sound shotSound, float volumeSound, float pitchSound, ItemStack baseItem) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -147,7 +147,6 @@ public abstract class GunItem {
 
     public void cancelReload() {
         this.isReloading = false;
-
     }
 
     public long getReloadRemainingTime() {
@@ -167,7 +166,7 @@ public abstract class GunItem {
         return isZoomWalkSpeed;
     }
 
-    public int getBaseDamage() {
+    public double getBaseDamage() {
         return baseDamage;
     }
 

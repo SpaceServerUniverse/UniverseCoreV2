@@ -37,11 +37,10 @@ public class giveGunCommand implements CommandExecutor {
             case "l96", "L96":
                 gunId = "l96";
                 break;
-            case "AK48":
-                // Give AK47
+            case "smg11", "SMG11":
+                gunId = "smg11";
                 break;
             case "RPG","rpg":
-                // Give RPG7
                 gunId = "rpg";
                 break;
             default:

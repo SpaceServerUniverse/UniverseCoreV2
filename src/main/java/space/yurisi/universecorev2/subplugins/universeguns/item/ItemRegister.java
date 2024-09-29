@@ -1,8 +1,6 @@
 package space.yurisi.universecorev2.subplugins.universeguns.item;
 
-import space.yurisi.universecorev2.subplugins.universeguns.item.gun_item.L96;
-import space.yurisi.universecorev2.subplugins.universeguns.item.gun_item.R4C;
-import space.yurisi.universecorev2.subplugins.universeguns.item.gun_item.RPG;
+import space.yurisi.universecorev2.subplugins.universeguns.item.gun_item.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,9 +17,11 @@ public class ItemRegister {
         items.put(R4C.id, new R4C());
         items.put(RPG.id, new RPG());
         items.put(L96.id, new L96());
+        items.put(SMG11.id, new SMG11());
         itemNames.add(R4C.id);
         itemNames.add(RPG.id);
         itemNames.add(L96.id);
+        itemNames.add(SMG11.id);
     }
 
     public static GunItem getItem(String id){
