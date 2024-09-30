@@ -4,8 +4,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.Location;
 import org.bukkit.entity.Snowball;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.subplugins.universeguns.item.GunItem;
 
 import java.util.ArrayList;
@@ -18,7 +21,10 @@ public class GunShot {
     public GunShot(Player player, GunItem gun, ArrayList<Player> isZoom) {
 
         PlayerInventory inventory = player.getInventory();
-        inventory.setItemInMainHand(gun.getItem());
+        ItemStack itemInHand = inventory.getItemInMainHand();
+
+        gun.updateItemName(itemInHand);
+
         Vector direction = player.getEyeLocation().getDirection().normalize();
 
         if((gun.getType().equals("SG") || gun.getType().equals("EX")) && !player.isSneaking()){
@@ -33,6 +39,16 @@ public class GunShot {
         projectile = player.launchProjectile(Snowball.class, velocity);
         projectile.setGravity(false);
         ShotEffect(player, gun, projectile.getLocation());
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!projectile.isDead()) {
+                    projectile.remove();
+                }
+            }
+        }.runTaskLater(UniverseCoreV2.getInstance(), 40);
+
     }
 
     private Vector SpreadProjectile(Vector direction, GunItem gun) {
@@ -52,7 +68,6 @@ public class GunShot {
 
     public void ShotEffect(Player player, GunItem gun, Location loc) {
         player.getWorld().playSound(player.getLocation(), gun.getShotSound(), gun.getVolumeSound(), gun.getPitchSound());
-
     }
 
     public Entity getProjectile() {

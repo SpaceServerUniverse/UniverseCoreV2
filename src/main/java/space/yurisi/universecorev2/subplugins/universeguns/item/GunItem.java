@@ -222,6 +222,14 @@ public abstract class GunItem {
         return baseItem;
     }
 
+    public void updateItemName(ItemStack item) {
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            meta.displayName(Component.text(name + "   " + getAmmoDisplay()));
+            item.setItemMeta(meta);
+        }
+    }
+
     public ItemStack getItem() {
         ItemStack item = baseItem.clone();
         ItemMeta meta = baseItem.getItemMeta();

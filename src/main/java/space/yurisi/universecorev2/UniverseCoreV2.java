@@ -43,7 +43,6 @@ public final class UniverseCoreV2 extends JavaPlugin {
         new CommandManager(this);
         new WorldInitializer();
         new UniverseItem();
-        new UniverseGuns();
         this.sub_plugin = new SubPluginInitializer(this);
         this.sub_plugin.onEnable();
 

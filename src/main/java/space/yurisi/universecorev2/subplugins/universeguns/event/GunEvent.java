@@ -6,6 +6,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -29,12 +30,15 @@ import space.yurisi.universecorev2.utils.Message;
 import javax.xml.transform.Result;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class GunEvent implements Listener {
 
     ArrayList<Player> isCooldown = new ArrayList<>();
     ArrayList<Player> isZoom = new ArrayList<>();
     ArrayList<Player> isReloading = new ArrayList<>();
+    private final HashMap<Player, BukkitRunnable> shootingTasks = new HashMap<>();
+    private final HashMap<Player, Boolean> isShooting = new HashMap<>();
     public final HashMap<Entity, GunItem> projectileData = new HashMap<>();
     private static final ThreadLocal<Boolean> isHandlingExplosion = ThreadLocal.withInitial(() -> false);
 
@@ -45,7 +49,7 @@ public class GunEvent implements Listener {
         GunEvent.plugin = plugin;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         Action action = event.getAction();
@@ -61,9 +65,11 @@ public class GunEvent implements Listener {
         GunItem gun = ItemRegister.getItem(handItemID);
 
         if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
-
             event.setCancelled(true);
-            if(isCooldown.contains(player)){
+//            if(isCooldown.contains(player)){
+//                return;
+//            }
+            if (isReloading.contains(player)) {
                 return;
             }
 
@@ -73,44 +79,75 @@ public class GunEvent implements Listener {
                 return;
             }
 
-            if ((gun.getType().equals("SR") || gun.getType().equals("EX")) && !isZoom.contains(player)) {
-                Message.sendWarningMessage(player, "[武器AI]", "スコープを覗いてください。");
-                return;
-            }
+            isShooting.put(player, true);
+            if (!shootingTasks.containsKey(player)) {
 
-            gun.shoot();
-
-            if(!gun.getType().equals("SR")) {
-                GunShot gunShot = new GunShot(player, gun, isZoom);
-                projectileData.put(gunShot.getProjectile(), gun);
-            } else {
-                SniperShot sniperShot = new SniperShot(player, gun);
-                RayTraceResult result = sniperShot.detectEntities(player);
-                if(result == null){
-                    return;
-                }
-                Entity entity = result.getHitEntity();
-                if (entity instanceof LivingEntity livingEntity) {
-                    double height = result.getHitPosition().getY();
-                    double damage = gun.getBaseDamage();
-                    if (isHeadShot(height, entity)) {
-                        damage *= 1.5D;
-                        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 2.0F, 1.0F);
-                    }
-                    livingEntity.damage(damage, player);
-                }
-
-            }
-
-            // クールダウン
-            int tick = gun.getFireRate();
-            if (tick != 0 && gun.getCurrentAmmo() > 0) {
-                isCooldown.add(player);
-                new BukkitRunnable() {
+                BukkitRunnable shootingTask = new BukkitRunnable() {
                     @Override
-                    public void run() {isCooldown.remove(player);}
-                }.runTaskLater(plugin, tick);
+                    public void run() {
+
+                        if (!isShooting.getOrDefault(player, false)) {
+                            this.cancel();
+                            shootingTasks.remove(player);
+                            return;
+                        }
+                        gun.shoot();
+
+                        if(!gun.getType().equals("SR")) {
+                            GunShot gunShot = new GunShot(player, gun, isZoom);
+                            projectileData.put(gunShot.getProjectile(), gun);
+                        } else {
+                            if(!isZoom.contains(player)){
+                                Message.sendWarningMessage(player, "[武器AI]", "狙撃時のみ発射できます。");
+                                return;
+                            }
+                            new SniperShot(player, gun);
+                            if(Objects.equals(gun.getName(), "L96")){
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_COPPER_DOOR_OPEN, 10.0F, 0.6F);
+                                    }
+                                }.runTaskLater(plugin, 5);
+                            }
+                        }
+
+                        if (gun.getCurrentAmmo() > 0) {
+                            isCooldown.add(player);
+
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    isCooldown.remove(player);
+                                    if(Objects.equals(gun.getName(), "L96")){
+                                        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_COPPER_DOOR_CLOSE, 10.0F, 0.6F);
+                                    }
+                                }
+                            }.runTaskLater(plugin, gun.getFireRate());
+
+                        }else{
+                            isShooting.put(player, false);
+                        }
+                    }
+                };
+
+                shootingTask.runTaskTimer(plugin, 0, gun.getFireRate());
+                shootingTasks.put(player, shootingTask);
             }
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (!isShooting.getOrDefault(player, false)) {
+                        BukkitRunnable task = shootingTasks.get(player);
+                        if (task != null) {
+                            task.cancel();
+                            shootingTasks.remove(player);
+                        }
+                    }
+                    isShooting.put(player, false);
+                }
+            }.runTaskLater(plugin, 4); // 4tick
 
 
         } else if (action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) {
@@ -168,7 +205,7 @@ public class GunEvent implements Listener {
         }
     }
 
-    private boolean isHeadShot(double height, Entity entity){
+    public boolean isHeadShot(double height, Entity entity){
         double neckHeight = 1.5;
         return height > entity.getLocation().getY() + neckHeight;
     }
@@ -196,7 +233,16 @@ public class GunEvent implements Listener {
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
+        removePlayer(event.getPlayer());
+    }
+
+    @EventHandler
+    public void onPlayerTeleport(PlayerTeleportEvent event) {
+        removePlayer(event.getPlayer());
+    }
+
+
+    private void removePlayer(Player player){
         if(isZoom.contains(player)){
             isZoom.remove(player);
             player.setWalkSpeed(0.2f);
@@ -206,6 +252,16 @@ public class GunEvent implements Listener {
         }
         if(isReloading.contains(player)){
             isReloading.remove(player);
+        }
+        if(isShooting.containsKey(player)){
+            isShooting.remove(player);
+        }
+        if(shootingTasks.containsKey(player)){
+            BukkitRunnable task = shootingTasks.get(player);
+            if(task != null){
+                task.cancel();
+            }
+            shootingTasks.remove(player);
         }
     }
 

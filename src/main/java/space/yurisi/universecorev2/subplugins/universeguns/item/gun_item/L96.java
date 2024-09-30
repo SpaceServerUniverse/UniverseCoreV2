@@ -24,7 +24,7 @@ public class L96 extends GunItem {
                 0.10F,
                 30,
                 1,
-                3.0D,
+                5.0D,
                 1,
                 2.0D,
                 false,

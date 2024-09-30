@@ -24,7 +24,7 @@ public class RPG extends GunItem {
                 0.09F,
                 60,
                 1,
-                3.0D,
+                5.0D,
                 1,
                 2.0D,
                 false,

@@ -1,7 +1,10 @@
 package space.yurisi.universecorev2.subplugins.universeguns.event;
 
 import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.Location;
 import org.bukkit.inventory.PlayerInventory;
@@ -21,7 +24,8 @@ public class SniperShot {
         }
 
         ShotEffect(player, gun, direction, player.getEyeLocation());
-
+        RayTraceResult result = detectEntities(player);
+        setDamage(player, result, gun);
     }
 
     private void Knockback(Player player, Vector direction) {
@@ -48,6 +52,23 @@ public class SniperShot {
                 break;
             }
             world.spawnParticle(Particle.WHITE_SMOKE, particleLocation, 0);
+        }
+    }
+
+    private void setDamage(Player player, RayTraceResult result, GunItem gun) {
+        if(result == null){
+            return;
+        }
+        Entity entity = result.getHitEntity();
+        if (entity instanceof LivingEntity livingEntity) {
+            double height = result.getHitPosition().getY();
+            double damage = gun.getBaseDamage();
+            double neckHeight = 1.5D;
+            if (height > entity.getLocation().getY() + neckHeight) {
+                damage *= 1.5D;
+                player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 2.0F, 1.0F);
+            }
+            livingEntity.damage(damage, player);
         }
     }
 
