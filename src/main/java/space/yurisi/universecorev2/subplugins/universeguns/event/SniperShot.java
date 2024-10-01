@@ -17,6 +17,9 @@ public class SniperShot {
     public SniperShot(Player player, GunItem gun) {
         PlayerInventory inventory = player.getInventory();
         inventory.setItemInMainHand(gun.getItem());
+
+        gun.updateActionBar(player, true);
+
         Vector direction = player.getEyeLocation().getDirection().normalize();
 
         if(!player.isSneaking()){

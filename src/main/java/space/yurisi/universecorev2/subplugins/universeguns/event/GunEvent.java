@@ -163,9 +163,13 @@ public class GunEvent implements Listener {
             if (isZoom.contains(player)) {
                 player.setWalkSpeed(gun.getWeight());
                 isZoom.remove(player);
+                player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PIG_SADDLE, 5.0F, 2.0F);
+                gun.updateActionBar(player, false);
             } else {
                 player.setWalkSpeed(gun.getIsZoomWalkSpeed());
                 isZoom.add(player);
+                player.getWorld().playSound(player.getLocation(), Sound.ITEM_SPYGLASS_USE, 5.0F, 0.8F);
+                gun.updateActionBar(player, true);
             }
 
         }
@@ -295,6 +299,7 @@ public class GunEvent implements Listener {
             if(ItemRegister.isGun(newHandItemID)){
                 GunItem gun = ItemRegister.getItem(newHandItemID);
                 player.setWalkSpeed(gun.getWeight());
+                gun.updateActionBar(player, false);
             }
         }
         if(isZoom.contains(player)){
@@ -377,6 +382,8 @@ public class GunEvent implements Listener {
                 isReloading.remove(player);
                 player.getInventory().setItemInMainHand(gun.getItem());
                 player.getWorld().playSound(player.getLocation(), Sound.BLOCK_IRON_DOOR_CLOSE, 1.0F, 1.0F);
+
+                gun.updateActionBar(player, isZoom.contains(player));
             }
         }.runTaskLater(UniverseCoreV2.getInstance(), gun.getReloadTime() / 50);
 
@@ -388,6 +395,8 @@ public class GunEvent implements Listener {
                     return;
                 }
                 player.getInventory().setItemInMainHand(gun.getItem());
+
+                gun.updateActionBar(player, isZoom.contains(player));
             }
         }.runTaskTimer(UniverseCoreV2.getInstance(), 0, 2);
     }

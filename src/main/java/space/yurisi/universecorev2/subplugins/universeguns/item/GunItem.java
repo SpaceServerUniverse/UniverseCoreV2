@@ -1,8 +1,10 @@
 package space.yurisi.universecorev2.subplugins.universeguns.item;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -222,12 +224,16 @@ public abstract class GunItem {
         return baseItem;
     }
 
-    public void updateItemName(ItemStack item) {
-        ItemMeta meta = item.getItemMeta();
-        if (meta != null) {
-            meta.displayName(Component.text(name + "   " + getAmmoDisplay()));
-            item.setItemMeta(meta);
+    public void updateActionBar(Player player, boolean isZoom) {
+        String ammoDisplay = getAmmoDisplay();
+        String messageText = (isZoom ? "ADS " : "") + ammoDisplay;
+        Component message = Component.text(messageText);
+
+        if (isReloading) {
+            message = message.color(NamedTextColor.RED);
         }
+
+        player.sendActionBar(message);
     }
 
     public ItemStack getItem() {
@@ -235,7 +241,7 @@ public abstract class GunItem {
         ItemMeta meta = baseItem.getItemMeta();
         PersistentDataContainer container = meta.getPersistentDataContainer();
         container.set(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME), PersistentDataType.STRING, getId());
-        meta.displayName(Component.text(name + "   " + getAmmoDisplay()));
+        meta.displayName(Component.text(name));
         item.setItemMeta(meta);
         return item;
     }

@@ -28,7 +28,7 @@ public class L96 extends GunItem {
                 1,
                 2.0D,
                 false,
-                Sound.UI_STONECUTTER_TAKE_RESULT,
+                Sound.ENTITY_IRON_GOLEM_DAMAGE,
                 10.0F,
                 0.8F,
                 ItemStack.of(Material.DIAMOND_HOE)

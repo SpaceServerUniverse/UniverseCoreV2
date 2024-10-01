@@ -28,9 +28,9 @@ public class SMG11 extends GunItem {
                 1,
                 3.0D,
                 true,
-                Sound.ENTITY_FIREWORK_ROCKET_BLAST,
-                5.0F,
-                0.5F,
+                Sound.ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR,
+                1.0F,
+                0.8F,
                 ItemStack.of(Material.DIAMOND_HOE)
         );
     }

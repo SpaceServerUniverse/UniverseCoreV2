@@ -20,10 +20,7 @@ public class GunShot {
 
     public GunShot(Player player, GunItem gun, ArrayList<Player> isZoom) {
 
-        PlayerInventory inventory = player.getInventory();
-        ItemStack itemInHand = inventory.getItemInMainHand();
-
-        gun.updateItemName(itemInHand);
+        gun.updateActionBar(player, isZoom.contains(player));
 
         Vector direction = player.getEyeLocation().getDirection().normalize();
 
