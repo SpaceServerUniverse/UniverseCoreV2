@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.event.block.BExplodeEvent;
 import space.yurisi.universecorev2.event.entity.EExplodeEvent;
+import space.yurisi.universecorev2.event.entity.EntityHangingBreakEvent;
 import space.yurisi.universecorev2.event.player.InteractEvent;
 import space.yurisi.universecorev2.event.player.LoginEvent;
 
@@ -17,5 +18,6 @@ public class EventManager {
         Bukkit.getPluginManager().registerEvents(new BExplodeEvent(),main);
         Bukkit.getPluginManager().registerEvents(new EExplodeEvent(),main);
         Bukkit.getPluginManager().registerEvents(new InteractEvent(), main);
+        Bukkit.getPluginManager().registerEvents(new EntityHangingBreakEvent(),main);
     }
 }
