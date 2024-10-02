@@ -91,9 +91,9 @@ public class GunEvent implements Listener {
                             shootingTasks.remove(player);
                             return;
                         }
-                        gun.shoot();
 
                         if(!gun.getType().equals("SR")) {
+                            gun.shoot();
                             GunShot gunShot = new GunShot(player, gun, isZoom);
                             projectileData.put(gunShot.getProjectile(), gun);
                         } else {
@@ -101,6 +101,7 @@ public class GunEvent implements Listener {
                                 Message.sendWarningMessage(player, "[武器AI]", "狙撃時のみ発射できます。");
                                 return;
                             }
+                            gun.shoot();
                             new SniperShot(player, gun);
                             if(Objects.equals(gun.getName(), "L96")){
                                 new BukkitRunnable() {
