@@ -29,7 +29,7 @@ public class R4C extends GunItem {
                 3.5D,
                 true,
                 Sound.BLOCK_PISTON_EXTEND,
-                2.0F,
+                4.0F,
                 1.8F,
                 ItemStack.of(Material.DIAMOND_HOE)
         );

@@ -36,7 +36,7 @@ public class GunEvent implements Listener {
 
     ArrayList<Player> isCooldown = new ArrayList<>();
     ArrayList<Player> isZoom = new ArrayList<>();
-    ArrayList<Player> isReloading = new ArrayList<>();
+    private final HashMap<Player, BukkitRunnable> reloadingTasks = new HashMap<>();
     private final HashMap<Player, BukkitRunnable> shootingTasks = new HashMap<>();
     private final HashMap<Player, Boolean> isShooting = new HashMap<>();
     public final HashMap<Entity, GunItem> projectileData = new HashMap<>();
@@ -66,10 +66,8 @@ public class GunEvent implements Listener {
 
         if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
             event.setCancelled(true);
-//            if(isCooldown.contains(player)){
-//                return;
-//            }
-            if (isReloading.contains(player)) {
+
+            if (reloadingTasks.containsKey(player)) {
                 return;
             }
 
@@ -101,13 +99,14 @@ public class GunEvent implements Listener {
                                 Message.sendWarningMessage(player, "[武器AI]", "狙撃時のみ発射できます。");
                                 return;
                             }
+
                             gun.shoot();
                             new SniperShot(player, gun);
                             if(Objects.equals(gun.getName(), "L96")){
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
-                                        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_COPPER_DOOR_OPEN, 10.0F, 0.6F);
+                                        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_COPPER_DOOR_OPEN, 1.0F, 0.6F);
                                     }
                                 }.runTaskLater(plugin, 5);
                             }
@@ -121,7 +120,7 @@ public class GunEvent implements Listener {
                                 public void run() {
                                     isCooldown.remove(player);
                                     if(Objects.equals(gun.getName(), "L96")){
-                                        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_COPPER_DOOR_CLOSE, 10.0F, 0.6F);
+                                        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_COPPER_DOOR_CLOSE, 1.0F, 0.6F);
                                     }
                                 }
                             }.runTaskLater(plugin, gun.getFireRate());
@@ -140,11 +139,7 @@ public class GunEvent implements Listener {
                 @Override
                 public void run() {
                     if (!isShooting.getOrDefault(player, false)) {
-                        BukkitRunnable task = shootingTasks.get(player);
-                        if (task != null) {
-                            task.cancel();
-                            shootingTasks.remove(player);
-                        }
+                        taskCancel(shootingTasks, player);
                     }
                     isShooting.put(player, false);
                 }
@@ -155,21 +150,18 @@ public class GunEvent implements Listener {
 
             event.setCancelled(true);
 
-            if(isReloading.contains(player)){
-                if(gun.getCurrentAmmo() == gun.getMagazineSize()){
-                    isReloading.remove(player);
-                }
+            if(reloadingTasks.containsKey(player)){
                 return;
             }
             if (isZoom.contains(player)) {
                 player.setWalkSpeed(gun.getWeight());
                 isZoom.remove(player);
-                player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PIG_SADDLE, 5.0F, 2.0F);
+                player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PIG_SADDLE, 1.0F, 2.0F);
                 gun.updateActionBar(player, false);
             } else {
                 player.setWalkSpeed(gun.getIsZoomWalkSpeed());
                 isZoom.add(player);
-                player.getWorld().playSound(player.getLocation(), Sound.ITEM_SPYGLASS_USE, 5.0F, 0.8F);
+                player.getWorld().playSound(player.getLocation(), Sound.ITEM_SPYGLASS_USE, 1.0F, 0.8F);
                 gun.updateActionBar(player, true);
             }
 
@@ -182,12 +174,17 @@ public class GunEvent implements Listener {
             return;
         }
         if (event.getDamager() instanceof Snowball snowball) {
+            Player player = (Player) snowball.getShooter();
             if (!projectileData.containsKey(snowball)) {
+                return;
+            }
+            if(event.getEntity().isDead()){
                 return;
             }
             GunItem gun = projectileData.get(snowball);
             double damage = gun.getBaseDamage();
             Location loc = snowball.getLocation();
+            LivingEntity entity = (LivingEntity) event.getEntity();
 
             if(gun.getIsExplosive()){
                 float radius = gun.getExplosionRadius();
@@ -200,11 +197,15 @@ public class GunEvent implements Listener {
             }
 
             double headShotTimes = 1.5;
-            if (isHeadShot(loc.getY(), event.getEntity())) {
+            if (isHeadShot(loc.getY(), entity)) {
                 damage *= headShotTimes;
             }
 
             event.setDamage(damage);
+            entity.setMaximumNoDamageTicks(0);
+            entity.setNoDamageTicks(0);
+            entity.setLastDamage(Integer.MAX_VALUE);
+
             projectileData.remove(snowball);
             // TODO: ヒットエフェクト
         }
@@ -246,6 +247,13 @@ public class GunEvent implements Listener {
         removePlayer(event.getPlayer());
     }
 
+    private void taskCancel(HashMap<Player, BukkitRunnable> tasks, Player player){
+        BukkitRunnable task = tasks.get(player);
+        if(task != null){
+            task.cancel();
+        }
+        tasks.remove(player);
+    }
 
     private void removePlayer(Player player){
         if(isZoom.contains(player)){
@@ -255,35 +263,34 @@ public class GunEvent implements Listener {
         if(isCooldown.contains(player)){
             isCooldown.remove(player);
         }
-        if(isReloading.contains(player)){
-            isReloading.remove(player);
+        if(reloadingTasks.containsKey(player)){
+            taskCancel(reloadingTasks, player);
         }
         if(isShooting.containsKey(player)){
             isShooting.remove(player);
         }
         if(shootingTasks.containsKey(player)){
-            BukkitRunnable task = shootingTasks.get(player);
-            if(task != null){
-                task.cancel();
-            }
-            shootingTasks.remove(player);
+            taskCancel(shootingTasks, player);
         }
     }
 
     @EventHandler
     public void onPlayerItemHeld(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
+
         ItemStack oldInHand = player.getInventory().getItem(event.getPreviousSlot());
         if(oldInHand != null && oldInHand.hasItemMeta()){
             String oldHandItemID = getGunID(oldInHand);
             if(oldHandItemID != null && ItemRegister.isGun(oldHandItemID)){
-                GunItem gun = ItemRegister.getItem(oldHandItemID);
-                if(gun.getIsReloading()){
-                    event.setCancelled(true);
-                    return;
+                GunItem oldGun = ItemRegister.getItem(oldHandItemID);
+                if(reloadingTasks.containsKey(player)){
+                    taskCancel(reloadingTasks, player);
+                    oldGun.cancelReload();
+                    oldGun.updateActionBar(player, false);
                 }
             }
         }
+
         ItemStack newInHand = player.getInventory().getItem(event.getNewSlot());
         if(newInHand == null){
             player.setWalkSpeed(0.2f);
@@ -298,16 +305,13 @@ public class GunEvent implements Listener {
                 return;
             }
             if(ItemRegister.isGun(newHandItemID)){
-                GunItem gun = ItemRegister.getItem(newHandItemID);
-                player.setWalkSpeed(gun.getWeight());
-                gun.updateActionBar(player, false);
+                GunItem newGun = ItemRegister.getItem(newHandItemID);
+                player.setWalkSpeed(newGun.getWeight());
+                newGun.updateActionBar(player, false);
             }
         }
         if(isZoom.contains(player)){
             isZoom.remove(player);
-        }
-        if(isReloading.contains(player)){
-            isReloading.remove(player);
         }
         if(isCooldown.contains(player)){
             isCooldown.remove(player);
@@ -361,42 +365,43 @@ public class GunEvent implements Listener {
     }
 
     private void startReload(Player player, GunItem gun) {
-        if(gun.getIsReloading()){
+        if (gun.getIsReloading()) {
             return;
         }
-        isReloading.add(player);
         gun.startReload();
-        if(isZoom.contains(player)){
+        if (isZoom.contains(player)) {
             player.setWalkSpeed(gun.getWeight());
             isZoom.remove(player);
         }
         player.getWorld().playSound(player.getLocation(), Sound.BLOCK_IRON_DOOR_OPEN, 1.0F, 1.0F);
-        new BukkitRunnable() {
+        BukkitRunnable reloadingTask = new BukkitRunnable() {
             @Override
             public void run() {
-                if (!player.isOnline() || !isReloading.contains(player)) {
+                if (!player.isOnline() || !reloadingTasks.containsKey(player)) {
                     gun.cancelReload();
                     cancel();
+                    reloadingTasks.remove(player);
                     return;
                 }
                 gun.finishReload();
-                isReloading.remove(player);
-                player.getInventory().setItemInMainHand(gun.getItem());
                 player.getWorld().playSound(player.getLocation(), Sound.BLOCK_IRON_DOOR_CLOSE, 1.0F, 1.0F);
-
+                reloadingTasks.remove(player);
                 gun.updateActionBar(player, isZoom.contains(player));
-            }
-        }.runTaskLater(UniverseCoreV2.getInstance(), gun.getReloadTime() / 50);
+                }
+            };
+
+        reloadingTask.runTaskLater(plugin, gun.getReloadTime() / 50);
+        reloadingTasks.put(player, reloadingTask);
+
 
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (!gun.getIsReloading()) {
+                if (!gun.getIsReloading() || !reloadingTasks.containsKey(player)) {
                     cancel();
+                    gun.cancelReload();
                     return;
                 }
-                player.getInventory().setItemInMainHand(gun.getItem());
-
                 gun.updateActionBar(player, isZoom.contains(player));
             }
         }.runTaskTimer(UniverseCoreV2.getInstance(), 0, 2);
@@ -405,9 +410,9 @@ public class GunEvent implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (event.getWhoClicked() instanceof Player player) {
-            if (isReloading.contains(player)) {
-                event.setCancelled(true);
-            }
+//            if (isReloading.contains(player)) {
+//                event.setCancelled(true);
+//            }
         }
     }
 
@@ -428,7 +433,7 @@ public class GunEvent implements Listener {
             return;
         }
         event.setCancelled(true);
-        if (!isReloading.contains(player)) {
+        if (!reloadingTasks.containsKey(player)) {
             startReload(player, gun);
         }
     }

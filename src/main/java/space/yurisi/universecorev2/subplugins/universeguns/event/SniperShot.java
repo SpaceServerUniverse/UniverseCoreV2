@@ -69,7 +69,7 @@ public class SniperShot {
             double neckHeight = 1.5D;
             if (height > entity.getLocation().getY() + neckHeight) {
                 damage *= 1.5D;
-                player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 2.0F, 1.0F);
+                player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
             }
             livingEntity.damage(damage, player);
         }
