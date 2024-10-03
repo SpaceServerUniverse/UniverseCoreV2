@@ -15,7 +15,7 @@ public class L96 extends GunItem {
                 "L96",
                 "SR",
                 5,
-                5,
+                0,
                 3000,
                 -0.20F,
                 15,

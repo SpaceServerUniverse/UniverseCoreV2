@@ -15,7 +15,7 @@ public class SMG11 extends GunItem {
                 "SMG-11",
                 "SMG",
                 16,
-                16,
+                0,
                 800,
                 0.17F,
                 1.0,

@@ -1,6 +1,5 @@
 package space.yurisi.universecorev2.subplugins.universeguns.event;
 
-import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
@@ -19,7 +18,6 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
@@ -27,7 +25,6 @@ import space.yurisi.universecorev2.subplugins.universeguns.item.GunItem;
 import space.yurisi.universecorev2.subplugins.universeguns.item.ItemRegister;
 import space.yurisi.universecorev2.utils.Message;
 
-import javax.xml.transform.Result;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -94,6 +91,18 @@ public class GunEvent implements Listener {
                             gun.shoot();
                             GunShot gunShot = new GunShot(player, gun, isZoom);
                             projectileData.put(gunShot.getProjectile(), gun);
+                            for (int i = 0; i < gun.getBurst(); i++) {
+                                new BukkitRunnable(){
+                                    @Override
+                                    public void run() {
+                                        gun.shoot();
+                                        GunShot burstShot = new GunShot(player, gun, isZoom);
+                                        projectileData.put(burstShot.getProjectile(), gun);
+                                    }
+                                }.runTaskLater(plugin, 1L);
+
+                            }
+
                         } else {
                             if(!isZoom.contains(player)){
                                 Message.sendWarningMessage(player, "[武器AI]", "狙撃時のみ発射できます。");
@@ -108,7 +117,7 @@ public class GunEvent implements Listener {
                                     public void run() {
                                         player.getWorld().playSound(player.getLocation(), Sound.BLOCK_COPPER_DOOR_OPEN, 1.0F, 0.6F);
                                     }
-                                }.runTaskLater(plugin, 5);
+                                }.runTaskLater(plugin, 5L);
                             }
                         }
 
@@ -174,7 +183,6 @@ public class GunEvent implements Listener {
             return;
         }
         if (event.getDamager() instanceof Snowball snowball) {
-            Player player = (Player) snowball.getShooter();
             if (!projectileData.containsKey(snowball)) {
                 return;
             }

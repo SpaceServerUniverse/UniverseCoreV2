@@ -18,10 +18,12 @@ public class ItemRegister {
         items.put(RPG.id, new RPG());
         items.put(L96.id, new L96());
         items.put(SMG11.id, new SMG11());
+        items.put(F2.id, new F2());
         itemNames.add(R4C.id);
         itemNames.add(RPG.id);
         itemNames.add(L96.id);
         itemNames.add(SMG11.id);
+        itemNames.add(F2.id);
     }
 
     public static GunItem getItem(String id){

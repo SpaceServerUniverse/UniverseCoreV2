@@ -15,7 +15,7 @@ public class RPG extends GunItem {
                 "RPG",
                 "EX",
                 1,
-                1,
+                0,
                 10000,
                 0.0F,
                 10,
