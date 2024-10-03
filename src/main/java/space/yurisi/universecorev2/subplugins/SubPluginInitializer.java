@@ -9,7 +9,6 @@ import space.yurisi.universecorev2.subplugins.customname.CustomName;
 import space.yurisi.universecorev2.subplugins.evolutionitem.EvolutionItem;
 import space.yurisi.universecorev2.subplugins.fishingsystem.FishingSystem;
 import space.yurisi.universecorev2.subplugins.gacha.Gacha;
-import space.yurisi.universecorev2.subplugins.damagemanager.DamageManager;
 import space.yurisi.universecorev2.subplugins.itemhat.ItemHat;
 import space.yurisi.universecorev2.subplugins.freemarket.FreeMarket;
 import space.yurisi.universecorev2.subplugins.levelaward.LevelAward;
@@ -19,6 +18,7 @@ import space.yurisi.universecorev2.subplugins.playerhead.PlayerHead;
 import space.yurisi.universecorev2.subplugins.playerinfoscoreboard.PlayerInfoScoreBoard;
 import space.yurisi.universecorev2.subplugins.rankcounter.RankCounter;
 import space.yurisi.universecorev2.subplugins.repaircream.RepairCream;
+import space.yurisi.universecorev2.subplugins.tickfreezer.TickFreezer;
 import space.yurisi.universecorev2.subplugins.universeutilcommand.UniverseUtilCommand;
 import space.yurisi.universecorev2.subplugins.signcommand.SignCommand;
 import space.yurisi.universecorev2.subplugins.sitdown.Sitdown;
@@ -38,12 +38,12 @@ public class SubPluginInitializer {
 
     private UniverseCoreV2 core;
 
-    public SubPluginInitializer(UniverseCoreV2 core){
+    public SubPluginInitializer(UniverseCoreV2 core) {
         this.core = core;
         registerPlugin();
     }
 
-    private void registerPlugin(){
+    private void registerPlugin() {
         this.subPlugins.add(new PlayerInfoScoreBoard());
         this.subPlugins.add(new LevelSystem());
         this.subPlugins.add(new UniverseEconomy());
@@ -71,17 +71,18 @@ public class SubPluginInitializer {
         //this.subPlugins.add(new DamageManager());
         this.subPlugins.add(new FishingSystem());
         this.subPlugins.add(new ChestShop());
+        this.subPlugins.add(new TickFreezer());
     }
 
-    public void onEnable(){
-        for (SubPlugin subplugin: subPlugins){
+    public void onEnable() {
+        for (SubPlugin subplugin : subPlugins) {
             subplugin.onEnable(this.core);
-            Bukkit.getLogger().info(subplugin.getName()+" v"+ subplugin.getVersion()+" Loaded");
+            Bukkit.getLogger().info(subplugin.getName() + " v" + subplugin.getVersion() + " Loaded");
         }
     }
 
-    public void onDisable(){
-        for(SubPlugin subPlugin: subPlugins){
+    public void onDisable() {
+        for (SubPlugin subPlugin : subPlugins) {
             subPlugin.onDisable();
         }
     }
