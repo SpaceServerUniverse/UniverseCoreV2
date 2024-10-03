@@ -1,6 +1,5 @@
 package space.yurisi.universecorev2.subplugins.tickfreezer.event.block;
 
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFadeEvent;
