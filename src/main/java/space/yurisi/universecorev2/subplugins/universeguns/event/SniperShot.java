@@ -10,11 +10,11 @@ import org.bukkit.Location;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
-import space.yurisi.universecorev2.subplugins.universeguns.item.GunItem;
+import space.yurisi.universecorev2.item.gun.Gun;
 
 public class SniperShot {
 
-    public SniperShot(Player player, GunItem gun) {
+    public SniperShot(Player player, Gun gun) {
         PlayerInventory inventory = player.getInventory();
         inventory.setItemInMainHand(gun.getItem());
 
@@ -44,7 +44,7 @@ public class SniperShot {
         return world.rayTraceEntities(player.getEyeLocation(), direction, 500, e -> e != player);
     }
 
-    private void ShotEffect(Player player, GunItem gun, Vector direction, Location startLocation) {
+    private void ShotEffect(Player player, Gun gun, Vector direction, Location startLocation) {
         player.getWorld().playSound(player.getLocation(), gun.getShotSound(), gun.getVolumeSound(), gun.getPitchSound());
 
         World world = player.getWorld();
@@ -58,7 +58,7 @@ public class SniperShot {
         }
     }
 
-    private void setDamage(Player player, RayTraceResult result, GunItem gun) {
+    private void setDamage(Player player, RayTraceResult result, Gun gun) {
         if(result == null){
             return;
         }

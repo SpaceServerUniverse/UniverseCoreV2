@@ -6,4 +6,5 @@ public class UniverseItemKeyString {
     public static final String LEVEL = "level";
 
     public static final String GACHA_TICKET = "gacha_ticket";
+    public static final String GUN = "gun";
 }

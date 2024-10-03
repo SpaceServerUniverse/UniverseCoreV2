@@ -107,11 +107,6 @@ commands:
   repair:
     description: アイテムを修復します
 
-  #UniverseGuns
-  givegun:
-    description: 銃をプレイヤーに与えます
-    premission: space.yurisi.universeguns.givegun
-
 permissions:
   # UniverseCoreV2
   space.yurisi.universecorev2.interactevent.enchanttable:

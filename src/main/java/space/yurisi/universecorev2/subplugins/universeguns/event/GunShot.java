@@ -7,7 +7,8 @@ import org.bukkit.entity.Snowball;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import space.yurisi.universecorev2.UniverseCoreV2;
-import space.yurisi.universecorev2.subplugins.universeguns.item.GunItem;
+import space.yurisi.universecorev2.item.gun.Gun;
+import space.yurisi.universecorev2.subplugins.universeguns.constants.GunType;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -16,13 +17,13 @@ public class GunShot {
 
     Snowball projectile;
 
-    public GunShot(Player player, GunItem gun, ArrayList<Player> isZoom) {
+    public GunShot(Player player, Gun gun, ArrayList<Player> isZoom) {
 
         gun.updateActionBar(player, isZoom.contains(player));
 
         Vector direction = player.getEyeLocation().getDirection().normalize();
 
-        if((gun.getType().equals("SG") || gun.getType().equals("EX")) && !player.isSneaking()){
+        if((gun.getType().equals(GunType.SG) || gun.getType().equals(GunType.EX)) && !player.isSneaking()){
             Knockback(player, direction);
         }
         // ADSしていない場合は精度を下げる
@@ -46,7 +47,7 @@ public class GunShot {
 
     }
 
-    private Vector SpreadProjectile(Vector direction, GunItem gun) {
+    private Vector SpreadProjectile(Vector direction, Gun gun) {
         double spread = gun.getSpread();
         Random random = new Random();
         double spreadX = (random.nextDouble() - 0.5) * spread;
@@ -61,7 +62,7 @@ public class GunShot {
         player.setVelocity(player.getVelocity().add(horizontalKnockback));
     }
 
-    public void ShotEffect(Player player, GunItem gun, Location loc) {
+    public void ShotEffect(Player player, Gun gun, Location loc) {
         player.getWorld().playSound(player.getLocation(), gun.getShotSound(), gun.getVolumeSound(), gun.getPitchSound());
     }
 

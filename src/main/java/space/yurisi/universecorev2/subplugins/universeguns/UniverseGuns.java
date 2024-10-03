@@ -4,8 +4,6 @@ import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.UniverseCoreV2API;
 import space.yurisi.universecorev2.database.DatabaseManager;
 import space.yurisi.universecorev2.subplugins.SubPlugin;
-import space.yurisi.universecorev2.subplugins.universeguns.command.giveGunCommand;
-import space.yurisi.universecorev2.subplugins.universeguns.item.ItemRegister;
 import space.yurisi.universecorev2.subplugins.universeguns.manager.EventManager;
 
 public class UniverseGuns implements SubPlugin {
@@ -14,8 +12,6 @@ public class UniverseGuns implements SubPlugin {
         // Plugin startup logic
         DatabaseManager manager = UniverseCoreV2API.getInstance().getDatabaseManager();
         EventManager.init(core);
-        core.getCommand("givegun").setExecutor(new giveGunCommand(core));
-        new ItemRegister();
     }
 
     public void onDisable() {
