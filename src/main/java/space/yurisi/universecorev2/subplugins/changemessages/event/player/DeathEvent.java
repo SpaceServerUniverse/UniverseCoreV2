@@ -6,11 +6,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.eclipse.sisu.Priority;
 import space.yurisi.universecorev2.subplugins.changemessages.message.event.player_death.*;
 
 import javax.annotation.Nullable;
-import java.util.Objects;
+import java.util.Optional;
 
 public class DeathEvent implements Listener {
 
@@ -18,12 +17,14 @@ public class DeathEvent implements Listener {
     public void onDeath(PlayerDeathEvent event) {
         Player player = event.getPlayer();
         Player killer = event.getEntity().getKiller();
-        EntityDamageEvent.DamageCause cause = Objects.requireNonNull(event.getEntity().getLastDamageCause()).getCause();
+        EntityDamageEvent.DamageCause cause = Optional.ofNullable(event.getEntity().getLastDamageCause())
+                .map(EntityDamageEvent::getCause)
+                .orElse(null);
         BasePlayerDeathEventMessage messageClass = getDeathMessageClass(player, killer, cause);
         event.deathMessage(messageClass.getMessage());
     }
 
-    private BasePlayerDeathEventMessage getDeathMessageClass(Player player, @Nullable Player killer, EntityDamageEvent.DamageCause cause){
+    private BasePlayerDeathEventMessage getDeathMessageClass(Player player, @Nullable Player killer, @Nullable EntityDamageEvent.DamageCause cause) {
         switch (cause) {
             case ENTITY_ATTACK:
                 return new EntityAttackBasePlayerDeathEventMessage(player, killer);
