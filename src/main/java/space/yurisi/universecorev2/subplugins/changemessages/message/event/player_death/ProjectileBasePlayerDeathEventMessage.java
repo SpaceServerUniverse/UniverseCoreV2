@@ -1,7 +1,6 @@
 package space.yurisi.universecorev2.subplugins.changemessages.message.event.player_death;
 
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -17,17 +16,27 @@ public final class ProjectileBasePlayerDeathEventMessage extends BasePlayerDeath
     protected void init(Player player, Player killer) {
         if (killer == null) {
             EntityDamageEvent cause = player.getLastDamageCause();
-            if (cause instanceof EntityDamageByEntityEvent) {
-                EntityDamageByEntityEvent e = (EntityDamageByEntityEvent) cause;
-                if (e.getDamager() instanceof Projectile) {
-                    if (!(((Projectile) e.getDamager()).getShooter() instanceof Entity)) {
+            if (cause instanceof EntityDamageByEntityEvent e) {
+                if (e.getDamager() instanceof Projectile damager) {
+                    if (!(damager.getShooter() instanceof Entity shooter)) {
                         setMessages(
                                 new Component[]{
                                         Component.text("§a§l[死亡管理AI] §c" + player.getName() + "§a が死亡した")
                                 }
                         );
-                        return;
+                    } else {
+                        String item = getItemName((Player) shooter);
+
+                        setMessages(
+                                new Component[]{
+                                        Component.text("§a§l[戦闘型AI] §c" + shooter.getName() + "§a が §b" + player.getName() + "§a を -§d" + item + "§a- で射抜きました"),
+                                        Component.text("§a§l[戦闘型AI] §c" + shooter.getName() + "§a が §b" + player.getName() + "§a を -§d" + item + "§a- で矢を心臓に刺しました"),
+                                        Component.text("§a§l[戦闘型AI] §c" + shooter.getName() + "§a が §b" + player.getName() + "§a を -§d" + item + "§a- によって生命活動を停止させました"),
+                                        Component.text("§a§l[戦闘型AI] §c" + shooter.getName() + "§a が §b" + player.getName() + "§a を -§d" + item + "§a- の矢が脳を貫きました"),
+                                }
+                        );
                     }
+                    return;
                 }
             }
 
