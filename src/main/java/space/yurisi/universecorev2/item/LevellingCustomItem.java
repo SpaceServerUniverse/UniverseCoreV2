@@ -71,6 +71,20 @@ public abstract class LevellingCustomItem extends CustomItem {
         return item;
     }
 
+    public static int getLevel(ItemStack item){
+       if(!UniverseItem.isLevelingItem(item)){
+           return 1;
+       }
+
+       ItemMeta meta = item.getItemMeta();
+       if(meta == null){
+           return 1;
+       }
+
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        return container.get(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.LEVEL), PersistentDataType.INTEGER);
+    }
+
     /**
      * レベル別の無名関数(エンチャント等)を登録するメソッドをサブクラスで実装
      */

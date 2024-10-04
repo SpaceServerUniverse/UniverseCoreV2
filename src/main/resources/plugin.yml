@@ -107,6 +107,10 @@ commands:
   repair:
     description: アイテムを修復します
 
+  #ChestShop
+  item:
+    description: メインハンドに持ったアイテムの名前を表示します
+
 permissions:
   # UniverseCoreV2
   space.yurisi.universecorev2.interactevent.enchanttable:

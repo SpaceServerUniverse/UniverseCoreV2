@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.InventoryHolder;
@@ -71,7 +70,7 @@ public class TouchEvent implements Listener {
                 return;
             }
 
-            if (api.canAccessContainer(player, blockLocation)) {
+            if (player.isOp() || api.canAccessContainer(player, blockLocation)) {
                 Message.sendSuccessMessage(player, "[金庫AI]", "このコンテナの保護を解除しました");
                 api.removeContainerProtect(blockLocation);
             } else {
@@ -83,9 +82,11 @@ public class TouchEvent implements Listener {
         }
 
         if (!api.canAccessContainer(player, blockLocation)) {
-            event.setCancelled(true);
+            if(!player.isOp()){
+                event.setCancelled(true);
+                player.playSound(player.getLocation(), Sound.BLOCK_IRON_DOOR_CLOSE, 1, 1);
+            }
             ContainerProtect containerProtect = api.getContainerProtect(blockLocation);
-            player.playSound(player.getLocation(), Sound.BLOCK_IRON_DOOR_CLOSE, 1, 1);
             player.sendActionBar(Component.text("このコンテナは " + Bukkit.getOfflinePlayer(UUID.fromString(containerProtect.getUuid())).getName() + " によって保護されています"));
         }
     }
