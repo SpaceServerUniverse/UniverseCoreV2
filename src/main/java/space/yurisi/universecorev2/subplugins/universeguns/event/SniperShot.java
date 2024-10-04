@@ -72,7 +72,11 @@ public class SniperShot {
                 player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
             }
 //            livingEntity.damage(damage, player);
-            livingEntity.setHealth(livingEntity.getHealth() - damage);
+            double newHealth = livingEntity.getHealth() - damage;
+            if (newHealth <= 0) {
+                newHealth = 0;
+            }
+            livingEntity.setHealth(newHealth);
         }
     }
 

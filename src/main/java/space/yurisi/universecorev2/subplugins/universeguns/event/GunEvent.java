@@ -232,7 +232,11 @@ public class GunEvent implements Listener {
             }
 
 //            event.setDamage(damage);
-            entity.setHealth(entity.getHealth() - damage);
+            double newHealth = entity.getHealth() - damage;
+            if (newHealth <= 0) {
+                newHealth = 0;
+            }
+            entity.setHealth(newHealth);
             entity.setMaximumNoDamageTicks(0);
             entity.setNoDamageTicks(0);
             entity.setLastDamage(Integer.MAX_VALUE);
