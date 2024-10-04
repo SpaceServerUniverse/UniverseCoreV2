@@ -37,11 +37,13 @@ public class PlayerNormalLevelRepository {
 
         Session session = this.sessionFactory.getCurrentSession();
 
-        session.beginTransaction();
-        session.persist(level);//save
-        session.getTransaction().commit();
-        session.close();
-
+        try {
+            session.beginTransaction();
+            session.persist(level);//save
+            session.getTransaction().commit();
+        }finally {
+            session.close();
+        }
         return level;
     }
 
@@ -54,14 +56,17 @@ public class PlayerNormalLevelRepository {
      */
     public PlayerNormalLevel getPlayerNormalLevel(Long id) throws PlayerNormalLevelNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        PlayerNormalLevel data = session.get(PlayerNormalLevel.class, id);
-        session.getTransaction().commit();
-        session.close();
-        if (data == null) {
-            throw new PlayerNormalLevelNotFoundException("ユーザーデータが存在しませんでした。 ID:" + id);
+        try {
+            session.beginTransaction();
+            PlayerNormalLevel data = session.get(PlayerNormalLevel.class, id);
+            session.getTransaction().commit();
+            if (data == null) {
+                throw new PlayerNormalLevelNotFoundException("ユーザーデータが存在しませんでした。 ID:" + id);
+            }
+            return data;
+        } finally {
+            session.close();
         }
-        return data;
     }
 
     /**
@@ -73,15 +78,18 @@ public class PlayerNormalLevelRepository {
      */
     public PlayerNormalLevel getPlayerNormalLevelFromUser(User user) throws PlayerNormalLevelNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        PlayerNormalLevel data = session.createSelectionQuery("from PlayerNormalLevel where user_id = ?1", PlayerNormalLevel.class)
-                .setParameter(1, user.getId()).getSingleResultOrNull();
-        session.getTransaction().commit();
-        session.close();
-        if (data == null) {
-            throw new PlayerNormalLevelNotFoundException("ユーザーレベルデータが存在しませんでした。 UserId:" + user.getId());
+        try {
+            session.beginTransaction();
+            PlayerNormalLevel data = session.createSelectionQuery("from PlayerNormalLevel where user_id = ?1", PlayerNormalLevel.class)
+                    .setParameter(1, user.getId()).getSingleResultOrNull();
+            session.getTransaction().commit();
+            if (data == null) {
+                throw new PlayerNormalLevelNotFoundException("ユーザーレベルデータが存在しませんでした。 UserId:" + user.getId());
+            }
+            return data;
+        } finally {
+            session.close();
         }
-        return data;
     }
 
 
@@ -122,10 +130,13 @@ public class PlayerNormalLevelRepository {
      */
     public void updatePlayerNormalLevel(PlayerNormalLevel level) {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.merge(level);//update
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            session.merge(level);//update
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
     }
 
     /**
@@ -135,10 +146,12 @@ public class PlayerNormalLevelRepository {
      */
     public void deletePlayerNormalLevel(PlayerNormalLevel level) {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.remove(level); //delete
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            session.remove(level); //delete
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
     }
-
 }

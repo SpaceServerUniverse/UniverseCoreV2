@@ -47,10 +47,13 @@ public class ChestShopRepository {
         ChestShop chestShop = new ChestShop(null, uuid, worldName, item, price, signX, signY, signZ, mainChestX, mainChestY, mainChestZ, new Date());
 
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.persist(chestShop);
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            session.persist(chestShop);
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
 
         return chestShop;
     }
@@ -64,14 +67,17 @@ public class ChestShopRepository {
      */
     public ChestShop getChestShop(Long id) throws ChestShopNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        ChestShop data = session.get(ChestShop.class, id);
-        session.getTransaction().commit();
-        session.close();
-        if (data == null) {
-            throw new ChestShopNotFoundException("チェストショップデータが存在しませんでした");
+        try {
+            session.beginTransaction();
+            ChestShop data = session.get(ChestShop.class, id);
+            session.getTransaction().commit();
+            if (data == null) {
+                throw new ChestShopNotFoundException("チェストショップデータが存在しませんでした");
+            }
+            return data;
+        } finally {
+            session.close();
         }
-        return data;
     }
 
     /**
@@ -81,10 +87,13 @@ public class ChestShopRepository {
      */
     public void updateChestShop(ChestShop chestShop) {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.merge(chestShop);
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            session.merge(chestShop);
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
     }
 
     /**
@@ -95,14 +104,17 @@ public class ChestShopRepository {
      */
     public List<ChestShop> getChestShops() throws ChestShopNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        List<ChestShop> data = session.createSelectionQuery("FROM ChestShop", ChestShop.class).getResultList();
-        session.getTransaction().commit();
-        session.close();
-        if (data == null) {
-            throw new ChestShopNotFoundException("チェストショップデータが存在しませんでした");
+        try {
+            session.beginTransaction();
+            List<ChestShop> data = session.createSelectionQuery("FROM ChestShop", ChestShop.class).getResultList();
+            session.getTransaction().commit();
+            if (data == null) {
+                throw new ChestShopNotFoundException("チェストショップデータが存在しませんでした");
+            }
+            return data;
+        } finally {
+            session.close();
         }
-        return data;
     }
 
     /**
@@ -112,48 +124,58 @@ public class ChestShopRepository {
      */
     public void deleteChestShop(ChestShop chestShop) {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.remove(chestShop);
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            session.remove(chestShop);
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
     }
 
     public ChestShop getChestShopByLocation(Location location) throws ChestShopNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        ChestShop data = session.createQuery("FROM ChestShop WHERE mainChest_x = :x AND mainChest_y = :y AND mainChest_z = :z AND world_name = :world_name", ChestShop.class)
-                .setParameter("x", location.getX())
-                .setParameter("y", location.getY())
-                .setParameter("z", location.getZ())
-                .setParameter("world_name", location.getWorld().getWorldFolder().getName())
-                .uniqueResult();
-        session.getTransaction().commit();
-        session.close();
-        if (data == null) {
-            throw new ChestShopNotFoundException("チェストショップデータが見つかりません");
-        }
-        return data;
+        try {
+            session.beginTransaction();
+            ChestShop data = session.createQuery("FROM ChestShop WHERE mainChest_x = :x AND mainChest_y = :y AND mainChest_z = :z AND world_name = :world_name", ChestShop.class)
+                    .setParameter("x", location.getX())
+                    .setParameter("y", location.getY())
+                    .setParameter("z", location.getZ())
+                    .setParameter("world_name", location.getWorld().getWorldFolder().getName())
+                    .uniqueResult();
+            session.getTransaction().commit();
 
+            if (data == null) {
+                throw new ChestShopNotFoundException("チェストショップデータが見つかりません");
+            }
+            return data;
+        } finally {
+            session.close();
+        }
     }
 
     public ChestShop getChestShopBySignLocation(Location location) throws ChestShopNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        ChestShop data = session.createQuery("FROM ChestShop WHERE sign_x = :x AND sign_y = :y AND sign_z = :z AND world_name = :world_name", ChestShop.class)
-                .setParameter("x", location.getX())
-                .setParameter("y", location.getY())
-                .setParameter("z", location.getZ())
-                .setParameter("world_name", location.getWorld().getWorldFolder().getName())
-                .uniqueResult();
-        session.getTransaction().commit();
-        session.close();
-        if (data == null) {
-            throw new ChestShopNotFoundException("チェストショップデータが見つかりませんでした");
+        try {
+            session.beginTransaction();
+            ChestShop data = session.createQuery("FROM ChestShop WHERE sign_x = :x AND sign_y = :y AND sign_z = :z AND world_name = :world_name", ChestShop.class)
+                    .setParameter("x", location.getX())
+                    .setParameter("y", location.getY())
+                    .setParameter("z", location.getZ())
+                    .setParameter("world_name", location.getWorld().getWorldFolder().getName())
+                    .uniqueResult();
+            session.getTransaction().commit();
+
+            if (data == null) {
+                throw new ChestShopNotFoundException("チェストショップデータが見つかりませんでした");
+            }
+            return data;
+        } finally {
+            session.close();
         }
-        return data;
     }
 
-    public boolean existsChestShopChest(Location location){
+    public boolean existsChestShopChest(Location location) {
         try {
             getChestShopByLocation(location);
         } catch (ChestShopNotFoundException e) {
@@ -162,10 +184,10 @@ public class ChestShopRepository {
         return true;
     }
 
-    public boolean existsChestShopSign(Location location){
-        try{
+    public boolean existsChestShopSign(Location location) {
+        try {
             getChestShopBySignLocation(location);
-        }catch(ChestShopNotFoundException e){
+        } catch (ChestShopNotFoundException e) {
             return false;
         }
         return true;

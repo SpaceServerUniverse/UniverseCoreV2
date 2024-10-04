@@ -41,10 +41,14 @@ public class UserRepository {
 
         Session session = this.sessionFactory.getCurrentSession();
 
-        session.beginTransaction();
-        session.persist(user);//save
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            session.persist(user);//save
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
+
 
         return user;
     }
@@ -54,18 +58,21 @@ public class UserRepository {
      *
      * @param id Long(PrimaryKey)
      * @return User | null
-     * @exception UserNotFoundException ユーザーが存在しない
+     * @throws UserNotFoundException ユーザーが存在しない
      */
     public User getUser(Long id) throws UserNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        User data = session.get(User.class, id);
-        session.getTransaction().commit();
-        session.close();
-        if (data == null) {
-            throw new UserNotFoundException("ユーザーデータが存在しませんでした。 ID:" + id);
+        try {
+            session.beginTransaction();
+            User data = session.get(User.class, id);
+            session.getTransaction().commit();
+            if (data == null) {
+                throw new UserNotFoundException("ユーザーデータが存在しませんでした。 ID:" + id);
+            }
+            return data;
+        } finally {
+            session.close();
         }
-        return data;
     }
 
     /**
@@ -73,19 +80,22 @@ public class UserRepository {
      *
      * @param uuid UUID
      * @return User | null
-     * @exception UserNotFoundException ユーザーが存在しない
+     * @throws UserNotFoundException ユーザーが存在しない
      */
     public User getUserFromUUID(UUID uuid) throws UserNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        User data = session.createSelectionQuery("from User where uuid = ?1", User.class)
-                .setParameter(1, uuid.toString()).getSingleResultOrNull();
-        session.getTransaction().commit();
-        session.close();
-        if (data == null) {
-            throw new UserNotFoundException("ユーザーデータが存在しませんでした。 UUID:" + uuid);
+        try {
+            session.beginTransaction();
+            User data = session.createSelectionQuery("from User where uuid = ?1", User.class)
+                    .setParameter(1, uuid.toString()).getSingleResultOrNull();
+            session.getTransaction().commit();
+            if (data == null) {
+                throw new UserNotFoundException("ユーザーデータが存在しませんでした。 UUID:" + uuid);
+            }
+            return data;
+        } finally {
+            session.close();
         }
-        return data;
     }
 
     /**
@@ -93,19 +103,23 @@ public class UserRepository {
      *
      * @param name String
      * @return User | null
-     * @exception UserNotFoundException ユーザーが存在しない
+     * @throws UserNotFoundException ユーザーが存在しない
      */
     public User getUserFromPlayerName(String name) throws UserNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        User data = session.createSelectionQuery("from User where name = ?1", User.class)
-                .setParameter(1, name).getSingleResultOrNull();
-        session.getTransaction().commit();
-        session.close();
-        if (data == null) {
-            throw new UserNotFoundException("ユーザーデータが存在しませんでした。 name:" + name);
+        try {
+            session.beginTransaction();
+            User data = session.createSelectionQuery("from User where name = ?1", User.class)
+                    .setParameter(1, name).getSingleResultOrNull();
+            session.getTransaction().commit();
+            session.close();
+            if (data == null) {
+                throw new UserNotFoundException("ユーザーデータが存在しませんでした。 name:" + name);
+            }
+            return data;
+        } finally {
+            session.close();
         }
-        return data;
     }
 
     /**
@@ -158,7 +172,7 @@ public class UserRepository {
      *
      * @param uuid UUID
      * @return Long(PrimaryKey) long
-     * @exception UserNotFoundException ユーザーが存在しない
+     * @throws UserNotFoundException ユーザーが存在しない
      */
     public Long getPrimaryKeyFromUUID(UUID uuid) throws UserNotFoundException {
         User user = this.getUserFromUUID(uuid);
@@ -170,7 +184,7 @@ public class UserRepository {
      *
      * @param name String
      * @return Long(PrimaryKey) long
-     * @exception UserNotFoundException ユーザーが存在しない
+     * @throws UserNotFoundException ユーザーが存在しない
      */
     public Long getPrimaryKeyFromPlayerName(String name) throws UserNotFoundException {
         User user = this.getUserFromPlayerName(name);
@@ -184,10 +198,13 @@ public class UserRepository {
      */
     public void updateUser(User user) {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.merge(user);//update
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            session.merge(user);//update
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
     }
 
     /**
@@ -197,9 +214,12 @@ public class UserRepository {
      */
     public void deleteUser(User user) {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.remove(user); //delete
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            session.remove(user); //delete
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
     }
 }

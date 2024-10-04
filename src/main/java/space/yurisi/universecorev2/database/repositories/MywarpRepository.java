@@ -54,10 +54,13 @@ public class MywarpRepository {
         Mywarp mywarp = new Mywarp(null, user_id, warp_name, x, y, z, world_name, is_private, new Date(), new Date());
 
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.persist(mywarp);
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            session.persist(mywarp);
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
 
         return mywarp;
     }
@@ -71,16 +74,18 @@ public class MywarpRepository {
      */
     public Mywarp getMywarp(Long id) throws MywarpNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        Mywarp data = session.get(Mywarp.class, id);
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            Mywarp data = session.get(Mywarp.class, id);
+            session.getTransaction().commit();
+            if (data == null) {
+                throw new MywarpNotFoundException("マイワープデータが見つかりません");
+            }
 
-        if (data == null) {
-            throw new MywarpNotFoundException("マイワープデータが見つかりません");
+            return data;
+        } finally {
+            session.close();
         }
-
-        return data;
     }
 
     /**
@@ -92,16 +97,20 @@ public class MywarpRepository {
      */
     public List<Mywarp> getMywarpFromUserId(Long user_id) throws MywarpNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        List<Mywarp> data = session.createSelectionQuery("from Mywarp where user_id = ?1", Mywarp.class)
-                .setParameter(1, user_id).getResultList();
-        session.getTransaction().commit();
-        session.close();
-        if (data.isEmpty()) {
-            throw new MywarpNotFoundException("マイワープデータが見つかりません");
-        }
+        try {
+            session.beginTransaction();
+            List<Mywarp> data = session.createSelectionQuery("from Mywarp where user_id = ?1", Mywarp.class)
+                    .setParameter(1, user_id).getResultList();
+            session.getTransaction().commit();
 
-        return data;
+            if (data.isEmpty()) {
+                throw new MywarpNotFoundException("マイワープデータが見つかりません");
+            }
+
+            return data;
+        } finally {
+            session.close();
+        }
     }
 
     /**
@@ -113,11 +122,14 @@ public class MywarpRepository {
      */
     public Mywarp updateMywarp(Mywarp mywarp) throws MywarpNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.merge(mywarp);
-        session.getTransaction().commit();
-        session.close();
-        return mywarp;
+        try {
+            session.beginTransaction();
+            session.merge(mywarp);
+            session.getTransaction().commit();
+            return mywarp;
+        } finally {
+            session.close();
+        }
     }
 
     /**
@@ -128,10 +140,13 @@ public class MywarpRepository {
      */
     public void deleteMywarp(Mywarp mywarp) throws MywarpNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.remove(mywarp);
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            session.remove(mywarp);
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
     }
 
     /**
@@ -144,20 +159,23 @@ public class MywarpRepository {
     public List<Mywarp> getPublicMywarpFromUserId(Long user_id) throws MywarpNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
         session.beginTransaction();
-        List<Mywarp> data = session.createSelectionQuery("from Mywarp where user_id = ?1 and is_private = false", Mywarp.class)
-                .setParameter(1, user_id).getResultList();
-        session.getTransaction().commit();
-        session.close();
+        try {
+            List<Mywarp> data = session.createSelectionQuery("from Mywarp where user_id = ?1 and is_private = false", Mywarp.class)
+                    .setParameter(1, user_id).getResultList();
+            session.getTransaction().commit();
 
-        if (data.isEmpty()) {
-            throw new MywarpNotFoundException("マイワープポイントが見つかりません");
-        }
-        data.removeIf(Mywarp::getIs_private);
-        if(data.isEmpty()){
-            throw new MywarpNotFoundException("公開マイワープポイントが見つかりません");
-        }
+            if (data.isEmpty()) {
+                throw new MywarpNotFoundException("マイワープポイントが見つかりません");
+            }
+            data.removeIf(Mywarp::getIs_private);
+            if (data.isEmpty()) {
+                throw new MywarpNotFoundException("公開マイワープポイントが見つかりません");
+            }
 
-        return data;
+            return data;
+        } finally {
+            session.close();
+        }
     }
 
 }

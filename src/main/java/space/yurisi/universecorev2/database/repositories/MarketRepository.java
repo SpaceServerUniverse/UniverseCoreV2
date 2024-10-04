@@ -35,13 +35,16 @@ public class MarketRepository {
      */
     public List<Market> getItems() {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        List<Market> market = session.createSelectionQuery("from Market where isSold != :is_sold", Market.class)
-                .setParameter("is_sold", true)
-                .getResultList();
-        session.getTransaction().commit();
-        session.close();
-        return market;
+        try {
+            session.beginTransaction();
+            List<Market> market = session.createSelectionQuery("from Market where isSold != :is_sold", Market.class)
+                    .setParameter("is_sold", true)
+                    .getResultList();
+            session.getTransaction().commit();
+            return market;
+        } finally {
+            session.close();
+        }
     }
 
     /**
@@ -53,21 +56,21 @@ public class MarketRepository {
      * @throws MarketItemNotFoundException アイテムがない
      */
     public Market getItemFromId(Long id, boolean isPurchaseSearchEnabled) throws MarketItemNotFoundException {
-        if (isPurchaseSearchEnabled) {
-            Session session = this.sessionFactory.getCurrentSession();
-            session.beginTransaction();
-            List<Market> data = session.createSelectionQuery("from Market where isSold != :is_sold and id = :id", Market.class)
-                    .setParameter("id", id)
-                    .setParameter("is_sold", true)
-                    .getResultList();
-            session.getTransaction().commit();
-            session.close();
-            if (data.isEmpty()) {
-                throw new MarketItemNotFoundException("マーケットにアイテムが存在しませんでした。id: " + id);
+        Session session = this.sessionFactory.getCurrentSession();
+        try {
+            if (isPurchaseSearchEnabled) {
+                session.beginTransaction();
+                List<Market> data = session.createSelectionQuery("from Market where isSold != :is_sold and id = :id", Market.class)
+                        .setParameter("id", id)
+                        .setParameter("is_sold", true)
+                        .getResultList();
+                session.getTransaction().commit();
+                if (data.isEmpty()) {
+                    throw new MarketItemNotFoundException("マーケットにアイテムが存在しませんでした。id: " + id);
+                }
+                return data.getFirst();
             }
-            return data.getFirst();
-        } else {
-            Session session = this.sessionFactory.getCurrentSession();
+
             session.beginTransaction();
             Market data = session.get(Market.class, id);
             session.getTransaction().commit();
@@ -76,6 +79,8 @@ public class MarketRepository {
                 throw new MarketItemNotFoundException("マーケットにアイテムが存在しませんでした。id: " + id);
             }
             return data;
+        } finally {
+            session.close();
         }
     }
 
@@ -86,25 +91,27 @@ public class MarketRepository {
      * @return List<Market>
      */
     public List<Market> getItemFromPlayer(String uuid, boolean isPurchaseSearchEnabled) {
-        if (isPurchaseSearchEnabled) {
-            Session session = this.sessionFactory.getCurrentSession();
+        Session session = this.sessionFactory.getCurrentSession();
+        try {
             session.beginTransaction();
-            List<Market> data = session.createSelectionQuery("from Market where playerUuid = :uuid and isSold != :is_sold", Market.class)
-                    .setParameter("uuid", uuid)
-                    .setParameter("is_sold", true)
-                    .getResultList();
+            List<Market> data;
+            if (isPurchaseSearchEnabled) {
+                data = session.createSelectionQuery("from Market where playerUuid = :uuid and isSold != :is_sold", Market.class)
+                        .setParameter("uuid", uuid)
+                        .setParameter("is_sold", true)
+                        .getResultList();
+            } else {
+                data = session.createSelectionQuery("from Market where playerUuid = :uuid", Market.class)
+                        .setParameter("uuid", uuid)
+                        .getResultList();
+                session.getTransaction().commit();
+            }
             session.getTransaction().commit();
-            session.close();
-            return data;
-        } else {
-            Session session = this.sessionFactory.getCurrentSession();
             session.beginTransaction();
-            List<Market> data = session.createSelectionQuery("from Market where playerUuid = :uuid", Market.class)
-                    .setParameter("uuid", uuid)
-                    .getResultList();
-            session.getTransaction().commit();
-            session.close();
+
             return data;
+        } finally {
+            session.close();
         }
     }
 
@@ -122,10 +129,14 @@ public class MarketRepository {
     public Market createItemData(String uuid, String itemName, String displayName, byte[] serializedItemStack, String serializedItemStackJson, String serializedItemStackMetaJson, Long price) {
         Session session = this.sessionFactory.getCurrentSession();
         Market market = new Market(null, uuid, itemName, displayName, serializedItemStack, serializedItemStackJson, serializedItemStackMetaJson, price, 0, 0, null);
-        session.beginTransaction();
-        session.persist(market);
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            session.persist(market);
+            session.getTransaction().commit();
+
+        } finally {
+            session.close();
+        }
         return market;
     }
 
@@ -139,10 +150,13 @@ public class MarketRepository {
     public Market removeItem(Long id, boolean isPurchaseSearchEnabled) throws MarketItemNotFoundException {
         Market market = this.getItemFromId(id, isPurchaseSearchEnabled);
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.remove(market);
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            session.remove(market);
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
         return market;
     }
 
@@ -157,10 +171,13 @@ public class MarketRepository {
         market.setReceivedItem(false);
         market.setPurchaserUuid(player.getUniqueId().toString());
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.merge(market);
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            session.merge(market);
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
     }
 
     public void addPurchased(Market market, Player player) {
@@ -168,32 +185,40 @@ public class MarketRepository {
         market.setReceivedItem(false);
         market.setPurchaserUuid(player.getUniqueId().toString());
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.merge(market);
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            session.merge(market);
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
     }
 
     public List<Market> getItemFromPurchaser(String uuid) {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        List<Market> markets = session.createSelectionQuery("from Market where purchaserUuid = :uuid and isReceivedItem = :is_received", Market.class)
-                .setParameter("uuid", uuid)
-                .setParameter("is_received", false)
-                .getResultList();
-        session.getTransaction().commit();
-        ;
-        session.close();
-        return markets;
+        try {
+            session.beginTransaction();
+            List<Market> markets = session.createSelectionQuery("from Market where purchaserUuid = :uuid and isReceivedItem = :is_received", Market.class)
+                    .setParameter("uuid", uuid)
+                    .setParameter("is_received", false)
+                    .getResultList();
+            session.getTransaction().commit();
+            return markets;
+        } finally {
+            session.close();
+        }
     }
 
     public void receiveItem(Long id, Player player) throws MarketItemNotFoundException {
         Market market = removeItem(id, false);
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        market.setReceivedItem(true);
-        session.merge(market);
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            market.setReceivedItem(true);
+            session.merge(market);
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
     }
 }

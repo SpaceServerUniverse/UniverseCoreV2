@@ -18,7 +18,7 @@ public class MoneyRepository {
     /**
      * Instantiates a new Money repository.
      *
-     * @param sessionFactory session factory
+     * @param sessionFactory         session factory
      * @param moneyHistoryRepository MoneyHistoryRepository
      */
     public MoneyRepository(SessionFactory sessionFactory, MoneyHistoryRepository moneyHistoryRepository) {
@@ -38,13 +38,14 @@ public class MoneyRepository {
 
         Session session = this.sessionFactory.getCurrentSession();
 
-        session.beginTransaction();
-        session.persist(money);//save
-        session.getTransaction().commit();
-        session.close();
-
-        this.moneyHistoryRepository.createMoneyHistory(money, 1000L, "お金データの作成");
-
+        try {
+            session.beginTransaction();
+            session.persist(money);//save
+            session.getTransaction().commit();
+            this.moneyHistoryRepository.createMoneyHistory(money, 1000L, "お金データの作成");
+        } finally {
+            session.close();
+        }
         return money;
     }
 
@@ -53,18 +54,22 @@ public class MoneyRepository {
      *
      * @param id Long(PrimaryKey)
      * @return Money
-     * @exception MoneyNotFoundException お金データが存在しない
+     * @throws MoneyNotFoundException お金データが存在しない
      */
     public Money getMoney(Long id) throws MoneyNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        Money data = session.get(Money.class, id);
-        session.getTransaction().commit();
-        session.close();
-        if (data == null) {
-            throw new MoneyNotFoundException("お金データが存在しませんでした。 ID:" + id);
+        try {
+            session.beginTransaction();
+            Money data = session.get(Money.class, id);
+            session.getTransaction().commit();
+
+            if (data == null) {
+                throw new MoneyNotFoundException("お金データが存在しませんでした。 ID:" + id);
+            }
+            return data;
+        } finally {
+            session.close();
         }
-        return data;
     }
 
     /**
@@ -72,19 +77,23 @@ public class MoneyRepository {
      *
      * @param user_id Long
      * @return Money
-     * @exception MoneyNotFoundException お金データが存在しない
+     * @throws MoneyNotFoundException お金データが存在しない
      */
     public Money getMoneyFromUserId(Long user_id) throws MoneyNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        Money data = session.createSelectionQuery("from Money where user_id = ?1", Money.class)
-                .setParameter(1, user_id).getSingleResultOrNull();
-        session.getTransaction().commit();
-        session.close();
-        if (data == null) {
-            throw new MoneyNotFoundException("お金データが存在しませんでした。 user_id:" + user_id);
+        try {
+            session.beginTransaction();
+            Money data = session.createSelectionQuery("from Money where user_id = ?1", Money.class)
+                    .setParameter(1, user_id).getSingleResultOrNull();
+            session.getTransaction().commit();
+
+            if (data == null) {
+                throw new MoneyNotFoundException("お金データが存在しませんでした。 user_id:" + user_id);
+            }
+            return data;
+        } finally {
+            session.close();
         }
-        return data;
     }
 
     /**
@@ -94,10 +103,10 @@ public class MoneyRepository {
      * @return boolean
      */
     public boolean existsMoney(Long id) {
-        try{
+        try {
             getMoney(id);
             return true;
-        }catch (MoneyNotFoundException e){
+        } catch (MoneyNotFoundException e) {
             return false;
         }
     }
@@ -112,7 +121,7 @@ public class MoneyRepository {
         try {
             getMoneyFromUserId(user_id);
             return true;
-        } catch (MoneyNotFoundException e){
+        } catch (MoneyNotFoundException e) {
             return false;
         }
     }
@@ -122,7 +131,7 @@ public class MoneyRepository {
      *
      * @param user_id Long
      * @return Long(PrimaryKey) long
-     * @exception MoneyNotFoundException お金データが存在しない
+     * @throws MoneyNotFoundException お金データが存在しない
      */
     public Long getPrimaryKeyFromUserId(Long user_id) throws MoneyNotFoundException {
         Money money = this.getMoneyFromUserId(user_id);
@@ -139,27 +148,33 @@ public class MoneyRepository {
         Long money_change = 0L;
         String reason = "";
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.merge(money);//update
-        session.getTransaction().commit();
-        this.moneyHistoryRepository.createMoneyHistory(money, money_change, reason);
-        session.close();
+        try {
+            session.beginTransaction();
+            session.merge(money);//update
+            session.getTransaction().commit();
+            this.moneyHistoryRepository.createMoneyHistory(money, money_change, reason);
+        } finally {
+            session.close();
+        }
     }
 
     /**
      * お金モデルに基づきデータをアップデートします。
      *
-     * @param money Money
+     * @param money  Money
      * @param reason 理由
      */
     public void updateMoney(Money money, String reason) {
         Long money_change = 0L;
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.merge(money);//update
-        session.getTransaction().commit();
-        this.moneyHistoryRepository.createMoneyHistory(money, money_change, reason);
-        session.close();
+        try {
+            session.beginTransaction();
+            session.merge(money);//update
+            session.getTransaction().commit();
+            this.moneyHistoryRepository.createMoneyHistory(money, money_change, reason);
+        } finally {
+            session.close();
+        }
     }
 
     /**
@@ -170,49 +185,57 @@ public class MoneyRepository {
     public void updateMoney(Money money, Long money_change) {
         String reason = "";
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.merge(money);//update
-        session.getTransaction().commit();
-        this.moneyHistoryRepository.createMoneyHistory(money, money_change, reason);
-        session.close();
+        try {
+            session.beginTransaction();
+            session.merge(money);//update
+            session.getTransaction().commit();
+            this.moneyHistoryRepository.createMoneyHistory(money, money_change, reason);
+        } finally {
+            session.close();
+        }
     }
 
     /**
      * お金モデルに基づきデータをアップデートします。
      *
-     * @param money Money
+     * @param money        Money
      * @param money_change お金の増減
-     * @param reason 理由
+     * @param reason       理由
      */
     public void updateMoney(Money money, Long money_change, String reason) {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.merge(money);//update
-        session.getTransaction().commit();
-        this.moneyHistoryRepository.createMoneyHistory(money, money_change, reason);
-        session.close();
+        try {
+            session.beginTransaction();
+            session.merge(money);//update
+            session.getTransaction().commit();
+            this.moneyHistoryRepository.createMoneyHistory(money, money_change, reason);
+        } finally {
+            session.close();
+        }
     }
 
     /**
      * トランザクション付きで2人のプレイヤーのお金を増減します。
      *
-     * @param send_money Money
+     * @param send_money    Money
      * @param receive_money Money
-     * @param money_change お金の増減
-     * @param reason 理由
+     * @param money_change  お金の増減
+     * @param reason        理由
      */
-    public Boolean moveMoney(Money send_money, Money receive_money, Long money_change, String reason){
+    public Boolean moveMoney(Money send_money, Money receive_money, Long money_change, String reason) {
+        Session session = this.sessionFactory.getCurrentSession();
         try {
-            Session session = this.sessionFactory.getCurrentSession();
             session.beginTransaction();
             session.merge(send_money);
             session.merge(receive_money);
             session.getTransaction().commit();
             this.moneyHistoryRepository.createMoneyHistory(send_money, money_change, reason);
             this.moneyHistoryRepository.createMoneyHistory(receive_money, money_change, reason);
-            session.close();
-        } catch (Exception ignored){
+
+        } catch (Exception ignored) {
             return false;
+        } finally {
+            session.close();
         }
 
         return true;
@@ -225,9 +248,13 @@ public class MoneyRepository {
      */
     public void deleteMoney(Money money) {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.remove(money); //delete
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            session.remove(money); //delete
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
+
     }
 }
