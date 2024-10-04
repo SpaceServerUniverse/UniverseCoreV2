@@ -3,6 +3,7 @@ package space.yurisi.universecorev2.subplugins.universeguns.event;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
+import org.bukkit.Particle;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -219,6 +220,7 @@ public class GunEvent implements Listener {
                 isHandlingExplosion.set(true);
                 try {
                     snowball.getWorld().createExplosion(loc, radius, false, false, snowball);
+                    snowball.getWorld().spawnParticle(Particle.EXPLOSION, loc, 1);
                 } finally {
                     isHandlingExplosion.set(false);
                 }
@@ -229,7 +231,8 @@ public class GunEvent implements Listener {
                 damage *= headShotTimes;
             }
 
-            event.setDamage(damage);
+//            event.setDamage(damage);
+            entity.setHealth(entity.getHealth() - damage);
             entity.setMaximumNoDamageTicks(0);
             entity.setNoDamageTicks(0);
             entity.setLastDamage(Integer.MAX_VALUE);
@@ -259,6 +262,8 @@ public class GunEvent implements Listener {
             isHandlingExplosion.set(true);
             try {
                 snowball.getWorld().createExplosion(loc, radius, false, false, snowball);
+
+                snowball.getWorld().spawnParticle(Particle.EXPLOSION, loc, 1);
             } finally {
                 isHandlingExplosion.set(false);
             }
