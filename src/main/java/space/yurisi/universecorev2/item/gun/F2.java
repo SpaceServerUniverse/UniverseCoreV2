@@ -1,7 +1,9 @@
 package space.yurisi.universecorev2.item.gun;
 
 import org.bukkit.Sound;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import space.yurisi.universecorev2.subplugins.universeguns.constants.GunType;
 
 import org.bukkit.Material;
@@ -45,6 +47,13 @@ public final class F2 extends Gun {
 
     @Override
     protected void registerItemFunction(){
-        default_setting = (item) -> item;
+        default_setting = (item) -> {
+            ItemMeta meta = item.getItemMeta();
+            if (meta != null) {
+                meta.setCustomModelData(5);
+            }
+            item.setItemMeta(meta);
+            return item;
+        };
     }
 }

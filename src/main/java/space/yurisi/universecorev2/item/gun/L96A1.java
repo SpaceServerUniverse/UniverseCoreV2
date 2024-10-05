@@ -3,6 +3,7 @@ package space.yurisi.universecorev2.item.gun;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import space.yurisi.universecorev2.subplugins.universeguns.constants.GunType;
 
 public final class L96A1 extends Gun {
@@ -41,6 +42,13 @@ public final class L96A1 extends Gun {
 
     @Override
     protected void registerItemFunction(){
-        default_setting = (item) -> item;
+        default_setting = (item) -> {
+            ItemMeta meta = item.getItemMeta();
+            if (meta != null) {
+                meta.setCustomModelData(2);
+            }
+            item.setItemMeta(meta);
+            return item;
+        };
     }
 }
