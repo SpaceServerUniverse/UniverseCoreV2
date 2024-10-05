@@ -19,6 +19,7 @@ import space.yurisi.universecorev2.database.models.Money;
 import space.yurisi.universecorev2.exception.MarketItemNotFoundException;
 import space.yurisi.universecorev2.exception.MoneyNotFoundException;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
+import space.yurisi.universecorev2.subplugins.freemarket.data.Config;
 import space.yurisi.universecorev2.subplugins.freemarket.data.JsonConverter;
 import space.yurisi.universecorev2.subplugins.freemarket.menu.MarketMenu;
 import space.yurisi.universecorev2.subplugins.freemarket.menu.PurchasedItemMenu;
@@ -35,6 +36,11 @@ import java.util.List;
 public class marketCommand implements CommandExecutor, TabCompleter {
 
     public static final String FreeMarketMessage = "[フリーマーケット]";
+    private final Config config;
+
+    public marketCommand(Config config){
+        this.config = config;
+    }
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
@@ -51,6 +57,8 @@ public class marketCommand implements CommandExecutor, TabCompleter {
                         if (price < 0) {
                             Message.sendErrorMessage(player, FreeMarketMessage, "値段は0未満にならないようにしてください");
                             return true;
+                        }else if(price > this.config.getLimit()){
+                            Message.sendErrorMessage(player, FreeMarketMessage, "値段は"+this.config.getLimit().toString()+"以上にならないようにしてください");
                         }
                         ItemStack item = player.getInventory().getItemInMainHand();
                         if (item.getType() == Material.AIR) {
