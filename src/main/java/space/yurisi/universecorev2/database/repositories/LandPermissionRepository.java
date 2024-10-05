@@ -40,11 +40,13 @@ public class LandPermissionRepository {
         LandPermission landPermission = new LandPermission(null, land.getId(), user.getUuid(), new Date());
 
         Session session = this.sessionFactory.getCurrentSession();
-
-        session.beginTransaction();
-        session.persist(landPermission);//save
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            session.persist(landPermission);//save
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
 
         return landPermission;
     }
@@ -59,17 +61,20 @@ public class LandPermissionRepository {
      */
     public LandPermission getLandPermission(User user, Land land) throws LandPermissionNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        LandPermission data = session.createSelectionQuery("from LandPermission where land_id = ?1 and uuid = ?2", LandPermission.class)
-                .setParameter(1, land.getId())
-                .setParameter(2, user.getUuid())
-                .getSingleResultOrNull();
-        session.getTransaction().commit();
-        session.close();
-        if (data == null) {
-            throw new LandPermissionNotFoundException("土地保護の権限データが存在しませんでした。");
+        try {
+            session.beginTransaction();
+            LandPermission data = session.createSelectionQuery("from LandPermission where land_id = ?1 and uuid = ?2", LandPermission.class)
+                    .setParameter(1, land.getId())
+                    .setParameter(2, user.getUuid())
+                    .getSingleResultOrNull();
+            session.getTransaction().commit();
+            if (data == null) {
+                throw new LandPermissionNotFoundException("土地保護の権限データが存在しませんでした。");
+            }
+            return data;
+        } finally {
+            session.close();
         }
-        return data;
     }
 
     /**
@@ -81,16 +86,20 @@ public class LandPermissionRepository {
      */
     public List<LandPermission> getLandPermissions(Land land) throws LandPermissionNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        List<LandPermission> data = session.createSelectionQuery("from LandPermission where land_id = ?1", LandPermission.class)
-                .setParameter(1, land.getId())
-                .getResultList();
-        session.getTransaction().commit();
-        session.close();
-        if (data == null) {
-            throw new LandPermissionNotFoundException("土地保護の権限データが存在しませんでした。");
+        try {
+            session.beginTransaction();
+            List<LandPermission> data = session.createSelectionQuery("from LandPermission where land_id = ?1", LandPermission.class)
+                    .setParameter(1, land.getId())
+                    .getResultList();
+            session.getTransaction().commit();
+
+            if (data == null) {
+                throw new LandPermissionNotFoundException("土地保護の権限データが存在しませんでした。");
+            }
+            return data;
+        } finally {
+            session.close();
         }
-        return data;
     }
 
     /**
@@ -100,9 +109,12 @@ public class LandPermissionRepository {
      */
     public void deleteLandPermission(LandPermission landPermission) {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.remove(landPermission); //delete
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            session.remove(landPermission); //delete
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
     }
 }

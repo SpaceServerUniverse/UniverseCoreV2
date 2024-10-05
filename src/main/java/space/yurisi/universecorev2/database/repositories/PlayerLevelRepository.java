@@ -21,7 +21,7 @@ public class PlayerLevelRepository {
      * ユーザーに基づきレベルを作成します。
      *
      * @param player Player
-     * @param user UserModel
+     * @param user   UserModel
      * @return User | null
      */
     public PlayerLevel createPlayerLevel(Player player, User user) {
@@ -30,11 +30,13 @@ public class PlayerLevelRepository {
         );
 
         Session session = this.sessionFactory.getCurrentSession();
-
-        session.beginTransaction();
-        session.persist(userLevel);//save
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            session.persist(userLevel);//save
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
 
         return userLevel;
     }
@@ -44,18 +46,21 @@ public class PlayerLevelRepository {
      *
      * @param id Long(PrimaryKey)
      * @return User | null
-     * @exception PlayerLevelNotFoundException レベルデータが存在しない
+     * @throws PlayerLevelNotFoundException レベルデータが存在しない
      */
     public PlayerLevel getPlayerLevel(Long id) throws PlayerLevelNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        PlayerLevel data = session.get(PlayerLevel.class, id);
-        session.getTransaction().commit();
-        session.close();
-        if (data == null) {
-            throw new PlayerLevelNotFoundException("ユーザーデータが存在しませんでした。 ID:" + id);
+        try {
+            session.beginTransaction();
+            PlayerLevel data = session.get(PlayerLevel.class, id);
+            session.getTransaction().commit();
+            if (data == null) {
+                throw new PlayerLevelNotFoundException("ユーザーデータが存在しませんでした。 ID:" + id);
+            }
+            return data;
+        } finally {
+            session.close();
         }
-        return data;
     }
 
     /**
@@ -63,19 +68,22 @@ public class PlayerLevelRepository {
      *
      * @param user User
      * @return User | null
-     * @exception PlayerLevelNotFoundException レベルデータが存在しない
+     * @throws PlayerLevelNotFoundException レベルデータが存在しない
      */
-    public PlayerLevel getPlayerLevelFromUser(User user) throws  PlayerLevelNotFoundException {
+    public PlayerLevel getPlayerLevelFromUser(User user) throws PlayerLevelNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        PlayerLevel data = session.createSelectionQuery("from PlayerLevel where user_id = ?1", PlayerLevel.class)
-                .setParameter(1, user.getId()).getSingleResultOrNull();
-        session.getTransaction().commit();
-        session.close();
-        if (data == null) {
-            throw new PlayerLevelNotFoundException("ユーザーレベルデータが存在しませんでした。 UserId:" + user.getId());
+        try {
+            session.beginTransaction();
+            PlayerLevel data = session.createSelectionQuery("from PlayerLevel where user_id = ?1", PlayerLevel.class)
+                    .setParameter(1, user.getId()).getSingleResultOrNull();
+            session.getTransaction().commit();
+            if (data == null) {
+                throw new PlayerLevelNotFoundException("ユーザーレベルデータが存在しませんでした。 UserId:" + user.getId());
+            }
+            return data;
+        } finally {
+            session.close();
         }
-        return data;
     }
 
 
@@ -116,10 +124,13 @@ public class PlayerLevelRepository {
      */
     public void updatePlayerLevel(PlayerLevel level) {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.merge(level);//update
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            session.merge(level);//update
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
     }
 
     /**
@@ -129,9 +140,12 @@ public class PlayerLevelRepository {
      */
     public void deletePlayerLevel(PlayerLevel level) {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.remove(level); //delete
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            session.remove(level); //delete
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
     }
 }
