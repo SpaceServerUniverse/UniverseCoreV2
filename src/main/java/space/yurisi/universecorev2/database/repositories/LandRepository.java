@@ -43,13 +43,14 @@ public class LandRepository {
      */
     public Land createLand(Player player, int start_x, int start_z, int end_x, int end_z, String world_name, Long price) {
         Land land = new Land(null, player.getUniqueId().toString(), start_x, start_z, end_x, end_z, world_name, price, new Date());
-
         Session session = this.sessionFactory.getCurrentSession();
-
-        session.beginTransaction();
-        session.persist(land);//save
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            session.persist(land);//save
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
 
         return land;
     }
@@ -63,14 +64,18 @@ public class LandRepository {
      */
     public Land getLand(Long id) throws LandNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        Land data = session.get(Land.class, id);
-        session.getTransaction().commit();
-        session.close();
-        if (data == null) {
-            throw new LandNotFoundException("土地保護データが存在しませんでした。 ID:" + id);
+        try {
+            session.beginTransaction();
+            Land data = session.get(Land.class, id);
+            session.getTransaction().commit();
+
+            if (data == null) {
+                throw new LandNotFoundException("土地保護データが存在しませんでした。 ID:" + id);
+            }
+            return data;
+        } finally {
+            session.close();
         }
-        return data;
     }
 
     /**
@@ -80,22 +85,30 @@ public class LandRepository {
      */
     public void updateLand(Land land) {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.merge(land);
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            session.merge(land);
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
+
     }
 
     public List<Land> getLands() throws LandNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        List<Land> data = session.createSelectionQuery("from Land", Land.class).getResultList();
-        session.getTransaction().commit();
-        session.close();
-        if (data == null) {
-            throw new LandNotFoundException("土地保護データが存在しませんでした。");
+        try {
+            session.beginTransaction();
+            List<Land> data = session.createSelectionQuery("from Land", Land.class).getResultList();
+            session.getTransaction().commit();
+
+            if (data == null) {
+                throw new LandNotFoundException("土地保護データが存在しませんでした。");
+            }
+            return data;
+        } finally {
+            session.close();
         }
-        return data;
     }
 
     /**
@@ -105,9 +118,13 @@ public class LandRepository {
      */
     public void deleteLand(Land land) {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.remove(land); //delete
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            session.remove(land); //delete
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
+
     }
 }

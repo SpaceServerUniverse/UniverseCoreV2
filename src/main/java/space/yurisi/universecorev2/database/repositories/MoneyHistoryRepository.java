@@ -27,20 +27,22 @@ public class MoneyHistoryRepository {
     /**
      * ユーザーとお金の変化に基づきお金履歴を作成します。
      *
-     * @param money Money
+     * @param money  Money
      * @param change Long ユーザーのお金の変化値
      * @param reason String 理由(255文字以下)
      * @return money_history MoneyHistory
      */
     public MoneyHistory createMoneyHistory(Money money, Long change, String reason) {
         MoneyHistory money_history = new MoneyHistory(null, money.getUser_id(), change, money.getMoney(), reason, new Date(), new Date());
-
         Session session = this.sessionFactory.getCurrentSession();
 
-        session.beginTransaction();
-        session.persist(money_history);//save
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            session.persist(money_history);//save
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
 
         return money_history;
     }
@@ -50,18 +52,21 @@ public class MoneyHistoryRepository {
      *
      * @param id Long(PrimaryKey)
      * @return Money
-     * @exception MoneyHistoryNotFoundException お金履歴データが存在しない
+     * @throws MoneyHistoryNotFoundException お金履歴データが存在しない
      */
     public MoneyHistory getMoneyHistory(Long id) throws MoneyHistoryNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        MoneyHistory data = session.get(MoneyHistory.class, id);
-        session.getTransaction().commit();
-        session.close();
-        if (data == null) {
-            throw new MoneyHistoryNotFoundException("お金履歴データが存在しませんでした。 ID:" + id);
+        try {
+            session.beginTransaction();
+            MoneyHistory data = session.get(MoneyHistory.class, id);
+            session.getTransaction().commit();
+            if (data == null) {
+                throw new MoneyHistoryNotFoundException("お金履歴データが存在しませんでした。 ID:" + id);
+            }
+            return data;
+        } finally {
+            session.close();
         }
-        return data;
     }
 
     /**
@@ -73,15 +78,18 @@ public class MoneyHistoryRepository {
      */
     public List<MoneyHistory> getMoneyHistoryFromUserId(Long user_id) throws MoneyNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        List<MoneyHistory> data = session.createSelectionQuery("from Money where user_id = ?1", MoneyHistory.class)
-                .setParameter(1, user_id).getResultList();
-        session.getTransaction().commit();
-        session.close();
-        if (data.isEmpty()) {
-            throw new MoneyNotFoundException("お金データが存在しませんでした。 user_id:" + user_id);
+        try {
+            session.beginTransaction();
+            List<MoneyHistory> data = session.createSelectionQuery("from Money where user_id = ?1", MoneyHistory.class)
+                    .setParameter(1, user_id).getResultList();
+            session.getTransaction().commit();
+            if (data.isEmpty()) {
+                throw new MoneyNotFoundException("お金データが存在しませんでした。 user_id:" + user_id);
+            }
+            return data;
+        } finally {
+            session.close();
         }
-        return data;
     }
 
     /**

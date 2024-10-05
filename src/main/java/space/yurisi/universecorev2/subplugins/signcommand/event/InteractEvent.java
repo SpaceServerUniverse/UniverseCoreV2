@@ -34,7 +34,10 @@ public class InteractEvent implements Listener {
         String command = commandBuilder.toString().trim();
 
         if (!command.isEmpty()) {
-            player.performCommand(command);
+            if (!player.isSneaking()) {
+                player.performCommand(command);
+                event.setCancelled(true);
+            }
         }
     }
 }

@@ -30,13 +30,14 @@ public class CustomNameRepository {
     public CustomName createCustomName(User user) {
         Long user_id = user.getId();
         CustomName custom_name = new CustomName(null, user_id, "", new Date(), new Date());
-
         Session session = this.sessionFactory.getCurrentSession();
-
-        session.beginTransaction();
-        session.persist(custom_name);//save
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            session.persist(custom_name);//save
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
 
         return custom_name;
     }
@@ -46,18 +47,21 @@ public class CustomNameRepository {
      *
      * @param id Long(PrimaryKey)
      * @return CustomName
-     * @exception CustomNameNotFoundException 称号データが存在しない
+     * @throws CustomNameNotFoundException 称号データが存在しない
      */
     public CustomName getCustomName(Long id) throws CustomNameNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        CustomName data = session.get(CustomName.class, id);
-        session.getTransaction().commit();
-        session.close();
-        if (data == null) {
-            throw new CustomNameNotFoundException("称号データが存在しませんでした。 ID:" + id);
+        try {
+            session.beginTransaction();
+            CustomName data = session.get(CustomName.class, id);
+            session.getTransaction().commit();
+            if (data == null) {
+                throw new CustomNameNotFoundException("称号データが存在しませんでした。 ID:" + id);
+            }
+            return data;
+        } finally {
+            session.close();
         }
-        return data;
     }
 
     /**
@@ -65,20 +69,23 @@ public class CustomNameRepository {
      *
      * @param user_id Long
      * @return CustomName
-     * @exception CustomNameNotFoundException 称号データが存在しない
+     * @throws CustomNameNotFoundException 称号データが存在しない
      */
     public CustomName getCustomNameFromUserId(Long user_id) throws CustomNameNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        CustomName data = session.createSelectionQuery("from CustomName where user_id = ?1", CustomName.class)
-                .setParameter(1, user_id).getSingleResultOrNull();
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            CustomName data = session.createSelectionQuery("from CustomName where user_id = ?1", CustomName.class)
+                    .setParameter(1, user_id).getSingleResultOrNull();
+            session.getTransaction().commit();
 
-        if (data == null) {
-            throw new CustomNameNotFoundException("称号データが存在しませんでした。 user_id:" + user_id);
+            if (data == null) {
+                throw new CustomNameNotFoundException("称号データが存在しませんでした。 user_id:" + user_id);
+            }
+            return data;
+        } finally {
+            session.close();
         }
-        return data;
     }
 
     /**
@@ -88,10 +95,10 @@ public class CustomNameRepository {
      * @return boolean
      */
     public boolean existsCustomName(Long id) {
-        try{
+        try {
             getCustomName(id);
             return true;
-        }catch (CustomNameNotFoundException e){
+        } catch (CustomNameNotFoundException e) {
             return false;
         }
     }
@@ -106,11 +113,10 @@ public class CustomNameRepository {
         try {
             getCustomNameFromUserId(user_id);
             return true;
-        } catch (CustomNameNotFoundException e){
+        } catch (CustomNameNotFoundException e) {
             return false;
         }
     }
-
 
 
     /**
@@ -120,10 +126,13 @@ public class CustomNameRepository {
      */
     public void updateCustomName(CustomName custom_name) {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.merge(custom_name);//update
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            session.merge(custom_name);//update
+            session.getTransaction().commit();
+        }finally {
+            session.close();
+        }
     }
 
 
@@ -134,9 +143,12 @@ public class CustomNameRepository {
      */
     public void deleteCustomName(CustomName custom_name) {
         Session session = this.sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        session.remove(custom_name); //delete
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            session.remove(custom_name); //delete
+            session.getTransaction().commit();
+        }finally {
+            session.close();
+        }
     }
 }

@@ -43,14 +43,18 @@ public class PositionRepository {
      */
     public String getNameFromUserPosition(UserPosition userPosition) throws PositionNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
-        Long id = userPosition.getPosition_id();
-        session.beginTransaction();
-        Position data = session.get(Position.class, id);
-        session.getTransaction().commit();
-        session.close();
-        if (data == null) {
-            throw new PositionNotFoundException("役職データが存在しませんでした。 ID:" + id);
+        try {
+            Long id = userPosition.getPosition_id();
+            session.beginTransaction();
+            Position data = session.get(Position.class, id);
+            session.getTransaction().commit();
+
+            if (data == null) {
+                throw new PositionNotFoundException("役職データが存在しませんでした。 ID:" + id);
+            }
+            return data.getName();
+        } finally {
+            session.close();
         }
-        return data.getName();
     }
 }
