@@ -11,7 +11,7 @@ public class InteractEvent implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (event.getAction() != Action.RIGHT_CLICK_BLOCK && event.getAction() != Action.LEFT_CLICK_BLOCK) {
+        if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
             return;
         }
 
@@ -35,6 +35,7 @@ public class InteractEvent implements Listener {
 
         if (!command.isEmpty()) {
             player.performCommand(command);
+            event.setCancelled(true);
         }
     }
 }
