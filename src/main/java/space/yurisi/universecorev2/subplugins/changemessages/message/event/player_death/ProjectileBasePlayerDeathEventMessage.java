@@ -21,10 +21,11 @@ public final class ProjectileBasePlayerDeathEventMessage extends BasePlayerDeath
                     String item = getItemName((Player) shooter);
                     setMessages(
                             new Component[]{
-                                    Component.text("§a§l[戦闘型AI] §c" + shooter.getName() + "§a が §b" + player.getName() + "§a を -§d" + item + "§a- で射抜きました"),
-                                    Component.text("§a§l[戦闘型AI] §c" + shooter.getName() + "§a が §b" + player.getName() + "§a を -§d" + item + "§a- で矢を心臓に刺しました"),
-                                    Component.text("§a§l[戦闘型AI] §c" + shooter.getName() + "§a が §b" + player.getName() + "§a を -§d" + item + "§a- によって生命活動を停止させました"),
-                                    Component.text("§a§l[戦闘型AI] §c" + shooter.getName() + "§a が §b" + player.getName() + "§a を -§d" + item + "§a- の矢が脳を貫きました"),
+                                    Component.text("§a§l[戦闘型AI] §c" + shooter.getName() + "§a が §b" + player.getName() + "§a を -§d" + item + "§a- で射撃しました"),
+                                    Component.text("§a§l[戦闘型AI] §c" + shooter.getName() + "§a が §b" + player.getName() + "§a を -§d" + item + "§a- で打ち抜きました"),
+                                    Component.text("§a§l[戦闘型AI] §c" + shooter.getName() + "§a が §b" + player.getName() + "§a を -§d" + item + "§a- で絶命させた！"),
+                                    Component.text("§a§l[戦闘型AI] §c" + shooter.getName() + "§a が §b" + player.getName() + "§a を -§d" + item + "§a- で倒しました"),
+
                             }
                     );
                 } else {
