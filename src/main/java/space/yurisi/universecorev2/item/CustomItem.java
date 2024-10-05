@@ -28,7 +28,6 @@ public abstract class CustomItem {
         registerItemFunction();
     }
 
-
     public String getId(){
         return this.id;
     }

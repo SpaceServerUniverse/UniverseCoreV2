@@ -7,4 +7,5 @@ public class UniverseItemKeyString {
     public static final String GACHA_TICKET = "gacha_ticket";
     public static final String FISH = "fish";
     public static final String FISH_SIZE = "fish_size";
+    public static final String GUN = "gun";
 }

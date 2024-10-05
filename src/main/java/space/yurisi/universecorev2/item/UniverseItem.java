@@ -11,6 +11,7 @@ import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.item.fishingrod.FishingRod;
 import space.yurisi.universecorev2.item.pickaxe.FishingPickaxe;
+import space.yurisi.universecorev2.item.gun.*;
 import space.yurisi.universecorev2.item.repair_cream.RepairCream;
 import space.yurisi.universecorev2.item.solar_system.*;
 import space.yurisi.universecorev2.item.stick.BlockCopyStick;
@@ -40,6 +41,11 @@ public class UniverseItem {
         items.put(BlockCopyStick.id, new BlockCopyStick());
         items.put(FishingRod.id, new FishingRod());
         items.put(FishingPickaxe.id, new FishingPickaxe());
+        items.put(R4C.id, new R4C());
+        items.put(L96A1.id, new L96A1());
+        items.put(SMG11.id, new SMG11());
+        items.put(RPG.id, new RPG());
+        items.put(F2.id, new F2());
     }
 
     public static CustomItem getItem(String id){
