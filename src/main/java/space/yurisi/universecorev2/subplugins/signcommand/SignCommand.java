@@ -25,6 +25,6 @@ public final class SignCommand implements SubPlugin {
 
     @Override
     public String getVersion() {
-        return "1.0.0";
+        return "1.0.1";
     }
 }
