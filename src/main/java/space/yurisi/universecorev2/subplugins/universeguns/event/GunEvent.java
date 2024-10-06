@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -38,6 +39,7 @@ public class GunEvent implements Listener {
     ArrayList<Player> isZoom = new ArrayList<>();
     private final HashMap<Player, BukkitRunnable> reloadingTasks = new HashMap<>();
     private final HashMap<Player, BukkitRunnable> shootingTasks = new HashMap<>();
+    private final HashMap<Player, Boolean> isTakingDamage = new HashMap<>();
     private final HashMap<Player, Boolean> isShooting = new HashMap<>();
     public final HashMap<Entity, Gun> projectileData = new HashMap<>();
     private static final ThreadLocal<Boolean> isHandlingExplosion = ThreadLocal.withInitial(() -> false);
@@ -203,17 +205,18 @@ public class GunEvent implements Listener {
         if (isHandlingExplosion.get()) {
             return;
         }
+        Entity entity = event.getEntity();
+        if(event.getEntity().isDead()){
+            return;
+        }
+        LivingEntity livingEntity = (LivingEntity) event.getEntity();
         if (event.getDamager() instanceof Snowball snowball) {
             if (!projectileData.containsKey(snowball)) {
-                return;
-            }
-            if(event.getEntity().isDead()){
                 return;
             }
             Gun gun = projectileData.get(snowball);
             double damage = gun.getBaseDamage();
             Location loc = snowball.getLocation();
-            LivingEntity entity = (LivingEntity) event.getEntity();
 
             if(gun.getIsExplosive()){
                 float radius = gun.getExplosionRadius();
@@ -232,18 +235,34 @@ public class GunEvent implements Listener {
             }
 
 //            event.setDamage(damage);
-            double newHealth = entity.getHealth() - damage;
+            double newHealth = livingEntity.getHealth() - damage;
             if (newHealth <= 0) {
                 newHealth = 0;
             }
-            entity.setHealth(newHealth);
-            entity.setMaximumNoDamageTicks(0);
-            entity.setNoDamageTicks(0);
-            entity.setLastDamage(Integer.MAX_VALUE);
-
+            livingEntity.setMaximumNoDamageTicks(0);
+            livingEntity.setNoDamageTicks(0);
+            livingEntity.setLastDamage(Integer.MAX_VALUE);
+            livingEntity.setHealth(newHealth);
             projectileData.remove(snowball);
             // TODO: ヒットエフェクト
+        }else{
+            livingEntity.setMaximumNoDamageTicks(10);
+            livingEntity.setNoDamageTicks(10);
         }
+    }
+
+    @EventHandler
+    public void onPlayerHitByBlock(EntityDamageByBlockEvent event) {
+        if (isHandlingExplosion.get()) {
+            return;
+        }
+        Entity entity = event.getEntity();
+        if(event.getEntity().isDead()){
+            return;
+        }
+        LivingEntity livingEntity = (LivingEntity) event.getEntity();
+        livingEntity.setMaximumNoDamageTicks(10);
+        livingEntity.setNoDamageTicks(10);
     }
 
     public boolean isHeadShot(double height, Entity entity){
