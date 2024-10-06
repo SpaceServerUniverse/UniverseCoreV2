@@ -101,19 +101,16 @@ public class GunEvent implements Listener {
 
             isShooting.put(player, true);
             if (!shootingTasks.containsKey(gunSerial)) {
-                player.sendMessage("aaaa");
 
                 BukkitRunnable shootingTask = new BukkitRunnable() {
                     @Override
                     public void run() {
 
                         if (!isShooting.getOrDefault(player, false)) {
-                            player.sendMessage("cancel");
                             this.cancel();
                             shootingTasks.remove(gunSerial);
                             return;
                         }
-                        player.sendMessage("bbbb");
 
                         if (!gun.getType().equals(GunType.SR)) {
 
@@ -144,7 +141,6 @@ public class GunEvent implements Listener {
                             }
 
                             gunStatus.shoot();
-                            player.sendMessage("ccccc");
                             new SniperShot(player, gun, gunStatus);
                             if (Objects.equals(gun.getName(), "L96A1")) {
                                 new BukkitRunnable() {
@@ -168,7 +164,6 @@ public class GunEvent implements Listener {
                             }.runTaskLater(plugin, gun.getFireRate());
 
                         } else {
-                            player.sendMessage("empty");
                             isShooting.put(player, false);
                         }
 
@@ -183,7 +178,6 @@ public class GunEvent implements Listener {
                 @Override
                 public void run() {
                     if (!isShooting.getOrDefault(player, false)) {
-                        player.sendMessage("trigger");
                         shootingTaskCancel(shootingTasks, gunSerial);
                     }
                     isShooting.put(player, false);
