@@ -218,7 +218,9 @@ public class GunEvent implements Listener {
         if (event.getEntity().isDead()) {
             return;
         }
-        LivingEntity livingEntity = (LivingEntity) event.getEntity();
+        if (!(entity instanceof LivingEntity livingEntity)) {
+            return;
+        }
         if (event.getDamager() instanceof Snowball snowball) {
             if (!projectileData.containsKey(snowball)) {
                 return;
