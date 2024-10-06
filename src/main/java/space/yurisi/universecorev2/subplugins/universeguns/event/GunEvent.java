@@ -277,7 +277,9 @@ public class GunEvent implements Listener {
         if (entity.isDead()) {
             return;
         }
-        LivingEntity livingEntity = (LivingEntity) event.getEntity();
+        if (!(entity instanceof LivingEntity livingEntity)) {
+            return;
+        }
         livingEntity.setMaximumNoDamageTicks(10);
         livingEntity.setNoDamageTicks(10);
     }
