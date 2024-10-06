@@ -19,11 +19,8 @@ public final class SMG11 extends Gun {
 
         this.type = GunType.SMG;
         this.magazineSize = 16;
-        this.currentAmmo = 16;
         this.burst = 0;
         this.reloadTime = 800;
-        this.isReloading = false;
-        this.reloadEndTime = 0;
         this.isZoomWalkSpeed = 0.17F;
         this.baseDamage = 1.0D;
         this.isExplosive = false;

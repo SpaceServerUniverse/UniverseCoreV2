@@ -19,11 +19,8 @@ public final class L96A1 extends Gun {
 
         this.type = GunType.SR;
         this.magazineSize = 5;
-        this.currentAmmo = 5;
         this.burst = 0;
         this.reloadTime = 5000;
-        this.isReloading = false;
-        this.reloadEndTime = 0;
         this.isZoomWalkSpeed = -0.20F;
         this.baseDamage = 15.0D;
         this.isExplosive = false;

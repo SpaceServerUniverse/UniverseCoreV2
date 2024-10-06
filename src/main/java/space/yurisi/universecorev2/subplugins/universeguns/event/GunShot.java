@@ -9,6 +9,7 @@ import org.bukkit.util.Vector;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.item.gun.Gun;
 import space.yurisi.universecorev2.subplugins.universeguns.constants.GunType;
+import space.yurisi.universecorev2.subplugins.universeguns.core.GunStatus;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -17,9 +18,9 @@ public class GunShot {
 
     Snowball projectile;
 
-    public GunShot(Player player, Gun gun, ArrayList<Player> isZoom) {
+    public GunShot(Player player, Gun gun, GunStatus gunStatus, ArrayList<Player> isZoom) {
 
-        gun.updateActionBar(player, isZoom.contains(player));
+        gunStatus.updateActionBar(player, isZoom.contains(player));
 
         Vector direction = player.getEyeLocation().getDirection().normalize();
 

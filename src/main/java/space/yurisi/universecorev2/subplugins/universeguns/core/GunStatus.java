@@ -13,13 +13,11 @@ public class GunStatus {
 
     private boolean isReloading;
 
-    /** リロード時間 (ms) */
-    private int reloadTime;
-
     private long reloadEndTime;
 
     public GunStatus(Gun gun){
         this.gun = gun;
+        this.currentAmmo = gun.getMagazineSize();
     }
 
     public int getCurrentAmmo(){
@@ -34,7 +32,7 @@ public class GunStatus {
         return true;
     }
 
-    public void startReload() {
+    public void startReload(int reloadTime) {
         this.isReloading = true;
         this.reloadEndTime = System.currentTimeMillis() + reloadTime;
     }
@@ -59,10 +57,6 @@ public class GunStatus {
 
     public boolean getIsReloading(){
         return this.isReloading;
-    }
-
-    public int getReloadTime(){
-        return this.reloadTime;
     }
 
     public long getReloadRemainingTime() {

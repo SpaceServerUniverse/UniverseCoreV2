@@ -40,6 +40,9 @@ public abstract class Gun extends CustomItem {
     /** 連射速度 (クールダウンのtick) */
     protected int fireRate;
 
+    /** リロード時間 (ms) */
+    protected int reloadTime;
+
     protected int recoil;
 
     protected double spread;
@@ -88,6 +91,10 @@ public abstract class Gun extends CustomItem {
 
     public float getExplosionRadius() {
         return explosionRadius;
+    }
+
+    public int getReloadTime(){
+        return this.reloadTime;
     }
 
     public float getWeight() {
