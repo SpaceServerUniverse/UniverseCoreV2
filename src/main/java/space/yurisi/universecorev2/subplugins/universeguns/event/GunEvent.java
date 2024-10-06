@@ -437,7 +437,7 @@ public class GunEvent implements Listener {
             NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
             NamespacedKey gunKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN);
 
-            if (!container.has(itemKey, PersistentDataType.STRING) || !container.has(gunKey, PersistentDataType.BOOLEAN)) {
+            if (!Gun.isGun(offHandItem)) {
                 return;
             }
             String handItemID = container.get(itemKey, PersistentDataType.STRING);
@@ -468,7 +468,7 @@ public class GunEvent implements Listener {
         NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
         NamespacedKey gunKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN);
 
-        if (!container.has(itemKey, PersistentDataType.STRING) || !container.has(gunKey, PersistentDataType.BOOLEAN)) {
+        if (!Gun.isGun(itemInHand)) {
             return;
         }
 
@@ -555,10 +555,9 @@ public class GunEvent implements Listener {
         }
         PersistentDataContainer container = meta.getPersistentDataContainer();
         NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
-        NamespacedKey gunKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN);
         NamespacedKey gunSerialKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN_SERIAL);
 
-        if (!container.has(itemKey, PersistentDataType.STRING) || !container.has(gunKey, PersistentDataType.BOOLEAN)) {
+        if (!Gun.isGun(droppedItem)) {
             return;
         }
 
