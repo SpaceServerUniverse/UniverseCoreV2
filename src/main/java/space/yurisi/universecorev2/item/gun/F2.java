@@ -25,7 +25,7 @@ public final class F2 extends Gun {
         this.type = GunType.AR;
         this.magazineSize = 30;
         this.burst = 2;
-        this.reloadTime = 2500;
+        this.reloadTime = 3500;
         this.isZoomWalkSpeed = 0.15F;
         this.baseDamage = 1.0D;
         this.isExplosive = false;
