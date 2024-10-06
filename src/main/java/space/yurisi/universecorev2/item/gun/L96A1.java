@@ -26,7 +26,7 @@ public final class L96A1 extends Gun {
         this.isExplosive = false;
         this.explosionRadius = 0.0F;
         this.weight = 0.10F;
-        this.fireRate = 30;
+        this.fireRate = 60;
         this.recoil = 1;
         this.spread = 5.0D;
         this.bulletNumber = 1;
