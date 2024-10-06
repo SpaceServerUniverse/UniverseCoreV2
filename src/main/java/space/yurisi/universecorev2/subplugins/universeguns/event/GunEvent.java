@@ -28,6 +28,8 @@ import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.item.gun.Gun;
 import space.yurisi.universecorev2.subplugins.universeguns.constants.GunType;
 import space.yurisi.universecorev2.subplugins.universeguns.constants.BulletData;
+import space.yurisi.universecorev2.subplugins.universeguns.core.GunStatus;
+import space.yurisi.universecorev2.subplugins.universeguns.manager.GunStatusManager;
 import space.yurisi.universecorev2.utils.Message;
 
 import java.util.ArrayList;
@@ -63,19 +65,26 @@ public class GunEvent implements Listener {
         PersistentDataContainer container = meta.getPersistentDataContainer();
 
         NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
-        NamespacedKey gunKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN);
+        NamespacedKey gunSerialKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN_SERIAL);
 
-        if(!container.has(itemKey, PersistentDataType.STRING) || !container.has(gunKey, PersistentDataType.BOOLEAN)){
+        if (!Gun.isGun(itemInHand)) {
             return;
         }
 
         String handItemID = container.get(itemKey, PersistentDataType.STRING);
+        String gunSerial = container.get(gunSerialKey, PersistentDataType.STRING);
+
         CustomItem gunItem = UniverseItem.getItem(handItemID);
 
-        if(!(gunItem instanceof Gun gun)){
+        if (!(gunItem instanceof Gun gun)) {
             return;
         }
 
+        if (!GunStatusManager.isExists(gunSerial)) {
+            GunStatusManager.register(gunSerial, gun);
+        }
+
+        GunStatus gunStatus = GunStatusManager.get(gunSerial);
 
         if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
             event.setCancelled(true);
@@ -85,8 +94,8 @@ public class GunEvent implements Listener {
             }
 
             // 発射
-            if (gun.getCurrentAmmo() == 0) {
-                startReload(player, gun);
+            if (gunStatus.getCurrentAmmo() == 0) {
+                startReload(player, gun, gunStatus);
                 return;
             }
 
@@ -103,62 +112,62 @@ public class GunEvent implements Listener {
                             return;
                         }
 
-                        if(!gun.getType().equals(GunType.SR)) {
+                        if (!gun.getType().equals(GunType.SR)) {
 
-                                gun.shoot();
-                                GunShot gunShot = new GunShot(player, gun, isZoom);
-                                projectileData.put(gunShot.getProjectile(), new BulletData(gun, player));
-                                if (gun.getBurst() != 0) {
-                                    for (int i = 0; i < gun.getBurst(); i++) {
-                                        if (gun.getCurrentAmmo() == 0) {
-                                            break;
-                                        }
-                                        new BukkitRunnable() {
-                                            @Override
-                                            public void run() {
-                                                gun.shoot();
-                                                GunShot burstShot = new GunShot(player, gun, isZoom);
-                                                projectileData.put(burstShot.getProjectile(), new BulletData(gun, player));
-                                            }
-                                        }.runTaskLater(plugin, 1L);
-
+                            gunStatus.shoot();
+                            GunShot gunShot = new GunShot(player, gun, gunStatus, isZoom);
+                            projectileData.put(gunShot.getProjectile(), new BulletData(gun, player));
+                            if (gun.getBurst() != 0) {
+                                for (int i = 0; i < gun.getBurst(); i++) {
+                                    if (gunStatus.getCurrentAmmo() == 0) {
+                                        break;
                                     }
-                                }
-
-                            } else{
-                                if (!isZoom.contains(player)) {
-                                    Message.sendWarningMessage(player, "[武器AI]", "狙撃時のみ発射できます。");
-                                    return;
-                                }
-
-                                gun.shoot();
-                                new SniperShot(player, gun);
-                                if (Objects.equals(gun.getName(), "L96A1")) {
                                     new BukkitRunnable() {
                                         @Override
                                         public void run() {
-                                            player.getWorld().playSound(player.getLocation(), Sound.BLOCK_COPPER_DOOR_OPEN, 1.0F, 0.6F);
+                                            gunStatus.shoot();
+                                            GunShot burstShot = new GunShot(player, gun, gunStatus, isZoom);
+                                            projectileData.put(burstShot.getProjectile(), new BulletData(gun, player));
                                         }
-                                    }.runTaskLater(plugin, 5L);
+                                    }.runTaskLater(plugin, 1L);
+
                                 }
                             }
 
-                            if (gun.getCurrentAmmo() > 0) {
-                                isCooldown.add(player);
+                        } else {
+                            if (!isZoom.contains(player)) {
+                                Message.sendWarningMessage(player, "[武器AI]", "狙撃時のみ発射できます。");
+                                return;
+                            }
 
+                            gunStatus.shoot();
+                            new SniperShot(player, gun, gunStatus);
+                            if (Objects.equals(gun.getName(), "L96A1")) {
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
-                                        isCooldown.remove(player);
-                                        if (Objects.equals(gun.getName(), "L96A1")) {
-                                            player.getWorld().playSound(player.getLocation(), Sound.BLOCK_COPPER_DOOR_CLOSE, 1.0F, 0.6F);
-                                        }
+                                        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_COPPER_DOOR_OPEN, 1.0F, 0.6F);
                                     }
-                                }.runTaskLater(plugin, gun.getFireRate());
-
-                            } else {
-                                isShooting.put(player, false);
+                                }.runTaskLater(plugin, 5L);
                             }
+                        }
+
+                        if (gunStatus.getCurrentAmmo() > 0) {
+                            isCooldown.add(player);
+
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    isCooldown.remove(player);
+                                    if (Objects.equals(gun.getName(), "L96A1")) {
+                                        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_COPPER_DOOR_CLOSE, 1.0F, 0.6F);
+                                    }
+                                }
+                            }.runTaskLater(plugin, gun.getFireRate());
+
+                        } else {
+                            isShooting.put(player, false);
+                        }
 
                     }
                 };
@@ -182,19 +191,19 @@ public class GunEvent implements Listener {
 
             event.setCancelled(true);
 
-            if(reloadingTasks.containsKey(player)){
+            if (reloadingTasks.containsKey(player)) {
                 return;
             }
             if (isZoom.contains(player)) {
                 player.setWalkSpeed(gun.getWeight());
                 isZoom.remove(player);
                 player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PIG_SADDLE, 1.0F, 2.0F);
-                gun.updateActionBar(player, false);
+                gunStatus.updateActionBar(player, false);
             } else {
                 player.setWalkSpeed(gun.getIsZoomWalkSpeed());
                 isZoom.add(player);
                 player.getWorld().playSound(player.getLocation(), Sound.ITEM_SPYGLASS_USE, 1.0F, 0.8F);
-                gun.updateActionBar(player, true);
+                gunStatus.updateActionBar(player, true);
             }
 
         }
@@ -206,7 +215,7 @@ public class GunEvent implements Listener {
             return;
         }
         Entity entity = event.getEntity();
-        if(event.getEntity().isDead()){
+        if (event.getEntity().isDead()) {
             return;
         }
         LivingEntity livingEntity = (LivingEntity) event.getEntity();
@@ -220,7 +229,7 @@ public class GunEvent implements Listener {
             double damage = gun.getBaseDamage();
             Location loc = snowball.getLocation();
 
-            if(gun.getIsExplosive()){
+            if (gun.getIsExplosive()) {
                 float radius = gun.getExplosionRadius();
                 isHandlingExplosion.set(true);
                 try {
@@ -235,7 +244,7 @@ public class GunEvent implements Listener {
             if (isHeadShot(loc.getY(), entity)) {
                 damage *= headShotTimes;
                 shooter.getWorld().playSound(shooter.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0F, 1.0F);
-            }else{
+            } else {
                 shooter.getWorld().playSound(shooter.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1.0F, 1.0F);
             }
 
@@ -251,7 +260,7 @@ public class GunEvent implements Listener {
             event.setDamage(damage);
             projectileData.remove(snowball);
             // TODO: ヒットエフェクト
-        }else{
+        } else {
             livingEntity.setMaximumNoDamageTicks(10);
             livingEntity.setNoDamageTicks(10);
         }
@@ -263,7 +272,7 @@ public class GunEvent implements Listener {
             return;
         }
         Entity entity = event.getEntity();
-        if(event.getEntity().isDead()){
+        if (entity.isDead()) {
             return;
         }
         LivingEntity livingEntity = (LivingEntity) event.getEntity();
@@ -271,8 +280,8 @@ public class GunEvent implements Listener {
         livingEntity.setNoDamageTicks(10);
     }
 
-    public boolean isHeadShot(double height, Entity entity){
-        double neckHeight = 1.5;
+    public boolean isHeadShot(double height, Entity entity) {
+        double neckHeight = 1.35;
         return height > entity.getLocation().getY() + neckHeight;
     }
 
@@ -284,7 +293,7 @@ public class GunEvent implements Listener {
             }
             BulletData data = projectileData.get(snowball);
             Gun gun = data.getGun();
-            if(!gun.getIsExplosive()){
+            if (!gun.getIsExplosive()) {
                 return;
             }
             float radius = gun.getExplosionRadius();
@@ -310,29 +319,29 @@ public class GunEvent implements Listener {
         removePlayer(event.getPlayer());
     }
 
-    private void taskCancel(HashMap<Player, BukkitRunnable> tasks, Player player){
+    private void taskCancel(HashMap<Player, BukkitRunnable> tasks, Player player) {
         BukkitRunnable task = tasks.get(player);
-        if(task != null){
+        if (task != null) {
             task.cancel();
         }
         tasks.remove(player);
     }
 
-    private void removePlayer(Player player){
-        if(isZoom.contains(player)){
+    private void removePlayer(Player player) {
+        if (isZoom.contains(player)) {
             isZoom.remove(player);
             player.setWalkSpeed(0.2f);
         }
-        if(isCooldown.contains(player)){
+        if (isCooldown.contains(player)) {
             isCooldown.remove(player);
         }
-        if(reloadingTasks.containsKey(player)){
+        if (reloadingTasks.containsKey(player)) {
             taskCancel(reloadingTasks, player);
         }
-        if(isShooting.containsKey(player)){
+        if (isShooting.containsKey(player)) {
             isShooting.remove(player);
         }
-        if(shootingTasks.containsKey(player)){
+        if (shootingTasks.containsKey(player)) {
             taskCancel(shootingTasks, player);
         }
     }
@@ -342,61 +351,79 @@ public class GunEvent implements Listener {
         Player player = event.getPlayer();
 
         ItemStack oldInHand = player.getInventory().getItem(event.getPreviousSlot());
-        if(oldInHand != null && oldInHand.hasItemMeta()){
+        if (oldInHand != null && oldInHand.hasItemMeta()) {
             ItemMeta oldMeta = oldInHand.getItemMeta();
             PersistentDataContainer oldContainer = oldMeta.getPersistentDataContainer();
             NamespacedKey oldItemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
-            NamespacedKey oldGunKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN);
-            if(!oldContainer.has(oldItemKey, PersistentDataType.STRING) || !oldContainer.has(oldGunKey, PersistentDataType.BOOLEAN)){
+            NamespacedKey gunSerialKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN_SERIAL);
+            if (!Gun.isGun(oldInHand)) {
                 return;
             }
 
             String oldHandItemID = oldContainer.get(oldItemKey, PersistentDataType.STRING);
+            String oldGunSerial = oldContainer.get(gunSerialKey, PersistentDataType.STRING);
             CustomItem oldGunItem = UniverseItem.getItem(oldHandItemID);
-            if(!(oldGunItem instanceof Gun oldGun)){
+
+            if (!(oldGunItem instanceof Gun oldGun)) {
                 return;
             }
 
-            if(reloadingTasks.containsKey(player)){
+            if (!GunStatusManager.isExists(oldGunSerial)) {
+                GunStatusManager.register(oldGunSerial, oldGun);
+            }
+
+            GunStatus oldGunStatus = GunStatusManager.get(oldGunSerial);
+
+            if (reloadingTasks.containsKey(player)) {
                 taskCancel(reloadingTasks, player);
-                oldGun.cancelReload();
-                oldGun.updateActionBar(player, false);
+                oldGunStatus.cancelReload();
+                oldGunStatus.updateActionBar(player, false);
             }
 
 
         }
 
         ItemStack newInHand = player.getInventory().getItem(event.getNewSlot());
-        if(newInHand == null){
+        if (newInHand == null) {
             player.setWalkSpeed(0.2f);
-        }else{
-            if(!newInHand.hasItemMeta()){
+        } else {
+            if (!newInHand.hasItemMeta()) {
                 player.setWalkSpeed(0.2f);
                 return;
             }
             ItemMeta newMeta = newInHand.getItemMeta();
             PersistentDataContainer newContainer = newMeta.getPersistentDataContainer();
             NamespacedKey newItemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
-            NamespacedKey newGunKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN);
-            if(!newContainer.has(newItemKey, PersistentDataType.STRING) || !newContainer.has(newGunKey, PersistentDataType.BOOLEAN)){
+            NamespacedKey gunSerialKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN_SERIAL);
+
+            if (!Gun.isGun(newInHand)) {
                 player.setWalkSpeed(0.2f);
                 return;
             }
             String newHandItemID = newContainer.get(newItemKey, PersistentDataType.STRING);
+            String gunSerial = newContainer.get(gunSerialKey, PersistentDataType.STRING);
             CustomItem newGunItem = UniverseItem.getItem(newHandItemID);
-            if(!(newGunItem instanceof Gun newGun)){
+            if (!(newGunItem instanceof Gun newGun)) {
                 player.setWalkSpeed(0.2f);
                 return;
             }
 
+
+
+            if (!GunStatusManager.isExists(gunSerial)) {
+                GunStatusManager.register(gunSerial, newGun);
+            }
+
+            GunStatus gunStatus = GunStatusManager.get(gunSerial);
+
             player.setWalkSpeed(newGun.getWeight());
-            newGun.updateActionBar(player, false);
+            gunStatus.updateActionBar(player, false);
 
         }
-        if(isZoom.contains(player)){
+        if (isZoom.contains(player)) {
             isZoom.remove(player);
         }
-        if(isCooldown.contains(player)){
+        if (isCooldown.contains(player)) {
             isCooldown.remove(player);
         }
     }
@@ -410,12 +437,12 @@ public class GunEvent implements Listener {
             NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
             NamespacedKey gunKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN);
 
-            if(!container.has(itemKey, PersistentDataType.STRING) || !container.has(gunKey, PersistentDataType.BOOLEAN)){
+            if (!container.has(itemKey, PersistentDataType.STRING) || !container.has(gunKey, PersistentDataType.BOOLEAN)) {
                 return;
             }
             String handItemID = container.get(itemKey, PersistentDataType.STRING);
             CustomItem gunItem = UniverseItem.getItem(handItemID);
-            if(!(gunItem instanceof Gun)){
+            if (!(gunItem instanceof Gun)) {
                 return;
             }
 
@@ -441,14 +468,14 @@ public class GunEvent implements Listener {
         NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
         NamespacedKey gunKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN);
 
-        if(!container.has(itemKey, PersistentDataType.STRING) || !container.has(gunKey, PersistentDataType.BOOLEAN)){
+        if (!container.has(itemKey, PersistentDataType.STRING) || !container.has(gunKey, PersistentDataType.BOOLEAN)) {
             return;
         }
 
         String handItemID = container.get(itemKey, PersistentDataType.STRING);
         CustomItem gunItem = UniverseItem.getItem(handItemID);
 
-        if(!(gunItem instanceof Gun gun)){
+        if (!(gunItem instanceof Gun gun)) {
             return;
         }
 
@@ -470,31 +497,27 @@ public class GunEvent implements Listener {
         return container.get(new NamespacedKey(plugin, UniverseItemKeyString.ITEM_NAME), PersistentDataType.STRING);
     }
 
-    private void startReload(Player player, Gun gun) {
-        if (gun.getIsReloading()) {
+    private void startReload(Player player, Gun gun, GunStatus gunStatus) {
+        if (gunStatus.getIsReloading()) {
             return;
         }
-        gun.startReload();
-        if (isZoom.contains(player)) {
-            player.setWalkSpeed(gun.getWeight());
-            isZoom.remove(player);
-        }
+        gunStatus.startReload(gun.getReloadTime());
         player.getWorld().playSound(player.getLocation(), Sound.BLOCK_IRON_DOOR_OPEN, 1.0F, 1.0F);
         BukkitRunnable reloadingTask = new BukkitRunnable() {
             @Override
             public void run() {
                 if (!player.isOnline() || !reloadingTasks.containsKey(player)) {
-                    gun.cancelReload();
+                    gunStatus.cancelReload();
                     cancel();
                     reloadingTasks.remove(player);
                     return;
                 }
-                gun.finishReload();
+                gunStatus.finishReload();
                 player.getWorld().playSound(player.getLocation(), Sound.BLOCK_IRON_DOOR_CLOSE, 1.0F, 1.0F);
                 reloadingTasks.remove(player);
-                gun.updateActionBar(player, isZoom.contains(player));
-                }
-            };
+                gunStatus.updateActionBar(player, isZoom.contains(player));
+            }
+        };
 
         reloadingTask.runTaskLater(plugin, gun.getReloadTime() / 50);
         reloadingTasks.put(player, reloadingTask);
@@ -503,12 +526,12 @@ public class GunEvent implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (!gun.getIsReloading() || !reloadingTasks.containsKey(player)) {
+                if (!gunStatus.getIsReloading() || !reloadingTasks.containsKey(player)) {
                     cancel();
-                    gun.cancelReload();
+                    gunStatus.cancelReload();
                     return;
                 }
-                gun.updateActionBar(player, isZoom.contains(player));
+                gunStatus.updateActionBar(player, isZoom.contains(player));
             }
         }.runTaskTimer(UniverseCoreV2.getInstance(), 0, 2);
     }
@@ -516,9 +539,9 @@ public class GunEvent implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (event.getWhoClicked() instanceof Player player) {
-//            if (isReloading.contains(player)) {
-//                event.setCancelled(true);
-//            }
+            if (reloadingTasks.containsKey(player)) {
+                event.setCancelled(true);
+            }
         }
     }
 
@@ -533,25 +556,34 @@ public class GunEvent implements Listener {
         PersistentDataContainer container = meta.getPersistentDataContainer();
         NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
         NamespacedKey gunKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN);
+        NamespacedKey gunSerialKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN_SERIAL);
 
-        if(!container.has(itemKey, PersistentDataType.STRING) || !container.has(gunKey, PersistentDataType.BOOLEAN)){
+        if (!container.has(itemKey, PersistentDataType.STRING) || !container.has(gunKey, PersistentDataType.BOOLEAN)) {
             return;
         }
 
         String handItemID = container.get(itemKey, PersistentDataType.STRING);
         CustomItem gunItem = UniverseItem.getItem(handItemID);
 
-        if(!(gunItem instanceof Gun gun)){
+        if (!(gunItem instanceof Gun gun)) {
             return;
         }
 
-        if(gun.getCurrentAmmo() == gun.getMagazineSize()){
+        String gunSerial = container.get(gunSerialKey, PersistentDataType.STRING);
+
+        if (!GunStatusManager.isExists(gunSerial)) {
+            GunStatusManager.register(gunSerial, gun);
+        }
+
+        GunStatus gunStatus = GunStatusManager.get(gunSerial);
+
+        if (gunStatus.getCurrentAmmo() == gun.getMagazineSize()) {
             player.setWalkSpeed(0.2f);
             return;
         }
         event.setCancelled(true);
         if (!reloadingTasks.containsKey(player)) {
-            startReload(player, gun);
+            startReload(player, gun, gunStatus);
         }
     }
 }

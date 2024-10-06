@@ -19,11 +19,7 @@ public final class R4C extends Gun {
 
         this.type = GunType.AR;
         this.magazineSize = 30;
-        this.currentAmmo = 30;
         this.burst = 0;
-        this.reloadTime = 2000;
-        this.isReloading = false;
-        this.reloadEndTime = 0;
         this.isZoomWalkSpeed = 0.05F;
         this.baseDamage = 3.0D;
         this.isExplosive = false;

@@ -23,11 +23,8 @@ public final class RPG extends Gun {
 
         this.type = GunType.EX;
         this.magazineSize = 1;
-        this.currentAmmo = 1;
         this.burst = 0;
         this.reloadTime = 10000;
-        this.isReloading = false;
-        this.reloadEndTime = 0;
         this.isZoomWalkSpeed = 0.0F;
         this.baseDamage = 10.0D;
         this.isExplosive = true;

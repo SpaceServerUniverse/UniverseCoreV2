@@ -15,22 +15,15 @@ import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.item.CustomItem;
 import space.yurisi.universecorev2.subplugins.universeguns.constants.GunType;
 
+import java.util.UUID;
+
 public abstract class Gun extends CustomItem {
 
     protected GunType type;
 
     protected int magazineSize;
 
-    protected int currentAmmo;
-
     protected int burst;
-
-    /** リロード時間 (ms) */
-    protected int reloadTime;
-
-    protected boolean isReloading;
-
-    protected long reloadEndTime;
 
     /** マイナスにすると動けなくなる -0.15が一番拡大するらしい */
     protected float isZoomWalkSpeed;
@@ -46,6 +39,9 @@ public abstract class Gun extends CustomItem {
 
     /** 連射速度 (クールダウンのtick) */
     protected int fireRate;
+
+    /** リロード時間 (ms) */
+    protected int reloadTime;
 
     protected int recoil;
 
@@ -76,55 +72,9 @@ public abstract class Gun extends CustomItem {
         return this.magazineSize;
     }
 
-    public int getCurrentAmmo(){
-        return this.currentAmmo;
-    }
-
-    public boolean shoot() {
-        if (this.currentAmmo <= 0 || this.isReloading) {
-            return false;
-        }
-        this.currentAmmo--;
-        return true;
-    }
 
     public int getBurst(){
         return this.burst;
-    }
-
-    public int getReloadTime(){
-        return this.reloadTime;
-    }
-
-    public boolean getIsReloading(){
-        return this.isReloading;
-    }
-
-    public void startReload() {
-        this.isReloading = true;
-        this.reloadEndTime = System.currentTimeMillis() + reloadTime;
-    }
-
-    public void finishReload() {
-        this.isReloading = false;
-        this.currentAmmo = magazineSize;
-    }
-
-    public void cancelReload() {
-        this.isReloading = false;
-    }
-
-    public long getReloadRemainingTime() {
-        return Math.max(0, reloadEndTime - System.currentTimeMillis());
-    }
-
-    public String getAmmoDisplay() {
-        if (isReloading) {
-            long remainingTime = getReloadRemainingTime();
-            double seconds = remainingTime / 1000.0;
-            return String.format("<< Reload %.1f >>", seconds);
-        }
-        return String.format("<< %d/%d >>", currentAmmo, magazineSize);
     }
 
     public float getIsZoomWalkSpeed(){
@@ -141,6 +91,10 @@ public abstract class Gun extends CustomItem {
 
     public float getExplosionRadius() {
         return explosionRadius;
+    }
+
+    public int getReloadTime(){
+        return this.reloadTime;
     }
 
     public float getWeight() {
@@ -183,18 +137,6 @@ public abstract class Gun extends CustomItem {
         return pitchSound;
     }
 
-    public void updateActionBar(Player player, boolean isZoom) {
-        String ammoDisplay = getAmmoDisplay();
-        String messageText = (isZoom ? "ADS " : "") + ammoDisplay;
-        Component message = Component.text(messageText);
-
-        if (isReloading) {
-            message = message.color(NamedTextColor.RED);
-        }
-
-        player.sendActionBar(message);
-    }
-
     @Override
     public ItemStack getItem(){
         ItemStack item = getBaseItem().clone();
@@ -202,8 +144,27 @@ public abstract class Gun extends CustomItem {
         PersistentDataContainer container = meta.getPersistentDataContainer();
         container.set(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME), PersistentDataType.STRING, getId());
         container.set(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN), PersistentDataType.BOOLEAN, true);
+        container.set(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN_SERIAL), PersistentDataType.STRING, UUID.randomUUID().toString());
         meta.displayName(Component.text(name));
         item.setItemMeta(meta);
         return default_setting.apply(item);
+    }
+
+    public static boolean isGun(ItemStack itemStack){
+        ItemMeta meta = itemStack.getItemMeta();
+
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+
+        NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
+        NamespacedKey gunKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN);
+        NamespacedKey gunSerialKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN_SERIAL);
+
+        if(!container.has(itemKey, PersistentDataType.STRING)
+                || !container.has(gunKey, PersistentDataType.BOOLEAN)
+                || !container.has(gunSerialKey, PersistentDataType.STRING)
+        ){
+            return false;
+        }
+        return true;
     }
 }

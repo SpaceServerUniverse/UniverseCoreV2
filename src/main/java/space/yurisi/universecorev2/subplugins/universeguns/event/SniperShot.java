@@ -11,14 +11,13 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 import space.yurisi.universecorev2.item.gun.Gun;
+import space.yurisi.universecorev2.subplugins.universeguns.core.GunStatus;
 
 public class SniperShot {
 
-    public SniperShot(Player player, Gun gun) {
-        PlayerInventory inventory = player.getInventory();
-        inventory.setItemInMainHand(gun.getItem());
+    public SniperShot(Player player, Gun gun, GunStatus gunStatus) {
 
-        gun.updateActionBar(player, true);
+        gunStatus.updateActionBar(player, true);
 
         Vector direction = player.getEyeLocation().getDirection().normalize();
 
