@@ -27,7 +27,7 @@ import space.yurisi.universecorev2.item.CustomItem;
 import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.item.gun.Gun;
 import space.yurisi.universecorev2.subplugins.universeguns.constants.GunType;
-import space.yurisi.universecorev2.subplugins.universeguns.constants.BulletData;
+import space.yurisi.universecorev2.subplugins.universeguns.core.BulletData;
 import space.yurisi.universecorev2.subplugins.universeguns.core.GunStatus;
 import space.yurisi.universecorev2.subplugins.universeguns.manager.GunStatusManager;
 import space.yurisi.universecorev2.utils.Message;
@@ -38,10 +38,10 @@ import java.util.Objects;
 
 public class GunEvent implements Listener {
 
-    ArrayList<Player> isCooldown = new ArrayList<>();
+
     ArrayList<Player> isZoom = new ArrayList<>();
     private final HashMap<Player, BukkitRunnable> reloadingTasks = new HashMap<>();
-    private final HashMap<Player, BukkitRunnable> shootingTasks = new HashMap<>();
+    private final HashMap<String, BukkitRunnable> shootingTasks = new HashMap<>();
     private final HashMap<Player, Boolean> isShooting = new HashMap<>();
     public final HashMap<Entity, BulletData> projectileData = new HashMap<>();
     private static final ThreadLocal<Boolean> isHandlingExplosion = ThreadLocal.withInitial(() -> false);
@@ -100,7 +100,7 @@ public class GunEvent implements Listener {
             }
 
             isShooting.put(player, true);
-            if (!shootingTasks.containsKey(player)) {
+            if (!shootingTasks.containsKey(gunSerial)) {
 
                 BukkitRunnable shootingTask = new BukkitRunnable() {
                     @Override
@@ -108,7 +108,7 @@ public class GunEvent implements Listener {
 
                         if (!isShooting.getOrDefault(player, false)) {
                             this.cancel();
-                            shootingTasks.remove(player);
+                            shootingTasks.remove(gunSerial);
                             return;
                         }
 
@@ -153,12 +153,10 @@ public class GunEvent implements Listener {
                         }
 
                         if (gunStatus.getCurrentAmmo() > 0) {
-                            isCooldown.add(player);
 
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    isCooldown.remove(player);
                                     if (Objects.equals(gun.getName(), "L96A1")) {
                                         player.getWorld().playSound(player.getLocation(), Sound.BLOCK_COPPER_DOOR_CLOSE, 1.0F, 0.6F);
                                     }
@@ -173,14 +171,14 @@ public class GunEvent implements Listener {
                 };
 
                 shootingTask.runTaskTimer(plugin, 0, gun.getFireRate());
-                shootingTasks.put(player, shootingTask);
+                shootingTasks.put(gunSerial, shootingTask);
             }
 
             new BukkitRunnable() {
                 @Override
                 public void run() {
                     if (!isShooting.getOrDefault(player, false)) {
-                        taskCancel(shootingTasks, player);
+                        shootingTaskCancel(shootingTasks, gunSerial);
                     }
                     isShooting.put(player, false);
                 }
@@ -331,13 +329,18 @@ public class GunEvent implements Listener {
         tasks.remove(player);
     }
 
+    private void shootingTaskCancel(HashMap<String, BukkitRunnable> tasks, String gunSerial) {
+        BukkitRunnable task = tasks.get(gunSerial);
+        if (task != null) {
+            task.cancel();
+        }
+        tasks.remove(gunSerial);
+    }
+
     private void removePlayer(Player player) {
         if (isZoom.contains(player)) {
             isZoom.remove(player);
             player.setWalkSpeed(0.2f);
-        }
-        if (isCooldown.contains(player)) {
-            isCooldown.remove(player);
         }
         if (reloadingTasks.containsKey(player)) {
             taskCancel(reloadingTasks, player);
@@ -345,9 +348,9 @@ public class GunEvent implements Listener {
         if (isShooting.containsKey(player)) {
             isShooting.remove(player);
         }
-        if (shootingTasks.containsKey(player)) {
-            taskCancel(shootingTasks, player);
-        }
+//        if (shootingTasks.containsKey(player)) {
+//            taskCancel(shootingTasks, gunStatus);
+//        }
     }
 
     @EventHandler
@@ -426,9 +429,6 @@ public class GunEvent implements Listener {
         }
         if (isZoom.contains(player)) {
             isZoom.remove(player);
-        }
-        if (isCooldown.contains(player)) {
-            isCooldown.remove(player);
         }
     }
 
