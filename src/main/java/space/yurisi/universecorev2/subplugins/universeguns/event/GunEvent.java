@@ -1,6 +1,5 @@
 package space.yurisi.universecorev2.subplugins.universeguns.event;
 
-import jakarta.persistence.Tuple;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
@@ -33,7 +32,6 @@ import space.yurisi.universecorev2.utils.Message;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Objects;
 
 public class GunEvent implements Listener {
@@ -42,7 +40,6 @@ public class GunEvent implements Listener {
     ArrayList<Player> isZoom = new ArrayList<>();
     private final HashMap<Player, BukkitRunnable> reloadingTasks = new HashMap<>();
     private final HashMap<Player, BukkitRunnable> shootingTasks = new HashMap<>();
-    private final HashMap<Player, Boolean> isTakingDamage = new HashMap<>();
     private final HashMap<Player, Boolean> isShooting = new HashMap<>();
     public final HashMap<Entity, BulletData> projectileData = new HashMap<>();
     private static final ThreadLocal<Boolean> isHandlingExplosion = ThreadLocal.withInitial(() -> false);
