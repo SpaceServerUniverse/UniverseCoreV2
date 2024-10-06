@@ -70,13 +70,15 @@ public class SniperShot {
             if (height > entity.getLocation().getY() + neckHeight) {
                 damage *= 1.5D;
                 player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
+            }else{
+                player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1.0F, 1.0F);
             }
-//            livingEntity.damage(damage, player);
-            double newHealth = livingEntity.getHealth() - damage;
-            if (newHealth <= 0) {
-                newHealth = 0;
-            }
-            livingEntity.setHealth(newHealth);
+            livingEntity.damage(damage, player);
+//            double newHealth = livingEntity.getHealth() - damage;
+//            if (newHealth <= 0) {
+//                newHealth = 0;
+//            }
+//            livingEntity.setHealth(newHealth);
         }
     }
 

@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -26,6 +27,7 @@ import space.yurisi.universecorev2.item.CustomItem;
 import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.item.gun.Gun;
 import space.yurisi.universecorev2.subplugins.universeguns.constants.GunType;
+import space.yurisi.universecorev2.subplugins.universeguns.constants.BulletData;
 import space.yurisi.universecorev2.utils.Message;
 
 import java.util.ArrayList;
@@ -39,7 +41,7 @@ public class GunEvent implements Listener {
     private final HashMap<Player, BukkitRunnable> reloadingTasks = new HashMap<>();
     private final HashMap<Player, BukkitRunnable> shootingTasks = new HashMap<>();
     private final HashMap<Player, Boolean> isShooting = new HashMap<>();
-    public final HashMap<Entity, Gun> projectileData = new HashMap<>();
+    public final HashMap<Entity, BulletData> projectileData = new HashMap<>();
     private static final ThreadLocal<Boolean> isHandlingExplosion = ThreadLocal.withInitial(() -> false);
 
 
@@ -105,7 +107,7 @@ public class GunEvent implements Listener {
 
                                 gun.shoot();
                                 GunShot gunShot = new GunShot(player, gun, isZoom);
-                                projectileData.put(gunShot.getProjectile(), gun);
+                                projectileData.put(gunShot.getProjectile(), new BulletData(gun, player));
                                 if (gun.getBurst() != 0) {
                                     for (int i = 0; i < gun.getBurst(); i++) {
                                         if (gun.getCurrentAmmo() == 0) {
@@ -116,7 +118,7 @@ public class GunEvent implements Listener {
                                             public void run() {
                                                 gun.shoot();
                                                 GunShot burstShot = new GunShot(player, gun, isZoom);
-                                                projectileData.put(burstShot.getProjectile(), gun);
+                                                projectileData.put(burstShot.getProjectile(), new BulletData(gun, player));
                                             }
                                         }.runTaskLater(plugin, 1L);
 
@@ -203,17 +205,20 @@ public class GunEvent implements Listener {
         if (isHandlingExplosion.get()) {
             return;
         }
+        Entity entity = event.getEntity();
+        if(event.getEntity().isDead()){
+            return;
+        }
+        LivingEntity livingEntity = (LivingEntity) event.getEntity();
         if (event.getDamager() instanceof Snowball snowball) {
             if (!projectileData.containsKey(snowball)) {
                 return;
             }
-            if(event.getEntity().isDead()){
-                return;
-            }
-            Gun gun = projectileData.get(snowball);
+            BulletData data = projectileData.get(snowball);
+            Player shooter = data.getPlayer();
+            Gun gun = data.getGun();
             double damage = gun.getBaseDamage();
             Location loc = snowball.getLocation();
-            LivingEntity entity = (LivingEntity) event.getEntity();
 
             if(gun.getIsExplosive()){
                 float radius = gun.getExplosionRadius();
@@ -229,21 +234,41 @@ public class GunEvent implements Listener {
             double headShotTimes = 1.5;
             if (isHeadShot(loc.getY(), entity)) {
                 damage *= headShotTimes;
+                shooter.getWorld().playSound(shooter.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0F, 1.0F);
+            }else{
+                shooter.getWorld().playSound(shooter.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1.0F, 1.0F);
             }
 
-//            event.setDamage(damage);
-            double newHealth = entity.getHealth() - damage;
-            if (newHealth <= 0) {
-                newHealth = 0;
-            }
-            entity.setHealth(newHealth);
-            entity.setMaximumNoDamageTicks(0);
-            entity.setNoDamageTicks(0);
-            entity.setLastDamage(Integer.MAX_VALUE);
 
+//            double newHealth = livingEntity.getHealth() - damage;
+//            if (newHealth <= 0) {
+//                newHealth = 0;
+//            }
+            livingEntity.setMaximumNoDamageTicks(0);
+            livingEntity.setNoDamageTicks(0);
+            livingEntity.setLastDamage(Integer.MAX_VALUE);
+//            livingEntity.setHealth(newHealth);
+            event.setDamage(damage);
             projectileData.remove(snowball);
             // TODO: ヒットエフェクト
+        }else{
+            livingEntity.setMaximumNoDamageTicks(10);
+            livingEntity.setNoDamageTicks(10);
         }
+    }
+
+    @EventHandler
+    public void onPlayerHitByBlock(EntityDamageByBlockEvent event) {
+        if (isHandlingExplosion.get()) {
+            return;
+        }
+        Entity entity = event.getEntity();
+        if(event.getEntity().isDead()){
+            return;
+        }
+        LivingEntity livingEntity = (LivingEntity) event.getEntity();
+        livingEntity.setMaximumNoDamageTicks(10);
+        livingEntity.setNoDamageTicks(10);
     }
 
     public boolean isHeadShot(double height, Entity entity){
@@ -257,7 +282,8 @@ public class GunEvent implements Listener {
             if (!projectileData.containsKey(snowball)) {
                 return;
             }
-            Gun gun = projectileData.get(snowball);
+            BulletData data = projectileData.get(snowball);
+            Gun gun = data.getGun();
             if(!gun.getIsExplosive()){
                 return;
             }

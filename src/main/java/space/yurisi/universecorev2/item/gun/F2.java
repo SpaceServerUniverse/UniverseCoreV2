@@ -30,7 +30,7 @@ public final class F2 extends Gun {
         this.isReloading = false;
         this.reloadEndTime = 0;
         this.isZoomWalkSpeed = 0.15F;
-        this.baseDamage = 2.5D;
+        this.baseDamage = 1.5D;
         this.isExplosive = false;
         this.explosionRadius = 0.0F;
         this.weight = 0.17F;
