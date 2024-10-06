@@ -1,4 +1,4 @@
-package space.yurisi.universecorev2.subplugins.universeguns.constants;
+package space.yurisi.universecorev2.subplugins.universeguns.core;
 
 import org.bukkit.entity.Player;
 import space.yurisi.universecorev2.item.gun.Gun;
