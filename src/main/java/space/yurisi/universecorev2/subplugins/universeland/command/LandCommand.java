@@ -139,11 +139,16 @@ public class LandCommand implements CommandExecutor, TabCompleter {
                     Message.sendWarningMessage(player, "[土地管理AI]", "現在いる場所は、あなたの土地ではないため招待できません");
                     return false;
                 }
-                Land dbland = database.getLandRepository().getLand(land.getId());
-                database.getLandPermissionRepository().createLandPermission(user, dbland);
 
-                Message.sendSuccessMessage(player, "[土地管理AI]", args[1] + " がこの土地を利用できるようになりました");
-                return false;
+                Land dbland = database.getLandRepository().getLand(land.getId());
+
+                try {
+                    database.getLandPermissionRepository().getLandPermission(user, dbland);
+                    Message.sendWarningMessage(player, "[土地管理AI]", args[1] + " は既にこの土地の共有権限を持っています");
+                } catch (LandPermissionNotFoundException e) {
+                    database.getLandPermissionRepository().createLandPermission(user, dbland);
+                    Message.sendSuccessMessage(player, "[土地管理AI]", args[1] + " がこの土地を利用できるようになりました");
+                }
             } catch (UserNotFoundException e) {
                 Message.sendErrorMessage(player, "[土地管理AI]", "ユーザーが見つかりませんでした");
                 return false;
