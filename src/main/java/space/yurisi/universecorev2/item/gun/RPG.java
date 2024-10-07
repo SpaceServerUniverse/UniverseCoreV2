@@ -32,7 +32,7 @@ public final class RPG extends Gun {
         this.weight = 0.10F;
         this.fireRate = 60;
         this.recoil = 1;
-        this.spread = 5.0D;
+        this.spread = 0.5D;
         this.bulletNumber = 1;
         this.bulletSpeed = 2.0D;
         this.isJumpEnabled = false;
