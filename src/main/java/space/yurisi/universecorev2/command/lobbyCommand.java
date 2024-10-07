@@ -22,7 +22,7 @@ public class lobbyCommand implements CommandExecutor {
         }
 
         World world = Bukkit.getServer().getWorld("lobby");
-        player.teleport(new Location(world, 0, 126, 35));
+        player.teleport(new Location(world, 0, 136, 45));
         Message.sendSuccessMessage(player, "[テレポートAI]", "ロビーにテレポートしました");
 
         return true;
