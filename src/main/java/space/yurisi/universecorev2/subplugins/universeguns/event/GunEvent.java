@@ -14,6 +14,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -58,6 +59,10 @@ public class GunEvent implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         Action action = event.getAction();
+        // オフハンドのイベントの場合は無視
+        if (event.getHand() != EquipmentSlot.HAND) {
+            return;
+        }
         ItemStack itemInHand = player.getInventory().getItemInMainHand();
         ItemMeta meta = itemInHand.getItemMeta();
         if (!itemInHand.hasItemMeta()) {
