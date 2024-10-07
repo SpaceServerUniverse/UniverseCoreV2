@@ -14,7 +14,9 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -57,6 +59,10 @@ public class GunEvent implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         Action action = event.getAction();
+        // オフハンドのイベントの場合は無視
+        if (event.getHand() != EquipmentSlot.HAND) {
+            return;
+        }
         ItemStack itemInHand = player.getInventory().getItemInMainHand();
         ItemMeta meta = itemInHand.getItemMeta();
         if (!itemInHand.hasItemMeta()) {
@@ -122,6 +128,7 @@ public class GunEvent implements Listener {
                                     if (gunStatus.getCurrentAmmo() == 0) {
                                         break;
                                     }
+
                                     new BukkitRunnable() {
                                         @Override
                                         public void run() {
@@ -161,7 +168,7 @@ public class GunEvent implements Listener {
                                         player.getWorld().playSound(player.getLocation(), Sound.BLOCK_COPPER_DOOR_CLOSE, 1.0F, 0.6F);
                                     }
                                 }
-                            }.runTaskLater(plugin, gun.getFireRate());
+                            }.runTaskLater(plugin, gun.getFireRate() - 5);
 
                         } else {
                             isShooting.put(player, false);
