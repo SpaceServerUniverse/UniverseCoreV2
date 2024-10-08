@@ -3,6 +3,7 @@ package space.yurisi.universecorev2.subplugins.universeguns.event;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -26,8 +27,9 @@ public class SniperShot {
         }
 
         ShotEffect(player, gun, direction, player.getEyeLocation());
-        RayTraceResult result = detectEntities(player);
-        setDamage(player, result, gun);
+        RayTraceResult entityResult = detectEntities(player);
+        RayTraceResult blockResult = player.getWorld().rayTraceBlocks(player.getEyeLocation(), direction, 500);
+        setDamage(player, entityResult, blockResult, gun);
     }
 
     private void Knockback(Player player, Vector direction) {
@@ -39,6 +41,7 @@ public class SniperShot {
     public RayTraceResult detectEntities(Player player) {
         World world = player.getWorld();
         Vector direction = player.getEyeLocation().getDirection();
+
 
         return world.rayTraceEntities(player.getEyeLocation(), direction, 500, e -> e != player);
     }
@@ -57,13 +60,24 @@ public class SniperShot {
         }
     }
 
-    private void setDamage(Player player, RayTraceResult result, Gun gun) {
-        if(result == null){
+    private void setDamage(Player player, RayTraceResult entityResult, RayTraceResult blockResult, Gun gun) {
+        if(entityResult == null){
             return;
         }
-        Entity entity = result.getHitEntity();
+        Entity entity = entityResult.getHitEntity();
+        Block block = blockResult.getHitBlock();
+        if (entity == null) {
+            return;
+        }
+        if(block == null){
+            return;
+        }
+        if(block.getLocation().distance(player.getEyeLocation()) < entity.getLocation().distance(player.getLocation())){
+            return;
+        }
+
         if (entity instanceof LivingEntity livingEntity) {
-            double height = result.getHitPosition().getY();
+            double height = entityResult.getHitPosition().getY();
             double damage = gun.getBaseDamage();
             double neckHeight = 1.5D;
             if (height > entity.getLocation().getY() + neckHeight) {
