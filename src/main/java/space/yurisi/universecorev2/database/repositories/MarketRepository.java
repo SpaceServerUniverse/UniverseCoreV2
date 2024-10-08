@@ -107,7 +107,6 @@ public class MarketRepository {
                 session.getTransaction().commit();
             }
             session.getTransaction().commit();
-            session.beginTransaction();
 
             return data;
         } finally {
