@@ -103,23 +103,32 @@ public class LandCommand implements CommandExecutor, TabCompleter {
                 return false;
             }
 
-            UUID ownerUUID = land.getOwnerUUID();
-            if (!ownerUUID.toString().equals(player.getUniqueId().toString())) {
-                Message.sendWarningMessage(player, "[土地管理AI]", "あなたはこの土地の所有者ではありません");
-                return false;
-            }
-
             DatabaseManager database = UniverseLand.getInstance().getDatabaseManager();
             UniverseEconomyAPI economy = UniverseEconomyAPI.getInstance();
 
-            try {
-                database.getLandRepository().deleteLand(database.getLandRepository().getLand(land.getId()));
-                economy.addMoney(player, land.getPrice() / 2, "土地の売却");
-            } catch (LandNotFoundException | UserNotFoundException | MoneyNotFoundException | CanNotAddMoneyException |
-                     ParameterException ignored) {
-            }
+            UUID ownerUUID = land.getOwnerUUID();
+            if (ownerUUID.toString().equals(player.getUniqueId().toString())) {
+                try {
+                    database.getLandRepository().deleteLand(database.getLandRepository().getLand(land.getId()));
+                    economy.addMoney(player, land.getPrice() / 2, "土地の売却");
+                } catch (LandNotFoundException | UserNotFoundException | MoneyNotFoundException |
+                         CanNotAddMoneyException |
+                         ParameterException ignored) {
+                }
 
-            player.sendMessage(Component.text("土地を [" + land.getPrice() / 2 + "star] で売却しました"));
+                player.sendMessage(Component.text("土地を [" + land.getPrice() / 2 + "star] で売却しました"));
+            } else if (player.isOp()) {
+                try {
+                    database.getLandRepository().deleteLand(database.getLandRepository().getLand(land.getId()));
+                } catch (LandNotFoundException ignored) {
+                }
+
+                OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player.getUniqueId());
+                player.sendMessage(Component.text("土地ID [ " + land.getId() + " ] 所有者 [" + offlinePlayer.getName() + "] の土地を削除しました"));
+            } else {
+                Message.sendWarningMessage(player, "[土地管理AI]", "あなたはこの土地の所有者ではありません");
+                return false;
+            }
         } else if (args[0].equals("invite")) {
             if (args.length == 1) {
                 Message.sendNormalMessage(player, "[土地管理AI]", "招待するプレイヤー名を指定してください");
