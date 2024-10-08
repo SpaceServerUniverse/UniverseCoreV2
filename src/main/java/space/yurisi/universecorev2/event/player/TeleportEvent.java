@@ -19,7 +19,9 @@ public class TeleportEvent implements Listener {
     public void onTeleport(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
         Boolean allowFlight = false;
-
+        if(player.isOp()){
+            allowFlight = true;
+        }
         if(event.getTo().getWorld().getName().equals("lobby")){
             allowFlight = true;
         }
