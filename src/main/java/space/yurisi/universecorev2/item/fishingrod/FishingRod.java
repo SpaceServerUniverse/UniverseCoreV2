@@ -78,32 +78,32 @@ public class FishingRod extends LevellingCustomItem {
             percentages.put(FishingRarity.Rare, 350);
             percentages.put(FishingRarity.SuperRare, 180);
             percentages.put(FishingRarity.UltraRare, 20);
-            percentages.put(FishingRarity.CreamRare, 3);
-            percentages.put(FishingRarity.PickaxeRare, 2);
+            percentages.put(FishingRarity.CreamRare, 2);
+            percentages.put(FishingRarity.PickaxeRare, 1);
             return percentages;
         }
         if (level == 3) {
             percentages.put(FishingRarity.Rare, 400);
             percentages.put(FishingRarity.SuperRare, 190);
             percentages.put(FishingRarity.UltraRare, 50);
-            percentages.put(FishingRarity.CreamRare, 3);
-            percentages.put(FishingRarity.PickaxeRare, 2);
+            percentages.put(FishingRarity.CreamRare, 2);
+            percentages.put(FishingRarity.PickaxeRare, 1);
             return percentages;
         }
         if (level == 4) {
             percentages.put(FishingRarity.Rare, 450);
             percentages.put(FishingRarity.SuperRare, 200);
             percentages.put(FishingRarity.UltraRare, 70);
-            percentages.put(FishingRarity.CreamRare, 5);
-            percentages.put(FishingRarity.PickaxeRare, 4);
+            percentages.put(FishingRarity.CreamRare, 4);
+            percentages.put(FishingRarity.PickaxeRare, 3);
             return percentages;
         }
 
         percentages.put(FishingRarity.Rare, 300);
         percentages.put(FishingRarity.SuperRare, 150);
         percentages.put(FishingRarity.UltraRare, 10);
-        percentages.put(FishingRarity.CreamRare, 500);
-        percentages.put(FishingRarity.PickaxeRare, 500);
+        percentages.put(FishingRarity.CreamRare, 2);
+        percentages.put(FishingRarity.PickaxeRare, 1);
         return percentages;
     }
 
