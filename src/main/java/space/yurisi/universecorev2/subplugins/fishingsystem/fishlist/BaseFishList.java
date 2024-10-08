@@ -30,7 +30,7 @@ public abstract class BaseFishList {
         setWorldName("謎の場所");
     }
 
-    protected void setWorldName(String worldName){
+    protected void setWorldName(String worldName) {
         this.worldName = worldName;
     }
 
@@ -76,20 +76,20 @@ public abstract class BaseFishList {
             Fish fish = getFishByRarityAndFeed(FishingRarity.UltraRare, feed);
             item = fish.getBaseItem(worldName);
             player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_TWINKLE_FAR, 1, 1);
-            Bukkit.broadcast(Component.text("§a" + player.getName() + "§eが地球で激レア海魚の§l§c" + fish.getName() + "(" + fish.getSize() + "cm)§r§eを釣りあげた！！！！！"));
-            player.sendActionBar(Component.text("[釣りAI]§eこれは！！とんでもない海魚の§5§l" + fish.getName() + "(" + fish.getSize() + "cm)§r§eが釣れた！"));
+            Bukkit.broadcast(Component.text("§a" + player.getName() + "§eが" + worldName + "で激レアの§l§c" + fish.getName() + "(" + fish.getSize() + "cm)§r§eを釣りあげた！！！！！"));
+            player.sendActionBar(Component.text("[釣りAI]§eこれは！！とんでもない！！§5§l" + fish.getName() + "(" + fish.getSize() + "cm)§r§eが釣れた！"));
         } else if (num < sr) {
             Fish fish = getFishByRarityAndFeed(FishingRarity.SuperRare, feed);
             item = fish.getBaseItem(worldName);
-            player.sendActionBar(Component.text("[釣りAI]§eわお！！"+ worldName +"の§d§l" + fish.getName() + "§r§eが釣れた！"));
+            player.sendActionBar(Component.text("[釣りAI]§eわお！！" + worldName + "の§d§l" + fish.getName() + "§r§eが釣れた！"));
         } else if (num < r) {
             Fish fish = getFishByRarityAndFeed(FishingRarity.Rare, feed);
             item = fish.getBaseItem(worldName);
-            player.sendActionBar(Component.text("[釣りAI]§eおっ！海魚の§c§l" + fish.getName() + "§r§eが釣れた！"));
+            player.sendActionBar(Component.text("[釣りAI]§eおっ！§c§l" + fish.getName() + "§r§eが釣れた！"));
         } else {
             Fish fish = getFishByRarityAndFeed(FishingRarity.Normal, feed);
             item = fish.getBaseItem(worldName);
-            player.sendActionBar(Component.text("[釣りAI]§a海魚の§b§l" + fish.getName() + "§r§aが釣れた！"));
+            player.sendActionBar(Component.text("[釣りAI]§a§b§l" + fish.getName() + "§r§aが釣れた！"));
         }
         return item;
     }
