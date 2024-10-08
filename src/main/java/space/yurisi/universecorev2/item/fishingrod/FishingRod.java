@@ -102,8 +102,8 @@ public class FishingRod extends LevellingCustomItem {
         percentages.put(FishingRarity.Rare, 300);
         percentages.put(FishingRarity.SuperRare, 150);
         percentages.put(FishingRarity.UltraRare, 10);
-        percentages.put(FishingRarity.CreamRare, 3);
-        percentages.put(FishingRarity.PickaxeRare, 2);
+        percentages.put(FishingRarity.CreamRare, 500);
+        percentages.put(FishingRarity.PickaxeRare, 500);
         return percentages;
     }
 
