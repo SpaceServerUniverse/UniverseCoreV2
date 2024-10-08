@@ -75,14 +75,6 @@ public class BirthdayData {
         this.day = day;
     }
 
-    public Set<BirthdayMessages> getBirthdayMessages() {
-        return birthdayMessages;
-    }
-
-    public void setBirthdayMessages(Set<BirthdayMessages> birthdayMessages) {
-        this.birthdayMessages = birthdayMessages;
-    }
-
     public Date getCreateAt() {
         return createdAt;
     }
