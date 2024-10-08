@@ -23,9 +23,6 @@ public class BirthdayData {
     @Column(name = "day")
     private int day;
 
-    @OneToMany(mappedBy = "birthday_messages", cascade = CascadeType.ALL)
-    private Set<BirthdayMessages> birthdayMessages;
-
     @CreationTimestamp
     @Column(name = "created_at", nullable = false)
     private Date createdAt;

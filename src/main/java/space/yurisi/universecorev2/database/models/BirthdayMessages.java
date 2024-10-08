@@ -13,9 +13,8 @@ public class BirthdayMessages {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "birthday_data_id", nullable = false)
-    private BirthdayData birthdayData;
+    @Column(name = "birthdayData_id")
+    private Long birthdayDataId;
 
     @Column(name = "uuid")
     private String uuid;
@@ -28,11 +27,11 @@ public class BirthdayMessages {
     private Date createdAt;
 
     public BirthdayMessages(
-            BirthdayData birthdayData,
+            Long birthdayDataId,
             String uuid,
             String message
     ) {
-        this.birthdayData = birthdayData;
+        this.birthdayDataId = birthdayDataId;
         this.uuid = uuid;
         this.message = message;
     }
@@ -49,12 +48,12 @@ public class BirthdayMessages {
         this.id = id;
     }
 
-    public BirthdayData getBirthdayData() {
-        return birthdayData;
+    public Long getBirthdayDataId() {
+        return birthdayDataId;
     }
 
-    public void setBirthdayData(BirthdayData birthdayData) {
-        this.birthdayData = birthdayData;
+    public void setBirthdayData(Long birthdayData) {
+        this.birthdayDataId = birthdayData;
     }
 
     public String getUuid() {

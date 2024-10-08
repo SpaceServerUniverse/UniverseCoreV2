@@ -123,20 +123,20 @@ public class BirthdayCardRepository {
     /**
      * バースデーメッセージを取得
      *
-     * @param birthdayData
+     * @param birthdayDataId
      * @return
      */
-    public List<BirthdayMessages> getBirthdayMessages(BirthdayData birthdayData) throws BirthdayDataNotFoundException {
+    public List<BirthdayMessages> getBirthdayMessages(Long birthdayDataId) throws BirthdayDataNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
 
         try {
             session.beginTransaction();
-            List<BirthdayMessages> birthdayMessagesList = session.createQuery("FROM BirthdayMessages WHERE birthdayData = :birthdayData", BirthdayMessages.class)
-                    .setParameter("birthdayData", birthdayData)
+            List<BirthdayMessages> birthdayMessagesList = session.createQuery("FROM BirthdayMessages WHERE birthdayDataId = :birthdayDataId", BirthdayMessages.class)
+                    .setParameter("birthdayDataId", birthdayDataId)
                     .getResultList();
             session.getTransaction().commit();
             if (birthdayMessagesList.isEmpty()) {
-                throw new BirthdayDataNotFoundException("Birthday messages not found for " + birthdayData);
+                throw new BirthdayDataNotFoundException("Birthday messages not found for " + birthdayDataId);
             }
             return birthdayMessagesList;
         } finally {
@@ -147,22 +147,20 @@ public class BirthdayCardRepository {
     /**
      * バースデーメッセージを作成します
      *
-     * @param birthdayData
+     * @param birthdayDataId
      * @param player
      * @param message
      * @return
      */
-    public BirthdayMessages createBirthdayMessage(BirthdayData birthdayData, Player player, String message) {
+    public BirthdayMessages createBirthdayMessage(Long birthdayDataId, Player player, String message) {
         String uuid = player.getUniqueId().toString();
 
-        BirthdayMessages birthdayMessages = new BirthdayMessages(birthdayData, uuid, message);
+        BirthdayMessages birthdayMessages = new BirthdayMessages(birthdayDataId, uuid, message);
 
         Session session = this.sessionFactory.getCurrentSession();
 
         try {
             session.beginTransaction();
-
-            birthdayData.getBirthdayMessages().add(birthdayMessages);
             session.persist(birthdayMessages);
             session.getTransaction().commit();
         } catch (Exception e) {
