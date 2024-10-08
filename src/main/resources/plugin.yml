@@ -111,6 +111,10 @@ commands:
   item:
     description: メインハンドに持ったアイテムの名前を表示します
 
+  #BirthdayCard
+  birthday:
+    description: "お誕生日カード"
+
 permissions:
   # UniverseCoreV2
   space.yurisi.universecorev2.interactevent.enchanttable:
