@@ -10,7 +10,7 @@ import space.yurisi.universecorev2.event.entity.EntityHangingBreakEvent;
 import space.yurisi.universecorev2.event.player.InteractEvent;
 import space.yurisi.universecorev2.event.player.LoginEvent;
 import space.yurisi.universecorev2.event.player.TouchEvent;
-import space.yurisi.universecorev2.event.player.WarpEvent;
+import space.yurisi.universecorev2.event.player.TeleportEvent;
 
 public class EventManager {
     public EventManager(UniverseCoreV2 main){
@@ -19,7 +19,7 @@ public class EventManager {
 
     private void init(UniverseCoreV2 main) {
         Bukkit.getPluginManager().registerEvents(new LoginEvent(), main);
-        Bukkit.getPluginManager().registerEvents(new WarpEvent(), main);
+        Bukkit.getPluginManager().registerEvents(new TeleportEvent(main), main);
         Bukkit.getPluginManager().registerEvents(new BreakEvent(), main);
         Bukkit.getPluginManager().registerEvents(new PlaceEvent(), main);
         Bukkit.getPluginManager().registerEvents(new TouchEvent(), main);
