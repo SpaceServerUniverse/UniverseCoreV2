@@ -1,5 +1,6 @@
 package space.yurisi.universecorev2.event.player;
 
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,7 +20,9 @@ public class TeleportEvent implements Listener {
     public void onTeleport(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
         Boolean allowFlight = false;
-
+        if(player.isOp() && !(player.getGameMode() == GameMode.SURVIVAL)){
+            allowFlight = true;
+        }
         if(event.getTo().getWorld().getName().equals("lobby")){
             allowFlight = true;
         }
