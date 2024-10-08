@@ -4,7 +4,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import space.yurisi.universecorev2.menu.BaseMenu;
 import space.yurisi.universecorev2.subplugins.birthdaycard.menu.item.BackItem;
-import space.yurisi.universecorev2.subplugins.birthdaycard.menu.item.CalenderItems;
 import space.yurisi.universecorev2.subplugins.birthdaycard.menu.item.ForwardItem;
 import xyz.xenondevs.invui.gui.Gui;
 import xyz.xenondevs.invui.gui.PagedGui;
