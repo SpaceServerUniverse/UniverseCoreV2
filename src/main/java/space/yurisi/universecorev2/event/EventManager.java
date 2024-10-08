@@ -7,6 +7,7 @@ import space.yurisi.universecorev2.event.entity.EExplodeEvent;
 import space.yurisi.universecorev2.event.entity.EntityHangingBreakEvent;
 import space.yurisi.universecorev2.event.player.InteractEvent;
 import space.yurisi.universecorev2.event.player.LoginEvent;
+import space.yurisi.universecorev2.event.player.WarpEvent;
 
 public class EventManager {
     public EventManager(UniverseCoreV2 main){
@@ -15,6 +16,7 @@ public class EventManager {
 
     private void init(UniverseCoreV2 main) {
         Bukkit.getPluginManager().registerEvents(new LoginEvent(), main);
+        Bukkit.getPluginManager().registerEvents(new WarpEvent(), main);
         Bukkit.getPluginManager().registerEvents(new BExplodeEvent(),main);
         Bukkit.getPluginManager().registerEvents(new EExplodeEvent(),main);
         Bukkit.getPluginManager().registerEvents(new InteractEvent(), main);
