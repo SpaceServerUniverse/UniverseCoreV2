@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import space.yurisi.universecorev2.subplugins.universediscord.UniverseDiscordChannel;
 import space.yurisi.universecorev2.subplugins.universediscord.UniverseDiscordMessage;
+import space.yurisi.universecorev2.utils.Message;
 
 public class PlayerEvent implements Listener {
 
@@ -39,6 +40,12 @@ public class PlayerEvent implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onChat(AsyncChatEvent event) {
         String message = LegacyComponentSerializer.legacy(LegacyComponentSerializer.AMPERSAND_CHAR).serialize(event.originalMessage());
+
+        if (!Message.isSafeMessage(message)) {
+            Message.sendWarningMessage(event.getPlayer(), "[管理AI]", "メッセージに招待リンクが含まれているため送信できませんでした");
+            event.setCancelled(true);
+            return;
+        }
 
         UniverseDiscordMessage.sendMessageToDiscord(event.getPlayer(), discordChannel, message);
     }
