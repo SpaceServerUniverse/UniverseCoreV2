@@ -70,6 +70,10 @@ commands:
   su:
     description: 自殺します
 
+  #Trash
+  trash:
+    description: アイテムを捨てます
+
   xtp:
     description: テレポートします
 
