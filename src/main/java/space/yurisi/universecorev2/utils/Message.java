@@ -5,6 +5,8 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import org.bukkit.entity.Player;
 
+import java.util.regex.Pattern;
+
 /**
  * UniverseCoreV2 内のサブプラグインで使用するメッセージを送信するためのユーティリティクラス.
  * `[prefix] message` の形式でメッセージを送信でき, プレフィックスの色は固定されている.
@@ -12,6 +14,9 @@ import org.bukkit.entity.Player;
  * @author m1sk9
  */
 public class Message {
+
+    static String discordInviteURL = "https://discord\\.gg/[a-zA-Z0-9]+";
+    static Pattern pattern = Pattern.compile(discordInviteURL);
 
     /**
      * プレイヤーに通常形式のメッセージを送信します.
@@ -76,5 +81,17 @@ public class Message {
      */
     public static void sendErrorMessage(Player target, String prefix, String message) {
         target.sendMessage(Component.text("§b" + prefix + " §c" + message));
+    }
+
+    /**
+     * 送信しようとした文字列が安全かどうかを判定します.
+     * 以下のチェックを行います.
+     * - Discord の招待リンクが含まれていないか
+     *
+     * @param message チェックする文字列
+     * @return boolean 安全な文字列かどうか
+     */
+    public static boolean isSafeMessage(String message) {
+        return !pattern.matcher(message).matches();
     }
 }
