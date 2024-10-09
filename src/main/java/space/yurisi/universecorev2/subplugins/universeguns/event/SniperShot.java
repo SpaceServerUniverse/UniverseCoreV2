@@ -64,10 +64,11 @@ public class SniperShot {
         if(entityResult == null){
             return;
         }
+        Entity entity = entityResult.getHitEntity();
         if(blockResult == null){
+            hit(entity, entityResult, gun, player);
             return;
         }
-        Entity entity = entityResult.getHitEntity();
         Block block = blockResult.getHitBlock();
         if (entity == null) {
             return;
@@ -79,22 +80,21 @@ public class SniperShot {
             return;
         }
 
+        hit(entity, entityResult, gun, player);
+    }
+
+    private void hit(Entity entity, RayTraceResult result, Gun gun, Player player) {
         if (entity instanceof LivingEntity livingEntity) {
-            double height = entityResult.getHitPosition().getY();
+            double height = result.getHitPosition().getY();
             double damage = gun.getBaseDamage();
             double neckHeight = 1.5D;
-            if (height > entity.getLocation().getY() + neckHeight) {
+            if (height > livingEntity.getLocation().getY() + neckHeight) {
                 damage *= 1.5D;
                 player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
-            }else{
+            } else {
                 player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1.0F, 1.0F);
             }
             livingEntity.damage(damage, player);
-//            double newHealth = livingEntity.getHealth() - damage;
-//            if (newHealth <= 0) {
-//                newHealth = 0;
-//            }
-//            livingEntity.setHealth(newHealth);
         }
     }
 
