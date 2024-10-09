@@ -64,6 +64,9 @@ public class SniperShot {
         if(entityResult == null){
             return;
         }
+        if(blockResult == null){
+            return;
+        }
         Entity entity = entityResult.getHitEntity();
         Block block = blockResult.getHitBlock();
         if (entity == null) {
