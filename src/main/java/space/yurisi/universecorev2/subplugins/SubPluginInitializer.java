@@ -2,6 +2,7 @@ package space.yurisi.universecorev2.subplugins;
 
 import org.bukkit.Bukkit;
 import space.yurisi.universecorev2.UniverseCoreV2;
+import space.yurisi.universecorev2.subplugins.birthdaycard.BirthdayCard;
 import space.yurisi.universecorev2.subplugins.blockcopystick.BlockCopyStick;
 import space.yurisi.universecorev2.subplugins.changemessages.ChangeMessages;
 import space.yurisi.universecorev2.subplugins.chestshop.ChestShop;
@@ -76,6 +77,7 @@ public class SubPluginInitializer {
         this.subPlugins.add(new TickFreezer());
         this.subPlugins.add(new UniverseGuns());
         this.subPlugins.add(new SnowSafeFrame());
+        this.subPlugins.add(new BirthdayCard());
     }
 
     public void onEnable() {
