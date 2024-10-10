@@ -41,7 +41,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
 
     private boolean isValidDate(String monthArg, String dayArg, Player player) {
         if (monthArg == null || dayArg == null || !NumberUtils.isNumeric(monthArg) || !NumberUtils.isNumeric(dayArg)) {
-            Message.sendErrorMessage(player, BirthdayCard.PREFIX, "引数が間違えているよ確認してください。");
+            Message.sendErrorMessage(player, BirthdayCard.PREFIX, "引数が間違えているよ確認してください");
             return false;
         }
         return true;
@@ -93,7 +93,6 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 if (existingData != null) {
                     Message.sendErrorMessage(player, BirthdayCard.PREFIX, "既に誕生日が登録されています");
                 } else {
-                    // 新規登録
                     birthdayCardRepository.createBirthdayData(player, registerMonthDay);
                     Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "お誕生日を登録しました");
                 }
@@ -143,11 +142,10 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 if (args.length < 2) {
                     data = getBirthdayData(player);
                     if (data == null) {
-                        Message.sendErrorMessage(player, BirthdayCard.PREFIX, "あなたの誕生日が登録されていません。");
+                        Message.sendErrorMessage(player, BirthdayCard.PREFIX, "あなたの誕生日が登録されていません");
                         return true;
                     }
-                    monthDay = MonthDay.of(data.getMonth(), data.getDay());
-                    Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "あなたの誕生日は " + monthDay);
+                    Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "あなたの誕生日は" + data.getMonth() + "月" + data.getDay() + "日");
                     return true;
                 }
 
@@ -162,7 +160,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                     Message.sendErrorMessage(player, BirthdayCard.PREFIX, birthdayPlayer.getName() + "の誕生日が登録されていません。");
                     return true;
                 }
-                Message.sendSuccessMessage(player, BirthdayCard.PREFIX, birthdayPlayer.getName() + "の誕生日は" + data.getMonth() +"月" + data.getDay() + "日" );
+                Message.sendSuccessMessage(player, BirthdayCard.PREFIX, birthdayPlayer.getName() + "の誕生日は" + data.getMonth() + "月" + data.getDay() + "日");
                 return true;
 
             case "list":
@@ -178,16 +176,16 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                             String playerName = offlineBirthdayPlayer.getName() != null ? offlineBirthdayPlayer.getName() : "不明なプレイヤー";
 
                             message.append(playerName)
-                                    .append("の誕生日は ")
-                                    .append(bd.getMonth()).append("月 ")
+                                    .append("の誕生日は")
+                                    .append(bd.getMonth()).append("月")
                                     .append(bd.getDay()).append("日\n");
                         }
                         Message.sendNormalMessage(player, BirthdayCard.PREFIX, message.toString());
                     }
                 } catch (BirthdayDataNotFoundException e) {
-                    Message.sendNormalMessage(player, BirthdayCard.PREFIX, "誕生日データが見つかりませんでした。");
+                    Message.sendNormalMessage(player, BirthdayCard.PREFIX, "誕生日データが見つかりませんでした");
                 }
-                break;
+                return true;
 
             case "send":
                 //TODO::保存機能を作る
@@ -220,7 +218,6 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
             return completions;
         }
 
-        // "register" コマンドの処理
         if (args[0].equals("register")) {
             if (args.length == 2) {
                 completions.add("<月(1~12)>");
