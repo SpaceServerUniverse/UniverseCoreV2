@@ -137,8 +137,6 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
 
             case "check":
                 BirthdayData data;
-                MonthDay monthDay;
-
                 if (args.length < 2) {
                     data = getBirthdayData(player);
                     if (data == null) {
@@ -207,7 +205,6 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         List<String> completions = new ArrayList<>();
 
-        // 最初の引数の候補を追加
         if (args.length == 1) {
             completions.add("register");
             completions.add("check");
