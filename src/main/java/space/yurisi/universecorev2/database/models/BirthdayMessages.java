@@ -13,7 +13,7 @@ public class BirthdayMessages {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "birthdayData_id")
+    @Column(name = "birthday_data_id")
     private Long birthdayDataId;
 
     @Column(name = "uuid")
