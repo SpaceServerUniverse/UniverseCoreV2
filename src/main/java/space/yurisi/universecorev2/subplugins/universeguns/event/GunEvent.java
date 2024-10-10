@@ -30,12 +30,14 @@ import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.item.gun.Gun;
 import space.yurisi.universecorev2.subplugins.universeguns.constants.GunType;
 import space.yurisi.universecorev2.subplugins.universeguns.core.BulletData;
+import space.yurisi.universecorev2.subplugins.universeguns.core.DamageCalculator;
 import space.yurisi.universecorev2.subplugins.universeguns.core.GunStatus;
 import space.yurisi.universecorev2.subplugins.universeguns.manager.GunStatusManager;
 import space.yurisi.universecorev2.utils.Message;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 public class GunEvent implements Listener {
@@ -118,11 +120,11 @@ public class GunEvent implements Listener {
                             return;
                         }
 
-                        if (!gun.getType().equals(GunType.SR)) {
+                        if (gun.getType().equals(GunType.HG) || gun.getType().equals(GunType.AR) || gun.getType().equals(GunType.EX)) {
 
                             gunStatus.shoot();
                             GunShot gunShot = new GunShot(player, gun, gunStatus, isZoom);
-                            projectileData.put(gunShot.getProjectile(), new BulletData(gun, player));
+                            projectileData.put(gunShot.getProjectile(), new BulletData(gun, player, gunShot.getLaunchLocation()));
                             if (gun.getBurst() != 0) {
                                 for (int i = 0; i < gun.getBurst(); i++) {
                                     if (gunStatus.getCurrentAmmo() == 0) {
@@ -134,14 +136,14 @@ public class GunEvent implements Listener {
                                         public void run() {
                                             gunStatus.shoot();
                                             GunShot burstShot = new GunShot(player, gun, gunStatus, isZoom);
-                                            projectileData.put(burstShot.getProjectile(), new BulletData(gun, player));
+                                            projectileData.put(burstShot.getProjectile(), new BulletData(gun, player, burstShot.getLaunchLocation()));
                                         }
                                     }.runTaskLater(plugin, 1L);
 
                                 }
                             }
 
-                        } else {
+                        } else if (gun.getType().equals(GunType.SR)) {
                             if (!isZoom.contains(player)) {
                                 Message.sendWarningMessage(player, "[武器AI]", "狙撃時のみ発射できます。");
                                 return;
@@ -156,6 +158,14 @@ public class GunEvent implements Listener {
                                         player.getWorld().playSound(player.getLocation(), Sound.BLOCK_COPPER_DOOR_OPEN, 1.0F, 0.6F);
                                     }
                                 }.runTaskLater(plugin, 5L);
+                            }
+
+                        } else if (gun.getType().equals(GunType.SG)) {
+                            gunStatus.shoot();
+                            ShotgunShot shotgunShot = new ShotgunShot(player, gun, gunStatus, isZoom);
+                            List<Snowball> projectiles = shotgunShot.getProjectiles();
+                            for (Snowball projectile : projectiles) {
+                                projectileData.put(projectile, new BulletData(gun, player, player.getEyeLocation()));
                             }
                         }
 
@@ -247,12 +257,17 @@ public class GunEvent implements Listener {
                 }
             }
 
+
             double headShotTimes = 1.5;
-            if (isHeadShot(loc.getY(), entity)) {
+            if (DamageCalculator.isHeadShot(loc.getY(), entity)) {
                 damage *= headShotTimes;
                 shooter.getWorld().playSound(shooter.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0F, 1.0F);
             } else {
                 shooter.getWorld().playSound(shooter.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1.0F, 1.0F);
+            }
+
+            if(gun.getType().equals(GunType.SG)){
+                damage = DamageCalculator.getSlopedDamage(data.getLocation(), livingEntity, gun.getRange(), damage);
             }
 
 
@@ -287,11 +302,6 @@ public class GunEvent implements Listener {
         }
         livingEntity.setMaximumNoDamageTicks(10);
         livingEntity.setNoDamageTicks(10);
-    }
-
-    public boolean isHeadShot(double height, Entity entity) {
-        double neckHeight = 1.35;
-        return height > entity.getLocation().getY() + neckHeight;
     }
 
     @EventHandler

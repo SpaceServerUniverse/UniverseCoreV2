@@ -1,11 +1,8 @@
 package space.yurisi.universecorev2.item.gun;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -51,6 +48,8 @@ public abstract class Gun extends CustomItem {
 
     /** 弾速 4.0Dが限界 */
     protected double bulletSpeed;
+
+    protected long range;
 
     protected boolean isJumpEnabled;
 
@@ -119,6 +118,10 @@ public abstract class Gun extends CustomItem {
 
     public double getBulletSpeed() {
         return bulletSpeed;
+    }
+
+    public long getRange() {
+        return range;
     }
 
     public boolean getIsJumpEnabled() {

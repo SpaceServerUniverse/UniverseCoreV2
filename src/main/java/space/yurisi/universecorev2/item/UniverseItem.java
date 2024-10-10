@@ -46,6 +46,7 @@ public class UniverseItem {
         items.put(SMG11.id, new SMG11());
         items.put(RPG.id, new RPG());
         items.put(F2.id, new F2());
+        items.put(M870.id, new M870());
     }
 
     public static CustomItem getItem(String id){

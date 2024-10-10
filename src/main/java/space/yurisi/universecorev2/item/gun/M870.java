@@ -1,41 +1,42 @@
 package space.yurisi.universecorev2.item.gun;
 
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import space.yurisi.universecorev2.subplugins.universeguns.constants.GunType;
 
-public final class SMG11 extends Gun {
+import org.bukkit.Material;
 
-    public static final String id = "smg11";
+public final class M870 extends Gun {
 
-    public SMG11() {
+    public static final String id = "m870";
+
+    public M870() {
         super(
                 id,
-                "SMG-11",
+                "M870",
                 ItemStack.of(Material.DIAMOND_HOE)
         );
 
-        this.type = GunType.SMG;
-        this.magazineSize = 16;
+        this.type = GunType.SG;
+        this.magazineSize = 7;
         this.burst = 0;
-        this.reloadTime = 800;
-        this.isZoomWalkSpeed = 0.17F;
-        this.baseDamage = 1.0D;
+        this.reloadTime = 4000;
+        this.isZoomWalkSpeed = 0.14F;
+        this.baseDamage = 2.0D;
         this.isExplosive = false;
         this.explosionRadius = 0.0F;
-        this.weight = 0.19F;
-        this.fireRate = 1;
-        this.recoil = 0;
-        this.spread = 1.0D;
-        this.bulletNumber = 1;
+        this.weight = 0.16F;
+        this.fireRate = 20;
+        this.recoil = 1;
+        this.spread = 0.2D;
+        this.bulletNumber = 8;
         this.bulletSpeed = 3.0D;
-        this.range = 500;
-        this.isJumpEnabled = true;
-        this.shotSound = Sound.ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR;
-        this.volumeSound = 3.0F;
-        this.pitchSound = 0.8F;
+        this.range = 20;
+        this.isJumpEnabled = false;
+        this.shotSound = Sound.ITEM_SHIELD_BREAK;
+        this.volumeSound = 5.0F;
+        this.pitchSound = 0.6F;
     }
 
     @Override
@@ -43,11 +44,10 @@ public final class SMG11 extends Gun {
         default_setting = (item) -> {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
-                meta.setCustomModelData(4);
+                meta.setCustomModelData(3);
             }
             item.setItemMeta(meta);
             return item;
         };
     }
-
 }
