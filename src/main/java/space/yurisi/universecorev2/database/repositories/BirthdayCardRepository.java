@@ -58,6 +58,27 @@ public class BirthdayCardRepository {
     }
 
     /**
+     * バースデーをuuidから取得します
+     *
+     * @param uuid
+     * @return
+     * @throws NoResultException
+     */
+    public BirthdayData getBirthdayData(String uuid) throws NoResultException {
+        Session session = this.sessionFactory.getCurrentSession();
+        try {
+            session.beginTransaction();
+            BirthdayData data = session.createQuery("FROM BirthdayData where uuid = :uuid", BirthdayData.class)
+                    .setParameter("uuid", uuid)
+                    .getSingleResult();
+            session.getTransaction().commit();
+            return data;
+        } finally {
+            session.close();
+        }
+    }
+
+    /**
      * すべてのバースデーデータを取得します
      *
      * @return
