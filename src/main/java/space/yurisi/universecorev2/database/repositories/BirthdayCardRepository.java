@@ -90,7 +90,7 @@ public class BirthdayCardRepository {
             session.beginTransaction();
             List<BirthdayData> data = session.createSelectionQuery("FROM BirthdayData", BirthdayData.class).getResultList();
             session.getTransaction().commit();
-            if (data == null) {
+            if (data == null || data.isEmpty()) {
                 throw new BirthdayDataNotFoundException("Birthday data not found");
             }
             return data;
