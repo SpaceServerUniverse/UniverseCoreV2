@@ -1,5 +1,6 @@
+name: space
 services:
-  paper:
+  life:
     image: itzg/minecraft-server:java21-jdk
     stdin_open: true
     tty: true
@@ -8,17 +9,62 @@ services:
       - TYPE=PAPER
       - VERSION=1.21.1
       - MEMORY=2G
-      - RCON_PASSWORD=${RCON_PASSWORD}
+      - RCON_PASSWORD=password
       - TZ=Asia/Tokyo
       - RESOURCE_PACK=https://github.com/SpaceServerUniverse/UniverseResourcePack/releases/latest/download/UniverseResources.zip
       - REQUIRE_RESOURCE_PACK=true
+      - SERVER_PORT=25585
     ports:
-      - "25565:25565" # When you want to connect to the minecraft server, you need to connect to the port 25565.
-      - "25575:25575"
+      - "25585:25585" # When you want to connect to the minecraft server, you need to connect to the port 25565.
     volumes:
-      - ./paper/data:/data
-      - ./paper/plugins:/data/plugins
-      - ./paper/logs:/data/logs
+      - ./life/data:/data
+      - ./life/plugins:/data/plugins
+      - ./life/logs:/data/logs
+    depends_on:
+      - db
+    networks:
+      - space_network
+      - shared_network
+
+  lobby:
+    image: itzg/minecraft-server:java21-jdk
+    stdin_open: true
+    tty: true
+    environment:
+      - EULA=TRUE
+      - TYPE=PAPER
+      - VERSION=1.21.1
+      - MEMORY=2G
+      - RCON_PASSWORD=password
+      - TZ=Asia/Tokyo
+      - RESOURCE_PACK=https://github.com/SpaceServerUniverse/UniverseResourcePack/releases/latest/download/UniverseReso>
+      - REQUIRE_RESOURCE_PACK=true
+      - SERVER_PORT=25584
+    ports:
+      - "25584:25584" # When you want to connect to the minecraft server, you need to connect to the port 25565.
+    volumes:
+      - ./lobby/data:/data
+      - ./lobby/plugins:/data/plugins
+      - ./lobby/logs:/data/logs
+    depends_on:
+      - db
+    networks:
+      - space_network
+      - shared_network
+
+  mc:
+    image: itzg/bungeecord
+    tty: true
+    stdin_open: true
+    environment:
+      TYPE: VELOCITY
+      VELOCITY_VERSION: latest
+      MEMORY: 512m
+    ports:
+      - "25565:25565/tcp"
+    volumes:
+      - ./velocity:/server
+    restart: always
     depends_on:
       - db
     networks:

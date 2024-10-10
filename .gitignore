@@ -6,3 +6,6 @@
 /docker/db/
 /docker/paper/
 /docker/phpmyadmin/
+/docker/life/
+/docker/lobby/
+/docker/velocity/
