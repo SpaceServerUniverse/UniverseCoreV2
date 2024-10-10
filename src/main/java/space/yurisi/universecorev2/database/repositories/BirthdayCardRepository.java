@@ -1,5 +1,6 @@
 package space.yurisi.universecorev2.database.repositories;
 
+import jakarta.persistence.NoResultException;
 import org.bukkit.entity.Player;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -79,7 +80,7 @@ public class BirthdayCardRepository {
     }
 
     /**
-     * チェストショップデータを削除します
+     * バースデーを削除します
      *
      * @param birthdayData
      */
