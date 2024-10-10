@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.Set;
 
 @Entity
-@Table(name = "birthday_data")
+@Table(name = "birthday_datas")
 public class BirthdayData {
     @Id
     @Column(name = "id", unique = true, columnDefinition = "BIGINT UNSIGNED")
