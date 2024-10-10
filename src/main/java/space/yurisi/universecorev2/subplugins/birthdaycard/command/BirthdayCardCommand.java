@@ -171,7 +171,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                         StringBuilder message = new StringBuilder("登録されている誕生日:\n");
                         for (BirthdayData bd : birthdayDataList) {
                             UUID playerUUID = UUID.fromString(bd.getUuid());
-                            OfflinePlayer offlineBirthdayPlayer = Bukkit.getOfflinePlayer(playerUUID);  // 変数名を変更
+                            OfflinePlayer offlineBirthdayPlayer = Bukkit.getOfflinePlayer(playerUUID);
                             String playerName = offlineBirthdayPlayer.getName() != null ? offlineBirthdayPlayer.getName() : "不明なプレイヤー";
 
                             message.append(playerName)
@@ -233,8 +233,17 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
         }
         if (args[0].equals("check") || args[0].equals("get")) {
             if (args.length == 2) {
-                Bukkit.getOnlinePlayers().forEach(player -> {
-                    completions.add(player.getName());
+                List<BirthdayData> birthdayDatas = null;
+                try {
+                    birthdayDatas = birthdayCardRepository.getAllBirthdayData();
+                } catch (BirthdayDataNotFoundException ignored) {
+                    //NOOP
+                }
+                birthdayDatas.forEach(birthdayData -> {
+                    UUID playerUUID = UUID.fromString(birthdayData.getUuid());
+                    OfflinePlayer offlineBirthdayPlayer = Bukkit.getOfflinePlayer(playerUUID);
+                    String playerName = offlineBirthdayPlayer.getName() != null ? offlineBirthdayPlayer.getName() : "不明なプレイヤー";
+                    completions.add(playerName);
                 });
                 return completions;
             }
