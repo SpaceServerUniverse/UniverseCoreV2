@@ -45,11 +45,14 @@ public class JoinEvent implements Listener {
                 return;
             }
             if (thisYearBirthday.isAfter(today) && thisYearBirthday.isBefore(tenDaysLater)) {
+
                 UUID playerUUID = UUID.fromString(birthdayData.getUuid());
-                OfflinePlayer offlineBirthdayPlayer = Bukkit.getOfflinePlayer(playerUUID);
-                String playerName = offlineBirthdayPlayer.getName() != null ? offlineBirthdayPlayer.getName() : "不明なプレイヤー";
-                Message.sendSuccessMessage(player, BirthdayCard.PREFIX, playerName + "の誕生日が近いよ！誕生日カードを書かない？");
-                return;
+                if(!player.getUniqueId().equals(playerUUID)) {
+                    OfflinePlayer offlineBirthdayPlayer = Bukkit.getOfflinePlayer(playerUUID);
+                    String playerName = offlineBirthdayPlayer.getName() != null ? offlineBirthdayPlayer.getName() : "不明なプレイヤー";
+                    Message.sendSuccessMessage(player, BirthdayCard.PREFIX, playerName + "の誕生日が近いよ！誕生日カードを書かない？");
+                    return;
+                }
             }
         }
     }
