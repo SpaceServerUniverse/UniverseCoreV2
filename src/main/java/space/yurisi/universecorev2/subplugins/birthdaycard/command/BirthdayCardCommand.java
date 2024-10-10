@@ -87,8 +87,8 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 MonthDay registerMonthDay = parseMonthDay(args[1], args[2], player);
                 if (registerMonthDay == null) return false;
 
-                UUID playerUUID = player.getUniqueId();
-                BirthdayData existingData = birthdayCardRepository.getBirthdayData(playerUUID.toString());
+                UUID registerPlayerUUID = player.getUniqueId();
+                BirthdayData existingData = birthdayCardRepository.getBirthdayData(registerPlayerUUID.toString());
 
                 if (existingData != null) {
                     Message.sendErrorMessage(player, BirthdayCard.PREFIX, "既に誕生日が登録されています");
