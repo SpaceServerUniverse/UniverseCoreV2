@@ -34,9 +34,11 @@ import java.util.UUID;
 
 public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
     private NamespacedKey nk;
+    private BirthdayCardRepository birthdayCardRepository;
 
     public BirthdayCardCommand() {
         nk = new NamespacedKey("universecorev2.birthday", "birthdaycard");
+        BirthdayCardRepository birthdayCardRepository = UniverseCoreV2API.getInstance().getDatabaseManager().getBirthdayCardRepository();
     }
 
     private boolean isValidDate(String monthArg, String dayArg, Player player) {
@@ -59,7 +61,6 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
     }
 
     private BirthdayData getBirthdayData(Player player) {
-        BirthdayCardRepository birthdayCardRepository = UniverseCoreV2API.getInstance().getDatabaseManager().getBirthdayCardRepository();
         try {
             return birthdayCardRepository.getBirthdayData(player.getUniqueId().toString());
         } catch (NoResultException e) {
@@ -74,7 +75,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
             //sender.sendMessage(BirthdayCard.PREFIX + "プレイヤー内で実行してね");
             return false;
         }
-        BirthdayCardRepository birthdayCardRepository = UniverseCoreV2API.getInstance().getDatabaseManager().getBirthdayCardRepository();
+
         if (args.length == 0) {
             BirthdayCalendarMenu menu = new BirthdayCalendarMenu();
             menu.sendMenu(player);
