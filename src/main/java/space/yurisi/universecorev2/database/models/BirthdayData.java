@@ -23,6 +23,9 @@ public class BirthdayData {
     @Column(name = "day")
     private int day;
 
+    @Column(name = "gift_received", nullable = false)
+    private boolean giftReceived;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false)
     private Date createdAt;
@@ -31,12 +34,14 @@ public class BirthdayData {
             Long id,
             String uuid,
             int month,
-            int day
+            int day,
+            boolean giftReceived
     ) {
         this.id = id;
         this.uuid = uuid;
         this.month = month;
         this.day = day;
+        this.giftReceived = giftReceived;
     }
 
     public BirthdayData() {
@@ -73,6 +78,12 @@ public class BirthdayData {
 
     public void setDay(int day) {
         this.day = day;
+    }
+    public boolean isGiftReceived() {
+        return giftReceived;
+    }
+    public void setGiftReceived(boolean giftReceived) {
+        this.giftReceived = giftReceived;
     }
 
     public Date getCreateAt() {

@@ -29,7 +29,7 @@ public class BirthdayCardRepository {
         String uuid = player.getUniqueId().toString();
         int month = monthDay.getMonthValue();
         int day = monthDay.getDayOfMonth();
-        BirthdayData birthdayData = new BirthdayData(null, uuid, month, day);
+        BirthdayData birthdayData = new BirthdayData(null, uuid, month, day, false);
 
         Session session = this.sessionFactory.getCurrentSession();
         try {
@@ -195,7 +195,48 @@ public class BirthdayCardRepository {
         } finally {
             session.close();
         }
-
         return birthdayMessages;
     }
+
+    /**
+     * プレイヤーuuidからバースデーメッセージを複数取得
+     *
+     * @param uuid
+     * @return
+     * @throws BirthdayDataNotFoundException
+     */
+    public List<BirthdayMessages> getBirthdayMessagesByUuid(String uuid) throws BirthdayDataNotFoundException {
+        Session session = this.sessionFactory.getCurrentSession();
+        try {
+            session.beginTransaction();
+            List<BirthdayMessages> birthdayMessagesList = session.createQuery("FROM BirthdayMessages WHERE uuid = :playerUuid", BirthdayMessages.class)
+                    .setParameter("playerUuid", uuid)
+                    .getResultList();
+            session.getTransaction().commit();
+            if (birthdayMessagesList.isEmpty()) {
+                throw new BirthdayDataNotFoundException("Birthday messages not found for " + uuid);
+            }
+            return birthdayMessagesList;
+        }finally {
+            session.close();
+        }
+    }
+
+    /**
+     * バースデーメッセージを削除します
+     *
+     * @param birthdayMessages
+     * @throws BirthdayDataNotFoundException
+     */
+    public void deleteBirthdayMessage(BirthdayMessages birthdayMessages) throws BirthdayDataNotFoundException {
+        Session session = this.sessionFactory.getCurrentSession();
+        try {
+            session.beginTransaction();
+            session.remove(birthdayMessages);
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
+    }
+
 }
