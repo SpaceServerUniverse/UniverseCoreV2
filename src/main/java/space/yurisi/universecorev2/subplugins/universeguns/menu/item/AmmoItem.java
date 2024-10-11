@@ -38,10 +38,10 @@ public abstract class AmmoItem extends AbstractItem {
     public ItemProvider getItemProvider(){
         try {
             return new ItemBuilder(getMaterial()).setDisplayName(getDisplayName()).addLoreLines(
-                    "§7クリックで" + amount + "発の弾薬を作成します。",
-                    "§7左クリックで鉄と火薬からクラフトします。",
-                    "§7右クリックでお金で購入します。",
-                    "現在の弾薬数: " + getCurrentAmmo() + "発"
+                    "§7クリックで" +"§a" + amount + "§7発の弾薬を作成します。",
+                    "§7左クリックで鉄" + "§a" + getAmountIron() + "§7と火薬" + "§a" + getAmountPowder() + "§7からクラフトします。",
+                    "§7右クリックでお金" + "§a" + getPrice() + "§7で購入します。",
+                    "現在の弾薬数: §a" + getCurrentAmmo() + "§f発"
             );
         } catch (UserNotFoundException e) {
             Message.sendErrorMessage(player, "[武器AI]", "ユーザーが見つかりませんでした。");
