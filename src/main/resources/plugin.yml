@@ -3,64 +3,64 @@ version: '1.0'
 main: space.yurisi.universecorev2.UniverseCoreV2
 api-version: '1.21'
 commands:
+  # UniverseCoreV2
   menu:
-    description: メニューを開きます
+    description: メインメニューを開きます
     aliases: [ m ]
   password:
-    description: パスワードを設定します
+    description: UniverseCoreV2 のパスワードを設定します
   pplayer:
     description: あなたの役職を確認します
   giveu:
     description: オンラインのプレイヤーに経験値を与えます
-    permission: space.yurisi.universecorev2.giveu
+  lobby:
+    description: ロビーに戻ります
 
-  #SubPlugins
-  #LevelSystem
+  # SubPlugins
+
+  ## LevelSystem
   addexp:
-        description: オンラインのプレイヤーに経験値を与えます
-        permission: space.yurisi.levelsystem.addexp
+    description: 指定したプレイヤーに経験値を追加します
 
-  #UniverseEconomy
+  ## UniverseEconomy
   money:
-    description: お金管理のメニューを表示します
-    permission: space.yurisi.universeeconomy.money
+    description: お金管理のメニューを表示します (未実装)
   mymoney:
-    description: 自分の持っているお金を確認します。
-    permission: space.yurisi.universeeconomy.mymoney
+    description: 自分の持っているお金を確認します
   pay:
-    description: プレイヤーにお金を払います。
-    permission: space.yurisi.universeeconomy.pay
+    description: 指定したプレイヤーにお金を払います
   seemoney:
     description: 他のプレイヤーのお金を確認します
-    permission: space.yurisi.universeeconomy.seemoney
   setmoney:
     description: 他のプレイヤーのお金をセットします
-    permission: space.yurisi.universeeconomy.setmoney
   addmoney:
     description: 他のプレイヤーのお金を増やします
-    permission: space.yurisi.universeeconomy.addmoney
   reducemoney:
     description: 他のプレイヤーのお金を減らします
-    permission: space.yurisi.universeeconomy.reducemoney
 
-  #UniverseLand
+  ## UniverseLand
   land:
     description: 土地を管理します
 
-  #UniverseDice
-  dice:
-    description: サイコロを振ります
-
-  #Mywarp
+  ## Mywarp
   mywarp:
-    description: マイワープを作成、ワープできます
+    description: マイワープの作成、管理を行います
     aliases: [mw]
 
-  #TPP
+  ## TPP
   tpp:
-      description: プレイヤーをテレポートします
+    description: プレイヤー間移動を行います
 
-  #Salute
+  ## Suicide
+  su:
+    description: 自滅します
+
+  ## UniverseUtils
+  trash:
+    description: アイテムを捨てることができるゴミ箱を開きます
+    aliases: [ gomi ]
+  dice:
+    description: サイコロを振ります
   k:
     description: こんにちはの顔文字を送信します
   oti:
@@ -68,21 +68,11 @@ commands:
   otu:
     description: おつかれの顔文字を送信します
 
-  #Suicide
-  su:
-    description: 自殺します
-
-  #Trash
-  trash:
-    description: アイテムを捨てます
-
+  ## XTP
   xtp:
-    description: テレポートします
+    description: 指定したワールド、座標にテレポートします
 
-  lobby:
-    description: ロビーに戻ります
-
-  #Navigation
+  ## Navigation
   wiki:
     description: Wiki へのURLを表示します
   discord:
@@ -90,37 +80,37 @@ commands:
   web:
     description: UniverseWeb へのURLを表示します
 
-  #ItemHat
+  ## ItemHat
   hat:
-    discription: 手に持っているアイテムを頭にかぶります
+    description: 手に持っているアイテムを頭にかぶります
 
-  #CustomName
+  ## CustomName
   tag:
     description: 称号を設定します
 
-  #ContainerProtect
+  ## ContainerProtect
   lock:
     description: コンテナ等を保護します
   unlock:
     description: コンテナ等の保護を解除します
 
-  #PlayerHead
+  ## PlayerHead
   head:
     description: プレイヤーヘッドを購入します(WIP)
 
-  #gacha
+  ## Gacha
   gacha:
     description: ガチャを引きます！
 
-  #FreeMarket
+  ## FreeMarket
   market:
     description: フリーマーケットの画面を開きます
 
-  #RepairCream
+  ## RepairCream
   repair:
     description: アイテムを修復します
 
-  #ChestShop
+  ## ChestShop
   item:
     description: メインハンドに持ったアイテムの名前を表示します
 
@@ -130,30 +120,26 @@ permissions:
     default: op
   space.yurisi.universecorev2.giveu:
     description: op command
-    default: op
 
-  #SubPlugins
-  #LevelSystem
+  # SubPlugins
+
+  ## LevelSystem
   space.yurisi.levelsystem.addexp:
-    description: op command
-    default: op
+    description: op
 
-  #UniverseEconomy
-  space.yurisi.universeeconomy.*:
+  ## UniverseEconomy
+  space.yurisi.universeeconomy.money:
     description: default
-    default: true
-    children:
-      space.yurisi.universeeconomy.money: true
-      space.yurisi.universeeconomy.mymoney: true
-      space.yurisi.universeeconomy.pay: true
-      space.yurisi.universeeconomy.seemoney: true
+  space.yurisi.universeeconomy.mymoney:
+    description: default
+  space.yurisi.universeeconomy.pay:
+    description: default
+  space.yurisi.universeeconomy.seemoney:
+    description: default
   space.yurisi.universeeconomy.setmoney:
-    description: op command
-    default: op
+    description: op
   space.yurisi.universeeconomy.addmoney:
-    description: op command
     default: op
   space.yurisi.universeeconomy.reducemoney:
-    description: op command
-    default: op
+    description: op
 
