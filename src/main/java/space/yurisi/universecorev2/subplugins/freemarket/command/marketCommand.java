@@ -46,9 +46,10 @@ public class marketCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
         if (!(commandSender instanceof Player player)) return true;
 
-        if (args.length < 1) {
+        if (args.length == 0) {
             MarketMenu menu = new MarketMenu();
             menu.sendMenu(player);
+            return false;
         }
 
         switch (args[0]) {
