@@ -120,26 +120,30 @@ permissions:
     default: op
   space.yurisi.universecorev2.giveu:
     description: op command
+    default: op
 
   # SubPlugins
-
   ## LevelSystem
   space.yurisi.levelsystem.addexp:
-    description: op
+    description: op command
+    default: op
 
   ## UniverseEconomy
-  space.yurisi.universeeconomy.money:
+  space.yurisi.universeeconomy.*:
     description: default
-  space.yurisi.universeeconomy.mymoney:
-    description: default
-  space.yurisi.universeeconomy.pay:
-    description: default
-  space.yurisi.universeeconomy.seemoney:
-    description: default
+    default: true
+    children:
+      space.yurisi.universeeconomy.money: true
+      space.yurisi.universeeconomy.mymoney: true
+      space.yurisi.universeeconomy.pay: true
+      space.yurisi.universeeconomy.seemoney: true
   space.yurisi.universeeconomy.setmoney:
-    description: op
+    description: op command
+    default: op
   space.yurisi.universeeconomy.addmoney:
+    description: op command
     default: op
   space.yurisi.universeeconomy.reducemoney:
-    description: op
+    description: op command
+    default: op
 
