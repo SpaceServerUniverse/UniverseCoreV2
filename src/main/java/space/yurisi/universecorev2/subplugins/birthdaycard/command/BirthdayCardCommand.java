@@ -60,7 +60,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
         }
     }
 
-    private BirthdayData getBirthdayData(Player player) {
+    private BirthdayData getBirthdayData(String playerUuid) {
         try {
             return birthdayCardRepository.getBirthdayData(playerUuid);
         } catch (BirthdayDataNotFoundException e) {
@@ -88,7 +88,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 if (registerMonthDay == null) return false;
 
                 UUID registerPlayerUUID = player.getUniqueId();
-                BirthdayData existingData = birthdayCardRepository.getBirthdayData(registerPlayerUUID.toString());
+                BirthdayData existingData = getBirthdayData(registerPlayerUUID.toString());
 
                 if (existingData != null) {
                     Message.sendErrorMessage(player, BirthdayCard.PREFIX, "既に誕生日が登録されています");
@@ -100,7 +100,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 return true;
 
             case "remove":
-                BirthdayData removeBirthdayData = getBirthdayData(player);
+                BirthdayData removeBirthdayData = getBirthdayData(player.getUniqueId().toString());
                 if (removeBirthdayData == null) {
                     Message.sendErrorMessage(player, BirthdayCard.PREFIX, "削除するバースデーデータが見つかりませんでした");
                     return false;
@@ -121,9 +121,11 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                     return false;
                 }
 
-                BirthdayData birthdayData = getBirthdayData(player);
-                if (birthdayData == null) return false;
-
+                BirthdayData birthdayData = getBirthdayData(player.getUniqueId().toString());
+                if (birthdayData == null) {
+                    Message.sendErrorMessage(player, BirthdayCard.PREFIX, "バースデーデータが見つかりません。");
+                    return true;
+                }
                 birthdayCardRepository.createBirthdayMessage(birthdayData.getId(), player, "test");
                 ItemStack writableBook = ItemStack.of(Material.WRITABLE_BOOK);
                 BookMeta writableMeta = (BookMeta) writableBook.getItemMeta();
@@ -138,7 +140,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
             case "check":
                 BirthdayData data;
                 if (args.length < 2) {
-                    data = getBirthdayData(player);
+                    data = getBirthdayData(player.getUniqueId().toString());
                     if (data == null) {
                         Message.sendErrorMessage(player, BirthdayCard.PREFIX, "あなたの誕生日が登録されていません");
                         return true;
@@ -153,7 +155,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                     return false;
                 }
 
-                data = getBirthdayData(birthdayPlayer);
+                data = getBirthdayData(birthdayPlayer.getUniqueId().toString());
                 if (data == null) {
                     Message.sendErrorMessage(player, BirthdayCard.PREFIX, birthdayPlayer.getName() + "の誕生日が登録されていません。");
                     return true;
