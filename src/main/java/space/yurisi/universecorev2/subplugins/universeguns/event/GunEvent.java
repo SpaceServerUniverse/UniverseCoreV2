@@ -13,10 +13,10 @@ import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -471,6 +471,30 @@ public class GunEvent implements Listener {
             Message.sendWarningMessage(event.getPlayer(), "[武器AI]", "オフハンドに武器を持つことはできません。");
 
         }
+    }
+
+    @EventHandler
+    public void onCraftItem(PrepareItemCraftEvent event){
+        ItemStack result = event.getInventory().getResult();
+        if (result == null) {
+            return;
+        }
+        if (!result.hasItemMeta()) {
+            return;
+        }
+        ItemMeta meta = result.getItemMeta();
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
+        NamespacedKey gunKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN);
+        String itemID = container.get(itemKey, PersistentDataType.STRING);
+        if (itemID == null) {
+            return;
+        }
+        CustomItem item = UniverseItem.getItem(itemID);
+        if (!(item instanceof Gun gun)) {
+            return;
+        }
+        event.getInventory().setResult(null);
     }
 
     @EventHandler
