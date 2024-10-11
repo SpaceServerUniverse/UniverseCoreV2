@@ -386,6 +386,13 @@ public class GunEvent implements Listener {
     @EventHandler
     public void onPlayerItemHeld(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
+        if(!connector.isExistsAmmoData(player)){
+            try {
+                connector.AmmoDataInit(player);
+            } catch (UserNotFoundException e) {
+                Message.sendErrorMessage(player, "[武器AI]", "ユーザーが見つかりませんでした。");
+            }
+        }
 
         ItemStack oldInHand = player.getInventory().getItem(event.getPreviousSlot());
         if (oldInHand != null && oldInHand.hasItemMeta()) {

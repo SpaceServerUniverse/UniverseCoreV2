@@ -50,7 +50,9 @@ public class GunStatus {
     }
 
     public boolean startReload(int reloadTime, Player player) throws UserNotFoundException, AmmoNotFoundException {
-        connector.AmmoDataInit(player);
+        if(!connector.isExistsAmmoData(player)){
+            connector.AmmoDataInit(player);
+        }
         this.inventoryAmmo = getInventoryAmmo(player);
         if(inventoryAmmo <= 0){
             return false;

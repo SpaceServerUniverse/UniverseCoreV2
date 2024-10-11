@@ -25,13 +25,21 @@ public class UniverseCoreAPIConnector {
         setAmmoRepository(databaseManager.getAmmoRepository());
     }
 
-    public void AmmoDataInit(Player player) throws UserNotFoundException {
-        try{
-            ammoRepository.getAmmo(userRepository.getPrimaryKeyFromUUID(player.getUniqueId()));
-        } catch (AmmoNotFoundException e){
-            User user = userRepository.getUserFromUUID(player.getUniqueId());
-            ammoRepository.createAmmo(user);
+    public boolean isExistsAmmoData(Player player) {
+        try {
+            Long ammo = ammoRepository.getAmmoFromUserId(userRepository.getPrimaryKeyFromUUID(player.getUniqueId()), GunType.HG);
+            return ammo != null;
+        } catch (UserNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (AmmoNotFoundException e) {
+            return false;
         }
+    }
+
+    public void AmmoDataInit(Player player) throws UserNotFoundException {
+
+        ammoRepository.createAmmoFromUUID(userRepository.getPrimaryKeyFromUUID(player.getUniqueId()));
+
     }
 
     public Long getAmmoFromUserId(Player player, GunType gunType) throws UserNotFoundException, AmmoNotFoundException {

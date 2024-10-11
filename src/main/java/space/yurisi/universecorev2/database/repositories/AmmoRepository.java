@@ -45,6 +45,27 @@ public class AmmoRepository {
     }
 
     /**
+     * create ammo based on user_id
+     *
+     * @param user_id Long
+     * @return ammo Ammo
+     */
+    public Ammo createAmmoFromUUID(Long user_id) {
+        Ammo ammo = new Ammo(null, user_id, 60L, 120L, 120L, 60L, 60L, 120L, 10L, new Date(), new Date());
+
+        Session session = this.sessionFactory.getCurrentSession();
+
+        try {
+            session.beginTransaction();
+            session.persist(ammo);//save
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
+        return ammo;
+    }
+
+    /**
      * get ammo from primary key
      *
      * @param id Long(PrimaryKey)

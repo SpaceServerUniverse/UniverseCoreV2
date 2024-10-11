@@ -26,7 +26,9 @@ public class AmmoManagerInventoryMenu implements BaseMenu {
     public void sendMenu(Player player) {
         // send menu
         try{
-            connector.AmmoDataInit(player);
+            if(!this.connector.isExistsAmmoData(player)){
+                this.connector.AmmoDataInit(player);
+            }
 
             Item border = new SimpleItem(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE));
             Item iron1 = new SimpleItem(new ItemBuilder(Material.IRON_INGOT).setAmount(1));
