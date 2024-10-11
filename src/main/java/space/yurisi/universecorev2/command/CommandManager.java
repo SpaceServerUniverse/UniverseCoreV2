@@ -12,6 +12,7 @@ public class CommandManager {
     }
 
     private void init(){
+        main.getCommand("menu").setExecutor(new menuCommand());
         main.getCommand("password").setExecutor(new passwordCommand());
         main.getCommand("pplayer").setExecutor(new pplayerCommand());
         main.getCommand("lobby").setExecutor(new lobbyCommand());
