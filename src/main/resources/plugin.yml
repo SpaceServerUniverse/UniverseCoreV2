@@ -80,6 +80,13 @@ commands:
   lobby:
     description: ロビーに戻ります
 
+  #Navigation
+  wiki:
+    description: Wiki へのURLを表示します
+
+  discord:
+    description: Discord の招待URLを表示します
+
   #ItemHat
   hat:
     discription: 手に持っているアイテムを頭にかぶります
