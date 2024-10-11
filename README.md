@@ -11,6 +11,12 @@ SpaceServer Universe のコアプラグイン
 2. サーバーを起動し, `plugins/UniverseCoreV2/` に生成された `config.yml` を編集します。 ([設定方法](#discord-との連携))
 3. サーバーを起動する。
 
+## 依存関係
+
+UniverseCoreV2 は以下のプラグインの API を使用しているため, 起動時にこれらのプラグインを導入しておく必要があります.
+
+- [LuckPerms](https://luckperms.net/)
+
 ### Discord との連携
 
 1. [Discord Developer Portal](https://discord.com/developers/applications) でアプリケーションを作成します。
