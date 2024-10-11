@@ -2,6 +2,8 @@ name: UniverseCoreV2
 version: '1.0'
 main: space.yurisi.universecorev2.UniverseCoreV2
 api-version: '1.21'
+depend:
+  - LuckPerms
 commands:
   # UniverseCoreV2
   menu:
