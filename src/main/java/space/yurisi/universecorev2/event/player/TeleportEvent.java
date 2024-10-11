@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import space.yurisi.universecorev2.api.LuckPermsWrapper;
 
 public class TeleportEvent implements Listener {
 
@@ -19,19 +20,14 @@ public class TeleportEvent implements Listener {
     @EventHandler
     public void onTeleport(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
-        Boolean allowFlight = false;
-        if(player.isOp() && !(player.getGameMode() == GameMode.SURVIVAL)){
-            allowFlight = true;
-        }
-        if(event.getTo().getWorld().getName().equals("lobby")){
-            allowFlight = true;
-        }
-        Boolean finalAllowFlight = allowFlight;
+        boolean allowFlight = player.isOp() && player.getGameMode() != GameMode.SURVIVAL
+                || LuckPermsWrapper.isUserInGroup(player, "developer")
+                || event.getTo().getWorld().getName().equals("lobby");
 
         new BukkitRunnable() {
             @Override
             public void run() {
-                player.setAllowFlight(finalAllowFlight);
+                player.setAllowFlight(allowFlight);
             }
         }.runTaskLater(plugin, 10);
     }
