@@ -19,7 +19,7 @@ public class LightMachineGunAmmoItem extends AmmoItem {
 
     @Override
     protected String getDisplayName() {
-        return "ライトマシンガン";
+        return "軽機関銃";
     }
 
     @Override
@@ -30,5 +30,20 @@ public class LightMachineGunAmmoItem extends AmmoItem {
     @Override
     protected GunType getGunType() {
         return GunType.LMG;
+    }
+
+    @Override
+    protected int getAmountIron() {
+        return 3;
+    }
+
+    @Override
+    protected int getAmountPowder() {
+        return 4;
+    }
+
+    @Override
+    protected long getPrice() {
+        return 200;
     }
 }

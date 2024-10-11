@@ -42,7 +42,7 @@ public class AmmoManagerInventoryMenu implements BaseMenu {
                     .setStructure(
                             "# a b c d e f g #",
                             "# # # # # # # # #",
-                            "# i i j j k k l #",
+                            "# i i j k j k l #",
                             "# p q q r r s t #")
                     .addIngredient('#', border)
                     .addIngredient('i', iron1)

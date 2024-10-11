@@ -32,4 +32,19 @@ public class SniperRifleAmmoItem extends AmmoItem {
     protected GunType getGunType() {
         return GunType.SR;
     }
+
+    @Override
+    protected int getAmountIron() {
+        return 3;
+    }
+
+    @Override
+    protected int getAmountPowder() {
+        return 3;
+    }
+
+    @Override
+    protected long getPrice() {
+        return 200;
+    }
 }

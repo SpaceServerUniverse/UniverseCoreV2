@@ -32,4 +32,19 @@ public class ExplosiveAmmoItem extends AmmoItem {
     protected GunType getGunType() {
         return GunType.EX;
     }
+
+    @Override
+    protected int getAmountIron() {
+        return 4;
+    }
+
+    @Override
+    protected int getAmountPowder() {
+        return 5;
+    }
+
+    @Override
+    protected long getPrice() {
+        return 200;
+    }
 }

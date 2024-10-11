@@ -36,4 +36,19 @@ public class SubMachineGunAmmoItem extends AmmoItem {
     protected GunType getGunType() {
         return GunType.SMG;
     }
+
+    @Override
+    protected int getAmountIron() {
+        return 1;
+    }
+
+    @Override
+    protected int getAmountPowder() {
+        return 2;
+    }
+
+    @Override
+    protected long getPrice() {
+        return 200;
+    }
 }

@@ -32,4 +32,19 @@ public class ShotGunAmmoItem extends AmmoItem {
     protected GunType getGunType() {
         return GunType.SG;
     }
+
+    @Override
+    protected int getAmountIron() {
+        return 2;
+    }
+
+    @Override
+    protected int getAmountPowder() {
+        return 3;
+    }
+
+    @Override
+    protected long getPrice() {
+        return 200;
+    }
 }

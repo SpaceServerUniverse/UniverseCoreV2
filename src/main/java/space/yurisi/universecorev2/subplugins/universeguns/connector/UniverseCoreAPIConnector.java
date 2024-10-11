@@ -6,6 +6,7 @@ import space.yurisi.universecorev2.database.DatabaseManager;
 import space.yurisi.universecorev2.database.models.Ammo;
 import space.yurisi.universecorev2.database.models.User;
 import space.yurisi.universecorev2.database.repositories.AmmoRepository;
+import space.yurisi.universecorev2.database.repositories.MoneyRepository;
 import space.yurisi.universecorev2.database.repositories.UserRepository;
 import space.yurisi.universecorev2.exception.AmmoNotFoundException;
 import space.yurisi.universecorev2.exception.UserNotFoundException;

@@ -30,7 +30,7 @@ public class AmmoRepository {
      */
     public Ammo createAmmo(User user) {
         Long user_id = user.getId();
-        Ammo ammo = new Ammo(null, user_id, 0L, 0L, 0L, 0L, 0L, 0L, 0L, new Date(), new Date());
+        Ammo ammo = new Ammo(null, user_id, 60L, 120L, 120L, 60L, 60L, 120L, 10L, new Date(), new Date());
 
         Session session = this.sessionFactory.getCurrentSession();
 
@@ -135,6 +135,8 @@ public class AmmoRepository {
                 case LMG -> ammo.setLmg(newAmmo);
                 case EX -> ammo.setEx(newAmmo);
             }
+            session.merge(ammo);
+            session.getTransaction().commit();
         }finally {
             session.close();
         }
