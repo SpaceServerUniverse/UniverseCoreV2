@@ -67,7 +67,8 @@ public class DatabaseConnector {
                 .addAnnotatedClass(PlayerCount.class)
                 .addAnnotatedClass(CustomName.class)
                 .addAnnotatedClass(Market.class)
-                .addAnnotatedClass(ChestShop.class);
+                .addAnnotatedClass(ChestShop.class)
+                .addAnnotatedClass(Ammo.class);
     }
 
     private Configuration registerProperties(Configuration configuration) {

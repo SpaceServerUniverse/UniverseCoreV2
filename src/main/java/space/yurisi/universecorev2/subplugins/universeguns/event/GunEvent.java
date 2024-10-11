@@ -28,6 +28,7 @@ import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.item.CustomItem;
 import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.item.gun.Gun;
+import space.yurisi.universecorev2.subplugins.universeguns.connector.UniverseCoreAPIConnector;
 import space.yurisi.universecorev2.subplugins.universeguns.constants.GunType;
 import space.yurisi.universecorev2.subplugins.universeguns.core.BulletData;
 import space.yurisi.universecorev2.subplugins.universeguns.core.DamageCalculator;
@@ -53,8 +54,11 @@ public class GunEvent implements Listener {
 
     private static Plugin plugin;
 
-    public GunEvent(Plugin plugin) {
+    private UniverseCoreAPIConnector connector;
+
+    public GunEvent(Plugin plugin, UniverseCoreAPIConnector connector) {
         GunEvent.plugin = plugin;
+        this.connector = connector;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -74,6 +78,11 @@ public class GunEvent implements Listener {
 
         NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
         NamespacedKey gunSerialKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN_SERIAL);
+
+        if(container.has(itemKey, PersistentDataType.STRING) && Objects.equals(container.get(itemKey, PersistentDataType.STRING), "magazine_bag")){
+            // インベントリメニュー
+            return;
+        }
 
         if (!Gun.isGun(itemInHand)) {
             return;
