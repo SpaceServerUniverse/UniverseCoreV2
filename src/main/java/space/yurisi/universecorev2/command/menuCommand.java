@@ -23,6 +23,7 @@ public class menuCommand implements CommandExecutor {
         mainMenu.sendMenu(player);
 
         Random random = new Random();
+        // 5%の確率でクリーパーの効果音を再生
         if (random.nextInt(100) < 5) {
             player.playSound(player.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 10, 1);
             player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 10, 1);
