@@ -38,7 +38,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
 
     public BirthdayCardCommand() {
         nk = new NamespacedKey("universecorev2.birthday", "birthdaycard");
-        BirthdayCardRepository birthdayCardRepository = UniverseCoreV2API.getInstance().getDatabaseManager().getBirthdayCardRepository();
+        this.birthdayCardRepository = UniverseCoreV2API.getInstance().getDatabaseManager().getBirthdayCardRepository();
     }
 
     private boolean isValidDate(String monthArg, String dayArg, Player player) {
@@ -62,9 +62,8 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
 
     private BirthdayData getBirthdayData(Player player) {
         try {
-            return birthdayCardRepository.getBirthdayData(player.getUniqueId().toString());
-        } catch (NoResultException e) {
-            Message.sendErrorMessage(player, BirthdayCard.PREFIX, "バースデーデータが見つかりません。");
+            return birthdayCardRepository.getBirthdayData(playerUuid);
+        } catch (BirthdayDataNotFoundException e) {
             return null;
         }
     }

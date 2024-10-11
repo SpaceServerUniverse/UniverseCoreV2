@@ -62,9 +62,9 @@ public class BirthdayCardRepository {
      *
      * @param uuid
      * @return
-     * @throws NoResultException
+     * @throws BirthdayDataNotFoundException
      */
-    public BirthdayData getBirthdayData(String uuid) throws NoResultException {
+    public BirthdayData getBirthdayData(String uuid) throws BirthdayDataNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
         try {
             session.beginTransaction();
@@ -73,6 +73,8 @@ public class BirthdayCardRepository {
                     .getSingleResult();
             session.getTransaction().commit();
             return data;
+        }catch (NoResultException error){
+            throw new BirthdayDataNotFoundException("Birthday data not found");
         } finally {
             session.close();
         }
