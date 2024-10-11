@@ -509,13 +509,15 @@ public class GunEvent implements Listener {
         ItemMeta meta = result.getItemMeta();
         PersistentDataContainer container = meta.getPersistentDataContainer();
         NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
-        NamespacedKey gunKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN);
         String itemID = container.get(itemKey, PersistentDataType.STRING);
         if (itemID == null) {
             return;
         }
         CustomItem item = UniverseItem.getItem(itemID);
-        if (!(item instanceof Gun gun)) {
+        if (!(item instanceof Gun)) {
+            return;
+        }
+        if(!Objects.equals(container.get(itemKey, PersistentDataType.STRING), "magazine_bag")){
             return;
         }
         event.getInventory().setResult(null);
