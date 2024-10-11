@@ -12,6 +12,7 @@ public class Navigation implements SubPlugin {
         Config config = new Config(core);
         core.getCommand("wiki").setExecutor(new NavigationCommand("wiki", config));
         core.getCommand("discord").setExecutor(new NavigationCommand("discord", config));
+        core.getCommand("web").setExecutor(new NavigationCommand("web", config));
         Bukkit.getServer().getPluginManager().registerEvents(new JoinEvent(config), core);
     }
 

@@ -21,7 +21,9 @@ public class NavigationCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (!(sender instanceof Player player)) return false;
-        player.sendMessage("§a " + config.getNavigation(key));
+
+        String name = key.substring(0, 1).toUpperCase() + key.substring(1);
+        player.sendMessage("§a" + name + ": " + config.getNavigation(key));
         return true;
     }
 

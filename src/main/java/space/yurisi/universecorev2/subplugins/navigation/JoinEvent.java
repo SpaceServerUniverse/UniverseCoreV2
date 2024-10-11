@@ -20,6 +20,7 @@ public class JoinEvent implements Listener {
         Player player = event.getPlayer();
         player.sendMessage("§6---☆ Welcome to SpaceServer Universe ☆---\n");
         player.sendMessage("§r§aWiki: " + config.getNavigation("wiki"));
+        player.sendMessage("§r§aWeb: " + config.getNavigation("web"));
         player.sendMessage("§r§aDiscord: " + config.getNavigation("discord"));
     }
 }

@@ -83,9 +83,10 @@ commands:
   #Navigation
   wiki:
     description: Wiki へのURLを表示します
-
   discord:
     description: Discord の招待URLを表示します
+  web:
+    description: UniverseWeb へのURLを表示します
 
   #ItemHat
   hat:
