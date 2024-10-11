@@ -22,9 +22,8 @@ public class menuCommand implements CommandExecutor {
         MainMenu mainMenu = new MainMenu();
         mainMenu.sendMenu(player);
 
-        Random random = new Random();
-        // 5%の確率でクリーパーの効果音を再生
-        if (random.nextInt(100) < 5) {
+        // 0.122%の確率でクリーパーの効果音を再生
+        if (new Random().nextDouble() < 0.000122) {
             player.playSound(player.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 10, 1);
             player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 10, 1);
             Message.sendSuccessMessage(player, "[管理AI]", "§c§oメニューを開きました...ヮ! クリーパーが... (´・ω・`)");
