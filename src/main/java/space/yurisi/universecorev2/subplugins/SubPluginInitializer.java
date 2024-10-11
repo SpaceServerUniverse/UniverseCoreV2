@@ -14,6 +14,7 @@ import space.yurisi.universecorev2.subplugins.freemarket.FreeMarket;
 import space.yurisi.universecorev2.subplugins.levelaward.LevelAward;
 import space.yurisi.universecorev2.subplugins.levelsystem.LevelSystem;
 import space.yurisi.universecorev2.subplugins.mywarp.Mywarp;
+import space.yurisi.universecorev2.subplugins.navigation.Navigation;
 import space.yurisi.universecorev2.subplugins.playerhead.PlayerHead;
 import space.yurisi.universecorev2.subplugins.playerinfoscoreboard.PlayerInfoScoreBoard;
 import space.yurisi.universecorev2.subplugins.rankcounter.RankCounter;
@@ -71,6 +72,7 @@ public class SubPluginInitializer {
         this.subPlugins.add(new BlockCopyStick());
         this.subPlugins.add(new EvolutionItem());
         //this.subPlugins.add(new DamageManager());
+        this.subPlugins.add(new Navigation());
         this.subPlugins.add(new FishingSystem());
         this.subPlugins.add(new ChestShop());
         this.subPlugins.add(new TickFreezer());
