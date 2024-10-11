@@ -3,6 +3,9 @@ version: '1.0'
 main: space.yurisi.universecorev2.UniverseCoreV2
 api-version: '1.21'
 commands:
+  menu:
+    description: メニューを開きます
+    aliases: [ m ]
   password:
     description: パスワードを設定します
   pplayer:
