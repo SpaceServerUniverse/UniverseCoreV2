@@ -12,6 +12,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 import space.yurisi.universecorev2.item.gun.Gun;
+import space.yurisi.universecorev2.subplugins.universeguns.core.DamageCalculator;
 import space.yurisi.universecorev2.subplugins.universeguns.core.GunStatus;
 
 public class SniperShot {
@@ -87,8 +88,7 @@ public class SniperShot {
         if (entity instanceof LivingEntity livingEntity) {
             double height = result.getHitPosition().getY();
             double damage = gun.getBaseDamage();
-            double neckHeight = 1.5D;
-            if (height > livingEntity.getLocation().getY() + neckHeight) {
+            if (DamageCalculator.isHeadShot(height, livingEntity)) {
                 damage *= 1.5D;
                 player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
             } else {

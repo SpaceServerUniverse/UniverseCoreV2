@@ -18,7 +18,11 @@ public class GunShot {
 
     Snowball projectile;
 
+    Player player;
+
     public GunShot(Player player, Gun gun, GunStatus gunStatus, ArrayList<Player> isZoom) {
+
+        this.player = player;
 
         gunStatus.updateActionBar(player, isZoom.contains(player));
 
@@ -69,5 +73,9 @@ public class GunShot {
 
     public Entity getProjectile() {
         return projectile;
+    }
+
+    public Location getLaunchLocation() {
+        return player.getEyeLocation();
     }
 }
