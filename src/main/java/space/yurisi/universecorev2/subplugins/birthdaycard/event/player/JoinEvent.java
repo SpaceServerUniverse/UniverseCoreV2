@@ -55,6 +55,14 @@ public class JoinEvent implements Listener {
                     return;
                 }
             }
+
+            if(birthdayData.isGiftReceived()){
+                LocalDate oneDayLater = LocalDate.now().plusDays(1);
+                if(thisYearBirthday.isAfter(oneDayLater)){
+                    birthdayData.setGiftReceived(false);
+                    birthdayCardRepository.updateBirthdayData(birthdayData);
+                }
+            }
         }
     }
 }
