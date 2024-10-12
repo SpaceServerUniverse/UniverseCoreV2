@@ -258,6 +258,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 } else {
                     birthdayMessagesList.forEach(birthdayMessages -> {
                         pageComponents.addAll(PageJsonUtils.deserializePageJson(birthdayMessages.getMessage()));
+                        birthdayCardRepository.deleteBirthdayMessage(birthdayMessages);
                     });
                 }
                 book = book.pages(pageComponents);
