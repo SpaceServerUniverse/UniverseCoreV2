@@ -6,19 +6,25 @@ import java.time.LocalTime;
 public class TimeHelper {
 
     /**
-     * 現在時刻をチェックし、その時間帯を返します。
+     * 現在時間をチェックし、その時間帯を表すTimeType列挙型を返します。
      *
-     * @return TimeType 時間帯 -- MORNING: 朝, AFTERNOON: 昼, EVENING: 夜
+     * @return TimeType 時間帯
      */
     public static TimeType checkTime() {
         LocalTime now = LocalTime.now();
 
-        if (now.isBefore(LocalTime.NOON)) {
+        if (now.isBefore(LocalTime.of(5, 0))) {
+            return TimeType.LATE_NIGHT;
+        } else if (now.isBefore(LocalTime.of(8, 0))) {
+            return TimeType.EARLY_MORNING;
+        } else if (now.isBefore(LocalTime.of(10, 0))) {
             return TimeType.MORNING;
-        } else if (now.isBefore(LocalTime.of(18, 0))) {
+        } else if (now.isBefore(LocalTime.of(16, 0))) {
             return TimeType.AFTERNOON;
-        } else {
+        } else if (now.isBefore(LocalTime.of(20, 0))) {
             return TimeType.EVENING;
+        } else {
+            return TimeType.NIGHT;
         }
     }
 
