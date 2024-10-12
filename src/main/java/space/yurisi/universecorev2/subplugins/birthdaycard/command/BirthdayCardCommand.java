@@ -128,7 +128,6 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                     Message.sendErrorMessage(player, BirthdayCard.PREFIX, "バースデーデータが見つかりません。");
                     return true;
                 }
-                birthdayCardRepository.createBirthdayMessage(birthdayData.getId(), player, "test");
                 ItemStack writableBook = ItemStack.of(Material.WRITABLE_BOOK);
                 BookMeta writableMeta = (BookMeta) writableBook.getItemMeta();
                 writableMeta.displayName(Component.text("お誕生日カード (" + birthdayPlayerToGet.getName() + ")"));
