@@ -3,6 +3,7 @@ package space.yurisi.universecorev2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 import org.bukkit.plugin.java.JavaPlugin;
+import space.yurisi.universecorev2.api.LuckPermsWrapper;
 import space.yurisi.universecorev2.command.CommandManager;
 import space.yurisi.universecorev2.database.DatabaseConnector;
 import space.yurisi.universecorev2.event.EventManager;
@@ -29,6 +30,8 @@ public final class UniverseCoreV2 extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+
+        new LuckPermsWrapper().initLuckPerms();
 
         ((Logger) LogManager.getRootLogger()).addFilter(new PasswordFilter());
         this.config = new Config(this);

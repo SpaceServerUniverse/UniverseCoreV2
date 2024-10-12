@@ -40,79 +40,87 @@ public class marketCommand implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
+    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
         if (!(commandSender instanceof Player player)) return true;
 
-        if (strings.length < 1) {
+        if (args.length == 0) {
             MarketMenu menu = new MarketMenu();
             menu.sendMenu(player);
-        } else {
-            if (strings[0].equals("sell")) {
-                if (strings.length < 3) {
-                    try {
-                        long price = Long.parseLong(strings[1]);
-                        if (price < 0) {
-                            Message.sendErrorMessage(player, FreeMarketMessage, "値段は0未満にならないようにしてください");
-                            return true;
-                        }else if(price > this.config.getLimit()){
-                            Message.sendErrorMessage(player, FreeMarketMessage, "値段は"+this.config.getLimit().toString()+"以上にならないようにしてください");
-                        }
-                        ItemStack item = player.getInventory().getItemInMainHand();
-                        if (item.getType() == Material.AIR) {
-                            Message.sendErrorMessage(player, FreeMarketMessage, "出品するものを手に持ってください");
-                            return true;
-                        }
-                        UniverseCoreV2API.getInstance().getDatabaseManager().getMarketRepository().createItemData(
-                                player.getUniqueId().toString(),
-                                item.getType().toString(),
-                                item.getItemMeta().hasDisplayName() ? PlainTextComponentSerializer.plainText().serialize(item.getItemMeta().displayName()) : null,
-                                item.serializeAsBytes(),
-                                JsonConverter.ItemStackSerializer(item),
-                                JsonConverter.ItemMetaSerializer(item),
-                                price
-                        );
-                        player.getInventory().getItemInMainHand().setAmount(0);
-                        Message.sendSuccessMessage(player, FreeMarketMessage, "出品しました");
-                    } catch (NumberFormatException e) {
-                        Message.sendErrorMessage(player, FreeMarketMessage, "値段は整数を入力してください");
-                        return true;
-                    } catch (ArrayIndexOutOfBoundsException e) {
-                        Message.sendErrorMessage(player, FreeMarketMessage, "値段を入力してください");
-                        return true;
-                    }
-                }
-            } else if (strings[0].equals("buy")) {
-                if (strings.length == 2) {
-                    Long id = Long.parseLong(strings[1]);
-                    try {
-                        UniverseCoreV2API.getInstance().getDatabaseManager().getMarketRepository().buyItem(id, player);
-                        Message.sendSuccessMessage(player, FreeMarketMessage, "アイテムを購入しました! 受取を行って下さい！");
-                        Component component = Component.text("§a[フリーマーケット] §l§n[ここをクリックで受取]")
-                                .clickEvent(ClickEvent.runCommand("/market bought"))
-                                .hoverEvent(HoverEvent.showText(Component.text("クリックで受取")));
-                        player.sendMessage(component);
-                    } catch (MarketItemNotFoundException e) {
-                        Message.sendErrorMessage(player, FreeMarketMessage, "アイテムが存在しません");
-                        return true;
-                    } catch (UserNotFoundException | MoneyNotFoundException | ParameterException |
-                             CanNotAddMoneyException e) {
-                        Message.sendErrorMessage(player, FreeMarketMessage, e.getMessage());
-                        return true;
-                    } catch (CanNotReduceMoneyException e) {
-                        Message.sendErrorMessage(player, FreeMarketMessage, "お金がたりません");
-                        return true;
-                    }
-                } else {
-                    Message.sendErrorMessage(player, FreeMarketMessage, "idを指定してください");
+            return false;
+        }
+
+        switch (args[0]) {
+            case "sell":
+                try {
+                    long price = Long.parseLong(args[1]);
+
+                    if (!checkCanSell(player, price)) return false;
+
+                    ItemStack item = player.getInventory().getItemInMainHand();
+                    UniverseCoreV2API.getInstance().getDatabaseManager().getMarketRepository().createItemData(
+                            player.getUniqueId().toString(),
+                            item.getType().toString(),
+                            item.getItemMeta().hasDisplayName() ? PlainTextComponentSerializer.plainText().serialize(item.getItemMeta().displayName()) : null,
+                            item.serializeAsBytes(),
+                            JsonConverter.ItemStackSerializer(item),
+                            JsonConverter.ItemMetaSerializer(item),
+                            price
+                    );
+
+                    player.getInventory().getItemInMainHand().setAmount(0);
+                    Message.sendSuccessMessage(player, FreeMarketMessage, "出品しました");
                     return true;
+                } catch (NumberFormatException e) {
+                    Message.sendErrorMessage(player, FreeMarketMessage, "値段は整数を入力してください");
+                    return false;
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    Message.sendErrorMessage(player, FreeMarketMessage, "値段を入力してください");
+                    return false;
                 }
-            } else if (strings[0].equals("bought")) {
+            case "buy":
+                if (args.length < 2) {
+                    Message.sendErrorMessage(player, FreeMarketMessage, "idを指定してください");
+                    return false;
+                }
+
+                Long id = Long.parseLong(args[1]);
+
+                try {
+                    UniverseCoreV2API.getInstance().getDatabaseManager().getMarketRepository().buyItem(id, player);
+                    Message.sendSuccessMessage(player, FreeMarketMessage, "アイテムを購入しました! 受取を行って下さい！");
+                    Component component = Component.text("§a[フリーマーケット] §l§n[ここをクリックで受取]")
+                            .clickEvent(ClickEvent.runCommand("/market bought"))
+                            .hoverEvent(HoverEvent.showText(Component.text("クリックで受取")));
+                    player.sendMessage(component);
+                } catch (MarketItemNotFoundException e) {
+                    Message.sendErrorMessage(player, FreeMarketMessage, "アイテムが存在しません");
+                    return false;
+                } catch (UserNotFoundException | MoneyNotFoundException | ParameterException |
+                         CanNotAddMoneyException e) {
+                    Message.sendErrorMessage(player, FreeMarketMessage, e.getMessage());
+                    return false;
+                } catch (CanNotReduceMoneyException e) {
+                    Message.sendErrorMessage(player, FreeMarketMessage, "お金がたりません");
+                    return false;
+                }
+                break;
+            case "bought":
                 PurchasedItemMenu menu = new PurchasedItemMenu();
                 menu.sendMenu(player);
-            } else if (strings[0].equals("remove")) {
-                RemoveMenu menu = new RemoveMenu();
-                menu.sendMenu(player);
-            }
+                break;
+            case "remove":
+                RemoveMenu removeMenu = new RemoveMenu();
+                removeMenu.sendMenu(player);
+                break;
+            default:
+                String[] helpMessage = """
+            §6-- Market Help --
+               §7/market sell <金額> : 手に持っているアイテムを指定した金額で出品します
+               §7/market bought : 購入済みのアイテムを受け取ります
+               §7/market remove : 出品中のアイテムを削除します
+            """.split("\n");
+                player.sendMessage(helpMessage);
+                break;
         }
         return true;
     }
@@ -126,5 +134,24 @@ public class marketCommand implements CommandExecutor, TabCompleter {
             completions.add("bought");
         }
         return completions;
+    }
+
+    private boolean checkCanSell(Player player, long price) {
+        if (price < 0) {
+            Message.sendErrorMessage(player, FreeMarketMessage, "値段は0未満にならないようにしてください");
+            return false;
+        }
+
+        if (price > this.config.getLimit()){
+            Message.sendErrorMessage(player, FreeMarketMessage, "値段は [" + this.config.getLimit().toString() + "] 以上にならないようにしてください");
+            return false;
+        }
+
+        ItemStack item = player.getInventory().getItemInMainHand();
+        if (item.getType() == Material.AIR) {
+            Message.sendErrorMessage(player, FreeMarketMessage, "出品するものを手に持ってください");
+            return false;
+        }
+        return true;
     }
 }

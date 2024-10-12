@@ -68,6 +68,7 @@ public class DatabaseConnector {
                 .addAnnotatedClass(CustomName.class)
                 .addAnnotatedClass(Market.class)
                 .addAnnotatedClass(ChestShop.class)
+                .addAnnotatedClass(Ammo.class)
                 .addAnnotatedClass(ReceiveBox.class);
     }
 

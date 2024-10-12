@@ -5,6 +5,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.subplugins.changemessages.file.Config;
 
 import java.util.List;
@@ -13,8 +16,11 @@ public final class JoinEvent implements Listener {
 
     private final Config config;
 
-    public JoinEvent(Config config) {
+    private final Plugin plugin;
+
+    public JoinEvent(Config config, Plugin plugin) {
         this.config = config;
+        this.plugin = plugin;
     }
 
     @EventHandler
@@ -26,6 +32,16 @@ public final class JoinEvent implements Listener {
             return;
         }
         event.joinMessage(getUserCustomJoinMessage(player));
+
+
+        if(player.getWorld().getName().equals("lobby")){
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    player.setAllowFlight(true);
+                }
+            }.runTaskLater(plugin, 10);
+        }
     }
 
     private Component getFirstJoinMessage(Player player) {

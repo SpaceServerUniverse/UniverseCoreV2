@@ -31,6 +31,7 @@ public final class R4C extends Gun {
         this.spread = 0.20D;
         this.bulletNumber = 1;
         this.bulletSpeed = 3.5D;
+        this.range = 500;
         this.isJumpEnabled = true;
         this.shotSound = Sound.BLOCK_PISTON_EXTEND;
         this.volumeSound = 4.0F;

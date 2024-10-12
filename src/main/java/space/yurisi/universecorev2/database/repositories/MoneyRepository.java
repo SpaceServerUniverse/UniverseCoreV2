@@ -5,8 +5,6 @@ import org.hibernate.SessionFactory;
 import space.yurisi.universecorev2.database.models.Money;
 import space.yurisi.universecorev2.database.models.User;
 import space.yurisi.universecorev2.exception.MoneyNotFoundException;
-import space.yurisi.universecorev2.database.models.Money;
-import space.yurisi.universecorev2.database.models.User;
 
 import java.util.Date;
 

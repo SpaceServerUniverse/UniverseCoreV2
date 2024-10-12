@@ -36,6 +36,7 @@ public final class F2 extends Gun {
         this.spread = 0.1D;
         this.bulletNumber = 1;
         this.bulletSpeed = 3.5D;
+        this.range = 500;
         this.isJumpEnabled = true;
         this.shotSound = Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST_FAR;
         this.volumeSound = 5.0F;
