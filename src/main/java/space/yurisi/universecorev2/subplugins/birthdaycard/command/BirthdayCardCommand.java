@@ -117,13 +117,12 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                     Message.sendErrorMessage(player, BirthdayCard.PREFIX, "引数が間違えています");
                     return false;
                 }
-                Player birthdayPlayerToGet = Bukkit.getPlayerExact(args[1]);
+                OfflinePlayer birthdayPlayerToGet = Bukkit.getOfflinePlayer(args[1]);
                 if (birthdayPlayerToGet == null) {
                     Message.sendErrorMessage(player, BirthdayCard.PREFIX, "プレイヤーが見つかりません");
                     return false;
                 }
-
-                BirthdayData birthdayData = getBirthdayData(player.getUniqueId().toString());
+                BirthdayData birthdayData = getBirthdayData(birthdayPlayerToGet.getUniqueId().toString());
                 if (birthdayData == null) {
                     Message.sendErrorMessage(player, BirthdayCard.PREFIX, "バースデーデータが見つかりません。");
                     return true;
@@ -150,12 +149,11 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                     return true;
                 }
 
-                Player birthdayPlayer = Bukkit.getPlayerExact(args[1]);
+                OfflinePlayer birthdayPlayer = Bukkit.getOfflinePlayer(args[1]);
                 if (birthdayPlayer == null) {
                     Message.sendErrorMessage(player, BirthdayCard.PREFIX, "プレイヤーが見つかりません");
                     return false;
                 }
-
                 data = getBirthdayData(birthdayPlayer.getUniqueId().toString());
                 if (data == null) {
                     Message.sendErrorMessage(player, BirthdayCard.PREFIX, birthdayPlayer.getName() + "の誕生日が登録されていません。");
