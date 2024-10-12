@@ -44,7 +44,7 @@ public final class M870 extends Gun {
         default_setting = (item) -> {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
-                meta.setCustomModelData(3);
+                meta.setCustomModelData(6);
             }
             item.setItemMeta(meta);
             return item;
