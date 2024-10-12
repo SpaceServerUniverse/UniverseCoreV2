@@ -242,9 +242,8 @@ public class BirthdayCardRepository {
      * バースデーメッセージを削除します
      *
      * @param birthdayMessages
-     * @throws BirthdayDataNotFoundException
      */
-    public void deleteBirthdayMessage(BirthdayMessages birthdayMessages) throws BirthdayDataNotFoundException {
+    public void deleteBirthdayMessage(BirthdayMessages birthdayMessages){
         Session session = this.sessionFactory.getCurrentSession();
         try {
             session.beginTransaction();
