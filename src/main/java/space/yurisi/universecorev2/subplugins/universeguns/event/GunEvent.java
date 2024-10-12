@@ -15,6 +15,7 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -133,7 +134,8 @@ public class GunEvent implements Listener {
                             return;
                         }
 
-                        if (gun.getType().equals(GunType.HG) || gun.getType().equals(GunType.AR) || gun.getType().equals(GunType.EX)) {
+                        if (gun.getType().equals(GunType.HG) || gun.getType().equals(GunType.AR) || gun.getType().equals(GunType.EX)
+                                || gun.getType().equals(GunType.SMG) || gun.getType().equals(GunType.LMG)) {
 
                             gunStatus.shoot();
                             GunShot gunShot = new GunShot(player, gun, gunStatus, isZoom);
@@ -516,28 +518,35 @@ public class GunEvent implements Listener {
 
     @EventHandler
     public void onCraftItem(PrepareItemCraftEvent event){
-        ItemStack result = event.getInventory().getResult();
-        if (result == null) {
-            return;
-        }
-        if (!result.hasItemMeta()) {
-            return;
-        }
-        ItemMeta meta = result.getItemMeta();
-        PersistentDataContainer container = meta.getPersistentDataContainer();
+        Player player = (Player) event.getView().getPlayer();
+        CraftingInventory inventory = event.getInventory();
+        ItemStack[] matrix = inventory.getMatrix();
         NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
-        String itemID = container.get(itemKey, PersistentDataType.STRING);
-        if (itemID == null) {
-            return;
+        for (ItemStack itemStack : matrix) {
+            if (itemStack == null) {
+                continue;
+            }
+            if (!itemStack.hasItemMeta()) {
+                continue;
+            }
+            ItemMeta itemMeta = itemStack.getItemMeta();
+            PersistentDataContainer itemContainer = itemMeta.getPersistentDataContainer();
+            String itemID2 = itemContainer.get(itemKey, PersistentDataType.STRING);
+            if (itemID2 == null) {
+                continue;
+            }
+            CustomItem item2 = UniverseItem.getItem(itemID2);
+            if (item2 instanceof Gun) {
+                event.getInventory().setResult(null);
+                Message.sendWarningMessage(player, "[武器AI]", "武器はクラフトできません。");
+                return;
+            }
+            if(Objects.equals(itemID2, "magazine_bag")){
+                event.getInventory().setResult(null);
+                Message.sendWarningMessage(player, "[武器AI]", "マガジンバッグはクラフトできません。");
+                return;
+            }
         }
-        CustomItem item = UniverseItem.getItem(itemID);
-        if (!(item instanceof Gun)) {
-            return;
-        }
-        if(!Objects.equals(container.get(itemKey, PersistentDataType.STRING), "magazine_bag")){
-            return;
-        }
-        event.getInventory().setResult(null);
     }
 
     @EventHandler
