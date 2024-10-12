@@ -1,11 +1,11 @@
 package space.yurisi.universecorev2.subplugins.birthdaycard.command;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import jakarta.persistence.NoResultException;
+import net.kyori.adventure.inventory.Book;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -19,10 +19,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import space.yurisi.universecorev2.UniverseCoreV2API;
 import space.yurisi.universecorev2.database.models.BirthdayData;
+import space.yurisi.universecorev2.database.models.BirthdayMessages;
 import space.yurisi.universecorev2.database.repositories.BirthdayCardRepository;
 import space.yurisi.universecorev2.exception.BirthdayDataNotFoundException;
 import space.yurisi.universecorev2.subplugins.birthdaycard.BirthdayCard;
 import space.yurisi.universecorev2.subplugins.birthdaycard.menu.BirthdayCalendarMenu;
+import space.yurisi.universecorev2.subplugins.birthdaycard.utils.PageJsonUtils;
 import space.yurisi.universecorev2.utils.Message;
 import space.yurisi.universecorev2.utils.NumberUtils;
 
@@ -188,14 +190,62 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 return true;
 
             case "send":
-                //TODO::保存機能を作る
-                PersistentDataContainer container = player.getInventory().getItemInMainHand().getItemMeta().getPersistentDataContainer();
-                if (container.has(nk, PersistentDataType.STRING)) {
-                    String value = container.get(nk, PersistentDataType.STRING);
-                    Message.sendSuccessMessage(player, BirthdayCard.PREFIX, value);
+                ItemStack mainHandItem = player.getInventory().getItemInMainHand();
+                if (mainHandItem.getType() == Material.WRITTEN_BOOK) {
+                    PersistentDataContainer container = mainHandItem.getItemMeta().getPersistentDataContainer();
+                    if (container.has(nk, PersistentDataType.STRING)) {
+                        String playerUuid = container.get(nk, PersistentDataType.STRING);
+                        BirthdayData sendToBirthdayData = getBirthdayData(playerUuid);
+                        if (sendToBirthdayData == null) {
+                            Message.sendErrorMessage(player, BirthdayCard.PREFIX, "誕生日が登録されていません");
+                            return true;
+                        }
+                        Book book = (Book) mainHandItem.getItemMeta();
+                        Bukkit.getLogger().info(book.pages().toString());
+                        Message.sendSuccessMessage(player, BirthdayCard.PREFIX, playerUuid);
+                        String pageJson = PageJsonUtils.serializePageJson(book.pages());
+                        Bukkit.getLogger().info(pageJson);
+                        birthdayCardRepository.createBirthdayMessage(sendToBirthdayData.getId(), player, pageJson);
+                    } else {
+                        Message.sendErrorMessage(player, BirthdayCard.PREFIX, "/birthday getで入手した本か確認してください");
+                    }
+                    return true;
+                } else {
+                    Message.sendErrorMessage(player, BirthdayCard.PREFIX, "著名した本にしてください");
+                }
+                return true;
+            case "gift":
+                BirthdayData gifToBirthdayData = getBirthdayData(player.getUniqueId().toString());
+                if (gifToBirthdayData == null) {
+                    Message.sendErrorMessage(player, BirthdayCard.PREFIX, "誕生日が登録されていません");
                     return true;
                 }
-                break;
+                if (gifToBirthdayData.isGiftReceived()) {
+                    Message.sendNormalMessage(player, BirthdayCard.PREFIX, "もうすでに誕生日カードを受け取っています");
+                    return true;
+                }
+                List<BirthdayMessages> birthdayMessagesList = null;
+                try {
+                    birthdayMessagesList = birthdayCardRepository.getBirthdayMessages(gifToBirthdayData.getId());
+                } catch (BirthdayDataNotFoundException ignored) {
+                    //NOOP 誕生日メッセージがない人なんていないよきっと大丈夫
+                }
+
+                gifToBirthdayData.setGiftReceived(true);
+                ItemStack bookItem = ItemStack.of(Material.WRITTEN_BOOK);
+                Book book = (Book) bookItem.getItemMeta();
+                book.title(Component.text("お誕生日カード " + player.getName() + "さんへ"));
+                book.author(Component.text("Happy Birth Day Book"));
+                List<Component> pageComponents = new ArrayList<>();
+                birthdayMessagesList.forEach(birthdayMessages -> {
+                    pageComponents.addAll(PageJsonUtils.deserializePageJson(birthdayMessages.getMessage()));
+                });
+                Bukkit.getLogger().info(pageComponents.toString());
+                book = book.pages(pageComponents);
+                BookMeta bookMeta = (BookMeta) book;
+                bookItem.setItemMeta(bookMeta);
+                player.getInventory().addItem(bookItem);
+                return true;
             default:
                 Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "引数を間違えています");
                 return false;
@@ -214,6 +264,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
             completions.add("remove");
             completions.add("get");
             completions.add("send");
+            completions.add("gift");
             return completions;
         }
 
