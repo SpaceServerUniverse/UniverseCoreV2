@@ -235,6 +235,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                     //NOOP 誕生日メッセージがない人なんていないよきっと大丈夫
                 }
                 gifToBirthdayData.setGiftReceived(true);
+                birthdayCardRepository.updateBirthdayData(gifToBirthdayData);
                 ItemStack bookItem = ItemStack.of(Material.WRITTEN_BOOK);
                 Book book = (Book) bookItem.getItemMeta();
                 book.title(Component.text("お誕生日カード " + player.getName() + "さんへ"));

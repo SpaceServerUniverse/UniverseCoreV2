@@ -103,6 +103,22 @@ public class BirthdayCardRepository {
     }
 
     /**
+     * バースデーデータを更新します
+     *
+     * @param birthdayData
+     */
+    public void updateBirthdayData(BirthdayData birthdayData) {
+        Session session = this.sessionFactory.getCurrentSession();
+        try{
+            session.beginTransaction();
+            session.merge(birthdayData);
+            session.getTransaction().commit();
+        }finally {
+            session.close();
+        }
+    }
+
+    /**
      * バースデーを削除します
      *
      * @param birthdayData
