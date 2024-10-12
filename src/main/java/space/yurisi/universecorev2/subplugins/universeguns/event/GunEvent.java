@@ -50,7 +50,7 @@ public class GunEvent implements Listener {
     ArrayList<Player> isZoom = new ArrayList<>();
     private final HashMap<Player, BukkitRunnable> reloadingTasks = new HashMap<>();
     private final HashMap<String, BukkitRunnable> shootingTasks = new HashMap<>();
-    private final HashMap<Player, Boolean> isShooting = new HashMap<>();
+    private final HashMap<String, Boolean> isShooting = new HashMap<>();
     public final HashMap<Entity, BulletData> projectileData = new HashMap<>();
     private static final ThreadLocal<Boolean> isHandlingExplosion = ThreadLocal.withInitial(() -> false);
 
@@ -120,14 +120,14 @@ public class GunEvent implements Listener {
                 return;
             }
 
-            isShooting.put(player, true);
+            isShooting.put(gunSerial, true);
             if (!shootingTasks.containsKey(gunSerial)) {
 
                 BukkitRunnable shootingTask = new BukkitRunnable() {
                     @Override
                     public void run() {
 
-                        if (!isShooting.getOrDefault(player, false)) {
+                        if (!isShooting.getOrDefault(gunSerial, false)) {
                             this.cancel();
                             shootingTasks.remove(gunSerial);
                             return;
@@ -138,6 +138,7 @@ public class GunEvent implements Listener {
                             gunStatus.shoot();
                             GunShot gunShot = new GunShot(player, gun, gunStatus, isZoom);
                             projectileData.put(gunShot.getProjectile(), new BulletData(gun, player, gunShot.getLaunchLocation()));
+
                             if (gun.getBurst() != 0) {
                                 for (int i = 0; i < gun.getBurst(); i++) {
                                     if (gunStatus.getMagazineAmmo() == 0) {
@@ -194,7 +195,7 @@ public class GunEvent implements Listener {
                             }.runTaskLater(plugin, gun.getFireRate() - 5);
 
                         } else {
-                            isShooting.put(player, false);
+                            isShooting.put(gunSerial, false);
                         }
 
                     }
@@ -207,10 +208,10 @@ public class GunEvent implements Listener {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (!isShooting.getOrDefault(player, false)) {
+                    if (!isShooting.getOrDefault(gunSerial, false)) {
                         shootingTaskCancel(shootingTasks, gunSerial);
                     }
-                    isShooting.put(player, false);
+                    isShooting.put(gunSerial, false);
                 }
             }.runTaskLater(plugin, 4); // 4tick
 
@@ -375,9 +376,9 @@ public class GunEvent implements Listener {
         if (reloadingTasks.containsKey(player)) {
             taskCancel(reloadingTasks, player);
         }
-        if (isShooting.containsKey(player)) {
-            isShooting.remove(player);
-        }
+//        if (isShooting.containsKey(gunSerial)) {
+//            isShooting.remove(gunSerial);
+//        }
 //        if (shootingTasks.containsKey(player)) {
 //            taskCancel(shootingTasks, gunStatus);
 //        }
@@ -386,13 +387,6 @@ public class GunEvent implements Listener {
     @EventHandler
     public void onPlayerItemHeld(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
-        if(!connector.isExistsAmmoData(player)){
-            try {
-                connector.AmmoDataInit(player);
-            } catch (UserNotFoundException e) {
-                Message.sendErrorMessage(player, "[武器AI]", "ユーザーが見つかりませんでした。");
-            }
-        }
 
         ItemStack oldInHand = player.getInventory().getItem(event.getPreviousSlot());
         if (oldInHand != null && oldInHand.hasItemMeta()) {
@@ -410,6 +404,14 @@ public class GunEvent implements Listener {
 
             if (!(oldGunItem instanceof Gun oldGun)) {
                 return;
+            }
+
+            if(!connector.isExistsAmmoData(player)){
+                try {
+                    connector.AmmoDataInit(player);
+                } catch (UserNotFoundException e) {
+                    Message.sendErrorMessage(player, "[武器AI]", "ユーザーが見つかりませんでした。");
+                }
             }
 
             if (!GunStatusManager.isExists(oldGunSerial)) {
@@ -449,6 +451,15 @@ public class GunEvent implements Listener {
                 player.setWalkSpeed(0.2f);
                 return;
             }
+
+            if(!connector.isExistsAmmoData(player)){
+                try {
+                    connector.AmmoDataInit(player);
+                } catch (UserNotFoundException e) {
+                    Message.sendErrorMessage(player, "[武器AI]", "ユーザーが見つかりませんでした。");
+                }
+            }
+
             String newHandItemID = newContainer.get(newItemKey, PersistentDataType.STRING);
             String gunSerial = newContainer.get(gunSerialKey, PersistentDataType.STRING);
             CustomItem newGunItem = UniverseItem.getItem(newHandItemID);
@@ -456,7 +467,6 @@ public class GunEvent implements Listener {
                 player.setWalkSpeed(0.2f);
                 return;
             }
-
 
 
             if (!GunStatusManager.isExists(gunSerial)) {
