@@ -208,7 +208,6 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                         Bukkit.getLogger().info(book.pages().toString());
                         Message.sendSuccessMessage(player, BirthdayCard.PREFIX, playerUuid);
                         String pageJson = PageJsonUtils.serializePageJson(book.pages());
-                        Bukkit.getLogger().info(pageJson);
                         birthdayCardRepository.createBirthdayMessage(sendToBirthdayData.getId(), player, pageJson);
                     } else {
                         Message.sendErrorMessage(player, BirthdayCard.PREFIX, "/birthday getで入手した本か確認してください");
@@ -254,7 +253,6 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                         pageComponents.addAll(PageJsonUtils.deserializePageJson(birthdayMessages.getMessage()));
                     });
                 }
-                Bukkit.getLogger().info(pageComponents.toString());
                 book = book.pages(pageComponents);
                 BookMeta bookMeta = (BookMeta) book;
                 bookItem.setItemMeta(bookMeta);
