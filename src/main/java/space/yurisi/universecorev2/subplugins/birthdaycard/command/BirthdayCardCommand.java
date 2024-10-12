@@ -1,8 +1,5 @@
 package space.yurisi.universecorev2.subplugins.birthdaycard.command;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import jakarta.persistence.NoResultException;
 import net.kyori.adventure.inventory.Book;
 import net.kyori.adventure.text.Component;
 import org.bukkit.*;
@@ -30,9 +27,7 @@ import space.yurisi.universecorev2.utils.NumberUtils;
 
 import java.time.DateTimeException;
 import java.time.MonthDay;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
     private NamespacedKey nk;
@@ -239,7 +234,6 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 } catch (BirthdayDataNotFoundException ignored) {
                     //NOOP 誕生日メッセージがない人なんていないよきっと大丈夫
                 }
-
                 gifToBirthdayData.setGiftReceived(true);
                 ItemStack bookItem = ItemStack.of(Material.WRITTEN_BOOK);
                 Book book = (Book) bookItem.getItemMeta();
