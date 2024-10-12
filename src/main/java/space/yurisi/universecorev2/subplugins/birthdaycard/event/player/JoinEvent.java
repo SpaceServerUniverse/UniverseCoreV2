@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.UniverseCoreV2API;
 import space.yurisi.universecorev2.database.models.BirthdayData;
 import space.yurisi.universecorev2.database.repositories.BirthdayCardRepository;
@@ -29,25 +28,27 @@ public class JoinEvent implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        List<BirthdayData> birthdayDataList = null;
+        List<BirthdayData> birthdayDataList;
         try {
             birthdayDataList = birthdayCardRepository.getAllBirthdayData();
-        } catch (BirthdayDataNotFoundException ignored) {
+        } catch (BirthdayDataNotFoundException error) {
             return;
         }
         for (BirthdayData birthdayData : birthdayDataList) {
+            if (birthdayData.isGiftReceived()) return;
             MonthDay birthday = MonthDay.of(birthdayData.getMonth(), birthdayData.getDay());
-            LocalDate thisYearBirthday = LocalDate.of(LocalDate.now().getYear(), birthday.getDayOfMonth(), birthday.getMonthValue());
+            LocalDate thisYearBirthday = LocalDate.of(LocalDate.now().getYear(), birthday.getMonthValue(), birthday.getDayOfMonth());
             LocalDate today = LocalDate.now();
             LocalDate tenDaysLater = LocalDate.now().plusDays(10);
             if (thisYearBirthday.isEqual(today)) {
-                Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "今日はあなたの誕生日です！お祝いしましょう！");
-                return;
+                if (birthdayData.getUuid().equals(player.getUniqueId().toString())) {
+                    Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "今日はあなたの誕生日です！");
+                    return;
+                }
             }
-            if (thisYearBirthday.isAfter(today) && thisYearBirthday.isBefore(tenDaysLater)) {
-
+            if ((thisYearBirthday.isEqual(today) || thisYearBirthday.isAfter(today)) && thisYearBirthday.isBefore(tenDaysLater.plusDays(1))) {
                 UUID playerUUID = UUID.fromString(birthdayData.getUuid());
-                if(!player.getUniqueId().equals(playerUUID)) {
+                if (!playerUUID.equals(player.getUniqueId())) {
                     OfflinePlayer offlineBirthdayPlayer = Bukkit.getOfflinePlayer(playerUUID);
                     String playerName = offlineBirthdayPlayer.getName() != null ? offlineBirthdayPlayer.getName() : "不明なプレイヤー";
                     Message.sendSuccessMessage(player, BirthdayCard.PREFIX, playerName + "の誕生日が近いよ！誕生日カードを書かない？");
