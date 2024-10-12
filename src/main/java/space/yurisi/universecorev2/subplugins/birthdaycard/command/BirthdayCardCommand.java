@@ -231,7 +231,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 LocalDate thisYearBirthday = LocalDate.of(LocalDate.now().getYear(), gifToBirthdayData.getMonth(), gifToBirthdayData.getDay());
                 LocalDate today = LocalDate.now();
                 if (!thisYearBirthday.isEqual(today)) {
-                    Message.sendErrorMessage(player,BirthdayCard.PREFIX,"まだ誕生日じゃないよ。誕生日を確認して、後で戻ってきてね！");
+                    Message.sendErrorMessage(player, BirthdayCard.PREFIX, "まだ誕生日じゃないよ。誕生日を確認して、後で戻ってきてね！");
                     return true;
                 }
                 List<BirthdayMessages> birthdayMessagesList = null;
