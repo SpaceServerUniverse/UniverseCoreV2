@@ -16,6 +16,7 @@ public class DatabaseManager {
     private final PlayerLevelRepository playerLevelRepository;
     private final PlayerNormalLevelRepository playerNormalLevelRepository;
     private final ChestShopRepository chestShopRepository;
+    private final AmmoRepository ammoRepository;
 
     private final PositionRepository positionRepository;
     private final ContainerProtectRepository containerProtectRepository;
@@ -49,6 +50,7 @@ public class DatabaseManager {
         this.customNameRepository = new CustomNameRepository(sessionFactory);
         this.marketRepository = new MarketRepository(sessionFactory);
         this.chestShopRepository = new ChestShopRepository(sessionFactory);
+        this.ammoRepository = new AmmoRepository(sessionFactory);
     }
 
     /**
@@ -227,5 +229,14 @@ public class DatabaseManager {
      */
     public ChestShopRepository getChestShopRepository() {
         return chestShopRepository;
+    }
+
+    /**
+     * 弾薬リポジトリを取得
+     *
+     * @return AmmoRepository
+     */
+    public AmmoRepository getAmmoRepository() {
+        return ammoRepository;
     }
 }

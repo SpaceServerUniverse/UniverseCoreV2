@@ -69,3 +69,4 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 compileJava.options.encoding = 'UTF-8'
+
