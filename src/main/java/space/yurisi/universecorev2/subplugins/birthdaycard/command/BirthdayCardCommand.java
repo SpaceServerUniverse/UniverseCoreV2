@@ -22,10 +22,12 @@ import space.yurisi.universecorev2.exception.BirthdayDataNotFoundException;
 import space.yurisi.universecorev2.subplugins.birthdaycard.BirthdayCard;
 import space.yurisi.universecorev2.subplugins.birthdaycard.menu.BirthdayCalendarMenu;
 import space.yurisi.universecorev2.subplugins.birthdaycard.utils.PageJsonUtils;
+import space.yurisi.universecorev2.subplugins.chestshop.utils.SuperMessageHelper;
 import space.yurisi.universecorev2.utils.Message;
 import space.yurisi.universecorev2.utils.NumberUtils;
 
 import java.time.DateTimeException;
+import java.time.LocalDate;
 import java.time.MonthDay;
 import java.util.*;
 
@@ -227,36 +229,47 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                     Message.sendNormalMessage(player, BirthdayCard.PREFIX, "もうすでに誕生日カードを受け取っています");
                     return true;
                 }
-                List<BirthdayMessages> birthdayMessagesList = null;
-                try {
-                    birthdayMessagesList = birthdayCardRepository.getBirthdayMessages(gifToBirthdayData.getId());
-                } catch (BirthdayDataNotFoundException ignored) {
-                    //NOOP 誕生日メッセージがない人なんていないよきっと大丈夫
-                }
-                gifToBirthdayData.setGiftReceived(true);
-                birthdayCardRepository.updateBirthdayData(gifToBirthdayData);
-                ItemStack bookItem = ItemStack.of(Material.WRITTEN_BOOK);
-                Book book = (Book) bookItem.getItemMeta();
-                book.title(Component.text("お誕生日カード " + player.getName() + "さんへ"));
-                book.author(Component.text("Happy Birth Day Book"));
-                List<Component> pageComponents = new ArrayList<>();
-                if (birthdayMessagesList == null) {
-                    Random random = new Random();
-                    int numberOfMessages = random.nextInt(birthdayMessages.size() + 1);
-                    Collections.shuffle(birthdayMessages);
-                    List<String> selectedMessages = birthdayMessages.subList(0, numberOfMessages);
-                    for (String message : selectedMessages) {
-                        pageComponents.add(Component.text(message));
+                LocalDate thisYearBirthday = LocalDate.of(LocalDate.now().getYear(), gifToBirthdayData.getMonth(), gifToBirthdayData.getDay());
+                LocalDate today = LocalDate.now();
+                if (thisYearBirthday.isEqual(today)) {
+                    List<BirthdayMessages> birthdayMessagesList = null;
+                    try {
+                        birthdayMessagesList = birthdayCardRepository.getBirthdayMessages(gifToBirthdayData.getId());
+                    } catch (BirthdayDataNotFoundException ignored) {
+                        //NOOP 誕生日メッセージがない人なんていないよきっと大丈夫
                     }
-                } else {
-                    birthdayMessagesList.forEach(birthdayMessages -> {
-                        pageComponents.addAll(PageJsonUtils.deserializePageJson(birthdayMessages.getMessage()));
-                    });
+                    Integer emptySlot = player.getInventory().firstEmpty();
+                    if (emptySlot == -1) {
+                        SuperMessageHelper.sendErrorMessage(player, "インベントリーがいっぱいです");
+                        return true;
+                    }
+                    gifToBirthdayData.setGiftReceived(true);
+                    birthdayCardRepository.updateBirthdayData(gifToBirthdayData);
+                    ItemStack bookItem = ItemStack.of(Material.WRITTEN_BOOK);
+                    Book book = (Book) bookItem.getItemMeta();
+                    book.title(Component.text("お誕生日カード " + player.getName() + "さんへ"));
+                    book.author(Component.text("Happy Birth Day Book"));
+                    List<Component> pageComponents = new ArrayList<>();
+                    if (birthdayMessagesList == null) {
+                        Random random = new Random();
+                        int numberOfMessages = random.nextInt(birthdayMessages.size() + 1);
+                        Collections.shuffle(birthdayMessages);
+                        List<String> selectedMessages = birthdayMessages.subList(0, numberOfMessages);
+                        for (String message : selectedMessages) {
+                            pageComponents.add(Component.text(message));
+                        }
+                    } else {
+                        birthdayMessagesList.forEach(birthdayMessages -> {
+                            pageComponents.addAll(PageJsonUtils.deserializePageJson(birthdayMessages.getMessage()));
+                        });
+                    }
+                    book = book.pages(pageComponents);
+                    BookMeta bookMeta = (BookMeta) book;
+                    bookItem.setItemMeta(bookMeta);
+                    player.getInventory().addItem(bookItem);
+                }else{
+                    Message.sendErrorMessage(player,BirthdayCard.PREFIX,"まだ誕生日じゃないよ。誕生日を確認して、後で戻ってきてね！");
                 }
-                book = book.pages(pageComponents);
-                BookMeta bookMeta = (BookMeta) book;
-                bookItem.setItemMeta(bookMeta);
-                player.getInventory().addItem(bookItem);
                 return true;
             default:
                 Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "引数を間違えています");
