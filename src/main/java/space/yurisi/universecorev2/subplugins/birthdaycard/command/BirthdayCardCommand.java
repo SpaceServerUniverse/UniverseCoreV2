@@ -205,8 +205,8 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                             return true;
                         }
                         Book book = (Book) mainHandItem.getItemMeta();
-                        Bukkit.getLogger().info(book.pages().toString());
-                        Message.sendSuccessMessage(player, BirthdayCard.PREFIX, playerUuid);
+                        Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "お誕生日カードを送信しました");
+                        player.getInventory().remove(mainHandItem);
                         String pageJson = PageJsonUtils.serializePageJson(book.pages());
                         birthdayCardRepository.createBirthdayMessage(sendToBirthdayData.getId(), player, pageJson);
                     } else {
