@@ -62,7 +62,7 @@ public class MainMenu implements BaseMenu {
         Item executeMoney = new SimpleItem(new ItemBuilder(Material.GOLD_INGOT)
                 .setDisplayName("銀行 (未実装)")
                 .setLegacyLore(List.of("§6お金を管理します")));
-        Item executeTrash = new CommandItem(new ItemBuilder(Material.NETHER_STAR)
+        Item executeTrash = new CommandItem(new ItemBuilder(Material.LAVA_BUCKET)
                 .setDisplayName("ゴミ箱")
                 .setLegacyLore(List.of("§6ゴミ箱を開きます。取り扱い注意!")),
                 "/trash");
