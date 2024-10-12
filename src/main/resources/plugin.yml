@@ -96,6 +96,10 @@ commands:
   unlock:
     description: コンテナ等の保護を解除します
 
+  ## UniverseGuns
+  ammo:
+    description: 弾薬管理メニューを開く
+
   ## PlayerHead
   head:
     description: プレイヤーヘッドを購入します(WIP)

@@ -14,6 +14,7 @@ import space.yurisi.universecorev2.database.repositories.UserRepository;
 import space.yurisi.universecorev2.exception.CustomNameNotFoundException;
 import space.yurisi.universecorev2.exception.MoneyNotFoundException;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
+import space.yurisi.universecorev2.menu.menu_item.main_menu.LaunchNavigationItem;
 import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomyAPI;
 import space.yurisi.universecorev2.utils.Message;
 import space.yurisi.universecorev2.utils.TimeHelper;
@@ -50,18 +51,6 @@ public class MainMenu implements BaseMenu {
                 .setDisplayName("ガチャ")
                 .setLegacyLore(List.of("§6ガチャを引くことができます")),
                 "/gacha");
-        Item executeWiki = new CommandItem(new ItemBuilder(Material.MAP)
-                .setDisplayName("Wiki")
-                .setLegacyLore(List.of("§6公式WikiへのURLを表示します")),
-                "/wiki");
-        Item executeWeb = new CommandItem(new ItemBuilder(Material.RECOVERY_COMPASS)
-                .setDisplayName("UniverseWeb")
-                .setLegacyLore(List.of("§6ランキングなどのオンラインサービスである UniverseWeb へのURLを表示します")),
-                "/web");
-        // TODO: Add execute /money command
-        Item executeMoney = new SimpleItem(new ItemBuilder(Material.GOLD_INGOT)
-                .setDisplayName("銀行 (未実装)")
-                .setLegacyLore(List.of("§6お金を管理します")));
         Item executeTrash = new CommandItem(new ItemBuilder(Material.LAVA_BUCKET)
                 .setDisplayName("ゴミ箱")
                 .setLegacyLore(List.of("§6ゴミ箱を開きます。取り扱い注意!")),
@@ -74,13 +63,17 @@ public class MainMenu implements BaseMenu {
                 .setDisplayName("プレイヤーヘッド")
                 .setLegacyLore(List.of("§6他のプレイヤーのヘッドを購入します")),
                 "/head");
+        Item executeAmmo = new CommandItem(new ItemBuilder(Material.IRON_NUGGET)
+                .setDisplayName("弾薬")
+                .setLegacyLore(List.of("§6弾薬を購入・クラフトします")),
+                "/ammo");
 
         Gui gui = Gui.normal()
                 .setStructure(
-                        "= # # # i # # # #",
-                        "# + a m t g y + #",
-                        "# + w u n s h + #",
-                        "# # # # # # # # #"
+                        "# # # i # = # # #",
+                        "# + a m t o y + #",
+                        "# + + n s h + + #",
+                        "# # # # l # # # #"
                 )
                 .addIngredient('#', border)
                 .addIngredient('+', inMenuBorder)
@@ -89,16 +82,15 @@ public class MainMenu implements BaseMenu {
                 .addIngredient('a', executeGacha)
                 .addIngredient('m', executeMywarp)
                 .addIngredient('t', executeTpp)
-                .addIngredient('g', executeMoney)
                 .addIngredient('y', executeMarket)
-                .addIngredient('w', executeWiki)
-                .addIngredient('u', executeWeb)
                 .addIngredient('n', executeTag)
                 .addIngredient('s', executeTrash)
                 .addIngredient('h', executeHead)
+                .addIngredient('o', executeAmmo)
+                .addIngredient('l', new LaunchNavigationItem())
                 .build();
 
-        xyz.xenondevs.invui.window.Window window = Window.single()
+        Window window = Window.single()
                 .setViewer(player)
                 .setGui(gui)
                 .setTitle("メインメニュー")
@@ -141,9 +133,12 @@ public class MainMenu implements BaseMenu {
         }
 
         String greetingWithName = switch (TimeHelper.checkTime()) {
+            case LATE_NIGHT -> "§e遅くまでお疲れ様です、 §r" + player.getName();
+            case EARLY_MORNING -> "§f朝早くからお疲れ様です、 §r" + player.getName();
             case MORNING -> "§bおはようございます、 §r" + player.getName();
-            case AFTERNOON -> "§6こんにちは、 §r" + player.getName();
-            case EVENING -> "§9こんばんは、 §r" + player.getName();
+            case AFTERNOON -> "§aこんにちは、 §r" + player.getName();
+            case EVENING -> "§6夜ご飯は何を食べるんですか？ §r" + player.getName();
+            case NIGHT -> "§9こんばんは、 §r" + player.getName();
         };
 
         List<String> playerinfo = List.of(
