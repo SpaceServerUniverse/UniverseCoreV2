@@ -70,6 +70,18 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
         }
     }
 
+    List<String> birthdayMessages = Arrays.asList(
+            "お誕生日おめでとう！今日は特別な日だから、素敵なことがたくさんありますように！",
+            "ハッピーバースデー！どんな日になるか楽しみだね。素晴らしい一年にしよう！",
+            "お誕生日おめでとう！あなたの笑顔がもっと見られる一年になりますように！",
+            "お誕生日おめでとうございます。新しい一年が素晴らしい成長と幸福に満ちたものとなりますように。",
+            "この特別な日を迎えられたことを心よりお祝い申し上げます。素晴らしい一年になりますように。",
+            "お誕生日おめでとうございます。今後の一年が健康で幸せに満ちたものでありますよう、心より願っております。",
+            "お誕生日おめでとう！年齢はただの数字…でも、ケーキの数は本物だよ！",
+            "ハッピーバースデー！年を取ることは避けられないけれど、心はいつまでも若々しく！",
+            "お誕生日おめでとう！歳を重ねるのも悪くない、特にケーキがあるときはね！"
+    );
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         if (!(sender instanceof Player player)) {
@@ -234,9 +246,19 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 book.title(Component.text("お誕生日カード " + player.getName() + "さんへ"));
                 book.author(Component.text("Happy Birth Day Book"));
                 List<Component> pageComponents = new ArrayList<>();
-                birthdayMessagesList.forEach(birthdayMessages -> {
-                    pageComponents.addAll(PageJsonUtils.deserializePageJson(birthdayMessages.getMessage()));
-                });
+                if (birthdayMessagesList == null) {
+                    Random random = new Random();
+                    int numberOfMessages = random.nextInt(birthdayMessages.size() + 1);
+                    Collections.shuffle(birthdayMessages);
+                    List<String> selectedMessages = birthdayMessages.subList(0, numberOfMessages);
+                    for (String message : selectedMessages) {
+                        pageComponents.add(Component.text(message));
+                    }
+                } else {
+                    birthdayMessagesList.forEach(birthdayMessages -> {
+                        pageComponents.addAll(PageJsonUtils.deserializePageJson(birthdayMessages.getMessage()));
+                    });
+                }
                 Bukkit.getLogger().info(pageComponents.toString());
                 book = book.pages(pageComponents);
                 BookMeta bookMeta = (BookMeta) book;
