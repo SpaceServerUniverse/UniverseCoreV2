@@ -134,7 +134,8 @@ public class GunEvent implements Listener {
                             return;
                         }
 
-                        if (gun.getType().equals(GunType.HG) || gun.getType().equals(GunType.AR) || gun.getType().equals(GunType.EX)) {
+                        if (gun.getType().equals(GunType.HG) || gun.getType().equals(GunType.AR) || gun.getType().equals(GunType.EX)
+                                || gun.getType().equals(GunType.SMG) || gun.getType().equals(GunType.LMG)) {
 
                             gunStatus.shoot();
                             GunShot gunShot = new GunShot(player, gun, gunStatus, isZoom);
