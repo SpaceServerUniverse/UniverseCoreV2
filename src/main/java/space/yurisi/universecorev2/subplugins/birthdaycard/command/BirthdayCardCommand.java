@@ -249,8 +249,6 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "引数を間違えています");
                 return false;
         }
-
-        return true;
     }
 
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
