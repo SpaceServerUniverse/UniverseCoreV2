@@ -285,11 +285,12 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
         }
         if (args[0].equals("check") || args[0].equals("get")) {
             if (args.length == 2) {
-                List<BirthdayData> birthdayDatas = null;
+                List<BirthdayData> birthdayDatas;
                 try {
                     birthdayDatas = birthdayCardRepository.getAllBirthdayData();
-                } catch (BirthdayDataNotFoundException ignored) {
-                    //NOOP
+                } catch (BirthdayDataNotFoundException error) {
+                    completions.add("<まだ登録されている人がいません>");
+                    return completions;
                 }
                 birthdayDatas.forEach(birthdayData -> {
                     UUID playerUUID = UUID.fromString(birthdayData.getUuid());
