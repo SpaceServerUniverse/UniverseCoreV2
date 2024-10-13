@@ -49,6 +49,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
         if (monthArg == null || dayArg == null || !NumberUtils.isNumeric(monthArg) || !NumberUtils.isNumeric(dayArg)) {
             Message.sendErrorMessage(player, BirthdayCard.PREFIX, "引数が間違えているよ確認してください");
             return false;
+            Message.sendErrorMessage(player, BirthdayCard.PREFIX, "/birthday register <月> <日>");
         }
         return true;
     }
@@ -87,7 +88,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
         if (!(sender instanceof Player player)) {
-            //sender.sendMessage(BirthdayCard.PREFIX + "プレイヤー内で実行してね");
+            sender.sendMessage(BirthdayCard.PREFIX + "ゲーム内で実行してね");
             return false;
         }
 
@@ -127,7 +128,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
 
             case "get":
                 if (args.length < 2) {
-                    Message.sendErrorMessage(player, BirthdayCard.PREFIX, "引数が間違えています");
+                    Message.sendErrorMessage(player, BirthdayCard.PREFIX, "/birthday get <プレイヤー名>");
                     return false;
                 }
                 OfflinePlayer birthdayPlayerToGet = Bukkit.getOfflinePlayer(args[1]);
@@ -257,7 +258,9 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 ItemStack bookItem = ItemStack.of(Material.WRITTEN_BOOK);
                 Book book = (Book) bookItem.getItemMeta();
                 book.title(Component.text("お誕生日カード " + player.getName() + "さんへ"));
-                book.author(Component.text("HappyBirthDayBook (" + LocalDate.now().getYear() + ")"));
+                book.author(Component.text("HappyBirthDayBook (" + LocalDate.now().getYear() + ")")
+                        .color(NamedTextColor.GOLD)
+                        .decorate(TextDecoration.BOLD));
                 List<Component> pageComponents = new ArrayList<>();
                 if (birthdayMessagesList == null) {
                     Random random = new Random();
@@ -296,8 +299,21 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "自身のバースデーデータを削除しました");
                 return true;
             default:
-                Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "引数を間違えています");
-                return false;
+                String[] helpMessage = """
+                        §6-- 🎉BirthdayCard Help --
+                        🎂 §bバースデーカードのコマンド一覧です 🎂
+                           §7/birthday : バースデーカレンダーメニューを開きます
+                           §7/birthday register <月> <日> : 誕生日を登録します
+                           §7/birthday remove : 登録した誕生日を削除します
+                           §7/birthday check [プレイヤー名] : 自分または指定したプレイヤーの誕生日を確認します
+                           §7/birthday list : 登録されている誕生日の一覧を表示します
+                           §7/birthday get <プレイヤー名> : 指定したプレイヤーに送る誕生日カードを取得します
+                           §7/birthday send : 手持ちの署名済み本をバースデーメッセージとして送信します
+                           §7/birthday gift : 誕生日ギフトを受け取ります（誕生日当日限定一回のみ）
+                           §7/birthday help : このヘルプを表示します
+                        """.split("\n");
+                player.sendMessage(helpMessage);
+                break;
         }
     }
 
