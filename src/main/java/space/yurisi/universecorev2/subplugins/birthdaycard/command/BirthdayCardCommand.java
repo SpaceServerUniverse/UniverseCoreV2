@@ -23,13 +23,11 @@ import space.yurisi.universecorev2.database.models.BirthdayMessages;
 import space.yurisi.universecorev2.database.repositories.BirthdayCardRepository;
 import space.yurisi.universecorev2.exception.BirthdayDataNotFoundException;
 import space.yurisi.universecorev2.subplugins.birthdaycard.BirthdayCard;
+import space.yurisi.universecorev2.subplugins.birthdaycard.menu.BirthdayCalendarMenue;
 import space.yurisi.universecorev2.subplugins.birthdaycard.menu.BirthdayCalendarMenu;
 import space.yurisi.universecorev2.subplugins.birthdaycard.utils.PageJsonUtils;
 import space.yurisi.universecorev2.utils.Message;
 import space.yurisi.universecorev2.utils.NumberUtils;
-import xyz.xenondevs.invui.item.Item;
-import xyz.xenondevs.invui.item.builder.ItemBuilder;
-import xyz.xenondevs.invui.item.impl.SimpleItem;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -124,7 +122,6 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 Message.sendWarningMessage(player, BirthdayCard.PREFIX, "本当に削除しますか？これまでにもらったメッセージも削除されます");
                 Message.sendNormalMessage(player, BirthdayCard.PREFIX, "§c[削除する]", ClickEvent.runCommand("/birthday　removeconfirm"), "バースデーデータを削除します");
                 return true;
-
             case "get":
                 if (args.length < 2) {
                     Message.sendErrorMessage(player, BirthdayCard.PREFIX, "/birthday get <プレイヤー名>");
