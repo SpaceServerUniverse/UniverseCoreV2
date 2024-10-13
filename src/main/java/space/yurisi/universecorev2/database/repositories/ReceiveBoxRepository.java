@@ -9,6 +9,7 @@ import space.yurisi.universecorev2.database.models.ReceiveBox;
 import space.yurisi.universecorev2.exception.MywarpNotFoundException;
 import space.yurisi.universecorev2.exception.ReceiveBoxNotFoundException;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -89,11 +90,13 @@ public class ReceiveBoxRepository {
     public List<ReceiveBox> getReceiveBoxesFromPlayer(Player player) {
         Session session = this.sessionFactory.getCurrentSession();
         UUID uuid = player.getUniqueId();
+        Date now = new Date();
         try {
             session.beginTransaction();
             List<ReceiveBox> receiveBoxes = session.createQuery(
-                            "from ReceiveBox where uuid = :uuid and is_received = 0", ReceiveBox.class)
+                            "from ReceiveBox where uuid = :uuid and is_received = 0 and expired_at > :now", ReceiveBox.class)
                     .setParameter("uuid", uuid.toString())
+                    .setParameter("now", now)
                     .getResultList();
             session.getTransaction().commit();
             return receiveBoxes;
@@ -101,6 +104,7 @@ public class ReceiveBoxRepository {
             session.close();
         }
     }
+
 
     /**
      * 受取アイテムを更新します

@@ -10,15 +10,20 @@ import space.yurisi.universecorev2.utils.JsonConverter;
 import space.yurisi.universecorev2.utils.Message;
 
 import java.util.Date;
+import java.util.UUID;
 
 public class ReceiveBoxAPI {
 
-    public static void AddReceiveItem(ItemStack itemStack, Player player, Date expire_date, String description){
+    public static void AddReceiveItem(ItemStack itemStack, UUID uuid, Date expire_date, String description){
+        String displayName = null;
+        if(itemStack.getItemMeta() != null){
+            displayName = itemStack.getItemMeta().hasDisplayName() ? PlainTextComponentSerializer.plainText().serialize(itemStack.getItemMeta().displayName()) : null;
+        }
         ReceiveBox receiveBox = new ReceiveBox(
                 null,
-                player.getUniqueId().toString(),
+                uuid.toString(),
                 itemStack.getType().toString(),
-                itemStack.getItemMeta().hasDisplayName() ? PlainTextComponentSerializer.plainText().serialize(itemStack.getItemMeta().displayName()) : null,
+                displayName,
                 description,
                 itemStack.serializeAsBytes(),
                 JsonConverter.ItemStackSerializer(itemStack),

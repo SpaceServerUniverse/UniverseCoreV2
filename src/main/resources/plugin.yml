@@ -123,6 +123,8 @@ commands:
   #ReceiveBox
   receive:
     description: アイテム受取ボックスを表示します
+  addreceive:
+    description: アイテム受取ボックスに追加します
 
 permissions:
   # UniverseCoreV2

@@ -21,7 +21,7 @@ public class ReceiveBoxMenu implements BaseMenu {
 
     @Override
     public void sendMenu(Player player) {
-        List<Item> items = UniverseCoreV2API.getInstance().getDatabaseManager().getReceiveBoxRepository().getReceiveBoxesFromPlayer( player).stream()
+        List<Item> items = UniverseCoreV2API.getInstance().getDatabaseManager().getReceiveBoxRepository().getReceiveBoxesFromPlayer(player).stream()
                 .map(ReceiveBoxItem::new)
                 .collect(Collectors.toList());
 
@@ -42,7 +42,7 @@ public class ReceiveBoxMenu implements BaseMenu {
         Window window = Window.single()
                 .setViewer(player)
                 .setGui(gui)
-                .setTitle("Market")
+                .setTitle("報酬受け取りボックス")
                 .build();
 
         window.open();
