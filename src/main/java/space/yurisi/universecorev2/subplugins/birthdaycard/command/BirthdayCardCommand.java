@@ -90,8 +90,8 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length == 0) {
-            BirthdayCalendarMenu menu = new BirthdayCalendarMenu();
-            menu.sendMenu(player);
+            BirthdayCalendarMenu birthdayCalendarMenu = new BirthdayCalendarMenu(null, null);
+            birthdayCalendarMenu.sendMenu(player);
             return true;
         }
         switch (args[0].toLowerCase()) {
@@ -304,7 +304,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                            §7/birthday remove : 登録した誕生日を削除します
                            §7/birthday check [プレイヤー名] : 自分または指定したプレイヤーの誕生日を確認します
                            §7/birthday list : 登録されている誕生日の一覧を表示します
-                           §7/birthday get <プレイヤー名> : 指定したプレイヤーに送る誕生日カードを取得します
+                           §7/birthday get [プレイヤー名] : 指定したプレイヤーに送る誕生日カードを取得します
                            §7/birthday send : 手持ちの署名済み本をバースデーメッセージとして送信します
                            §7/birthday gift : 誕生日ギフトを受け取ります（誕生日当日限定一回のみ）
                            §7/birthday help : このヘルプを表示します
