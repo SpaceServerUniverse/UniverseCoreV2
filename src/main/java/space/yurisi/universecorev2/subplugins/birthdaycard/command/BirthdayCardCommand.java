@@ -24,6 +24,9 @@ import space.yurisi.universecorev2.subplugins.birthdaycard.menu.BirthdayCalendar
 import space.yurisi.universecorev2.subplugins.birthdaycard.utils.PageJsonUtils;
 import space.yurisi.universecorev2.utils.Message;
 import space.yurisi.universecorev2.utils.NumberUtils;
+import xyz.xenondevs.invui.item.Item;
+import xyz.xenondevs.invui.item.builder.ItemBuilder;
+import xyz.xenondevs.invui.item.impl.SimpleItem;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -132,7 +135,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 }
                 BirthdayData birthdayData = getBirthdayData(birthdayPlayerToGet.getUniqueId().toString());
                 if (birthdayData == null) {
-                    Message.sendErrorMessage(player, BirthdayCard.PREFIX, "バースデーデータが見つかりません。");
+                    Message.sendErrorMessage(player, BirthdayCard.PREFIX, "バースデーデータが見つかりません");
                     return true;
                 }
                 ItemStack writableBook = ItemStack.of(Material.WRITABLE_BOOK);
@@ -164,7 +167,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 }
                 data = getBirthdayData(birthdayPlayer.getUniqueId().toString());
                 if (data == null) {
-                    Message.sendErrorMessage(player, BirthdayCard.PREFIX, birthdayPlayer.getName() + "の誕生日が登録されていません。");
+                    Message.sendErrorMessage(player, BirthdayCard.PREFIX, birthdayPlayer.getName() + "の誕生日が登録されていません");
                     return true;
                 }
                 Message.sendSuccessMessage(player, BirthdayCard.PREFIX, birthdayPlayer.getName() + "の誕生日は" + data.getMonth() + "月" + data.getDay() + "日");
@@ -245,7 +248,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 ItemStack bookItem = ItemStack.of(Material.WRITTEN_BOOK);
                 Book book = (Book) bookItem.getItemMeta();
                 book.title(Component.text("お誕生日カード " + player.getName() + "さんへ"));
-                book.author(Component.text("Happy Birth Day Book"));
+                book.author(Component.text("HappyBirthDayBook (" + LocalDate.now().getYear() + ")"));
                 List<Component> pageComponents = new ArrayList<>();
                 if (birthdayMessagesList == null) {
                     Random random = new Random();
