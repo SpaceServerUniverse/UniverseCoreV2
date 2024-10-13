@@ -138,6 +138,10 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                     Message.sendErrorMessage(player, BirthdayCard.PREFIX, "バースデーデータが見つかりません");
                     return true;
                 }
+                if (birthdayData.getUuid().equals(birthdayPlayerToGet.getUniqueId().toString())) {
+                    Message.sendErrorMessage(player, BirthdayCard.PREFIX, "自分自身にメッセージを書くことはできません");
+                    return true;
+                }
                 ItemStack writableBook = ItemStack.of(Material.WRITABLE_BOOK);
                 BookMeta writableMeta = (BookMeta) writableBook.getItemMeta();
                 writableMeta.displayName(Component.text("お誕生日カード (" + birthdayPlayerToGet.getName() + ")"));
@@ -199,26 +203,29 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
 
             case "send":
                 ItemStack mainHandItem = player.getInventory().getItemInMainHand();
-                if (mainHandItem.getType() == Material.WRITTEN_BOOK) {
-                    PersistentDataContainer container = mainHandItem.getItemMeta().getPersistentDataContainer();
-                    if (container.has(nk, PersistentDataType.STRING)) {
-                        String playerUuid = container.get(nk, PersistentDataType.STRING);
-                        BirthdayData sendToBirthdayData = getBirthdayData(playerUuid);
-                        if (sendToBirthdayData == null) {
-                            Message.sendErrorMessage(player, BirthdayCard.PREFIX, "誕生日が登録されていません");
-                            return true;
-                        }
-                        Book book = (Book) mainHandItem.getItemMeta();
-                        Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "お誕生日カードを送信しました");
-                        player.getInventory().remove(mainHandItem);
-                        String pageJson = PageJsonUtils.serializePageJson(book.pages());
-                        birthdayCardRepository.createBirthdayMessage(sendToBirthdayData.getId(), player, pageJson);
-                    } else {
-                        Message.sendErrorMessage(player, BirthdayCard.PREFIX, "/birthday getで入手した本か確認してください");
-                    }
-                    return true;
-                } else {
+                if (mainHandItem.getType() != Material.WRITTEN_BOOK) {
                     Message.sendErrorMessage(player, BirthdayCard.PREFIX, "著名した本にしてください");
+                    return true;
+                }
+                PersistentDataContainer container = mainHandItem.getItemMeta().getPersistentDataContainer();
+                if (container.has(nk, PersistentDataType.STRING)) {
+                    String playerUuid = container.get(nk, PersistentDataType.STRING);
+                    BirthdayData sendToBirthdayData = getBirthdayData(playerUuid);
+                    if (sendToBirthdayData == null) {
+                        Message.sendErrorMessage(player, BirthdayCard.PREFIX, "誕生日が登録されていません");
+                        return true;
+                    }
+                    if (sendToBirthdayData.getUuid().equals(player.getUniqueId().toString())) {
+                        Message.sendErrorMessage(player, BirthdayCard.PREFIX, "自分自身にメッセージを送信することはできません");
+                        return true;
+                    }
+                    Book book = (Book) mainHandItem.getItemMeta();
+                    Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "お誕生日カードを送信しました");
+                    player.getInventory().remove(mainHandItem);
+                    String pageJson = PageJsonUtils.serializePageJson(book.pages());
+                    birthdayCardRepository.createBirthdayMessage(sendToBirthdayData.getId(), player, pageJson);
+                } else {
+                    Message.sendErrorMessage(player, BirthdayCard.PREFIX, "/birthday getで入手した本か確認してください");
                 }
                 return true;
             case "gift":
