@@ -2,6 +2,9 @@ package space.yurisi.universecorev2.subplugins.birthdaycard.command;
 
 import net.kyori.adventure.inventory.Book;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -118,9 +121,8 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                     Message.sendErrorMessage(player, BirthdayCard.PREFIX, "削除するバースデーデータが見つかりませんでした");
                     return false;
                 }
-
-                birthdayCardRepository.deleteBirthdayData(removeBirthdayData);
-                Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "自身のバースデーデータを削除しました");
+                Message.sendWarningMessage(player, BirthdayCard.PREFIX, "本当に削除しますか？これまでにもらったメッセージも削除されます");
+                Message.sendNormalMessage(player, BirthdayCard.PREFIX, "§c[削除する]", ClickEvent.runCommand("/birthday　removeconfirm"), "バースデーデータを削除します");
                 return true;
 
             case "get":
@@ -275,6 +277,23 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 BookMeta bookMeta = (BookMeta) book;
                 bookItem.setItemMeta(bookMeta);
                 player.getInventory().addItem(bookItem);
+            case "removeconfirm":
+                BirthdayData removeConfirmBirthdayData = getBirthdayData(player.getUniqueId().toString());
+                if (removeConfirmBirthdayData == null) {
+                    Message.sendErrorMessage(player, BirthdayCard.PREFIX, "削除するバースデーデータが見つかりませんでした");
+                    return true;
+                }
+                List<BirthdayMessages> removeConfirmBirthdayMessagesList = new ArrayList<>();
+                try {
+                    removeConfirmBirthdayMessagesList = birthdayCardRepository.getBirthdayMessages(removeConfirmBirthdayData.getId());
+                } catch (BirthdayDataNotFoundException ignored) {
+                    //NOOP
+                }
+                removeConfirmBirthdayMessagesList.forEach(removeConfirmBirthdayMessages ->{
+                    birthdayCardRepository.deleteBirthdayMessage(removeConfirmBirthdayMessages);
+                });
+                birthdayCardRepository.deleteBirthdayData(removeConfirmBirthdayData);
+                Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "自身のバースデーデータを削除しました");
                 return true;
             default:
                 Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "引数を間違えています");
