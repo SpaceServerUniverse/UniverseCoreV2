@@ -47,9 +47,8 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
 
     private boolean isValidDate(String monthArg, String dayArg, Player player) {
         if (monthArg == null || dayArg == null || !NumberUtils.isNumeric(monthArg) || !NumberUtils.isNumeric(dayArg)) {
-            Message.sendErrorMessage(player, BirthdayCard.PREFIX, "引数が間違えているよ確認してください");
-            return false;
             Message.sendErrorMessage(player, BirthdayCard.PREFIX, "/birthday register <月> <日>");
+            return true;
         }
         return true;
     }
@@ -102,7 +101,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 if (!isValidDate(args[1], args[2], player)) return false;
 
                 MonthDay registerMonthDay = parseMonthDay(args[1], args[2], player);
-                if (registerMonthDay == null) return false;
+                if (registerMonthDay == null) return true;
 
                 UUID registerPlayerUUID = player.getUniqueId();
                 BirthdayData existingData = getBirthdayData(registerPlayerUUID.toString());
@@ -120,7 +119,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 BirthdayData removeBirthdayData = getBirthdayData(player.getUniqueId().toString());
                 if (removeBirthdayData == null) {
                     Message.sendErrorMessage(player, BirthdayCard.PREFIX, "削除するバースデーデータが見つかりませんでした");
-                    return false;
+                    return true;
                 }
                 Message.sendWarningMessage(player, BirthdayCard.PREFIX, "本当に削除しますか？これまでにもらったメッセージも削除されます");
                 Message.sendNormalMessage(player, BirthdayCard.PREFIX, "§c[削除する]", ClickEvent.runCommand("/birthday　removeconfirm"), "バースデーデータを削除します");
@@ -134,7 +133,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 OfflinePlayer birthdayPlayerToGet = Bukkit.getOfflinePlayer(args[1]);
                 if (birthdayPlayerToGet == null) {
                     Message.sendErrorMessage(player, BirthdayCard.PREFIX, "プレイヤーが見つかりません");
-                    return false;
+                    return true;
                 }
                 BirthdayData birthdayData = getBirthdayData(birthdayPlayerToGet.getUniqueId().toString());
                 if (birthdayData == null) {
@@ -170,7 +169,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 OfflinePlayer birthdayPlayer = Bukkit.getOfflinePlayer(args[1]);
                 if (birthdayPlayer == null) {
                     Message.sendErrorMessage(player, BirthdayCard.PREFIX, "プレイヤーが見つかりません");
-                    return false;
+                    return true;
                 }
                 data = getBirthdayData(birthdayPlayer.getUniqueId().toString());
                 if (data == null) {
@@ -280,6 +279,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 BookMeta bookMeta = (BookMeta) book;
                 bookItem.setItemMeta(bookMeta);
                 player.getInventory().addItem(bookItem);
+                return true;
             case "removeconfirm":
                 BirthdayData removeConfirmBirthdayData = getBirthdayData(player.getUniqueId().toString());
                 if (removeConfirmBirthdayData == null) {
@@ -315,6 +315,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 player.sendMessage(helpMessage);
                 break;
         }
+        return true;
     }
 
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
