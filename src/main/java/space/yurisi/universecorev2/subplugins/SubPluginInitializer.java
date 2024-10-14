@@ -6,6 +6,7 @@ import space.yurisi.universecorev2.subplugins.blockcopystick.BlockCopyStick;
 import space.yurisi.universecorev2.subplugins.changemessages.ChangeMessages;
 import space.yurisi.universecorev2.subplugins.chestshop.ChestShop;
 import space.yurisi.universecorev2.subplugins.customname.CustomName;
+import space.yurisi.universecorev2.subplugins.elevator.Elevator;
 import space.yurisi.universecorev2.subplugins.evolutionitem.EvolutionItem;
 import space.yurisi.universecorev2.subplugins.fishingsystem.FishingSystem;
 import space.yurisi.universecorev2.subplugins.gacha.Gacha;
@@ -78,6 +79,7 @@ public class SubPluginInitializer {
         this.subPlugins.add(new TickFreezer());
         this.subPlugins.add(new UniverseGuns());
         this.subPlugins.add(new SnowSafeFrame());
+        this.subPlugins.add(new Elevator());
     }
 
     public void onEnable() {
