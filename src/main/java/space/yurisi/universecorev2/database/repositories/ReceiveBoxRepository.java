@@ -108,6 +108,8 @@ public class ReceiveBoxRepository {
 
     /**
      * 受取アイテムを更新します
+     *
+     * @return ReceiveBox
      */
     public ReceiveBox updateReceiveBox(ReceiveBox receiveBox){
         Session session = this.sessionFactory.getCurrentSession();
