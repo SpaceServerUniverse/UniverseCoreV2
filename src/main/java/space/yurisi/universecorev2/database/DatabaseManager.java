@@ -244,7 +244,7 @@ public class DatabaseManager {
 
     /**
      * 受取ボックスリポジトリーを取得
-     * @return
+     * @return ReceiveBoxRepository 受取ボックスのリポジトリ
      */
     public ReceiveBoxRepository getReceiveBoxRepository(){
         return receiveBoxRepository;
