@@ -42,7 +42,7 @@ public class ReceiveBoxRepository {
     /**
      * 受取アイテムをプライマリーキーから検索します
      * @param id
-     * @return
+     * @return ReceiveBox
      * @throws ReceiveBoxNotFoundException
      */
     public ReceiveBox getItemFromId(Long id) throws ReceiveBoxNotFoundException {
