@@ -120,7 +120,7 @@ commands:
   item:
     description: メインハンドに持ったアイテムの名前を表示します
 
-  #ReceiveBox
+  # ReceiveBox
   receive:
     description: アイテム受取ボックスを表示します
   addreceive:
