@@ -85,7 +85,7 @@ public class ReceiveBoxRepository {
     /**
      * 受取アイテムをプレイヤーから検索します
      * @param player
-     * @return
+     * @return List<ReceiveBox>
      */
     public List<ReceiveBox> getReceiveBoxesFromPlayer(Player player) {
         Session session = this.sessionFactory.getCurrentSession();
