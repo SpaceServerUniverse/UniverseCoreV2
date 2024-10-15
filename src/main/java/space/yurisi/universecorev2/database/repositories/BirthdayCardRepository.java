@@ -138,10 +138,9 @@ public class BirthdayCardRepository {
      * MonthDayからバースデーデータを複数取得します
      *
      * @param monthDay
-     * @return
-     * @throws BirthdayDataNotFoundException
+     * @return 指定された月日が存在しない場合は空のリスト、存在する場合は該当するバースデーデータのリスト
      */
-    public List<BirthdayData> getBirthdayDataByMonthDay(MonthDay monthDay) throws BirthdayDataNotFoundException {
+    public List<BirthdayData> getBirthdayDataByMonthDay(MonthDay monthDay){
         Session session = this.sessionFactory.getCurrentSession();
         try {
             session.beginTransaction();
@@ -151,9 +150,6 @@ public class BirthdayCardRepository {
                     .getResultList();
             session.getTransaction().commit();
 
-            if (data.isEmpty()) {
-                throw new BirthdayDataNotFoundException("Birthday data not found for " + monthDay);
-            }
             return data;
         } finally {
             session.close();
