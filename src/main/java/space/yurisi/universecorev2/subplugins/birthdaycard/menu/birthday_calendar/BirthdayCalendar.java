@@ -15,11 +15,9 @@ import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.SimpleItem;
 import xyz.xenondevs.invui.window.Window;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.MonthDay;
-import java.time.YearMonth;
+import java.time.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class BirthdayCalendar implements BaseMenu {
     private BirthdayCardRepository birthdayCardRepository;
@@ -29,7 +27,6 @@ public class BirthdayCalendar implements BaseMenu {
     String charPools = "ABCDEFGHIJKLMNOPQRSTUVWXYZ012345678";
     String[] months = {"January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"};
-    private Map<Integer, Map<Integer, List<BirthdayData>>> birthdayDataCache = new HashMap<>();
 
     public BirthdayCalendar(List<List<Item>> listItems, Integer page) {
         birthdayCardRepository = UniverseCoreV2API.getInstance().getDatabaseManager().getBirthdayCardRepository();
@@ -39,10 +36,11 @@ public class BirthdayCalendar implements BaseMenu {
 
     public void sendMenu(Player player) {
         if (listItems == null) {
-
             listItems = new ArrayList<>();
             currentItems = new ArrayList<>();
             for (int month = 1; month <= 12; month++) {
+                List<BirthdayData> monthBirthdayData = birthdayCardRepository.getBirthdayDataByMonth(Month.of(month));
+                Map<Integer, List<BirthdayData>> birthdayDataCache = monthBirthdayData.stream().collect(Collectors.groupingBy(BirthdayData::getDay));
                 YearMonth yearMonth = YearMonth.of(LocalDate.now().getYear(), month);
                 LocalDate firstDayOfMonth = yearMonth.atDay(1);
                 int daysInMonth = yearMonth.lengthOfMonth();
@@ -52,8 +50,7 @@ public class BirthdayCalendar implements BaseMenu {
                     currentItems.add((new SimpleItem(new ItemBuilder(Material.AIR).setDisplayName(""))));
                 }
                 for (int day = 1; day <= daysInMonth; day++) {
-                    List<BirthdayData> birthdays = birthdayCardRepository.getBirthdayDataByMonthDay(MonthDay.of(month, day));
-                    //420回dbにアクセスしますパフォーマンスヤバそう
+                    List<BirthdayData> birthdays = birthdayDataCache.getOrDefault(day, Collections.emptyList());
                     currentItems.add(new BirthdayCalendarMenuItem(birthdays, MonthDay.of(month, day)));
                 }
                 listItems.add(currentItems);

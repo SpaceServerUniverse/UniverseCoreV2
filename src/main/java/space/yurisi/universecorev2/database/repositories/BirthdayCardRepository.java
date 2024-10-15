@@ -8,6 +8,7 @@ import space.yurisi.universecorev2.database.models.BirthdayData;
 import space.yurisi.universecorev2.database.models.BirthdayMessages;
 import space.yurisi.universecorev2.exception.BirthdayDataNotFoundException;
 
+import java.time.Month;
 import java.time.MonthDay;
 import java.util.List;
 
@@ -147,6 +148,27 @@ public class BirthdayCardRepository {
             List<BirthdayData> data = session.createQuery("FROM BirthdayData WHERE month = :month AND day = :day", BirthdayData.class)
                     .setParameter("month", monthDay.getMonthValue())
                     .setParameter("day", monthDay.getDayOfMonth())
+                    .getResultList();
+            session.getTransaction().commit();
+
+            return data;
+        } finally {
+            session.close();
+        }
+    }
+
+    /**
+     * Monthからバースデーデータを複数取得します
+     *
+     * @param month
+     * @return 指定された月が存在しない場合は空のリスト、存在する場合は該当するバースデーデータのリスト
+     */
+    public List<BirthdayData> getBirthdayDataByMonth(Month month) {
+        Session session = this.sessionFactory.getCurrentSession();
+        try {
+            session.beginTransaction();
+            List<BirthdayData> data = session.createQuery("FROM BirthdayData WHERE month = :month", BirthdayData.class)
+                    .setParameter("month", month.getValue())
                     .getResultList();
             session.getTransaction().commit();
 
