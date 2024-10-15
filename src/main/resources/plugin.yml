@@ -128,7 +128,7 @@ commands:
 
   #BirthdayCard
   birthday:
-    description: "お誕生日カード"
+    description: お誕生日カードメニューを開きます
 
 permissions:
   # UniverseCoreV2
