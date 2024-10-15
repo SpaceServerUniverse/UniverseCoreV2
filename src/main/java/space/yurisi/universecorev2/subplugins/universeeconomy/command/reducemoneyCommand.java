@@ -5,6 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import space.yurisi.universecorev2.api.LuckPermsWrapper;
 import space.yurisi.universecorev2.exception.MoneyNotFoundException;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
 import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomyAPI;
@@ -18,6 +19,11 @@ public class reducemoneyCommand extends BaseCommand {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player player)) {
             return false;
+        }
+
+        if (!LuckPermsWrapper.isUserInAdminOrDevGroup(player)) {
+            player.sendMessage(getErrorMessage("あなたはこのコマンドを実行する権限がありません。"));
+            return true;
         }
 
         if (args.length != 2) {
