@@ -1,5 +1,6 @@
 package space.yurisi.universecorev2.subplugins.birthdaycard.event.player;
 
+import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -43,6 +44,7 @@ public class JoinEvent implements Listener {
             if (thisYearBirthday.isEqual(today)) {
                 if (birthdayData.getUuid().equals(player.getUniqueId().toString())) {
                     Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "今日はあなたの誕生日です！");
+                    player.performCommand("birthday gift");
                     return;
                 }
             }
