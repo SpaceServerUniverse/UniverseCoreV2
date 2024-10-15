@@ -137,7 +137,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                     Message.sendErrorMessage(player, BirthdayCard.PREFIX, "バースデーデータが見つかりません");
                     return true;
                 }
-                if (birthdayData.getUuid().equals(birthdayPlayerToGet.getUniqueId().toString())) {
+                if (birthdayData.getUuid().equals(player.getUniqueId().toString())) {
                     Message.sendErrorMessage(player, BirthdayCard.PREFIX, "自分自身にメッセージを書くことはできません");
                     return true;
                 }
