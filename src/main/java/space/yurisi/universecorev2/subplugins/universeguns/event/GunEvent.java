@@ -575,13 +575,19 @@ public class GunEvent implements Listener {
         if (!(gunItem instanceof Gun gun)) {
             return;
         }
+        double weight = gun.getWeight();
+        if(isZoom.contains(player)){
+            weight = gun.getIsZoomWalkSpeed();
+        }
 
         if (!gun.getIsJumpEnabled()) {
             Vector velocity = player.getVelocity();
-            double weight = gun.getWeight();
             velocity.setX(velocity.getX() * weight);
+            velocity.setY(velocity.getY() * weight);
             velocity.setZ(velocity.getZ() * weight);
             player.setVelocity(velocity);
+        }else{
+            event.setCancelled(true);
         }
     }
 

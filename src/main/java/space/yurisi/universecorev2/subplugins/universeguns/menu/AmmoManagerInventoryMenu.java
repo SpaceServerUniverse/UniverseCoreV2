@@ -57,12 +57,12 @@ public class AmmoManagerInventoryMenu implements BaseMenu {
                     .addIngredient('s', powder4)
                     .addIngredient('t', powder5)
 
-                    .addIngredient('a', new HandGunAmmoItem(this.connector, 60, player))
-                    .addIngredient('b', new SubMachineGunAmmoItem(this.connector, 120, player))
-                    .addIngredient('c', new AssaultRifleAmmoItem(this.connector, 120, player))
-                    .addIngredient('d', new SniperRifleAmmoItem(this.connector, 48, player))
-                    .addIngredient('e', new ShotGunAmmoItem(this.connector, 60, player))
-                    .addIngredient('f', new LightMachineGunAmmoItem(this.connector, 240, player))
+                    .addIngredient('a', new HandGunAmmoItem(this.connector, 30, player))
+                    .addIngredient('b', new SubMachineGunAmmoItem(this.connector, 60, player))
+                    .addIngredient('c', new AssaultRifleAmmoItem(this.connector, 60, player))
+                    .addIngredient('d', new SniperRifleAmmoItem(this.connector, 24, player))
+                    .addIngredient('e', new ShotGunAmmoItem(this.connector, 30, player))
+                    .addIngredient('f', new LightMachineGunAmmoItem(this.connector, 80, player))
                     .addIngredient('g', new ExplosiveAmmoItem(this.connector, 12, player));
 
             xyz.xenondevs.invui.window.Window window = Window.single()
