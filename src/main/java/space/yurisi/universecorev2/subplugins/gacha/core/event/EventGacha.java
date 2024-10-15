@@ -46,6 +46,11 @@ public abstract class EventGacha {
     public void turn() {
         Boolean ticket = UniverseItem.removeItem(player, "gacha_ticket");
 
+        if (player.getInventory().firstEmpty() == -1) {
+            Message.sendErrorMessage(player, "[ガチャAI]", "インベントリがいっぱいです。(スタックが余ってる場合も一度しまって下さい。)");
+            return;
+        }
+
         if(!ticket){
             Message.sendErrorMessage(player, "[ガチャAI]", "チケットが足りません。");
             return;
