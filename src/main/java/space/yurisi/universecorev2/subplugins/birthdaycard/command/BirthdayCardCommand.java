@@ -247,6 +247,11 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                     Message.sendErrorMessage(player, BirthdayCard.PREFIX, "まだ誕生日じゃないよ。誕生日を確認して、後で戻ってきてね！");
                     return true;
                 }
+                if (player.getInventory().firstEmpty() == -1) {
+                    Message.sendErrorMessage(player, BirthdayCard.PREFIX, "インベントリーがいっぱいです");
+                    Message.sendNormalMessage(player, BirthdayCard.PREFIX, "[受け取る]", ClickEvent.runCommand("/birthday gift"), "お誕生日カードを受け取る");
+                    return true;
+                }
                 List<BirthdayMessages> birthdayMessagesList = null;
                 try {
                     birthdayMessagesList = birthdayCardRepository.getBirthdayMessages(gifToBirthdayData.getId());
