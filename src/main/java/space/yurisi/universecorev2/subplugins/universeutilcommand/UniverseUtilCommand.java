@@ -7,6 +7,7 @@ import space.yurisi.universecorev2.subplugins.universeutilcommand.salute.otiComm
 import space.yurisi.universecorev2.subplugins.universeutilcommand.salute.otuCommand;
 import space.yurisi.universecorev2.subplugins.universeutilcommand.suicide.suCommand;
 import space.yurisi.universecorev2.subplugins.universeutilcommand.dice.DiceCommand;
+import space.yurisi.universecorev2.subplugins.universeutilcommand.trash.TrashCommand;
 
 public class UniverseUtilCommand implements SubPlugin {
 
@@ -22,6 +23,9 @@ public class UniverseUtilCommand implements SubPlugin {
 
         // dice
         core.getCommand("dice").setExecutor(new DiceCommand());
+
+        // trash
+        core.getCommand("trash").setExecutor(new TrashCommand());
     }
 
     @Override

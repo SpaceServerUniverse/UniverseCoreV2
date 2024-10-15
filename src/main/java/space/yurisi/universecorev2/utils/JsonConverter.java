@@ -1,4 +1,4 @@
-package space.yurisi.universecorev2.subplugins.freemarket.data;
+package space.yurisi.universecorev2.utils;
 
 import com.google.gson.Gson;
 import org.bukkit.inventory.ItemStack;

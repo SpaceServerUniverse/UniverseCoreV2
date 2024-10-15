@@ -85,6 +85,7 @@ public class Fish {
         if (meta == null) {
             return item;
         }
+
         PersistentDataContainer container = meta.getPersistentDataContainer();
         container.set(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.FISH), PersistentDataType.STRING, name);
 

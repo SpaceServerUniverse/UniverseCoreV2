@@ -6,9 +6,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import space.yurisi.universecorev2.subplugins.universeguns.constants.GunType;
 
 import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.inventory.ItemStack;
-import space.yurisi.universecorev2.subplugins.universeguns.constants.GunType;
 
 public final class RPG extends Gun {
 
@@ -32,9 +29,10 @@ public final class RPG extends Gun {
         this.weight = 0.10F;
         this.fireRate = 60;
         this.recoil = 1;
-        this.spread = 5.0D;
+        this.spread = 0.5D;
         this.bulletNumber = 1;
         this.bulletSpeed = 2.0D;
+        this.range = 500;
         this.isJumpEnabled = false;
         this.shotSound = Sound.ENTITY_FIREWORK_ROCKET_LAUNCH;
         this.volumeSound = 10.0F;

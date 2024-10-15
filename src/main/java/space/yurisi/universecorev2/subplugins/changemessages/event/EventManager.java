@@ -20,7 +20,7 @@ public class EventManager {
     }
 
     private void init(){
-        Bukkit.getPluginManager().registerEvents(new JoinEvent(this.main.getConfigClass()), core);
+        Bukkit.getPluginManager().registerEvents(new JoinEvent(this.main.getConfigClass(), core), core);
         Bukkit.getPluginManager().registerEvents(new QuitEvent(), core);
         Bukkit.getPluginManager().registerEvents(new DeathEvent(), core);
     }

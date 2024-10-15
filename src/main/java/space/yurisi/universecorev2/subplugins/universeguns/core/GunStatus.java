@@ -3,43 +3,80 @@ package space.yurisi.universecorev2.subplugins.universeguns.core;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
+import space.yurisi.universecorev2.exception.AmmoNotFoundException;
+import space.yurisi.universecorev2.exception.UserNotFoundException;
 import space.yurisi.universecorev2.item.gun.Gun;
+import space.yurisi.universecorev2.subplugins.universeguns.connector.UniverseCoreAPIConnector;
 
 public class GunStatus {
 
     private Gun gun;
 
-    private int currentAmmo;
+    private long inventoryAmmo;
+
+    private int magazineAmmo;
 
     private boolean isReloading;
 
     private long reloadEndTime;
 
-    public GunStatus(Gun gun){
+    private UniverseCoreAPIConnector connector;
+
+    public GunStatus(Gun gun, UniverseCoreAPIConnector connector) {
         this.gun = gun;
-        this.currentAmmo = gun.getMagazineSize();
+        this.magazineAmmo = gun.getMagazineSize();
+        this.connector = connector;
     }
 
-    public int getCurrentAmmo(){
-        return this.currentAmmo;
+    public void setInventoryAmmo(Player player, long inventoryAmmo) throws UserNotFoundException, AmmoNotFoundException {
+        this.inventoryAmmo = inventoryAmmo;
+        connector.setAmmoFromUserId(player, gun.getType(), inventoryAmmo);
+    }
+
+    public long getInventoryAmmo(Player player) throws UserNotFoundException, AmmoNotFoundException {
+        return connector.getAmmoFromUserId(player, gun.getType());
+    }
+
+    public int getMagazineAmmo(){
+        return this.magazineAmmo;
     }
 
     public boolean shoot() {
-        if (this.currentAmmo <= 0 || this.isReloading) {
+        if (this.magazineAmmo <= 0 || this.isReloading) {
             return false;
         }
-        this.currentAmmo--;
+        this.magazineAmmo--;
         return true;
     }
 
-    public void startReload(int reloadTime) {
+    public boolean startReload(int reloadTime, Player player) throws UserNotFoundException, AmmoNotFoundException {
+        if(!connector.isExistsAmmoData(player)){
+            connector.AmmoDataInit(player);
+        }
+        this.inventoryAmmo = getInventoryAmmo(player);
+        if(inventoryAmmo <= 0){
+            return false;
+        }
         this.isReloading = true;
         this.reloadEndTime = System.currentTimeMillis() + reloadTime;
+        return true;
     }
 
-    public void finishReload() {
+    public void finishReload(Player player) throws UserNotFoundException, AmmoNotFoundException {
         this.isReloading = false;
-        this.currentAmmo = gun.getMagazineSize();
+        connector.setAmmoFromUserId(player, gun.getType(), getInventoryAmmo(player) + magazineAmmo);
+        if(this.inventoryAmmo <= gun.getMagazineSize()){
+            this.magazineAmmo = (int) this.inventoryAmmo;
+            setInventoryAmmo(player, 0);
+        } else {
+            setInventoryAmmo(player, this.inventoryAmmo - (gun.getMagazineSize() - magazineAmmo));
+            this.magazineAmmo = gun.getMagazineSize();
+        }
+    }
+
+    public void updateAmmo(Player player, boolean isZoom) throws UserNotFoundException, AmmoNotFoundException {
+        this.inventoryAmmo = getInventoryAmmo(player);
+        updateActionBar(player, isZoom);
     }
 
     public String getAmmoDisplay() {
@@ -48,7 +85,7 @@ public class GunStatus {
             double seconds = remainingTime / 1000.0;
             return String.format("<< Reload %.1f >>", seconds);
         }
-        return String.format("<< %d/%d >>", currentAmmo, gun.getMagazineSize());
+        return String.format("<< %d/%d >>", magazineAmmo, this.inventoryAmmo);
     }
 
     public void cancelReload() {

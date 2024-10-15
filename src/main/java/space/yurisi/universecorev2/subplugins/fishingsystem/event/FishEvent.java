@@ -3,6 +3,7 @@ package space.yurisi.universecorev2.subplugins.fishingsystem.event;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.util.Vector;
 import space.yurisi.universecorev2.item.LevellingCustomItem;
 import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.item.fishingrod.FishingRod;
@@ -41,8 +43,6 @@ public class FishEvent implements Listener {
         }
 
         Item caught = (Item) event.getCaught();
-        ItemStack item = caught.getItemStack();
-        ItemMeta meta = item.getItemMeta();
 
         if (!UniverseItem.isUniverseItemFromId(hand, FishingRod.id) || !UniverseItem.isLevelingItem(hand)) {
             return;
@@ -59,6 +59,7 @@ public class FishEvent implements Listener {
         ItemStack fish;
         switch (player.getLocation().getWorld().getName()) {
             case "earth":
+            case "world":
                 fish = new EarthFishList().catchFish(player, level, feed);
                 break;
             case "lobby":
@@ -68,13 +69,7 @@ public class FishEvent implements Listener {
                 return;
         }
 
-        item.setType(fish.getType());
-        Component name = fish.displayName();
-        String displayName = StringHelper.getComponent2String(name);
-        List<Component> lore = fish.lore();
-        meta.displayName(Component.text(displayName));
-        meta.lore(lore);
-        item.setItemMeta(meta);
+        caught.setItemStack(fish);
     }
 
     private static boolean canUseFishFeed(Player player) {

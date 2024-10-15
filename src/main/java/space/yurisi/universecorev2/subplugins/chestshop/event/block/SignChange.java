@@ -12,6 +12,7 @@ import org.bukkit.block.sign.Side;
 import org.bukkit.block.sign.SignSide;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import space.yurisi.universecorev2.UniverseCoreV2API;
@@ -42,9 +43,6 @@ public class SignChange implements Listener {
         if (!(sign.getBlockData() instanceof WallSign)) return;
 
         ChestShopRepository chestShopRepository = UniverseCoreV2API.getInstance().getDatabaseManager().getChestShopRepository();
-        UniverseEconomyAPI universeEconomyAPI = UniverseEconomyAPI.getInstance();
-        UserRepository userRepository = UniverseCoreV2API.getInstance().getDatabaseManager().getUserRepository();
-        MoneyRepository moneyRepository = UniverseCoreV2API.getInstance().getDatabaseManager().getMoneyRepository();
         Location location = sign.getLocation();
         ChestShop chestShop = null;
 
@@ -53,79 +51,7 @@ public class SignChange implements Listener {
         } catch (ChestShopNotFoundException ignored) {
             //NOOP
         }
-        if (chestShop != null) {
-            if (player.getUniqueId().toString().equals(chestShop.getUuid())) {
-                SuperMessageHelper.sendErrorMessage(player, "このチェストショップはあなたがオーナーなため買うことができません");
-                event.setCancelled(true);
-                return;
-            }
-            Integer emptySlot = player.getInventory().firstEmpty();
-
-            if (emptySlot == -1) {
-                SuperMessageHelper.sendErrorMessage(player, "インベントリーがいっぱいです");
-                event.setCancelled(true);
-                return;
-            }
-            World world = Bukkit.getWorld(chestShop.getWorld_name());
-            Location chestLocation = new Location(world, chestShop.getMainChest_x(), chestShop.getMainChest_y(), chestShop.getMainChest_z());
-            Block chestBlock = chestLocation.getBlock();
-            if (!(chestBlock.getType() == Material.CHEST)) return;
-            org.bukkit.block.Chest chest = (org.bukkit.block.Chest) chestBlock.getState();
-            ItemStack itemStack;
-            try {
-                itemStack = ItemUtils.deserialize(chestShop.getItem());
-            } catch (IllegalArgumentException | JsonSyntaxException e) {
-                SuperMessageHelper.sendErrorMessage(player, "不明なエラーが発生しました");
-                event.setCancelled(true);
-                return;
-            }
-            boolean doItemRemove;
-            int remaining = itemStack.getAmount();
-            doItemRemove = InventoryUtils.RemoveItemFormChest(chest, itemStack, remaining);
-
-            Chest chestBlockData = (Chest) chest.getBlockData();
-            if (!doItemRemove) {
-                if (chestBlockData.getType() != Chest.Type.SINGLE) {
-                    BlockFace face = DoubleChestFinder.getNeighboringChestBlockFace(chestBlockData);
-                    if (face != null) {
-                        Block neighborBlock = chestBlock.getRelative(face);
-                        if (neighborBlock.getState() instanceof org.bukkit.block.Chest) {
-                            doItemRemove = InventoryUtils.RemoveItemFormChest((org.bukkit.block.Chest) neighborBlock, itemStack, remaining);
-                        }
-                    }
-                }
-            }
-            if (!(doItemRemove)) {
-                SuperMessageHelper.sendErrorMessage(player, "チェスト内の在庫が不足しています");
-                event.setCancelled(true);
-                return;
-            }
-
-            try {
-                universeEconomyAPI.reduceMoney(player, chestShop.getPrice(), "チェストショップでの購入:" + ItemUtils.name(itemStack) + ":" + itemStack.getAmount());
-            } catch (UserNotFoundException | MoneyNotFoundException e) {
-                event.setCancelled(true);
-                return;
-            } catch (CanNotReduceMoneyException e) {
-                SuperMessageHelper.sendErrorMessage(player, "お金が不足しています");
-                event.setCancelled(true);
-                return;
-            }
-
-            try {
-                User owner = userRepository.getUserFromUUID(UUID.fromString(chestShop.getUuid()));
-                Money ownerMoney = moneyRepository.getMoneyFromUserId(owner.getId());
-                ownerMoney.setMoney(ownerMoney.getMoney() + chestShop.getPrice());
-                moneyRepository.updateMoney(ownerMoney, chestShop.getPrice(), "チェストショップでの売却:" + ItemUtils.name(itemStack) + ":" + itemStack.getAmount());
-            } catch (UserNotFoundException | MoneyNotFoundException e) {
-                event.setCancelled(true);
-                return;
-            }
-
-            player.getInventory().addItem(itemStack);
-            SuperMessageHelper.sendSuccessMessage(player, "チェストショップから" + ItemUtils.name(itemStack) + "を" + itemStack.getAmount() + "こ購入しました");
-            event.setCancelled(true);
-        } else {
+        if (chestShop == null) {
             BlockData signBlockData = sign.getBlockData();
             if (!(signBlockData instanceof WallSign)) return;
 

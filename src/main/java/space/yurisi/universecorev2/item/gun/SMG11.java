@@ -31,6 +31,7 @@ public final class SMG11 extends Gun {
         this.spread = 1.0D;
         this.bulletNumber = 1;
         this.bulletSpeed = 3.0D;
+        this.range = 500;
         this.isJumpEnabled = true;
         this.shotSound = Sound.ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR;
         this.volumeSound = 3.0F;

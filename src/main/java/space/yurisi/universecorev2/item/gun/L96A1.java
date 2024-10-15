@@ -31,6 +31,7 @@ public final class L96A1 extends Gun {
         this.spread = 5.0D;
         this.bulletNumber = 1;
         this.bulletSpeed = 2.0D;
+        this.range = 500;
         this.isJumpEnabled = false;
         this.shotSound = Sound.ENTITY_IRON_GOLEM_DAMAGE;
         this.volumeSound = 10.0F;

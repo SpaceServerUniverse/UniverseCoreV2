@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import space.yurisi.universecorev2.utils.Message;
 
 public class UniverseDiscordMessage {
 
@@ -14,6 +15,10 @@ public class UniverseDiscordMessage {
 
     public static void sendMessageToMinecraft(Member discordMember, String discordMessage) {
         String name_format;
+
+        if (!Message.isSafeMessage(discordMessage)) {
+            return;
+        }
 
         if (discordMember.getNickname() == null) {
             name_format = discordMember.getUser().getName();
