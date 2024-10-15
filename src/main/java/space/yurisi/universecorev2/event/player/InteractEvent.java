@@ -22,14 +22,16 @@ public class InteractEvent implements Listener {
             return;
         }
 
-        if (!LuckPermsWrapper.isUserInAdminOrDevGroup(player)) {
-            Message.sendSuccessMessage(player, "[管理AI]", "対象ブロックの利用制限をバイパスしました");
-            event.setCancelled(false);
-            return;
-        }
-
         switch (targetBlock.getType()) {
-            case ENCHANTING_TABLE -> event.setCancelled(true);
+            case ENCHANTING_TABLE -> {
+                if (LuckPermsWrapper.isUserInAdminOrDevGroup(player)) {
+                    Message.sendSuccessMessage(player, "[管理AI]", "対象ブロック [エンチャントテーブル] の利用制限をバイパスしました");
+                    event.setCancelled(false);
+                    break;
+                }
+
+                event.setCancelled(true);
+            }
         }
     }
 
