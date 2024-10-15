@@ -120,7 +120,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                     return true;
                 }
                 Message.sendWarningMessage(player, BirthdayCard.PREFIX, "本当に削除しますか？これまでにもらったメッセージも削除されます");
-                Message.sendNormalMessage(player, BirthdayCard.PREFIX, "§c[削除する]", ClickEvent.runCommand("/birthday　removeconfirm"), "バースデーデータを削除します");
+                Message.sendNormalMessage(player, BirthdayCard.PREFIX, "§c[削除する]", ClickEvent.runCommand("/birthday removeconfirm"), "バースデーデータを削除します");
                 return true;
             case "get":
                 if (args.length < 2) {
