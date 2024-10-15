@@ -156,6 +156,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 player.getInventory().addItem(writableBook);
 
                 Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "お誕生日カードを入手しました");
+                Message.sendNormalMessage(player, BirthdayCard.PREFIX, "[送る]", ClickEvent.runCommand("/birthday send"), "お誕生日カードを送る");
                 return true;
 
             case "check":
@@ -275,6 +276,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                     for (String message : selectedMessages) {
                         pageComponents.add(Component.text(message));
                     }
+                    Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "お誕生日カードをお贈りしました");
                 } else {
                     birthdayMessagesList.forEach(birthdayMessages -> {
                         pageComponents.addAll(PageJsonUtils.deserializePageJson(birthdayMessages.getMessage()));

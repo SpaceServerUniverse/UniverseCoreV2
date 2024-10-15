@@ -54,6 +54,7 @@ public class JoinEvent implements Listener {
                     OfflinePlayer offlineBirthdayPlayer = Bukkit.getOfflinePlayer(playerUUID);
                     String playerName = offlineBirthdayPlayer.getName() != null ? offlineBirthdayPlayer.getName() : "不明なプレイヤー";
                     Message.sendSuccessMessage(player, BirthdayCard.PREFIX, playerName + "の誕生日が近いよ！誕生日カードを書かない？");
+                    Message.sendNormalMessage(player, BirthdayCard.PREFIX, "[誕生日カードを書く]", ClickEvent.runCommand("/birthday get " + playerName), playerName + "の誕生日カードを取得する");
                     return;
                 }
             }
