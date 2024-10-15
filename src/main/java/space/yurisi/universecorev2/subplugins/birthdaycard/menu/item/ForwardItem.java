@@ -7,6 +7,7 @@ import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.controlitem.PageItem;
 
 public class ForwardItem extends PageItem {
+
     public ForwardItem() {
         super(true);
     }

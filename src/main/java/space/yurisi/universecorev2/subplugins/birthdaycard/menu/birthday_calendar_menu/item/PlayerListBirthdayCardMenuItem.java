@@ -6,8 +6,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 import space.yurisi.universecorev2.database.models.BirthdayData;
-import space.yurisi.universecorev2.subplugins.birthdaycard.menu.birthday_calendar.BirthdayCalendar;
-import space.yurisi.universecorev2.subplugins.birthdaycard.menu.birthday_player_list.BirthdayPlayerList;
+import space.yurisi.universecorev2.subplugins.birthdaycard.menu.birthday_player_list_menu.BirthdayPlayerListMenu;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
@@ -34,8 +33,8 @@ public class PlayerListBirthdayCardMenuItem extends AbstractItem {
     @Override
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent inventoryClickEvent) {
         if (!birthdayDataList.isEmpty()) {
-            BirthdayPlayerList birthdayPlayerList = new BirthdayPlayerList(birthdayDataList);
-            birthdayPlayerList.sendMenu(player);
+            BirthdayPlayerListMenu birthdayPlayerListMenu = new BirthdayPlayerListMenu(birthdayDataList);
+            birthdayPlayerListMenu.sendMenu(player);
         }
     }
 }
