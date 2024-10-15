@@ -24,7 +24,7 @@ public class BirthdayCardRepository {
      *
      * @param player   Player
      * @param monthDay MonthDay
-     * @return
+     * @return BirthdayData
      */
     public BirthdayData createBirthdayData(Player player, MonthDay monthDay) {
         String uuid = player.getUniqueId().toString();
