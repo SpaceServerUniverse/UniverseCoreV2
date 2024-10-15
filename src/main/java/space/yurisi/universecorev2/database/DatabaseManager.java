@@ -28,6 +28,7 @@ public class DatabaseManager {
     private final PlayerCountRepository playerCountRepository;
     private final CustomNameRepository customNameRepository;
     private final MarketRepository marketRepository;
+    private final ReceiveBoxRepository receiveBoxRepository;
 
     public DatabaseManager(SessionFactory sessionFactory) {
         this.userRepository = new UserRepository(sessionFactory);
@@ -51,6 +52,7 @@ public class DatabaseManager {
         this.marketRepository = new MarketRepository(sessionFactory);
         this.chestShopRepository = new ChestShopRepository(sessionFactory);
         this.ammoRepository = new AmmoRepository(sessionFactory);
+        this.receiveBoxRepository = new ReceiveBoxRepository(sessionFactory);
     }
 
     /**
@@ -238,5 +240,13 @@ public class DatabaseManager {
      */
     public AmmoRepository getAmmoRepository() {
         return ammoRepository;
+    }
+
+    /**
+     * 受取ボックスリポジトリーを取得
+     * @return ReceiveBoxRepository 受取ボックスのリポジトリ
+     */
+    public ReceiveBoxRepository getReceiveBoxRepository(){
+        return receiveBoxRepository;
     }
 }

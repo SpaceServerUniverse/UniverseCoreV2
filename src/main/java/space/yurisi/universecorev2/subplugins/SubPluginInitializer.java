@@ -19,6 +19,7 @@ import space.yurisi.universecorev2.subplugins.navigation.Navigation;
 import space.yurisi.universecorev2.subplugins.playerhead.PlayerHead;
 import space.yurisi.universecorev2.subplugins.playerinfoscoreboard.PlayerInfoScoreBoard;
 import space.yurisi.universecorev2.subplugins.rankcounter.RankCounter;
+import space.yurisi.universecorev2.subplugins.receivebox.ReceiveBox;
 import space.yurisi.universecorev2.subplugins.repaircream.RepairCream;
 import space.yurisi.universecorev2.subplugins.snowsafeframe.SnowSafeFrame;
 import space.yurisi.universecorev2.subplugins.tickfreezer.TickFreezer;
@@ -79,6 +80,7 @@ public class SubPluginInitializer {
         this.subPlugins.add(new TickFreezer());
         this.subPlugins.add(new UniverseGuns());
         this.subPlugins.add(new SnowSafeFrame());
+        this.subPlugins.add(new ReceiveBox());
         this.subPlugins.add(new Elevator());
     }
 

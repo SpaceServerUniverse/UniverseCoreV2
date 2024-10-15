@@ -120,6 +120,12 @@ commands:
   item:
     description: メインハンドに持ったアイテムの名前を表示します
 
+  # ReceiveBox
+  receive:
+    description: アイテム受取ボックスを表示します
+  addreceive:
+    description: アイテム受取ボックスに追加します
+
 permissions:
   # UniverseCoreV2
   space.yurisi.universecorev2.interactevent.enchanttable:
