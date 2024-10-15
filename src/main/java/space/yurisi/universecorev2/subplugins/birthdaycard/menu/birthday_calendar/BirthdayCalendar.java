@@ -103,7 +103,7 @@ public class BirthdayCalendar implements BaseMenu {
         Window window = Window.single()
                 .setViewer(player)
                 .setGui(gui)
-                .setTitle("BirthdayCard 2024 (" + months[page] + ")")
+                .setTitle("BirthdayCard " + LocalDate.now().getYear() + " " + (" + months[page] + "))
                 .build();
         window.open();
     }
