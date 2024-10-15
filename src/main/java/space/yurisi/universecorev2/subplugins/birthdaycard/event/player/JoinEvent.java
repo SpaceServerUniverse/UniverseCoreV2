@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class JoinEvent implements Listener {
-    private BirthdayCardRepository birthdayCardRepository;
+    private final BirthdayCardRepository birthdayCardRepository;
 
     public JoinEvent() {
         birthdayCardRepository = UniverseCoreV2API.getInstance().getDatabaseManager().getBirthdayCardRepository();
@@ -56,9 +56,9 @@ public class JoinEvent implements Listener {
                 }
             }
 
-            if(birthdayData.isGiftReceived()){
+            if (birthdayData.isGiftReceived()) {
                 LocalDate oneDayLater = LocalDate.now().plusDays(1);
-                if(thisYearBirthday.isAfter(oneDayLater)){
+                if (thisYearBirthday.isAfter(oneDayLater)) {
                     birthdayData.setGiftReceived(false);
                     birthdayCardRepository.updateBirthdayData(birthdayData);
                 }

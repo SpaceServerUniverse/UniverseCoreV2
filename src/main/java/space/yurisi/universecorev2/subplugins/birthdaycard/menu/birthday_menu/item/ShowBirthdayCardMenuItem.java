@@ -18,7 +18,7 @@ public class ShowBirthdayCardMenuItem extends AbstractItem {
 
     @Override
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent inventoryClickEvent) {
-        BirthdayCalendar calendarMenu = new BirthdayCalendar(null,null);
+        BirthdayCalendar calendarMenu = new BirthdayCalendar(null, null);
         calendarMenu.sendMenu(player);
     }
 }

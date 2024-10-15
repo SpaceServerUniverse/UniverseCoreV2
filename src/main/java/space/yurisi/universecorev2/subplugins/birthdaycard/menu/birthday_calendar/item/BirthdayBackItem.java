@@ -15,8 +15,8 @@ import java.util.List;
 
 public class BirthdayBackItem extends AbstractItem {
 
-    private List<List<Item>> listItems;
-    private int page;
+    private final List<List<Item>> listItems;
+    private final int page;
 
     public BirthdayBackItem(List<List<Item>> listItems, int page) {
         this.page = page;
@@ -42,8 +42,8 @@ public class BirthdayBackItem extends AbstractItem {
 
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent inventoryClickEvent) {
         if (clickType == ClickType.LEFT) {
-            if(hasPreviousPage()) {
-                BirthdayCalendar birthdayCalendar = new BirthdayCalendar(listItems,page - 1);
+            if (hasPreviousPage()) {
+                BirthdayCalendar birthdayCalendar = new BirthdayCalendar(listItems, page - 1);
                 birthdayCalendar.sendMenu(player);
             }
         }

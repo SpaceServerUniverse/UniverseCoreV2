@@ -20,13 +20,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class BirthdayCalendar implements BaseMenu {
-    private BirthdayCardRepository birthdayCardRepository;
-    private List<List<Item>> listItems;
-    private int page;
-    private List<Item> currentItems;
+    private final BirthdayCardRepository birthdayCardRepository;
+    private final int page;
     String charPools = "ABCDEFGHIJKLMNOPQRSTUVWXYZ012345678";
+    private List<List<Item>> listItems;
     String[] months = {"January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"};
+    private List<Item> currentItems;
 
     public BirthdayCalendar(List<List<Item>> listItems, Integer page) {
         birthdayCardRepository = UniverseCoreV2API.getInstance().getDatabaseManager().getBirthdayCardRepository();

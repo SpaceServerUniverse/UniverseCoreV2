@@ -14,8 +14,8 @@ import xyz.xenondevs.invui.item.impl.AbstractItem;
 import java.util.List;
 
 public class BirthdayForwardItem extends AbstractItem {
-    private List<List<Item>> listItems;
-    private int page;
+    private final List<List<Item>> listItems;
+    private final int page;
 
     public BirthdayForwardItem(List<List<Item>> listItems, int page) {
         this.page = page;
@@ -34,15 +34,15 @@ public class BirthdayForwardItem extends AbstractItem {
         ItemBuilder builder = new ItemBuilder(Material.GREEN_STAINED_GLASS_PANE).setDisplayName("次のページ");
         builder.setDisplayName("次のページ")
                 .addLoreLines(hasNextPage()
-                        ? (page +2) + "/" + getPageAmount()
+                        ? (page + 2) + "/" + getPageAmount()
                         : "最後のページです");
         return builder;
     }
 
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent inventoryClickEvent) {
         if (clickType == ClickType.LEFT) {
-            if(hasNextPage()) {
-                BirthdayCalendar birthdayCalendar = new BirthdayCalendar(listItems,page + 1);
+            if (hasNextPage()) {
+                BirthdayCalendar birthdayCalendar = new BirthdayCalendar(listItems, page + 1);
                 birthdayCalendar.sendMenu(player);
             }
         }

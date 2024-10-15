@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class BirthdayPlayerListMenu implements BaseMenu {
-    private List<BirthdayData> birthdayDataList;
+    private final List<BirthdayData> birthdayDataList;
 
     public BirthdayPlayerListMenu(List<BirthdayData> birthdayDataList) {
         this.birthdayDataList = birthdayDataList;

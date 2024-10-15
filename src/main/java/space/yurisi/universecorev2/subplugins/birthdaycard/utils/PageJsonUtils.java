@@ -1,11 +1,9 @@
 package space.yurisi.universecorev2.subplugins.birthdaycard.utils;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 import java.util.List;

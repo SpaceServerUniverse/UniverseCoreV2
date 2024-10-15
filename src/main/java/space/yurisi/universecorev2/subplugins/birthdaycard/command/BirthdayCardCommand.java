@@ -5,7 +5,10 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -35,8 +38,19 @@ import java.time.MonthDay;
 import java.util.*;
 
 public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
-    private NamespacedKey nk;
-    private BirthdayCardRepository birthdayCardRepository;
+    private final NamespacedKey nk;
+    private final BirthdayCardRepository birthdayCardRepository;
+    List<String> birthdayMessages = Arrays.asList(
+            "お誕生日おめでとう！今日は特別な日だから、素敵なことがたくさんありますように！",
+            "ハッピーバースデー！どんな日になるか楽しみだね。素晴らしい一年にしよう！",
+            "お誕生日おめでとう！あなたの笑顔がもっと見られる一年になりますように！",
+            "お誕生日おめでとうございます。新しい一年が素晴らしい成長と幸福に満ちたものとなりますように。",
+            "この特別な日を迎えられたことを心よりお祝い申し上げます。素晴らしい一年になりますように。",
+            "お誕生日おめでとうございます。今後の一年が健康で幸せに満ちたものでありますよう、心より願っております。",
+            "お誕生日おめでとう！年齢はただの数字…でも、ケーキの数は本物だよ！",
+            "ハッピーバースデー！年を取ることは避けられないけれど、心はいつまでも若々しく！",
+            "お誕生日おめでとう！歳を重ねるのも悪くない、特にケーキがあるときはね！"
+    );
 
     public BirthdayCardCommand() {
         nk = new NamespacedKey("universecorev2.birthday", "birthdaycard");
@@ -69,18 +83,6 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
             return null;
         }
     }
-
-    List<String> birthdayMessages = Arrays.asList(
-            "お誕生日おめでとう！今日は特別な日だから、素敵なことがたくさんありますように！",
-            "ハッピーバースデー！どんな日になるか楽しみだね。素晴らしい一年にしよう！",
-            "お誕生日おめでとう！あなたの笑顔がもっと見られる一年になりますように！",
-            "お誕生日おめでとうございます。新しい一年が素晴らしい成長と幸福に満ちたものとなりますように。",
-            "この特別な日を迎えられたことを心よりお祝い申し上げます。素晴らしい一年になりますように。",
-            "お誕生日おめでとうございます。今後の一年が健康で幸せに満ちたものでありますよう、心より願っております。",
-            "お誕生日おめでとう！年齢はただの数字…でも、ケーキの数は本物だよ！",
-            "ハッピーバースデー！年を取ることは避けられないけれど、心はいつまでも若々しく！",
-            "お誕生日おめでとう！歳を重ねるのも悪くない、特にケーキがあるときはね！"
-    );
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {

@@ -8,12 +8,11 @@ import org.jetbrains.annotations.NotNull;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
-import xyz.xenondevs.invui.item.impl.CommandItem;
 
 import java.time.MonthDay;
 
 public class RegisterBirthdayCardMenuItem extends AbstractItem {
-    private MonthDay monthDay;
+    private final MonthDay monthDay;
 
     public RegisterBirthdayCardMenuItem(MonthDay monthDay) {
         this.monthDay = monthDay;

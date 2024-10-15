@@ -17,12 +17,11 @@ import xyz.xenondevs.invui.item.impl.AbstractItem;
 import java.util.UUID;
 
 public class PlayerHeadItem extends AbstractItem {
-    private UUID playerUuid;
+    private final UUID playerUuid;
 
     public PlayerHeadItem(UUID playerUuid) {
         this.playerUuid = playerUuid;
     }
-
 
 
     public ItemProvider getItemProvider() {

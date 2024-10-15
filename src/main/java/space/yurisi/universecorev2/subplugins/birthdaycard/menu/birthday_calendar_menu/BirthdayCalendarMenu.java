@@ -16,8 +16,8 @@ import java.time.MonthDay;
 import java.util.List;
 
 public class BirthdayCalendarMenu implements BaseMenu {
-    private MonthDay monthDay;
-    private List<BirthdayData> birthdayDataList;
+    private final MonthDay monthDay;
+    private final List<BirthdayData> birthdayDataList;
 
     public BirthdayCalendarMenu(MonthDay monthDay, List<BirthdayData> birthdayDataList) {
         this.monthDay = monthDay;

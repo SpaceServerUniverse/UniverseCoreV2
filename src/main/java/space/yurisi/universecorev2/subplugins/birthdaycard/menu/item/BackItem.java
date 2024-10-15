@@ -8,17 +8,18 @@ import xyz.xenondevs.invui.item.impl.controlitem.PageItem;
 
 public class BackItem extends PageItem {
 
-        public BackItem() {
-            super(false);
-        }
-        @Override
-        public ItemProvider getItemProvider(PagedGui<?> gui) {
-            ItemBuilder builder = new ItemBuilder(Material.RED_STAINED_GLASS_PANE);
-            builder.setDisplayName("前のページ")
-                    .addLoreLines(gui.hasPreviousPage()
-                            ? gui.getCurrentPage() + "/" + gui.getPageAmount()
-                            : "最初のページ");
+    public BackItem() {
+        super(false);
+    }
 
-            return builder;
-        }
+    @Override
+    public ItemProvider getItemProvider(PagedGui<?> gui) {
+        ItemBuilder builder = new ItemBuilder(Material.RED_STAINED_GLASS_PANE);
+        builder.setDisplayName("前のページ")
+                .addLoreLines(gui.hasPreviousPage()
+                        ? gui.getCurrentPage() + "/" + gui.getPageAmount()
+                        : "最初のページ");
+
+        return builder;
+    }
 }

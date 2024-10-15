@@ -74,7 +74,7 @@ public class BirthdayCardRepository {
                     .getSingleResult();
             session.getTransaction().commit();
             return data;
-        }catch (NoResultException error){
+        } catch (NoResultException error) {
             throw new BirthdayDataNotFoundException("Birthday data not found");
         } finally {
             session.close();
@@ -110,11 +110,11 @@ public class BirthdayCardRepository {
      */
     public void updateBirthdayData(BirthdayData birthdayData) {
         Session session = this.sessionFactory.getCurrentSession();
-        try{
+        try {
             session.beginTransaction();
             session.merge(birthdayData);
             session.getTransaction().commit();
-        }finally {
+        } finally {
             session.close();
         }
     }
@@ -251,7 +251,7 @@ public class BirthdayCardRepository {
                 throw new BirthdayDataNotFoundException("Birthday messages not found for " + uuid);
             }
             return birthdayMessagesList;
-        }finally {
+        } finally {
             session.close();
         }
     }
@@ -261,7 +261,7 @@ public class BirthdayCardRepository {
      *
      * @param birthdayMessages
      */
-    public void deleteBirthdayMessage(BirthdayMessages birthdayMessages){
+    public void deleteBirthdayMessage(BirthdayMessages birthdayMessages) {
         Session session = this.sessionFactory.getCurrentSession();
         try {
             session.beginTransaction();
