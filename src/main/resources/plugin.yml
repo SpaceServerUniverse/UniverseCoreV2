@@ -125,37 +125,3 @@ commands:
     description: アイテム受取ボックスを表示します
   addreceive:
     description: アイテム受取ボックスに追加します
-
-permissions:
-  # UniverseCoreV2
-  space.yurisi.universecorev2.interactevent.enchanttable:
-    default: op
-  space.yurisi.universecorev2.giveu:
-    description: op command
-    default: op
-
-  # SubPlugins
-  ## LevelSystem
-  space.yurisi.levelsystem.addexp:
-    description: op command
-    default: op
-
-  ## UniverseEconomy
-  space.yurisi.universeeconomy.*:
-    description: default
-    default: true
-    children:
-      space.yurisi.universeeconomy.money: true
-      space.yurisi.universeeconomy.mymoney: true
-      space.yurisi.universeeconomy.pay: true
-      space.yurisi.universeeconomy.seemoney: true
-  space.yurisi.universeeconomy.setmoney:
-    description: op command
-    default: op
-  space.yurisi.universeeconomy.addmoney:
-    description: op command
-    default: op
-  space.yurisi.universeeconomy.reducemoney:
-    description: op command
-    default: op
-

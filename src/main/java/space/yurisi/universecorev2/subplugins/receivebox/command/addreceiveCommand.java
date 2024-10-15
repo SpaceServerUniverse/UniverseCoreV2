@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import space.yurisi.universecorev2.api.LuckPermsWrapper;
 import space.yurisi.universecorev2.database.models.ReceiveBox;
 import space.yurisi.universecorev2.subplugins.receivebox.ReceiveBoxAPI;
 import space.yurisi.universecorev2.utils.Message;
@@ -20,6 +21,11 @@ import java.util.Date;
 public class addreceiveCommand  implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player player)) {
+            return false;
+        }
+
+        if (!LuckPermsWrapper.isUserInAdminOrDevGroup(player)) {
+            Message.sendErrorMessage(player, "[XP管理AI]", "このコマンドを実行する権限がありません。");
             return false;
         }
 
