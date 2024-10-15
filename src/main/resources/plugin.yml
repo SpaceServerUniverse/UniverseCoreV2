@@ -125,3 +125,8 @@ commands:
     description: アイテム受取ボックスを表示します
   addreceive:
     description: アイテム受取ボックスに追加します
+
+  # BirthdayCard
+  birthday:
+    description: お誕生日カードメニューを開きます
+
