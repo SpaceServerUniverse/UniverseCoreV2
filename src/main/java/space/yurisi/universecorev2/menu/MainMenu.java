@@ -65,12 +65,16 @@ public class MainMenu implements BaseMenu {
                 .setDisplayName("弾薬")
                 .setLegacyLore(List.of("§6弾薬を購入・クラフトします")),
                 "/ammo");
+        Item executeReceive = new CommandItem(new ItemBuilder(Material.CHEST)
+                .setDisplayName("報酬受け取り")
+                .setLegacyLore(List.of("§6報酬受け取りメニューを開きます")),
+                "/receive");
 
         Gui gui = Gui.normal()
                 .setStructure(
                         "# # # i # = # # #",
                         "# + a m t o y + #",
-                        "# + + n s h + + #",
+                        "# + + n s h p + #",
                         "# # # # l # # # #"
                 )
                 .addIngredient('#', border)
@@ -85,6 +89,7 @@ public class MainMenu implements BaseMenu {
                 .addIngredient('s', executeTrash)
                 .addIngredient('h', executeHead)
                 .addIngredient('o', executeAmmo)
+                .addIngredient('p', executeReceive)
                 .addIngredient('l', new LaunchNavigationItem())
                 .build();
 
