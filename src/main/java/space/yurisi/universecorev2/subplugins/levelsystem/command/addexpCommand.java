@@ -6,6 +6,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import space.yurisi.universecorev2.api.LuckPermsWrapper;
 import space.yurisi.universecorev2.subplugins.levelsystem.LevelSystemAPI;
 import space.yurisi.universecorev2.subplugins.levelsystem.exception.PlayerDataNotFoundException;
 import space.yurisi.universecorev2.utils.Message;
@@ -14,15 +15,24 @@ public class addexpCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (!(sender instanceof Player player)) {
+            return false;
+        }
+
+        if (!LuckPermsWrapper.isUserInAdminOrDevGroup(player)) {
+            Message.sendErrorMessage(player, "[XP管理AI]", "このコマンドを実行する権限がありません。");
+            return false;
+        }
+
         if (args.length != 2) {
-            Message.sendNormalMessage((Player) sender, "[XP管理AI]", "/addexp <プレイヤー名> <経験値>");
+            Message.sendNormalMessage(player, "[XP管理AI]", "/addexp <プレイヤー名> <経験値>");
             return false;
         }
 
         Player to_player = Bukkit.getPlayerExact(args[0]);
 
         if (to_player == null) {
-            Message.sendErrorMessage((Player) sender, "[XP管理AI]", "プレイヤーが見つかりませんでした。");
+            Message.sendErrorMessage(player, "[XP管理AI]", "プレイヤーが見つかりませんでした。");
             return false;
         }
 

@@ -6,6 +6,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+import space.yurisi.universecorev2.api.LuckPermsWrapper;
+import space.yurisi.universecorev2.utils.Message;
 
 public class InteractEvent implements Listener {
 
@@ -22,9 +24,13 @@ public class InteractEvent implements Listener {
 
         switch (targetBlock.getType()) {
             case ENCHANTING_TABLE -> {
-                if (!player.hasPermission("space.yurisi.universecorev2.interactevent.enchanttable")) {
-                    event.setCancelled(true);
+                if (LuckPermsWrapper.isUserInAdminOrDevGroup(player)) {
+                    Message.sendSuccessMessage(player, "[管理AI]", "対象ブロック [エンチャントテーブル] の利用制限をバイパスしました");
+                    event.setCancelled(false);
+                    break;
                 }
+
+                event.setCancelled(true);
             }
         }
     }
