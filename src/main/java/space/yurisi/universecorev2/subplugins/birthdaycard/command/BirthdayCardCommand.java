@@ -23,8 +23,7 @@ import space.yurisi.universecorev2.database.models.BirthdayMessages;
 import space.yurisi.universecorev2.database.repositories.BirthdayCardRepository;
 import space.yurisi.universecorev2.exception.BirthdayDataNotFoundException;
 import space.yurisi.universecorev2.subplugins.birthdaycard.BirthdayCard;
-import space.yurisi.universecorev2.subplugins.birthdaycard.menu.BirthdayCalendarMenue;
-import space.yurisi.universecorev2.subplugins.birthdaycard.menu.BirthdayCalendarMenu;
+import space.yurisi.universecorev2.subplugins.birthdaycard.menu.birthday_menu.BirthdayCardMenu;
 import space.yurisi.universecorev2.subplugins.birthdaycard.utils.PageJsonUtils;
 import space.yurisi.universecorev2.utils.Message;
 import space.yurisi.universecorev2.utils.NumberUtils;
@@ -90,8 +89,8 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length == 0) {
-            BirthdayCalendarMenu birthdayCalendarMenu = new BirthdayCalendarMenu(null, null);
-            birthdayCalendarMenu.sendMenu(player);
+            BirthdayCardMenu birthdayCardMenu = new BirthdayCardMenu();
+            birthdayCardMenu.sendMenu(player);
             return true;
         }
         switch (args[0].toLowerCase()) {
