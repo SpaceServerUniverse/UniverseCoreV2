@@ -55,7 +55,7 @@ public class BirthdayCalendar implements BaseMenu {
                 DayOfWeek firstDayOfWeek = firstDayOfMonth.getDayOfWeek();
                 int valueOfFirstDayOfMonth = firstDayOfWeek.getValue();
                 for (int empty = 1; empty < valueOfFirstDayOfMonth; empty++) {
-                    currentItems.add((new SimpleItem(new ItemBuilder(Material.AIR).setDisplayName(""))));
+                    currentItems.add((new SimpleItem(new ItemBuilder(Material.AIR))));
                 }
                 for (int day = 1; day <= daysInMonth; day++) {
                     List<BirthdayData> birthdays = birthdayDataCache.getOrDefault(day, Collections.emptyList());

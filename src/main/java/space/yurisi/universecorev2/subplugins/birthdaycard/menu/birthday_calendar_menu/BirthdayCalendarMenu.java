@@ -25,7 +25,7 @@ public class BirthdayCalendarMenu implements BaseMenu {
     }
 
     public void sendMenu(Player player) {
-        Item border = new SimpleItem(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE).setDisplayName(""));
+        Item border = new SimpleItem(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE));
         Gui gui = Gui.normal()
                 .setStructure(
                         "# # # # # # # # # ",
