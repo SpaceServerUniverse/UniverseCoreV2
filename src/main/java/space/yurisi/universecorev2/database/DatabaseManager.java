@@ -257,7 +257,7 @@ public class DatabaseManager {
     /**
      * バースデーカードリポジトリを取得
      *
-     * @return
+     * @return BirthdayCardRepository
      */
     public BirthdayCardRepository getBirthdayCardRepository() {
         return birthdayCardRepository;
