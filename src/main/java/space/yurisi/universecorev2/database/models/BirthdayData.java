@@ -79,9 +79,11 @@ public class BirthdayData {
     public void setDay(int day) {
         this.day = day;
     }
+
     public boolean isGiftReceived() {
         return giftReceived;
     }
+
     public void setGiftReceived(boolean giftReceived) {
         this.giftReceived = giftReceived;
     }
