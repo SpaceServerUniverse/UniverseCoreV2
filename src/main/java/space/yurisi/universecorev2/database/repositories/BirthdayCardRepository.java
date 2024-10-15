@@ -62,7 +62,7 @@ public class BirthdayCardRepository {
      * バースデーをuuidから取得します
      *
      * @param uuid
-     * @return
+     * @return BirthdayData
      * @throws BirthdayDataNotFoundException
      */
     public BirthdayData getBirthdayData(String uuid) throws BirthdayDataNotFoundException {
