@@ -35,7 +35,12 @@ import space.yurisi.universecorev2.utils.NumberUtils;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.MonthDay;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
     private final NamespacedKey nk;
