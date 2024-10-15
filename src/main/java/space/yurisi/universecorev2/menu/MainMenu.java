@@ -25,8 +25,6 @@ import xyz.xenondevs.invui.item.impl.CommandItem;
 import xyz.xenondevs.invui.item.impl.SimpleItem;
 import xyz.xenondevs.invui.window.Window;
 
-import java.time.LocalTime;
-import java.util.Arrays;
 import java.util.List;
 
 public class MainMenu implements BaseMenu {
