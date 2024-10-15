@@ -25,6 +25,7 @@ import space.yurisi.universecorev2.exception.BirthdayDataNotFoundException;
 import space.yurisi.universecorev2.subplugins.birthdaycard.BirthdayCard;
 import space.yurisi.universecorev2.subplugins.birthdaycard.menu.birthday_menu.BirthdayCardMenu;
 import space.yurisi.universecorev2.subplugins.birthdaycard.utils.PageJsonUtils;
+import space.yurisi.universecorev2.subplugins.birthdaycard.utils.PlayerUtils;
 import space.yurisi.universecorev2.utils.Message;
 import space.yurisi.universecorev2.utils.NumberUtils;
 
@@ -184,10 +185,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                         StringBuilder message = new StringBuilder("登録されている誕生日:\n");
                         for (BirthdayData bd : birthdayDataList) {
                             UUID playerUUID = UUID.fromString(bd.getUuid());
-                            OfflinePlayer offlineBirthdayPlayer = Bukkit.getOfflinePlayer(playerUUID);
-                            String playerName = offlineBirthdayPlayer.getName() != null ? offlineBirthdayPlayer.getName() : "不明なプレイヤー";
-
-                            message.append(playerName)
+                            message.append(PlayerUtils.getPlayerNameByUuid(playerUUID))
                                     .append("の誕生日は")
                                     .append(bd.getMonth()).append("月")
                                     .append(bd.getDay()).append("日\n");
@@ -288,7 +286,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 } catch (BirthdayDataNotFoundException ignored) {
                     //NOOP
                 }
-                removeConfirmBirthdayMessagesList.forEach(removeConfirmBirthdayMessages ->{
+                removeConfirmBirthdayMessagesList.forEach(removeConfirmBirthdayMessages -> {
                     birthdayCardRepository.deleteBirthdayMessage(removeConfirmBirthdayMessages);
                 });
                 birthdayCardRepository.deleteBirthdayData(removeConfirmBirthdayData);
@@ -353,10 +351,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                     return completions;
                 }
                 birthdayDatas.forEach(birthdayData -> {
-                    UUID playerUUID = UUID.fromString(birthdayData.getUuid());
-                    OfflinePlayer offlineBirthdayPlayer = Bukkit.getOfflinePlayer(playerUUID);
-                    String playerName = offlineBirthdayPlayer.getName() != null ? offlineBirthdayPlayer.getName() : "不明なプレイヤー";
-                    completions.add(playerName);
+                    completions.add(PlayerUtils.getPlayerNameByUuid(UUID.fromString(birthdayData.getUuid())));
                 });
                 return completions;
             }
