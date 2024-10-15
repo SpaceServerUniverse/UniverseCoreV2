@@ -84,7 +84,7 @@ public class BirthdayCardRepository {
     /**
      * すべてのバースデーデータを取得します
      *
-     * @return
+     * @return List<BirthdayData>
      * @throws BirthdayDataNotFoundException
      */
     public List<BirthdayData> getAllBirthdayData() throws BirthdayDataNotFoundException {
