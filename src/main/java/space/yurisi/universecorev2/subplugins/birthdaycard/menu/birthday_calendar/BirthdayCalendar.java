@@ -32,8 +32,6 @@ public class BirthdayCalendar implements BaseMenu {
     private final int page;
     String charPools = "ABCDEFGHIJKLMNOPQRSTUVWXYZ012345678";
     private List<List<Item>> listItems;
-    String[] months = {"January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"};
     private List<Item> currentItems;
 
     public BirthdayCalendar(List<List<Item>> listItems, Integer page) {
@@ -103,7 +101,7 @@ public class BirthdayCalendar implements BaseMenu {
         Window window = Window.single()
                 .setViewer(player)
                 .setGui(gui)
-                .setTitle("BirthdayCard " + LocalDate.now().getYear() + " " + "(" + months[page] + ")")
+                .setTitle("BirthdayCard " + LocalDate.now().getYear() + " " + "(" + (page + 1) + "月)")
                 .build();
         window.open();
     }
