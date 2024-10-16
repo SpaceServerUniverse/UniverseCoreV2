@@ -20,7 +20,9 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.UniverseCoreV2API;
+import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.database.models.BirthdayData;
 import space.yurisi.universecorev2.database.models.BirthdayMessages;
 import space.yurisi.universecorev2.database.repositories.BirthdayCardRepository;
@@ -58,7 +60,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
     );
 
     public BirthdayCardCommand() {
-        nk = new NamespacedKey("universecorev2.birthday", "birthdaycard");
+        nk = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.BIRTHDAY_CARD);
         this.birthdayCardRepository = UniverseCoreV2API.getInstance().getDatabaseManager().getBirthdayCardRepository();
     }
 
