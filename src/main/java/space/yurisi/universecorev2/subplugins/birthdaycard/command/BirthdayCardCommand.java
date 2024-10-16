@@ -228,7 +228,11 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                     Book book = (Book) mainHandItem.getItemMeta();
                     Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "お誕生日カードを送信しました");
                     player.getInventory().remove(mainHandItem);
-                    String pageJson = PageJsonUtils.serializePageJson(book.pages());
+                    Component lastPage = book.pages().get(book.pages().size() - 1);
+                    Component updatedLastPage = lastPage.append(Component.text("\n" + player.getName() + " より"));
+                    List<Component> newPages = new ArrayList<>(book.pages());
+                    newPages.set(newPages.size() - 1, updatedLastPage);
+                    String pageJson = PageJsonUtils.serializePageJson(newPages);
                     birthdayCardRepository.createBirthdayMessage(sendToBirthdayData.getId(), player, pageJson);
                 } else {
                     Message.sendErrorMessage(player, BirthdayCard.PREFIX, "/birthday getで入手した本か確認してください");
@@ -281,6 +285,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                     Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "お誕生日カードをお贈りしました");
                 } else {
                     birthdayMessagesList.forEach(birthdayMessages -> {
+                        Bukkit.getLogger().info(PageJsonUtils.deserializePageJson(birthdayMessages.getMessage()).toString());
                         pageComponents.addAll(PageJsonUtils.deserializePageJson(birthdayMessages.getMessage()));
                         birthdayCardRepository.deleteBirthdayMessage(birthdayMessages);
                     });
