@@ -78,6 +78,9 @@ public class SniperShot {
             return;
         }
         if(block.getLocation().distance(player.getEyeLocation()) < entity.getLocation().distance(player.getLocation())){
+            if(block.getType().toString().contains("GLASS")){
+                player.getWorld().playSound(block.getLocation(), Sound.BLOCK_GLASS_BREAK, 3.0F, 1.0F);
+            }
             return;
         }
 
@@ -90,9 +93,9 @@ public class SniperShot {
             double damage = gun.getBaseDamage();
             if (DamageCalculator.isHeadShot(height, livingEntity)) {
                 damage *= 1.5D;
-                player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
+                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
             } else {
-                player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1.0F, 1.0F);
+                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1.0F, 1.0F);
             }
             livingEntity.damage(damage, player);
         }

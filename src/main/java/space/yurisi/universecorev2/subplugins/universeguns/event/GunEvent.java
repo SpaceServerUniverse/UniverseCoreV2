@@ -23,6 +23,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
@@ -84,6 +85,7 @@ public class GunEvent implements Listener {
         NamespacedKey gunSerialKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN_SERIAL);
 
         if(container.has(itemKey, PersistentDataType.STRING) && Objects.equals(container.get(itemKey, PersistentDataType.STRING), "magazine_bag")){
+            player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN, 1.0F, 1.0F);
             AmmoManagerInventoryMenu menu = new AmmoManagerInventoryMenu(connector);
             menu.sendMenu(player);
             return;
@@ -171,7 +173,7 @@ public class GunEvent implements Listener {
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
-                                        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_COPPER_DOOR_OPEN, 1.0F, 0.6F);
+                                        player.playSound(player.getLocation(), Sound.BLOCK_COPPER_DOOR_OPEN, 1.0F, 0.6F);
                                     }
                                 }.runTaskLater(plugin, 5L);
                             }
@@ -191,7 +193,7 @@ public class GunEvent implements Listener {
                                 @Override
                                 public void run() {
                                     if (Objects.equals(gun.getName(), "L96A1")) {
-                                        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_COPPER_DOOR_CLOSE, 1.0F, 0.6F);
+                                        player.playSound(player.getLocation(), Sound.BLOCK_COPPER_DOOR_CLOSE, 1.0F, 0.6F);
                                     }
                                 }
                             }.runTaskLater(plugin, gun.getFireRate() - 5);
@@ -228,12 +230,12 @@ public class GunEvent implements Listener {
             if (isZoom.contains(player)) {
                 player.setWalkSpeed(gun.getWeight());
                 isZoom.remove(player);
-                player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PIG_SADDLE, 1.0F, 2.0F);
+                player.playSound(player.getLocation(), Sound.ENTITY_PIG_SADDLE, 1.0F, 2.0F);
                 gunStatus.updateActionBar(player, false);
             } else {
                 player.setWalkSpeed(gun.getIsZoomWalkSpeed());
                 isZoom.add(player);
-                player.getWorld().playSound(player.getLocation(), Sound.ITEM_SPYGLASS_USE, 1.0F, 0.8F);
+                player.playSound(player.getLocation(), Sound.ITEM_SPYGLASS_USE, 1.0F, 0.8F);
                 gunStatus.updateActionBar(player, true);
             }
 
@@ -277,9 +279,9 @@ public class GunEvent implements Listener {
             double headShotTimes = 1.5;
             if (DamageCalculator.isHeadShot(loc.getY(), entity)) {
                 damage *= headShotTimes;
-                shooter.getWorld().playSound(shooter.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0F, 1.0F);
+                shooter.playSound(shooter.getLocation(), Sound.BLOCK_NOTE_BLOCK_CHIME, 1.0F, 1.0F);
             } else {
-                shooter.getWorld().playSound(shooter.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1.0F, 1.0F);
+                shooter.playSound(shooter.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1.0F, 1.0F);
             }
 
             if(gun.getType().equals(GunType.SG)){
@@ -327,12 +329,16 @@ public class GunEvent implements Listener {
                 return;
             }
             BulletData data = projectileData.get(snowball);
+            projectileData.remove(snowball);
+            Location loc = snowball.getLocation();
             Gun gun = data.getGun();
+            if (event.getHitBlock() != null && event.getHitBlock().getType().toString().contains("GLASS")) {
+                snowball.getWorld().playSound(loc, Sound.BLOCK_GLASS_BREAK, 2.0F, 1.0F);
+            }
             if (!gun.getIsExplosive()) {
                 return;
             }
             float radius = gun.getExplosionRadius();
-            Location loc = snowball.getLocation();
             isHandlingExplosion.set(true);
             try {
                 snowball.getWorld().createExplosion(loc, radius, false, false, snowball);

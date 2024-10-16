@@ -23,7 +23,7 @@ public final class M870 extends Gun {
         this.burst = 0;
         this.reloadTime = 4000;
         this.isZoomWalkSpeed = 0.14F;
-        this.baseDamage = 3.5D;
+        this.baseDamage = 3.0D;
         this.isExplosive = false;
         this.explosionRadius = 0.0F;
         this.weight = 0.16F;
