@@ -27,10 +27,13 @@ import space.yurisi.universecorev2.database.models.BirthdayData;
 import space.yurisi.universecorev2.database.models.BirthdayMessages;
 import space.yurisi.universecorev2.database.repositories.BirthdayCardRepository;
 import space.yurisi.universecorev2.exception.BirthdayDataNotFoundException;
+import space.yurisi.universecorev2.item.UniverseItem;
+import space.yurisi.universecorev2.item.ticket.GachaTicket;
 import space.yurisi.universecorev2.subplugins.birthdaycard.BirthdayCard;
 import space.yurisi.universecorev2.subplugins.birthdaycard.menu.birthday_menu.BirthdayCardMenu;
 import space.yurisi.universecorev2.subplugins.birthdaycard.utils.PageJsonUtils;
 import space.yurisi.universecorev2.subplugins.birthdaycard.utils.PlayerUtils;
+import space.yurisi.universecorev2.subplugins.receivebox.ReceiveBoxAPI;
 import space.yurisi.universecorev2.utils.Message;
 import space.yurisi.universecorev2.utils.NumberUtils;
 
@@ -40,6 +43,7 @@ import java.time.MonthDay;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -240,7 +244,20 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                     List<Component> newPages = new ArrayList<>(book.pages());
                     newPages.set(newPages.size() - 1, updatedLastPage);
                     String pageJson = PageJsonUtils.serializePageJson(newPages);
-                    birthdayCardRepository.createBirthdayMessage(sendToBirthdayData.getId(), player, pageJson);
+                    var sendToBirthdayMessages = birthdayCardRepository.createBirthdayMessage(sendToBirthdayData.getId(), player, pageJson);
+                    if (birthdayCardRepository.canReceiveGachaTicket(sendToBirthdayMessages)) {
+                        ItemStack ticket = UniverseItem.getItem(GachaTicket.id).getItem();
+                        ticket.setAmount(5);
+                        Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "お誕生日カードを書いてくれてありがとう\nガチャチケを5枚プレゼント!!");
+                        if (player.getInventory().firstEmpty() == -1) {
+                            Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "インベントリーがいっぱいなので\n報酬受け取りボックスに追加しました");
+                            ReceiveBoxAPI.AddReceiveItem(ticket, player.getUniqueId(), new Date(), "お誕生日カードを書いてくれたから(インベントリーがいっぱい)");
+                        } else {
+                            player.getInventory().addItem(ticket);
+                        }
+                        sendToBirthdayMessages.setReceivedGachaTicket(true);
+                        birthdayCardRepository.updateBirthdayMessage(sendToBirthdayMessages);
+                    }
                 } else {
                     Message.sendErrorMessage(player, BirthdayCard.PREFIX, "/birthday getで入手した本か確認してください");
                 }
