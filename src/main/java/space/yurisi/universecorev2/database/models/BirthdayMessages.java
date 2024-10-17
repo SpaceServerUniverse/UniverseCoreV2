@@ -1,6 +1,11 @@
 package space.yurisi.universecorev2.database.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
@@ -21,6 +26,9 @@ public class BirthdayMessages {
 
     @Column(name = "message")
     private String message;
+
+    @Column(name = "received_gacha_ticket", nullable = false)
+    private boolean receivedGachaTicket;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false)
@@ -70,6 +78,14 @@ public class BirthdayMessages {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public boolean isReceivedGachaTicket() {
+        return receivedGachaTicket;
+    }
+
+    public void setReceivedGachaTicket(boolean receivedGachaTicket) {
+        this.receivedGachaTicket = receivedGachaTicket;
     }
 
     public Date getCreatedAt() {

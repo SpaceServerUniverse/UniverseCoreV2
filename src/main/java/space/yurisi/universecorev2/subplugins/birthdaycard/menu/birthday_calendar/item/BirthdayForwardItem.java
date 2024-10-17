@@ -31,11 +31,11 @@ public class BirthdayForwardItem extends AbstractItem {
     }
 
     public ItemProvider getItemProvider() {
-        ItemBuilder builder = new ItemBuilder(Material.GREEN_STAINED_GLASS_PANE).setDisplayName("次のページ");
-        builder.setDisplayName("次のページ")
+        ItemBuilder builder = new ItemBuilder(Material.GREEN_STAINED_GLASS_PANE).setDisplayName("来月");
+        builder.setDisplayName("来月")
                 .addLoreLines(hasNextPage()
                         ? (page + 2) + "/" + getPageAmount()
-                        : "最後のページです");
+                        : "最後の月です");
         return builder;
     }
 

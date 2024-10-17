@@ -32,11 +32,11 @@ public class BirthdayBackItem extends AbstractItem {
     }
 
     public ItemProvider getItemProvider() {
-        ItemBuilder builder = new ItemBuilder(Material.RED_STAINED_GLASS_PANE).setDisplayName("前のページ");
-        builder.setDisplayName("前のページ")
+        ItemBuilder builder = new ItemBuilder(Material.RED_STAINED_GLASS_PANE).setDisplayName("前月");
+        builder.setDisplayName("前月")
                 .addLoreLines(hasPreviousPage()
                         ? page + "/" + getPageAmount()
-                        : "最初のページ");
+                        : "最初の月です");
         return builder;
     }
 
