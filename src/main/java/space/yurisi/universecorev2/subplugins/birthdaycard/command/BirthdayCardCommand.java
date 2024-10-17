@@ -71,7 +71,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
     private boolean isValidDate(String monthArg, String dayArg, Player player) {
         if (monthArg == null || dayArg == null || !NumberUtils.isNumeric(monthArg) || !NumberUtils.isNumeric(dayArg)) {
             Message.sendErrorMessage(player, BirthdayCard.PREFIX, "/birthday register <月> <日>");
-            return true;
+            return false;
         }
         return true;
     }
@@ -109,6 +109,10 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
         }
         switch (args[0].toLowerCase()) {
             case "register":
+                if (args.length < 3) {
+                    Message.sendErrorMessage(player, BirthdayCard.PREFIX, "/birthday register <月> <日>");
+                    return false;
+                }
                 if (!isValidDate(args[1], args[2], player)) return false;
 
                 MonthDay registerMonthDay = parseMonthDay(args[1], args[2], player);
@@ -126,6 +130,11 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 }
                 return true;
             case "registerconfirm":
+                if (args.length < 3) {
+                    Message.sendErrorMessage(player, BirthdayCard.PREFIX, "/birthday register <月> <日>");
+                    return false;
+                }
+
                 if (!isValidDate(args[1], args[2], player)) return false;
 
                 MonthDay registerConfirmMonthDay = parseMonthDay(args[1], args[2], player);
