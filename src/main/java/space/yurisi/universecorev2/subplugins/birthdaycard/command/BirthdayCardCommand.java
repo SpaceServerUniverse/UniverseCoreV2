@@ -108,28 +108,35 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 if (!isValidDate(args[1], args[2], player)) return false;
 
                 MonthDay registerMonthDay = parseMonthDay(args[1], args[2], player);
+                UUID registerPlayerUUID = player.getUniqueId();
                 if (registerMonthDay == null) return true;
 
-                UUID registerPlayerUUID = player.getUniqueId();
                 BirthdayData existingData = getBirthdayData(registerPlayerUUID.toString());
 
                 if (existingData != null) {
                     Message.sendErrorMessage(player, BirthdayCard.PREFIX, "既に誕生日が登録されています");
                 } else {
-                    birthdayCardRepository.createBirthdayData(player, registerMonthDay);
+
+                    Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "一度登録すると変更することはできません");
+                    Message.sendNormalMessage(player, BirthdayCard.PREFIX, "[登録]", ClickEvent.runCommand("/birthday registerconfirm " + registerMonthDay.getMonthValue() + " " + registerMonthDay.getDayOfMonth()), "誕生日を登録します");
+                }
+                return true;
+            case "registerconfirm":
+                if (!isValidDate(args[1], args[2], player)) return false;
+
+                MonthDay registerConfirmMonthDay = parseMonthDay(args[1], args[2], player);
+                if (registerConfirmMonthDay == null) return true;
+
+                UUID registerConfirmPlayerUUID = player.getUniqueId();
+                BirthdayData registerConfirmexistingData = getBirthdayData(registerConfirmPlayerUUID.toString());
+
+                if (registerConfirmexistingData != null) {
+                    Message.sendErrorMessage(player, BirthdayCard.PREFIX, "既に誕生日が登録されています");
+                } else {
+                    birthdayCardRepository.createBirthdayData(player, registerConfirmMonthDay);
                     Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "お誕生日を登録しました");
                 }
 
-                return true;
-
-            case "remove":
-                BirthdayData removeBirthdayData = getBirthdayData(player.getUniqueId().toString());
-                if (removeBirthdayData == null) {
-                    Message.sendErrorMessage(player, BirthdayCard.PREFIX, "削除するバースデーデータが見つかりませんでした");
-                    return true;
-                }
-                Message.sendWarningMessage(player, BirthdayCard.PREFIX, "本当に削除しますか？これまでにもらったメッセージも削除されます");
-                Message.sendNormalMessage(player, BirthdayCard.PREFIX, "§c[削除する]", ClickEvent.runCommand("/birthday removeconfirm"), "バースデーデータを削除します");
                 return true;
             case "get":
                 if (args.length < 2) {
@@ -295,31 +302,12 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 bookItem.setItemMeta(bookMeta);
                 player.getInventory().addItem(bookItem);
                 return true;
-            case "removeconfirm":
-                BirthdayData removeConfirmBirthdayData = getBirthdayData(player.getUniqueId().toString());
-                if (removeConfirmBirthdayData == null) {
-                    Message.sendErrorMessage(player, BirthdayCard.PREFIX, "削除するバースデーデータが見つかりませんでした");
-                    return true;
-                }
-                List<BirthdayMessages> removeConfirmBirthdayMessagesList = new ArrayList<>();
-                try {
-                    removeConfirmBirthdayMessagesList = birthdayCardRepository.getBirthdayMessages(removeConfirmBirthdayData.getId());
-                } catch (BirthdayDataNotFoundException ignored) {
-                    //NOOP
-                }
-                removeConfirmBirthdayMessagesList.forEach(removeConfirmBirthdayMessages -> {
-                    birthdayCardRepository.deleteBirthdayMessage(removeConfirmBirthdayMessages);
-                });
-                birthdayCardRepository.deleteBirthdayData(removeConfirmBirthdayData);
-                Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "自身のバースデーデータを削除しました");
-                return true;
             default:
                 String[] helpMessage = """
                         §6-- 🎉BirthdayCard Help --
                         🎂 §bバースデーカードのコマンド一覧です 🎂
                            §7/birthday : バースデーカレンダーメニューを開きます
-                           §7/birthday register <月> <日> : 誕生日を登録します
-                           §7/birthday remove : 登録した誕生日を削除します
+                           §7/birthday register <月> <日> : 誕生日を登録します (一度登録すると変更できません)
                            §7/birthday check [プレイヤー名] : 自分または指定したプレイヤーの誕生日を確認します
                            §7/birthday list : 登録されている誕生日の一覧を表示します
                            §7/birthday get [プレイヤー名] : 指定したプレイヤーに送る誕生日カードを取得します
