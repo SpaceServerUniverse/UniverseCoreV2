@@ -20,7 +20,7 @@ public class ExplosiveAmmoItem extends AmmoItem {
 
     @Override
     protected String getDisplayName() {
-        return "爆発系";
+        return "特殊系";
     }
 
     @Override
@@ -45,6 +45,6 @@ public class ExplosiveAmmoItem extends AmmoItem {
 
     @Override
     protected long getPrice() {
-        return 200;
+        return 300;
     }
 }

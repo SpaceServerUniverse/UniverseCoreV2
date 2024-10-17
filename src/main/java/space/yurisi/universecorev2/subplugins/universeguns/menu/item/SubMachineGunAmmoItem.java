@@ -49,6 +49,6 @@ public class SubMachineGunAmmoItem extends AmmoItem {
 
     @Override
     protected long getPrice() {
-        return 200;
+        return 300;
     }
 }

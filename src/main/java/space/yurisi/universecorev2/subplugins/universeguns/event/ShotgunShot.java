@@ -44,7 +44,7 @@ public class ShotgunShot {
             Vector spreadDirection = SpreadProjectile(direction.clone(), gun, spread);
             Vector velocity = spreadDirection.multiply(gun.getBulletSpeed());
             Snowball projectile = player.launchProjectile(Snowball.class, velocity);
-            projectile.setGravity(false);
+//            projectile.setGravity(false);
             projectiles.add(projectile);
             new BukkitRunnable() {
                 @Override
