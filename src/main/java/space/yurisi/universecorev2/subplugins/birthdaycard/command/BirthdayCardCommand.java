@@ -303,7 +303,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 ItemStack bookItem = ItemStack.of(Material.WRITTEN_BOOK);
                 Book book = (Book) bookItem.getItemMeta();
                 book.title(Component.text("お誕生日カード " + player.getName() + "さんへ"));
-                book.author(Component.text("HappyBirthDayBook (" + LocalDate.now().getYear() + ")")
+                book.author(Component.text("お誕生日カード (" + LocalDate.now().getYear() + ")")
                         .color(NamedTextColor.GOLD)
                         .decorate(TextDecoration.BOLD));
                 List<Component> pageComponents = new ArrayList<>();
@@ -330,7 +330,11 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 ItemStack ticket = UniverseItem.getItem(GachaTicket.id).getItem();
                 ticket.setAmount(10);
                 ReceiveBoxAPI.AddReceiveItem(ticket, player.getUniqueId(), new Date(), "お誕生日プレゼント");
-                Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "お誕生日おめでとう\nガチャチケ10枚プレゼント");
+                Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "ガチャチケ10枚プレゼント");
+                Bukkit.getServer().broadcast(Component.text("🎉 今日は ", NamedTextColor.YELLOW)
+                        .append(Component.text(player.getName(), NamedTextColor.GOLD))
+                        .append(Component.text(" さんの誕生日です！🎂\n", NamedTextColor.YELLOW))
+                        .append(Component.text("素晴らしい一年になりますように！おめでとう！", NamedTextColor.GREEN)));
                 return true;
             default:
                 String[] helpMessage = """
