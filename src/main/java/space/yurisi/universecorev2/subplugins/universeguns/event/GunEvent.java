@@ -328,11 +328,13 @@ public class GunEvent implements Listener {
             if (!projectileData.containsKey(snowball)) {
                 return;
             }
+            if(event.getHitBlock() == null){
+                return;
+            }
             BulletData data = projectileData.get(snowball);
-            projectileData.remove(snowball);
             Location loc = snowball.getLocation();
             Gun gun = data.getGun();
-            if (event.getHitBlock() != null && event.getHitBlock().getType().toString().contains("GLASS")) {
+            if (event.getHitBlock().getType().toString().contains("GLASS")) {
                 snowball.getWorld().playSound(loc, Sound.BLOCK_GLASS_BREAK, 2.0F, 1.0F);
             }
             if (!gun.getIsExplosive()) {
@@ -558,9 +560,10 @@ public class GunEvent implements Listener {
     @EventHandler
     public void onPlayerJump(PlayerMoveEvent event) {
         Player player = event.getPlayer();
-        if (event.getFrom().getY() >= event.getTo().getY()) {
+        if(event.getFrom().getY() <= event.getTo().getY()){
             return;
         }
+
         ItemStack itemInHand = player.getInventory().getItemInMainHand();
         ItemMeta meta = itemInHand.getItemMeta();
         if (!itemInHand.hasItemMeta()) {
@@ -587,13 +590,10 @@ public class GunEvent implements Listener {
         }
 
         if (!gun.getIsJumpEnabled()) {
-            Vector velocity = player.getVelocity();
-            velocity.setX(velocity.getX() * weight);
-            velocity.setY(velocity.getY() * weight);
-            velocity.setZ(velocity.getZ() * weight);
-            player.setVelocity(velocity);
-        }else{
-            event.setCancelled(true);
+            Vector vector = player.getVelocity();
+            vector.setX(vector.getX() * weight);
+            vector.setZ(vector.getZ() * weight);
+            player.setVelocity(vector);
         }
     }
 
