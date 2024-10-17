@@ -318,6 +318,10 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 BookMeta bookMeta = (BookMeta) book;
                 bookItem.setItemMeta(bookMeta);
                 player.getInventory().addItem(bookItem);
+                ItemStack ticket = UniverseItem.getItem(GachaTicket.id).getItem();
+                ticket.setAmount(10);
+                ReceiveBoxAPI.AddReceiveItem(ticket, player.getUniqueId(), new Date(), "お誕生日プレゼント");
+                Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "お誕生日おめでとう\nガチャチケ10枚プレゼント");
                 return true;
             default:
                 String[] helpMessage = """
