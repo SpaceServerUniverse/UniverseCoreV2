@@ -67,6 +67,7 @@ public class TouchEvent implements Listener {
 
             if(containerProtect == null) {
                 Message.sendErrorMessage(player, "[金庫AI]", "このコンテナは保護されていません");
+                lockManager.removeFlag(player);
                 return;
             }
 
