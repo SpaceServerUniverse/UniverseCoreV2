@@ -1,15 +1,11 @@
 package space.yurisi.universecorev2.item.gun;
 
 import org.bukkit.Sound;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import space.yurisi.universecorev2.subplugins.universeguns.constants.GunType;
 
 import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.inventory.ItemStack;
-import space.yurisi.universecorev2.subplugins.universeguns.constants.GunType;
 
 public final class F2 extends Gun {
 

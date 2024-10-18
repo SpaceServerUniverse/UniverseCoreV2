@@ -54,10 +54,11 @@ public class GunShot {
 
     private Vector SpreadProjectile(Vector direction, Gun gun) {
         double spread = gun.getSpread();
+        spread /= 5.0;
         Random random = new Random();
-        double spreadX = (random.nextDouble() - 0.5) * spread;
-        double spreadY = (random.nextDouble() - 0.5) * spread;
-        double spreadZ = (random.nextDouble() - 0.5) * spread;
+        double spreadX = random.nextGaussian() * spread;
+        double spreadY = random.nextGaussian() * spread;
+        double spreadZ = random.nextGaussian() * spread;
         return direction.add(new Vector(spreadX, spreadY, spreadZ)).normalize();
     }
 

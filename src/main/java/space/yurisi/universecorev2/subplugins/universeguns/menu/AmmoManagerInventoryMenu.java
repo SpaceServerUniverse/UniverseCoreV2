@@ -1,6 +1,7 @@
 package space.yurisi.universecorev2.subplugins.universeguns.menu;
 
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import space.yurisi.universecorev2.exception.AmmoNotFoundException;
@@ -30,6 +31,8 @@ public class AmmoManagerInventoryMenu implements BaseMenu {
                 this.connector.AmmoDataInit(player);
             }
 
+            player.playSound(player.getLocation(), Sound.BLOCK_BARREL_OPEN, 1, 1);
+
             Item border = new SimpleItem(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE));
             Item iron1 = new SimpleItem(new ItemBuilder(Material.IRON_INGOT).setAmount(1));
             Item iron2 = new SimpleItem(new ItemBuilder(Material.IRON_INGOT).setAmount(2));
@@ -57,12 +60,12 @@ public class AmmoManagerInventoryMenu implements BaseMenu {
                     .addIngredient('s', powder4)
                     .addIngredient('t', powder5)
 
-                    .addIngredient('a', new HandGunAmmoItem(this.connector, 60, player))
-                    .addIngredient('b', new SubMachineGunAmmoItem(this.connector, 120, player))
-                    .addIngredient('c', new AssaultRifleAmmoItem(this.connector, 120, player))
-                    .addIngredient('d', new SniperRifleAmmoItem(this.connector, 48, player))
-                    .addIngredient('e', new ShotGunAmmoItem(this.connector, 60, player))
-                    .addIngredient('f', new LightMachineGunAmmoItem(this.connector, 240, player))
+                    .addIngredient('a', new HandGunAmmoItem(this.connector, 30, player))
+                    .addIngredient('b', new SubMachineGunAmmoItem(this.connector, 60, player))
+                    .addIngredient('c', new AssaultRifleAmmoItem(this.connector, 60, player))
+                    .addIngredient('d', new SniperRifleAmmoItem(this.connector, 24, player))
+                    .addIngredient('e', new ShotGunAmmoItem(this.connector, 30, player))
+                    .addIngredient('f', new LightMachineGunAmmoItem(this.connector, 80, player))
                     .addIngredient('g', new ExplosiveAmmoItem(this.connector, 12, player));
 
             xyz.xenondevs.invui.window.Window window = Window.single()

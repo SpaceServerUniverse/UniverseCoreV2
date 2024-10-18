@@ -31,9 +31,9 @@ public final class M870 extends Gun {
         this.recoil = 1;
         this.spread = 0.2D;
         this.bulletNumber = 8;
-        this.bulletSpeed = 3.0D;
+        this.bulletSpeed = 2.5D;
         this.range = 20;
-        this.isJumpEnabled = false;
+        this.isJumpEnabled = true;
         this.shotSound = Sound.ITEM_SHIELD_BREAK;
         this.volumeSound = 5.0F;
         this.pitchSound = 0.6F;

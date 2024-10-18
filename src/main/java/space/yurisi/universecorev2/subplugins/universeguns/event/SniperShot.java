@@ -1,14 +1,10 @@
 package space.yurisi.universecorev2.subplugins.universeguns.event;
 
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.Location;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 import space.yurisi.universecorev2.item.gun.Gun;
@@ -29,7 +25,13 @@ public class SniperShot {
 
         ShotEffect(player, gun, direction, player.getEyeLocation());
         RayTraceResult entityResult = detectEntities(player);
-        RayTraceResult blockResult = player.getWorld().rayTraceBlocks(player.getEyeLocation(), direction, 500);
+        RayTraceResult blockResult = player.getWorld().rayTraceBlocks(
+                player.getEyeLocation(),
+                direction,
+                500,
+                FluidCollisionMode.NEVER,
+                true
+        );
         setDamage(player, entityResult, blockResult, gun);
     }
 
@@ -63,6 +65,12 @@ public class SniperShot {
 
     private void setDamage(Player player, RayTraceResult entityResult, RayTraceResult blockResult, Gun gun) {
         if(entityResult == null){
+            if(blockResult != null){
+                Block block = blockResult.getHitBlock();
+                if(block.getType().toString().contains("GLASS")){
+                    player.getWorld().playSound(block.getLocation(), Sound.BLOCK_GLASS_BREAK, 3.0F, 1.0F);
+                }
+            }
             return;
         }
         Entity entity = entityResult.getHitEntity();
@@ -78,6 +86,9 @@ public class SniperShot {
             return;
         }
         if(block.getLocation().distance(player.getEyeLocation()) < entity.getLocation().distance(player.getLocation())){
+            if(block.getType().toString().contains("GLASS")){
+                player.getWorld().playSound(block.getLocation(), Sound.BLOCK_GLASS_BREAK, 3.0F, 1.0F);
+            }
             return;
         }
 
@@ -90,9 +101,9 @@ public class SniperShot {
             double damage = gun.getBaseDamage();
             if (DamageCalculator.isHeadShot(height, livingEntity)) {
                 damage *= 1.5D;
-                player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
+                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
             } else {
-                player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1.0F, 1.0F);
+                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 1.0F, 1.0F);
             }
             livingEntity.damage(damage, player);
         }

@@ -4,7 +4,7 @@ import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.UniverseCoreV2API;
 import space.yurisi.universecorev2.database.DatabaseManager;
 import space.yurisi.universecorev2.subplugins.SubPlugin;
-import space.yurisi.universecorev2.subplugins.universeguns.core.GunCommand;
+import space.yurisi.universecorev2.subplugins.universeguns.command.GunCommand;
 import space.yurisi.universecorev2.subplugins.universeguns.event.GunEvent;
 import space.yurisi.universecorev2.subplugins.universeguns.connector.UniverseCoreAPIConnector;
 
