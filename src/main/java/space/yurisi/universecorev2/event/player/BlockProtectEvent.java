@@ -25,7 +25,6 @@ public class BlockProtectEvent implements Listener {
         switch (targetBlock.getType()) {
             case ENCHANTING_TABLE -> {
                 if (LuckPermsWrapper.isUserInAdminOrDevGroup(player)) {
-                    Message.sendSuccessMessage(player, "[管理AI]", "対象ブロック [エンチャントテーブル] の利用制限をバイパスしました");
                     event.setCancelled(false);
                     break;
                 }
@@ -38,7 +37,6 @@ public class BlockProtectEvent implements Listener {
                 }
 
                 if (LuckPermsWrapper.isUserInAdminOrDevGroup(player)) {
-                    Message.sendSuccessMessage(player, "[管理AI]", "対象ブロック [金床] の利用制限をバイパスしました");
                     event.setCancelled(false);
                     break;
                 }

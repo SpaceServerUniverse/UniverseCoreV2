@@ -27,7 +27,7 @@ public class menuCommand implements CommandExecutor {
         if (!(sender instanceof Player player)) {
             return false;
         }
-        
+
         switch (args.length) {
             case 0:
                 MainMenu mainMenu = new MainMenu();
