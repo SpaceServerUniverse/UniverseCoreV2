@@ -9,6 +9,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
+import space.yurisi.universecorev2.item.book.MainMenuBook;
 import space.yurisi.universecorev2.item.fishingrod.FishingRod;
 import space.yurisi.universecorev2.item.pickaxe.FishingPickaxe;
 import space.yurisi.universecorev2.item.gun.*;
@@ -16,6 +17,7 @@ import space.yurisi.universecorev2.item.repair_cream.RepairCream;
 import space.yurisi.universecorev2.item.solar_system.*;
 import space.yurisi.universecorev2.item.stick.BlockCopyStick;
 import space.yurisi.universecorev2.item.ticket.GachaTicket;
+import space.yurisi.universecorev2.menu.MainMenu;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -48,6 +50,7 @@ public class UniverseItem {
         items.put(F2.id, new F2());
         items.put(M870.id, new M870());
         items.put(MagazineBag.id, new MagazineBag());
+        items.put(MainMenuBook.id, new MainMenuBook());
     }
 
     public static CustomItem getItem(String id){

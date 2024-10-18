@@ -63,6 +63,11 @@ public class menuCommand implements CommandExecutor {
                 }
 
                 ItemStack itemStack = item.getItem();
+                if (inv.contains(item.getItem())) {
+                    Message.sendErrorMessage(player, "[管理AI]", "既にメインメニュー用のアイテムを持っています。");
+                    return false;
+                }
+
                 inv.addItem(itemStack);
 
                 Message.sendSuccessMessage(player, "[管理AI]", "メインメニュー用のアイテムをインベントリに追加しました");
