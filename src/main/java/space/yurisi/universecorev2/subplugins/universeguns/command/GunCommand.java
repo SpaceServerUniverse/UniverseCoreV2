@@ -1,4 +1,4 @@
-package space.yurisi.universecorev2.subplugins.universeguns.core;
+package space.yurisi.universecorev2.subplugins.universeguns.command;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -26,7 +26,7 @@ public class GunCommand implements CommandExecutor {
         AmmoManagerInventoryMenu ammoManagerInventoryMenu = new AmmoManagerInventoryMenu(connector);
         ammoManagerInventoryMenu.sendMenu(player);
 
-        Message.sendSuccessMessage(player, "[武器AI]", "弾薬管理メニューを開きました");
+//        Message.sendSuccessMessage(player, "[武器AI]", "弾薬管理メニューを開きました");
         return true;
     }
 }

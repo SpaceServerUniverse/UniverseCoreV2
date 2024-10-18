@@ -1,6 +1,7 @@
 package space.yurisi.universecorev2.subplugins.universeguns.menu;
 
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import space.yurisi.universecorev2.exception.AmmoNotFoundException;
@@ -29,6 +30,8 @@ public class AmmoManagerInventoryMenu implements BaseMenu {
             if(!this.connector.isExistsAmmoData(player)){
                 this.connector.AmmoDataInit(player);
             }
+
+            player.playSound(player.getLocation(), Sound.BLOCK_BARREL_OPEN, 1, 1);
 
             Item border = new SimpleItem(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE));
             Item iron1 = new SimpleItem(new ItemBuilder(Material.IRON_INGOT).setAmount(1));

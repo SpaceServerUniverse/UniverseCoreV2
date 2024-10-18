@@ -23,7 +23,6 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
@@ -299,7 +298,6 @@ public class GunEvent implements Listener {
 //            livingEntity.setHealth(newHealth);
             event.setDamage(damage);
             projectileData.remove(snowball);
-            // TODO: ヒットエフェクト
         } else {
             livingEntity.setMaximumNoDamageTicks(10);
             livingEntity.setNoDamageTicks(10);
