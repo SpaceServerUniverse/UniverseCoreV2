@@ -32,6 +32,19 @@ public class BlockProtectEvent implements Listener {
 
                 event.setCancelled(true);
             }
+            case ANVIL -> {
+                if (!player.getWorld().getName().equals("lobby")) {
+                    return;
+                }
+
+                if (LuckPermsWrapper.isUserInAdminOrDevGroup(player)) {
+                    Message.sendSuccessMessage(player, "[管理AI]", "対象ブロック [金床] の利用制限をバイパスしました");
+                    event.setCancelled(false);
+                    break;
+                }
+
+                event.setCancelled(true);
+            }
         }
     }
 

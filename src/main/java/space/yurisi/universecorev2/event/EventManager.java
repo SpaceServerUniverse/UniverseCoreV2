@@ -20,7 +20,6 @@ public class EventManager {
         Bukkit.getPluginManager().registerEvents(new BreakEvent(), main);
         Bukkit.getPluginManager().registerEvents(new PlaceEvent(), main);
         Bukkit.getPluginManager().registerEvents(new OpenMainMenuEvent(), main);
-        Bukkit.getPluginManager().registerEvents(new TouchEvent(), main);
         Bukkit.getPluginManager().registerEvents(new BExplodeEvent(),main);
         Bukkit.getPluginManager().registerEvents(new EExplodeEvent(),main);
         Bukkit.getPluginManager().registerEvents(new BlockProtectEvent(), main);
