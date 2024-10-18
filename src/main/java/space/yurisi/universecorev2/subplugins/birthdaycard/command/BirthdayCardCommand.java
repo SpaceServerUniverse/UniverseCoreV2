@@ -20,15 +20,20 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.UniverseCoreV2API;
+import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.database.models.BirthdayData;
 import space.yurisi.universecorev2.database.models.BirthdayMessages;
 import space.yurisi.universecorev2.database.repositories.BirthdayCardRepository;
 import space.yurisi.universecorev2.exception.BirthdayDataNotFoundException;
+import space.yurisi.universecorev2.item.UniverseItem;
+import space.yurisi.universecorev2.item.ticket.GachaTicket;
 import space.yurisi.universecorev2.subplugins.birthdaycard.BirthdayCard;
 import space.yurisi.universecorev2.subplugins.birthdaycard.menu.birthday_menu.BirthdayCardMenu;
 import space.yurisi.universecorev2.subplugins.birthdaycard.utils.PageJsonUtils;
 import space.yurisi.universecorev2.subplugins.birthdaycard.utils.PlayerUtils;
+import space.yurisi.universecorev2.subplugins.receivebox.ReceiveBoxAPI;
 import space.yurisi.universecorev2.utils.Message;
 import space.yurisi.universecorev2.utils.NumberUtils;
 
@@ -38,6 +43,7 @@ import java.time.MonthDay;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -58,14 +64,14 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
     );
 
     public BirthdayCardCommand() {
-        nk = new NamespacedKey("universecorev2.birthday", "birthdaycard");
+        nk = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.BIRTHDAY_CARD);
         this.birthdayCardRepository = UniverseCoreV2API.getInstance().getDatabaseManager().getBirthdayCardRepository();
     }
 
     private boolean isValidDate(String monthArg, String dayArg, Player player) {
         if (monthArg == null || dayArg == null || !NumberUtils.isNumeric(monthArg) || !NumberUtils.isNumeric(dayArg)) {
             Message.sendErrorMessage(player, BirthdayCard.PREFIX, "/birthday register <月> <日>");
-            return true;
+            return false;
         }
         return true;
     }
@@ -103,31 +109,47 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
         }
         switch (args[0].toLowerCase()) {
             case "register":
+                if (args.length < 3) {
+                    Message.sendErrorMessage(player, BirthdayCard.PREFIX, "/birthday register <月> <日>");
+                    return false;
+                }
                 if (!isValidDate(args[1], args[2], player)) return false;
 
                 MonthDay registerMonthDay = parseMonthDay(args[1], args[2], player);
+                UUID registerPlayerUUID = player.getUniqueId();
                 if (registerMonthDay == null) return true;
 
-                UUID registerPlayerUUID = player.getUniqueId();
                 BirthdayData existingData = getBirthdayData(registerPlayerUUID.toString());
 
                 if (existingData != null) {
                     Message.sendErrorMessage(player, BirthdayCard.PREFIX, "既に誕生日が登録されています");
                 } else {
-                    birthdayCardRepository.createBirthdayData(player, registerMonthDay);
+
+                    Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "一度登録すると変更することはできません");
+                    Message.sendNormalMessage(player, BirthdayCard.PREFIX, "[登録]", ClickEvent.runCommand("/birthday registerconfirm " + registerMonthDay.getMonthValue() + " " + registerMonthDay.getDayOfMonth()), "誕生日を登録します");
+                }
+                return true;
+            case "registerconfirm":
+                if (args.length < 3) {
+                    Message.sendErrorMessage(player, BirthdayCard.PREFIX, "/birthday register <月> <日>");
+                    return false;
+                }
+
+                if (!isValidDate(args[1], args[2], player)) return false;
+
+                MonthDay registerConfirmMonthDay = parseMonthDay(args[1], args[2], player);
+                if (registerConfirmMonthDay == null) return true;
+
+                UUID registerConfirmPlayerUUID = player.getUniqueId();
+                BirthdayData registerConfirmexistingData = getBirthdayData(registerConfirmPlayerUUID.toString());
+
+                if (registerConfirmexistingData != null) {
+                    Message.sendErrorMessage(player, BirthdayCard.PREFIX, "既に誕生日が登録されています");
+                } else {
+                    birthdayCardRepository.createBirthdayData(player, registerConfirmMonthDay);
                     Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "お誕生日を登録しました");
                 }
 
-                return true;
-
-            case "remove":
-                BirthdayData removeBirthdayData = getBirthdayData(player.getUniqueId().toString());
-                if (removeBirthdayData == null) {
-                    Message.sendErrorMessage(player, BirthdayCard.PREFIX, "削除するバースデーデータが見つかりませんでした");
-                    return true;
-                }
-                Message.sendWarningMessage(player, BirthdayCard.PREFIX, "本当に削除しますか？これまでにもらったメッセージも削除されます");
-                Message.sendNormalMessage(player, BirthdayCard.PREFIX, "§c[削除する]", ClickEvent.runCommand("/birthday removeconfirm"), "バースデーデータを削除します");
                 return true;
             case "get":
                 if (args.length < 2) {
@@ -226,8 +248,25 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                     Book book = (Book) mainHandItem.getItemMeta();
                     Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "お誕生日カードを送信しました");
                     player.getInventory().remove(mainHandItem);
-                    String pageJson = PageJsonUtils.serializePageJson(book.pages());
-                    birthdayCardRepository.createBirthdayMessage(sendToBirthdayData.getId(), player, pageJson);
+                    Component lastPage = book.pages().get(book.pages().size() - 1);
+                    Component updatedLastPage = lastPage.append(Component.text("\n" + player.getName() + " より"));
+                    List<Component> newPages = new ArrayList<>(book.pages());
+                    newPages.set(newPages.size() - 1, updatedLastPage);
+                    String pageJson = PageJsonUtils.serializePageJson(newPages);
+                    var sendToBirthdayMessages = birthdayCardRepository.createBirthdayMessage(sendToBirthdayData.getId(), player, pageJson);
+                    if (birthdayCardRepository.canReceiveGachaTicket(sendToBirthdayMessages)) {
+                        ItemStack ticket = UniverseItem.getItem(GachaTicket.id).getItem();
+                        ticket.setAmount(5);
+                        Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "お誕生日カードを書いてくれてありがとう\nガチャチケを5枚プレゼント!!");
+                        if (player.getInventory().firstEmpty() == -1) {
+                            Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "インベントリーがいっぱいなので\n報酬受け取りボックスに追加しました");
+                            ReceiveBoxAPI.AddReceiveItem(ticket, player.getUniqueId(), new Date(), "お誕生日カードを書いてくれたから(インベントリーがいっぱい)");
+                        } else {
+                            player.getInventory().addItem(ticket);
+                        }
+                        sendToBirthdayMessages.setReceivedGachaTicket(true);
+                        birthdayCardRepository.updateBirthdayMessage(sendToBirthdayMessages);
+                    }
                 } else {
                     Message.sendErrorMessage(player, BirthdayCard.PREFIX, "/birthday getで入手した本か確認してください");
                 }
@@ -264,7 +303,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 ItemStack bookItem = ItemStack.of(Material.WRITTEN_BOOK);
                 Book book = (Book) bookItem.getItemMeta();
                 book.title(Component.text("お誕生日カード " + player.getName() + "さんへ"));
-                book.author(Component.text("HappyBirthDayBook (" + LocalDate.now().getYear() + ")")
+                book.author(Component.text("お誕生日カード (" + LocalDate.now().getYear() + ")")
                         .color(NamedTextColor.GOLD)
                         .decorate(TextDecoration.BOLD));
                 List<Component> pageComponents = new ArrayList<>();
@@ -279,6 +318,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                     Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "お誕生日カードをお贈りしました");
                 } else {
                     birthdayMessagesList.forEach(birthdayMessages -> {
+                        Bukkit.getLogger().info(PageJsonUtils.deserializePageJson(birthdayMessages.getMessage()).toString());
                         pageComponents.addAll(PageJsonUtils.deserializePageJson(birthdayMessages.getMessage()));
                         birthdayCardRepository.deleteBirthdayMessage(birthdayMessages);
                     });
@@ -287,32 +327,21 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 BookMeta bookMeta = (BookMeta) book;
                 bookItem.setItemMeta(bookMeta);
                 player.getInventory().addItem(bookItem);
-                return true;
-            case "removeconfirm":
-                BirthdayData removeConfirmBirthdayData = getBirthdayData(player.getUniqueId().toString());
-                if (removeConfirmBirthdayData == null) {
-                    Message.sendErrorMessage(player, BirthdayCard.PREFIX, "削除するバースデーデータが見つかりませんでした");
-                    return true;
-                }
-                List<BirthdayMessages> removeConfirmBirthdayMessagesList = new ArrayList<>();
-                try {
-                    removeConfirmBirthdayMessagesList = birthdayCardRepository.getBirthdayMessages(removeConfirmBirthdayData.getId());
-                } catch (BirthdayDataNotFoundException ignored) {
-                    //NOOP
-                }
-                removeConfirmBirthdayMessagesList.forEach(removeConfirmBirthdayMessages -> {
-                    birthdayCardRepository.deleteBirthdayMessage(removeConfirmBirthdayMessages);
-                });
-                birthdayCardRepository.deleteBirthdayData(removeConfirmBirthdayData);
-                Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "自身のバースデーデータを削除しました");
+                ItemStack ticket = UniverseItem.getItem(GachaTicket.id).getItem();
+                ticket.setAmount(10);
+                ReceiveBoxAPI.AddReceiveItem(ticket, player.getUniqueId(), new Date(), "お誕生日プレゼント");
+                Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "ガチャチケ10枚プレゼント");
+                Bukkit.getServer().broadcast(Component.text("🎉 今日は ", NamedTextColor.YELLOW)
+                        .append(Component.text(player.getName(), NamedTextColor.GOLD))
+                        .append(Component.text(" さんの誕生日です！🎂\n", NamedTextColor.YELLOW))
+                        .append(Component.text("素晴らしい一年になりますように！おめでとう！", NamedTextColor.GREEN)));
                 return true;
             default:
                 String[] helpMessage = """
                         §6-- 🎉BirthdayCard Help --
                         🎂 §bバースデーカードのコマンド一覧です 🎂
                            §7/birthday : バースデーカレンダーメニューを開きます
-                           §7/birthday register <月> <日> : 誕生日を登録します
-                           §7/birthday remove : 登録した誕生日を削除します
+                           §7/birthday register <月> <日> : 誕生日を登録します (一度登録すると変更できません)
                            §7/birthday check [プレイヤー名] : 自分または指定したプレイヤーの誕生日を確認します
                            §7/birthday list : 登録されている誕生日の一覧を表示します
                            §7/birthday get [プレイヤー名] : 指定したプレイヤーに送る誕生日カードを取得します

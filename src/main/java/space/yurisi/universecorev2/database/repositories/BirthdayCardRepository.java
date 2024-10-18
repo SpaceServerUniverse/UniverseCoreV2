@@ -141,7 +141,7 @@ public class BirthdayCardRepository {
      * @param monthDay
      * @return 指定された月日が存在しない場合は空のリスト、存在する場合は該当するバースデーデータのリスト
      */
-    public List<BirthdayData> getBirthdayDataByMonthDay(MonthDay monthDay){
+    public List<BirthdayData> getBirthdayDataByMonthDay(MonthDay monthDay) {
         Session session = this.sessionFactory.getCurrentSession();
         try {
             session.beginTransaction();
@@ -266,6 +266,40 @@ public class BirthdayCardRepository {
         try {
             session.beginTransaction();
             session.remove(birthdayMessages);
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
+    }
+
+    /***
+     * ガチャチケを受け取るかどうか
+     *
+     */
+    public boolean canReceiveGachaTicket(BirthdayMessages birthdayMessages) {
+        Session session = this.sessionFactory.getCurrentSession();
+        try {
+            session.beginTransaction();
+            List birthdayMessagesList = session.createQuery("FROM BirthdayMessages WHERE birthdayDataId = :birthdayDataId AND uuid = :playerUuid AND receivedGachaTicket = true", BirthdayMessages.class)
+                    .setParameter("birthdayDataId", birthdayMessages.getBirthdayDataId())
+                    .setParameter("playerUuid", birthdayMessages.getUuid())
+                    .getResultList();
+            return birthdayMessagesList.isEmpty();
+        } finally {
+            session.close();
+        }
+    }
+
+    /**
+     * バースデーメッセージを更新します
+     *
+     * @param birthdayMessages
+     */
+    public void updateBirthdayMessage(BirthdayMessages birthdayMessages) {
+        Session session = this.sessionFactory.getCurrentSession();
+        try {
+            session.beginTransaction();
+            session.merge(birthdayMessages);
             session.getTransaction().commit();
         } finally {
             session.close();
