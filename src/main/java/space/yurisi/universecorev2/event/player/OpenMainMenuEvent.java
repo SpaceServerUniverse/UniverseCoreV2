@@ -1,6 +1,7 @@
 package space.yurisi.universecorev2.event.player;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -18,16 +19,19 @@ public class OpenMainMenuEvent implements Listener {
 
         ItemStack targetItem = event.getItem();
 
-        switch (targetItem.getType()) {
-            case KNOWLEDGE_BOOK -> {
-                ItemStack item = UniverseItem.getItem(MainMenuBook.id).getItem();
-                if (targetItem.isSimilar(item)) {
-                    Bukkit.dispatchCommand(player, "menu");
-                }
-                event.setCancelled(true);
-            }
+        if (targetItem == null) {
+            return;
         }
 
+        if (targetItem.getType() != Material.KNOWLEDGE_BOOK) {
+            return;
+        }
+
+        ItemStack item = UniverseItem.getItem(MainMenuBook.id).getItem();
+        if (targetItem.isSimilar(item)) {
+            Bukkit.dispatchCommand(player, "menu");
+        }
+        event.setCancelled(true);
     }
 
 }
