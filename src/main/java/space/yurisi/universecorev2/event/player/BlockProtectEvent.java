@@ -9,7 +9,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import space.yurisi.universecorev2.api.LuckPermsWrapper;
 import space.yurisi.universecorev2.utils.Message;
 
-public class InteractEvent implements Listener {
+public class BlockProtectEvent implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onInteract(PlayerInteractEvent event) {
@@ -25,7 +25,18 @@ public class InteractEvent implements Listener {
         switch (targetBlock.getType()) {
             case ENCHANTING_TABLE -> {
                 if (LuckPermsWrapper.isUserInAdminOrDevGroup(player)) {
-                    Message.sendSuccessMessage(player, "[管理AI]", "対象ブロック [エンチャントテーブル] の利用制限をバイパスしました");
+                    event.setCancelled(false);
+                    break;
+                }
+
+                event.setCancelled(true);
+            }
+            case ANVIL -> {
+                if (!player.getWorld().getName().equals("lobby")) {
+                    return;
+                }
+
+                if (LuckPermsWrapper.isUserInAdminOrDevGroup(player)) {
                     event.setCancelled(false);
                     break;
                 }

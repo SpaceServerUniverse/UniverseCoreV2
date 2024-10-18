@@ -69,13 +69,21 @@ public class MainMenu implements BaseMenu {
                 .setDisplayName("報酬受け取り")
                 .setLegacyLore(List.of("§6報酬受け取りメニューを開きます")),
                 "/receive");
+        Item executeBirthday = new CommandItem(new ItemBuilder(Material.CAKE)
+                .setDisplayName("誕生日カードメニュー")
+                .setLegacyLore(List.of("§6誕生日カードメニューを開きます")),
+                "/birthday");
+        Item executeMenuBook = new CommandItem(new ItemBuilder(Material.KNOWLEDGE_BOOK)
+                .setDisplayName("メインメニューの本を召喚する")
+                .setLegacyLore(List.of("§6右クリックでメニューが開ける本を召喚します")),
+                "/menu book");
 
         Gui gui = Gui.normal()
                 .setStructure(
                         "# # # i # = # # #",
                         "# + a m t o y + #",
-                        "# + + n s h p + #",
-                        "# # # # l # # # #"
+                        "# + k n s h p + #",
+                        "b # # # l # # # #"
                 )
                 .addIngredient('#', border)
                 .addIngredient('+', inMenuBorder)
@@ -85,11 +93,13 @@ public class MainMenu implements BaseMenu {
                 .addIngredient('m', executeMywarp)
                 .addIngredient('t', executeTpp)
                 .addIngredient('y', executeMarket)
+                .addIngredient('k', executeBirthday)
                 .addIngredient('n', executeTag)
                 .addIngredient('s', executeTrash)
                 .addIngredient('h', executeHead)
                 .addIngredient('o', executeAmmo)
                 .addIngredient('p', executeReceive)
+                .addIngredient('b', executeMenuBook)
                 .addIngredient('l', new LaunchNavigationItem())
                 .build();
 
