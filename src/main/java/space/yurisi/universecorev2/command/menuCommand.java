@@ -36,12 +36,10 @@ public class menuCommand implements CommandExecutor {
                 if (new Random().nextDouble() < 0.000122) {
                     player.playSound(player.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 10, 1);
                     player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 10, 1);
-                    Message.sendSuccessMessage(player, "[管理AI]", "§c§oメニューを開きました...ヮ! クリーパーが... (´・ω・`)");
                     return true;
                 }
 
                 player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_FALL, 10, 1);
-                Message.sendSuccessMessage(player, "[管理AI]", "メニューを開きました");
                 return true;
             case 1:
                 if (!args[0].equals("book")) {
