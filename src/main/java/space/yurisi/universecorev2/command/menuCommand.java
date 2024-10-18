@@ -27,8 +27,7 @@ public class menuCommand implements CommandExecutor {
         if (!(sender instanceof Player player)) {
             return false;
         }
-
-
+        
         switch (args.length) {
             case 0:
                 MainMenu mainMenu = new MainMenu();
@@ -71,7 +70,10 @@ public class menuCommand implements CommandExecutor {
                 inv.addItem(itemStack);
 
                 Message.sendSuccessMessage(player, "[管理AI]", "メインメニュー用のアイテムをインベントリに追加しました");
+                return true;
+            default:
+                Message.sendNormalMessage(player, "[管理AI]", "[/menu] でメインメニューを開くか、[/menu book] でメインメニュー用のアイテムを入手できます。");
+                return true;
         }
-        return true;
     }
 }
