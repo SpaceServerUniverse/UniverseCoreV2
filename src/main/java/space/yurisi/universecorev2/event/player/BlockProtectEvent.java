@@ -9,7 +9,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import space.yurisi.universecorev2.api.LuckPermsWrapper;
 import space.yurisi.universecorev2.utils.Message;
 
-public class InteractEvent implements Listener {
+public class BlockProtectEvent implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onInteract(PlayerInteractEvent event) {
