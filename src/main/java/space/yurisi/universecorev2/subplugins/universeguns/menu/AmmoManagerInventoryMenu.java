@@ -31,8 +31,6 @@ public class AmmoManagerInventoryMenu implements BaseMenu {
                 this.connector.AmmoDataInit(player);
             }
 
-            player.playSound(player.getLocation(), Sound.BLOCK_BARREL_OPEN, 1, 1);
-
             Item border = new SimpleItem(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE));
             Item iron1 = new SimpleItem(new ItemBuilder(Material.IRON_INGOT).setAmount(1));
             Item iron2 = new SimpleItem(new ItemBuilder(Material.IRON_INGOT).setAmount(2));

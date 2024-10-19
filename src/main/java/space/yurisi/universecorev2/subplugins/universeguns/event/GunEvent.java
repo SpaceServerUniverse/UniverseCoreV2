@@ -84,7 +84,7 @@ public class GunEvent implements Listener {
         NamespacedKey gunSerialKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN_SERIAL);
 
         if(container.has(itemKey, PersistentDataType.STRING) && Objects.equals(container.get(itemKey, PersistentDataType.STRING), "magazine_bag")){
-            player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN, 1.0F, 1.0F);
+            player.playSound(player.getLocation(), Sound.BLOCK_BARREL_OPEN, 1, 1);
             AmmoManagerInventoryMenu menu = new AmmoManagerInventoryMenu(connector);
             menu.sendMenu(player);
             return;
