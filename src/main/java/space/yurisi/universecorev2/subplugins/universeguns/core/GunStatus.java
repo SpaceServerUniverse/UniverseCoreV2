@@ -64,12 +64,13 @@ public class GunStatus {
 
     public void finishReload(Player player) throws UserNotFoundException, AmmoNotFoundException {
         this.isReloading = false;
-        connector.setAmmoFromUserId(player, gun.getType(), getInventoryAmmo(player) + magazineAmmo);
-        if(this.inventoryAmmo <= gun.getMagazineSize()){
-            this.magazineAmmo = (int) this.inventoryAmmo;
+        long nowAllAmmo = getInventoryAmmo(player) + (long)magazineAmmo;
+        connector.setAmmoFromUserId(player, gun.getType(), nowAllAmmo);
+        if(nowAllAmmo <= gun.getMagazineSize()){
+            this.magazineAmmo = (int) nowAllAmmo;
             setInventoryAmmo(player, 0);
         } else {
-            setInventoryAmmo(player, this.inventoryAmmo - (gun.getMagazineSize() - magazineAmmo));
+            setInventoryAmmo(player, nowAllAmmo - (long)(gun.getMagazineSize()));
             this.magazineAmmo = gun.getMagazineSize();
         }
     }
