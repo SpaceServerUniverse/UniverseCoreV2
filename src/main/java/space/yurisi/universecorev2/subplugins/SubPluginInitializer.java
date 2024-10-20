@@ -3,10 +3,12 @@ package space.yurisi.universecorev2.subplugins;
 import org.bukkit.Bukkit;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.subplugins.autocollect.AutoCollect;
+import space.yurisi.universecorev2.subplugins.birthdaycard.BirthdayCard;
 import space.yurisi.universecorev2.subplugins.blockcopystick.BlockCopyStick;
 import space.yurisi.universecorev2.subplugins.changemessages.ChangeMessages;
 import space.yurisi.universecorev2.subplugins.chestshop.ChestShop;
 import space.yurisi.universecorev2.subplugins.customname.CustomName;
+import space.yurisi.universecorev2.subplugins.elevator.Elevator;
 import space.yurisi.universecorev2.subplugins.evolutionitem.EvolutionItem;
 import space.yurisi.universecorev2.subplugins.fishingsystem.FishingSystem;
 import space.yurisi.universecorev2.subplugins.gacha.Gacha;
@@ -19,6 +21,7 @@ import space.yurisi.universecorev2.subplugins.navigation.Navigation;
 import space.yurisi.universecorev2.subplugins.playerhead.PlayerHead;
 import space.yurisi.universecorev2.subplugins.playerinfoscoreboard.PlayerInfoScoreBoard;
 import space.yurisi.universecorev2.subplugins.rankcounter.RankCounter;
+import space.yurisi.universecorev2.subplugins.receivebox.ReceiveBox;
 import space.yurisi.universecorev2.subplugins.repaircream.RepairCream;
 import space.yurisi.universecorev2.subplugins.snowsafeframe.SnowSafeFrame;
 import space.yurisi.universecorev2.subplugins.tickfreezer.TickFreezer;
@@ -79,6 +82,9 @@ public class SubPluginInitializer {
         this.subPlugins.add(new TickFreezer());
         this.subPlugins.add(new UniverseGuns());
         this.subPlugins.add(new SnowSafeFrame());
+        this.subPlugins.add(new ReceiveBox());
+        this.subPlugins.add(new Elevator());
+        this.subPlugins.add(new BirthdayCard());
         this.subPlugins.add(new AutoCollect());
     }
 
