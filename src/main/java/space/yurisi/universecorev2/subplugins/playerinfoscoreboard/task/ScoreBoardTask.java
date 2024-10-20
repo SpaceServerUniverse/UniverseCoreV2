@@ -44,9 +44,9 @@ public final class ScoreBoardTask extends BukkitRunnable {
         setOnline(objective, -6);
         setJob(objective, -7);
         if(AutoCollectMap.getInstance().isAutoCollect(player)) {
-            Objects.requireNonNull(objective).getScore("§a自動収集モード").setScore(-7);
+            Objects.requireNonNull(objective).getScore("§a自動収集モード").setScore(-8);
         }
-        setSpaceShipPoint(objective, -8);
+        setSpaceShipPoint(objective, -9);
         player.setScoreboard(scoreboard);
         changeTick();
     }
