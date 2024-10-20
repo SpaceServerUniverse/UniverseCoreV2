@@ -6,7 +6,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import space.yurisi.universecorev2.subplugins.autocollect.data.AutoCollectMap;
-import space.yurisi.universecorev2.subplugins.autocollect.event.AutoCollectListener;
 import space.yurisi.universecorev2.utils.Message;
 
 public class AutoCollectCommand implements CommandExecutor {

@@ -5,15 +5,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import space.yurisi.universecorev2.subplugins.autocollect.command.AutoCollectCommand;
 import space.yurisi.universecorev2.subplugins.autocollect.data.AutoCollectMap;
 import space.yurisi.universecorev2.utils.Message;
 
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
 
-public class AutoCollectListener implements org.bukkit.event.Listener {
+public class AutoCollectListener implements Listener{
 
     @EventHandler
     public void onDrop(BlockDropItemEvent event) {
@@ -55,6 +56,7 @@ public class AutoCollectListener implements org.bukkit.event.Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        AutoCollectMap.getInstance().init(event.getPlayer());
+        if(AutoCollectMap.getInstance().isRegistered(event.getPlayer())) return;
+        AutoCollectMap.getInstance().register(event.getPlayer());
     }
 }

@@ -27,7 +27,11 @@ public class AutoCollectMap {
         return this.autoCollectMap.get(player.getUniqueId().toString());
     }
 
-    public void init(Player player){
+    public void register(Player player){
         this.autoCollectMap.put(player.getUniqueId().toString(),false);
+    }
+
+    public boolean isRegistered(Player player){
+        return this.autoCollectMap.containsKey(player.getUniqueId().toString());
     }
 }
