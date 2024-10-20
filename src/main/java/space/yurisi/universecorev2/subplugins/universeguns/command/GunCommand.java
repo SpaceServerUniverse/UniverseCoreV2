@@ -1,5 +1,6 @@
-package space.yurisi.universecorev2.subplugins.universeguns.core;
+package space.yurisi.universecorev2.subplugins.universeguns.command;
 
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -22,11 +23,12 @@ public class GunCommand implements CommandExecutor {
         if (!(sender instanceof Player player)) {
             return false;
         }
+        player.playSound(player.getLocation(), Sound.BLOCK_BARREL_OPEN, 1, 1);
 
         AmmoManagerInventoryMenu ammoManagerInventoryMenu = new AmmoManagerInventoryMenu(connector);
         ammoManagerInventoryMenu.sendMenu(player);
 
-        Message.sendSuccessMessage(player, "[武器AI]", "弾薬管理メニューを開きました");
+//        Message.sendSuccessMessage(player, "[武器AI]", "弾薬管理メニューを開きました");
         return true;
     }
 }

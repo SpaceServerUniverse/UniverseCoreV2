@@ -28,6 +28,8 @@ public class DatabaseManager {
     private final PlayerCountRepository playerCountRepository;
     private final CustomNameRepository customNameRepository;
     private final MarketRepository marketRepository;
+    private final ReceiveBoxRepository receiveBoxRepository;
+    private final BirthdayCardRepository birthdayCardRepository;
 
     public DatabaseManager(SessionFactory sessionFactory) {
         this.userRepository = new UserRepository(sessionFactory);
@@ -51,6 +53,8 @@ public class DatabaseManager {
         this.marketRepository = new MarketRepository(sessionFactory);
         this.chestShopRepository = new ChestShopRepository(sessionFactory);
         this.ammoRepository = new AmmoRepository(sessionFactory);
+        this.receiveBoxRepository = new ReceiveBoxRepository(sessionFactory);
+        this.birthdayCardRepository = new BirthdayCardRepository(sessionFactory);
     }
 
     /**
@@ -211,14 +215,16 @@ public class DatabaseManager {
      *
      * @return MarketRepository
      */
-    public MarketRepository getMarketRepository() { return marketRepository; }
+    public MarketRepository getMarketRepository() {
+        return marketRepository;
+    }
 
     /**
      * 称号リポジトリを取得
      *
      * @return PlayerNormalLevelRepository
      */
-    public CustomNameRepository getCustomNameRepository(){
+    public CustomNameRepository getCustomNameRepository() {
         return customNameRepository;
     }
 
@@ -238,5 +244,22 @@ public class DatabaseManager {
      */
     public AmmoRepository getAmmoRepository() {
         return ammoRepository;
+    }
+
+    /**
+     * 受取ボックスリポジトリーを取得
+     * @return ReceiveBoxRepository 受取ボックスのリポジトリ
+     */
+    public ReceiveBoxRepository getReceiveBoxRepository(){
+        return receiveBoxRepository;
+    }
+
+    /**
+     * バースデーカードリポジトリを取得
+     *
+     * @return BirthdayCardRepository
+     */
+    public BirthdayCardRepository getBirthdayCardRepository() {
+        return birthdayCardRepository;
     }
 }

@@ -68,7 +68,10 @@ public class DatabaseConnector {
                 .addAnnotatedClass(CustomName.class)
                 .addAnnotatedClass(Market.class)
                 .addAnnotatedClass(ChestShop.class)
-                .addAnnotatedClass(Ammo.class);
+                .addAnnotatedClass(Ammo.class)
+                .addAnnotatedClass(ReceiveBox.class)
+                .addAnnotatedClass(BirthdayData.class)
+                .addAnnotatedClass(BirthdayMessages.class);
     }
 
     private Configuration registerProperties(Configuration configuration) {

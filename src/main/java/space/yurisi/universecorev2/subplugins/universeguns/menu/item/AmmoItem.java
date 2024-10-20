@@ -93,7 +93,7 @@ public abstract class AmmoItem extends AbstractItem {
         if(hasItemForCrafting(amountIron, amountPowder)){
             player.getInventory().removeItem(new ItemStack(Material.IRON_INGOT, amountIron));
             player.getInventory().removeItem(new ItemStack(Material.GUNPOWDER, amountPowder));
-            player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, 1, 1);
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, 1, 1);
             return true;
         }
         Message.sendErrorMessage(player, "[武器AI]", "アイテムが足りません。");
@@ -110,7 +110,7 @@ public abstract class AmmoItem extends AbstractItem {
             Long money = universeEconomyAPI.getMoney(player);
             if(money >= price) {
                 universeEconomyAPI.reduceMoney(player, price, "弾薬の購入");
-                player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, 1, 1);
+                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, 1, 1);
                 return true;
             }
             Message.sendErrorMessage(player, "[武器AI]", "お金が足りません。");

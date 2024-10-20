@@ -9,4 +9,5 @@ public class UniverseItemKeyString {
     public static final String FISH_SIZE = "fish_size";
     public static final String GUN = "gun";
     public static final String GUN_SERIAL = "gun_serial";
+    public static final String BIRTHDAY_CARD = "birthday_card";
 }

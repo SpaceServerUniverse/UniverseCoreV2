@@ -36,3 +36,45 @@ UniverseCoreV2 をデバッグする際は次の手順を踏みます.
 3. `docker compose restart` を実行する
 4. `localhost:25565` で Minecraft サーバーに接続する
 
+## 権限周り
+
+SpaceServer Universe では権限周りを LuckPerms で管理しています.
+
+LuckPerms には API が公開されており, それを利用することでプラグイン内で権限周りを制御することができます.
+
+UniverseCoreV2 には LuckPerms の API を利用するためのユーティリティクラス **LuckPermsWrapper** が用意されています.
+
+### 運営・開発者かどうかを確認する
+
+運営・開発者かどうかを確認するには LuckPermsWrapper の `isUserInAdminOrDevGroup()` メソッドを使用します.
+
+```java
+/**
+ * プレイヤーが管理者グループまたは開発者グループに所属しているかどうか確認します
+ * @param player　プレイヤー
+ * @return いずれかに所属している場合はtrue、所属していない場合はfalse
+ */
+public static boolean isUserInAdminOrDevGroup(Player player) {
+   return player.hasPermission("group.admin") || player.hasPermission("group.developer");
+}
+```
+
+### 特定のグループに所属しているかどうかを確認する
+
+特定のグループに所属しているかどうかを確認するには LuckPermsWrapper の `isUserInGroup()` メソッドを使用します.
+
+```java
+/**
+ * プレイヤーが指定したグループに所属しているかどうか確認します
+ * @param player プレイヤー
+ * @param group グループ名
+ * @return 所属している場合はtrue、所属していない場合はfalse
+ */
+public static boolean isUserInGroup(Player player, String group) {
+   return player.hasPermission("group." + group);
+}
+```
+
+### 権限を持っているかどうかを確認する
+
+権限を持っているかどうかを確認するには Player クラスの `hasPermission()` を使用します.
