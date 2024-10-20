@@ -3,43 +3,22 @@ package space.yurisi.universecorev2.subplugins.autocollect.event;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 import space.yurisi.universecorev2.subplugins.autocollect.command.AutoCollectCommand;
+import space.yurisi.universecorev2.subplugins.autocollect.data.AutoCollectMap;
 import space.yurisi.universecorev2.utils.Message;
 
 import java.util.*;
 
-public class Listener implements org.bukkit.event.Listener {
-
-    private Map<String, Boolean> isCollect;
-    private static Listener instance;
-
-    public Listener(){
-        this.isCollect = new HashMap<>();
-        instance = this;
-    }
-
-    public static Listener getInstance(){
-        return instance;
-    }
-
-    public void toggleCollect(Player player){
-        this.isCollect.put(player.getUniqueId().toString(),!this.isCollect.get(player.getUniqueId().toString()));
-    }
-
-    public boolean isCollect(Player player){
-        return this.isCollect.get(player.getUniqueId().toString());
-    }
+public class AutoCollectListener implements org.bukkit.event.Listener {
 
     @EventHandler
     public void onDrop(BlockDropItemEvent event) {
         Player player = event.getPlayer();
-        if(!isCollect.get(player.getUniqueId().toString())) return;
+        if(!AutoCollectMap.getInstance().isAutoCollect(player)) return;
         List<Item> itemEntity = event.getItems();
         outside:for(int i = 0; i < itemEntity.size(); i++){
             ItemStack dropItem = itemEntity.get(i).getItemStack();
@@ -76,11 +55,6 @@ public class Listener implements org.bukkit.event.Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        isCollect.put(event.getPlayer().getUniqueId().toString(), false);
-    }
-
-    @EventHandler
-    public void onQuit(PlayerQuitEvent event) {
-        isCollect.remove(event.getPlayer().getUniqueId().toString());
+        AutoCollectMap.getInstance().init(event.getPlayer());
     }
 }

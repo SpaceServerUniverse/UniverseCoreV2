@@ -11,6 +11,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import space.yurisi.universecorev2.exception.MoneyNotFoundException;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
+import space.yurisi.universecorev2.subplugins.autocollect.data.AutoCollectMap;
 import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomyAPI;
 
 import java.time.LocalTime;
@@ -42,6 +43,9 @@ public final class ScoreBoardTask extends BukkitRunnable {
         Objects.requireNonNull(objective).getScore("§r　").setScore(-5);
         setOnline(objective, -6);
         setJob(objective, -7);
+        if(AutoCollectMap.getInstance().isAutoCollect(player)) {
+            Objects.requireNonNull(objective).getScore("§a自動収集モード").setScore(-7);
+        }
         setSpaceShipPoint(objective, -8);
         player.setScoreboard(scoreboard);
         changeTick();

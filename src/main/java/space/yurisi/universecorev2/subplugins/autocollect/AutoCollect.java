@@ -4,7 +4,8 @@ import org.bukkit.Bukkit;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.subplugins.SubPlugin;
 import space.yurisi.universecorev2.subplugins.autocollect.command.AutoCollectCommand;
-import space.yurisi.universecorev2.subplugins.autocollect.event.Listener;
+import space.yurisi.universecorev2.subplugins.autocollect.data.AutoCollectMap;
+import space.yurisi.universecorev2.subplugins.autocollect.event.AutoCollectListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,8 @@ public class AutoCollect implements SubPlugin {
 
     @Override
     public void onEnable(UniverseCoreV2 core) {
-        Bukkit.getPluginManager().registerEvents(new Listener(), core);
+        Bukkit.getPluginManager().registerEvents(new AutoCollectListener(), core);
+        new AutoCollectMap();
         core.getCommand("autocollect").setExecutor(new AutoCollectCommand());
         List<String> aliases = new ArrayList<>();
         aliases.add("ac");
