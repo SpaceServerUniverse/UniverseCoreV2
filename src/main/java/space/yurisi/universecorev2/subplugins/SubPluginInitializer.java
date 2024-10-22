@@ -2,6 +2,7 @@ package space.yurisi.universecorev2.subplugins;
 
 import org.bukkit.Bukkit;
 import space.yurisi.universecorev2.UniverseCoreV2;
+import space.yurisi.universecorev2.subplugins.autocollect.AutoCollect;
 import space.yurisi.universecorev2.subplugins.birthdaycard.BirthdayCard;
 import space.yurisi.universecorev2.subplugins.blockcopystick.BlockCopyStick;
 import space.yurisi.universecorev2.subplugins.changemessages.ChangeMessages;
@@ -84,6 +85,7 @@ public class SubPluginInitializer {
         this.subPlugins.add(new ReceiveBox());
         this.subPlugins.add(new Elevator());
         this.subPlugins.add(new BirthdayCard());
+        this.subPlugins.add(new AutoCollect());
     }
 
     public void onEnable() {
