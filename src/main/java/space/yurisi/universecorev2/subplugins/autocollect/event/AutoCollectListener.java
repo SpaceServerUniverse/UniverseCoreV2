@@ -1,5 +1,6 @@
 package space.yurisi.universecorev2.subplugins.autocollect.event;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -51,7 +52,7 @@ public class AutoCollectListener implements Listener{
             player.getWorld().dropItem(player.getLocation(), item);
         }
         if(isDrop){
-            Message.sendWarningMessage(player, AutoCollectCommand.ACCommand, "インベントリが満杯です！");
+            player.sendActionBar(Component.text("§b" + AutoCollectCommand.ACCommand + " §6インベントリが満杯です！"));
         }
     }
 
