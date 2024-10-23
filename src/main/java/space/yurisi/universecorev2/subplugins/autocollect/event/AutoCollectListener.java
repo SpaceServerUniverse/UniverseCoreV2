@@ -20,6 +20,7 @@ public class AutoCollectListener implements Listener{
     public void onDrop(BlockDropItemEvent event) {
         Player player = event.getPlayer();
         if(!AutoCollectMap.getInstance().isAutoCollect(player)) return;
+        event.setCancelled(true);
         List<Item> itemEntity = event.getItems();
         outside:for(int i = 0; i < itemEntity.size(); i++){
             ItemStack dropItem = itemEntity.get(i).getItemStack();
