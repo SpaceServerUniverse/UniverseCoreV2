@@ -22,7 +22,7 @@ public final class M1911 extends Gun {
         this.magazineSize = 7;
         this.burst = 0;
         this.reloadTime = 800;
-        this.isZoomWalkSpeed = 0.20F;
+        this.isZoomWalkSpeed = 0.23F;
         this.baseDamage = 2.0D;
         this.isExplosive = false;
         this.explosionRadius = 0.0F;
