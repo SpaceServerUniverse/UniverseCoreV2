@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import space.yurisi.universecorev2.UniverseCoreV2API;
 import space.yurisi.universecorev2.database.DatabaseManager;
@@ -61,10 +62,15 @@ public class MainMenu implements BaseMenu {
                 .setDisplayName("プレイヤーヘッド")
                 .setLegacyLore(List.of("§6他のプレイヤーのヘッドを購入します")),
                 "/head");
-        Item executeAmmo = new CommandItem(new ItemBuilder(Material.IRON_NUGGET)
-                .setDisplayName("弾薬")
-                .setLegacyLore(List.of("§6弾薬を購入・クラフトします")),
-                "/ammo");
+        ItemStack ammoItem = new ItemStack(Material.IRON_NUGGET);
+        ItemMeta ammoMeta = ammoItem.getItemMeta();
+        if (ammoMeta != null) {
+            ammoMeta.setDisplayName("弾薬");
+            ammoMeta.setLore(List.of("§6弾薬を購入・クラフトします"));
+            ammoMeta.setCustomModelData(1);
+            ammoItem.setItemMeta(ammoMeta);
+        }
+        Item executeAmmo = new CommandItem(new ItemBuilder(ammoItem), "/ammo");
         Item executeReceive = new CommandItem(new ItemBuilder(Material.CHEST)
                 .setDisplayName("報酬受け取り")
                 .setLegacyLore(List.of("§6報酬受け取りメニューを開きます")),
