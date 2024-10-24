@@ -1,7 +1,10 @@
 package space.yurisi.universecorev2.subplugins.universeguns.event;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import space.yurisi.universecorev2.UniverseCoreV2;
@@ -42,6 +45,13 @@ public class ShotgunShot {
             Vector velocity = spreadDirection.multiply(gun.getBulletSpeed());
             Snowball projectile = player.launchProjectile(Snowball.class, velocity);
 //            projectile.setGravity(false);
+            ItemStack itemStack = new ItemStack(Material.SNOWBALL);
+            ItemMeta itemMeta = itemStack.getItemMeta();
+            if (itemMeta != null) {
+                itemMeta.setCustomModelData(1);
+                itemStack.setItemMeta(itemMeta);
+            }
+            projectile.setItem(itemStack);
             projectiles.add(projectile);
             new BukkitRunnable() {
                 @Override

@@ -7,11 +7,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.item.CustomItem;
 import space.yurisi.universecorev2.subplugins.universeguns.constants.GunType;
 
+import java.util.List;
 import java.util.UUID;
 
 public abstract class Gun extends CustomItem {
@@ -58,6 +60,8 @@ public abstract class Gun extends CustomItem {
     protected float volumeSound;
 
     protected float pitchSound;
+
+    protected String flavorText;
 
     public Gun(String id, String name, ItemStack baseItem) {
         super(id, name, baseItem);
@@ -149,8 +153,44 @@ public abstract class Gun extends CustomItem {
         container.set(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN), PersistentDataType.BOOLEAN, true);
         container.set(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN_SERIAL), PersistentDataType.STRING, UUID.randomUUID().toString());
         meta.displayName(Component.text(name));
+        List<Component> lore = getComponents();
+        meta.lore(lore);
         item.setItemMeta(meta);
         return default_setting.apply(item);
+    }
+
+    private @NotNull List<Component> getComponents() {
+        String category = "§7カテゴリ: ";
+        switch (type){
+            case AR:
+                category += "アサルトライフル";
+                break;
+            case SMG:
+                category += "サブマシンガン";
+                break;
+            case SG:
+                category += "ショットガン";
+                break;
+            case SR:
+                category += "スナイパーライフル";
+                break;
+            case HG:
+                category += "ハンドガン";
+                break;
+            case LMG:
+                category += "軽機関銃";
+                break;
+            case EX:
+                category += "特殊系";
+                break;
+        }
+        List<Component> lore = List.of(
+                Component.text(category),
+                Component.text("§7マガジンサイズ: " + magazineSize),
+                Component.text("§7リロード時間: " + (double)reloadTime/1000 + "s"),
+                Component.text(flavorText)
+        );
+        return lore;
     }
 
     public static boolean isGun(ItemStack itemStack){

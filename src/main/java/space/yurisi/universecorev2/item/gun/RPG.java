@@ -37,6 +37,7 @@ public final class RPG extends Gun {
         this.shotSound = Sound.ENTITY_FIREWORK_ROCKET_LAUNCH;
         this.volumeSound = 10.0F;
         this.pitchSound = 0.5F;
+        this.flavorText = "§7ロケットランチャーの代名詞。爆風で広範囲にダメージを与える";
     }
 
     @Override

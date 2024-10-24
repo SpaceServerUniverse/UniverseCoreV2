@@ -37,6 +37,7 @@ public final class M870 extends Gun {
         this.shotSound = Sound.ITEM_SHIELD_BREAK;
         this.volumeSound = 5.0F;
         this.pitchSound = 0.6F;
+        this.flavorText = "§7ポンプアクション式ショットガン。有効射程が長いが連射速度は遅い";
     }
 
     @Override
