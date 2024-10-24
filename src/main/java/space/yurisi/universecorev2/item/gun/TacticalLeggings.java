@@ -32,6 +32,7 @@ public class TacticalLeggings extends CustomItem {
                         Component.text("§7マガジンを取り出しやすくした戦闘用のレギンス"),
                         Component.text("§7装備することでリロード速度が上昇する")
                 );
+                meta.lore(lore);
                 item.setItemMeta(meta);
             }
             return item;
