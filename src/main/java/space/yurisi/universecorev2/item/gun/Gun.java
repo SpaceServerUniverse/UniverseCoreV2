@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.item.CustomItem;
@@ -153,6 +154,12 @@ public abstract class Gun extends CustomItem {
         container.set(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN_SERIAL), PersistentDataType.STRING, UUID.randomUUID().toString());
         meta.displayName(Component.text(name));
         item.setItemMeta(meta);
+        List<Component> lore = getComponents();
+        meta.lore(lore);
+        return default_setting.apply(item);
+    }
+
+    private @NotNull List<Component> getComponents() {
         String category = "§7カテゴリ: ";
         switch (type){
             case AR:
@@ -183,8 +190,7 @@ public abstract class Gun extends CustomItem {
                 Component.text("§7リロード時間: " + reloadTime/1000 + "s"),
                 Component.text(flavorText)
         );
-        meta.lore(lore);
-        return default_setting.apply(item);
+        return lore;
     }
 
     public static boolean isGun(ItemStack itemStack){
