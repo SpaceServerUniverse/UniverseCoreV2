@@ -1,0 +1,8 @@
+# コンフィグの書き方
+# achievement:
+#   - Long [Normal]
+#   - Long [Gold]
+
+flower:
+  - 25
+  - 100
