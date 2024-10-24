@@ -36,7 +36,7 @@ public final class SMG11 extends Gun {
         this.shotSound = Sound.ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR;
         this.volumeSound = 3.0F;
         this.pitchSound = 0.8F;
-        this.flavorText = "§7随一の連射速度と軽量さが特徴のサブマシンガン。覗かないとまともに当たらない。";
+        this.flavorText = "§7随一の連射速度と軽量さが特徴のサブマシンガン。覗かないとまともに当たらない";
     }
 
     @Override

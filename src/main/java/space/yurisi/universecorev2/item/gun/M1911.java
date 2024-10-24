@@ -27,7 +27,7 @@ public final class M1911 extends Gun {
         this.isExplosive = false;
         this.explosionRadius = 0.0F;
         this.weight = 0.20F;
-        this.fireRate = 5;
+        this.fireRate = 6;
         this.recoil = 0;
         this.spread = 0.05D;
         this.bulletNumber = 1;
@@ -37,7 +37,7 @@ public final class M1911 extends Gun {
         this.shotSound = Sound.ENTITY_FIREWORK_ROCKET_BLAST_FAR;
         this.volumeSound = 5.0F;
         this.pitchSound = 2.0F;
-        this.flavorText = "§7アメリカで開発された自動拳銃。生まれたのは第一次世界大戦の時代だが、現在でも多くの国で使用されている。";
+        this.flavorText = "§7アメリカで開発された自動拳銃。第一次世界大戦時代に生まれ、現在でも多くの国で使用されている";
     }
 
     @Override

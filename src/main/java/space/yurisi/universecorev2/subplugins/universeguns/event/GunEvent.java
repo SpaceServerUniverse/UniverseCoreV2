@@ -609,7 +609,7 @@ public class GunEvent implements Listener {
                 PersistentDataContainer container = meta.getPersistentDataContainer();
                 NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
                 if (container.has(itemKey, PersistentDataType.STRING) &&  Objects.equals(container.get(itemKey, PersistentDataType.STRING), "tactical_leggings")) {
-                    double newReloadTime = reloadTime * 0.8;
+                    double newReloadTime = reloadTime * 0.7;
                     reloadTime = (int) newReloadTime;
                 }
             }

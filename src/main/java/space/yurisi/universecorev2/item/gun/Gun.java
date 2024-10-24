@@ -153,9 +153,9 @@ public abstract class Gun extends CustomItem {
         container.set(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN), PersistentDataType.BOOLEAN, true);
         container.set(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN_SERIAL), PersistentDataType.STRING, UUID.randomUUID().toString());
         meta.displayName(Component.text(name));
-        item.setItemMeta(meta);
         List<Component> lore = getComponents();
         meta.lore(lore);
+        item.setItemMeta(meta);
         return default_setting.apply(item);
     }
 
@@ -187,7 +187,7 @@ public abstract class Gun extends CustomItem {
         List<Component> lore = List.of(
                 Component.text(category),
                 Component.text("§7マガジンサイズ: " + magazineSize),
-                Component.text("§7リロード時間: " + reloadTime/1000 + "s"),
+                Component.text("§7リロード時間: " + (double)reloadTime/1000 + "s"),
                 Component.text(flavorText)
         );
         return lore;

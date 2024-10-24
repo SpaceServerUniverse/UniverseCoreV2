@@ -36,7 +36,7 @@ public final class R4C extends Gun {
         this.shotSound = Sound.BLOCK_PISTON_EXTEND;
         this.volumeSound = 4.0F;
         this.pitchSound = 1.8F;
-        this.flavorText = "§7コンパクトなカービンライフルで、威力は低いものの高い連射速度でかの特殊部隊に愛用されている。";
+        this.flavorText = "§7威力は低いものの高い連射速度でレインボーな特殊部隊に愛用されている";
     }
 
 

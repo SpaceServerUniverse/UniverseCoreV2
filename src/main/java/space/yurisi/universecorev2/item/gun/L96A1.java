@@ -36,7 +36,7 @@ public final class L96A1 extends Gun {
         this.shotSound = Sound.ENTITY_IRON_GOLEM_DAMAGE;
         this.volumeSound = 10.0F;
         this.pitchSound = 0.8F;
-        this.flavorText = "§7イギリスで使用される軍用ボルトアクション式スナイパーライフル。";
+        this.flavorText = "§7イギリスで使用される軍用ボルトアクション式スナイパーライフル";
     }
 
     @Override

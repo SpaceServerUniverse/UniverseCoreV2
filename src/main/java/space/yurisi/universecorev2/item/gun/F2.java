@@ -37,7 +37,7 @@ public final class F2 extends Gun {
         this.shotSound = Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST_FAR;
         this.volumeSound = 5.0F;
         this.pitchSound = 0.8F;
-        this.flavorText = "§7フランスで開発された3点バースト式のアサルトライフル。高い命中精度とレートが特徴。";
+        this.flavorText = "§7フランスで開発された3点バースト式のアサルトライフル。高いレートと命中精度が特徴";
     }
 
     @Override
