@@ -27,7 +27,7 @@ public class TacticalLeggings extends CustomItem {
         default_setting = (item) -> {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
-                meta.addEnchant(Enchantment.UNBREAKING, 2, true);
+                meta.addEnchant(Enchantment.UNBREAKING, 4, true);
                 List<Component> lore = List.of(
                         Component.text("§7マガジンを取り出しやすくした戦闘用のレギンス"),
                         Component.text("§7装備することでリロード速度が上昇する")
