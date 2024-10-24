@@ -22,13 +22,13 @@ public final class R4C extends Gun {
         this.burst = 0;
         this.reloadTime = 2500;
         this.isZoomWalkSpeed = 0.05F;
-        this.baseDamage = 3.0D;
+        this.baseDamage = 2.5D;
         this.isExplosive = false;
         this.explosionRadius = 0.0F;
         this.weight = 0.17F;
         this.fireRate = 3;
         this.recoil = 0;
-        this.spread = 0.20D;
+        this.spread = 0.30D;
         this.bulletNumber = 1;
         this.bulletSpeed = 3.5D;
         this.range = 500;
@@ -36,6 +36,7 @@ public final class R4C extends Gun {
         this.shotSound = Sound.BLOCK_PISTON_EXTEND;
         this.volumeSound = 4.0F;
         this.pitchSound = 1.8F;
+        this.flavorText = "§7コンパクトなカービンライフルで、威力は低いものの高い連射速度でかの特殊部隊に愛用されている。";
     }
 
 

@@ -23,13 +23,13 @@ public final class F2 extends Gun {
         this.burst = 2;
         this.reloadTime = 3500;
         this.isZoomWalkSpeed = 0.15F;
-        this.baseDamage = 1.0D;
+        this.baseDamage = 1.5D;
         this.isExplosive = false;
         this.explosionRadius = 0.0F;
         this.weight = 0.17F;
         this.fireRate = 8;
         this.recoil = 0;
-        this.spread = 0.1D;
+        this.spread = 0.06D;
         this.bulletNumber = 1;
         this.bulletSpeed = 3.5D;
         this.range = 500;
@@ -37,6 +37,7 @@ public final class F2 extends Gun {
         this.shotSound = Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST_FAR;
         this.volumeSound = 5.0F;
         this.pitchSound = 0.8F;
+        this.flavorText = "§7フランスで開発された3点バースト式のアサルトライフル。高い命中精度とレートが特徴。";
     }
 
     @Override

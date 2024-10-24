@@ -37,6 +37,7 @@ public final class M1911 extends Gun {
         this.shotSound = Sound.ENTITY_FIREWORK_ROCKET_BLAST_FAR;
         this.volumeSound = 5.0F;
         this.pitchSound = 2.0F;
+        this.flavorText = "§7アメリカで開発された自動拳銃。生まれたのは第一次世界大戦の時代だが、現在でも多くの国で使用されている。";
     }
 
     @Override

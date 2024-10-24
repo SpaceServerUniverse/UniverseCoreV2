@@ -602,9 +602,21 @@ public class GunEvent implements Listener {
             return;
         }
         try {
-            boolean result = gunStatus.startReload(gun.getReloadTime(), player);
+            int reloadTime = gun.getReloadTime();
+            ItemStack leggings = player.getInventory().getLeggings();
+            if (leggings != null && leggings.hasItemMeta()) {
+                ItemMeta meta = leggings.getItemMeta();
+                PersistentDataContainer container = meta.getPersistentDataContainer();
+                NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
+                if (container.has(itemKey, PersistentDataType.STRING) &&  Objects.equals(container.get(itemKey, PersistentDataType.STRING), "tactical_leggings")) {
+                    double newReloadTime = reloadTime * 0.8;
+                    reloadTime = (int) newReloadTime;
+                }
+            }
+
+            boolean result = gunStatus.startReload(reloadTime, player);
             if (!result) {
-                Message.sendWarningMessage(player, "[武器AI]", "弾薬がありません。");
+                Message.sendWarningMessage(player, "[武器AI]", "弾薬を補充してください");
                 return;
             }
             player.getWorld().playSound(player.getLocation(), Sound.BLOCK_IRON_DOOR_OPEN, 1.0F, 1.0F);
@@ -628,7 +640,7 @@ public class GunEvent implements Listener {
                 }
             };
 
-            reloadingTask.runTaskLater(plugin, gun.getReloadTime() / 50);
+            reloadingTask.runTaskLater(plugin, reloadTime / 50);
             reloadingTasks.put(player, reloadingTask);
 
 
