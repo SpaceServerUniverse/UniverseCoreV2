@@ -13,7 +13,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import space.yurisi.universecorev2.subplugins.universediscord.UniverseDiscordChannel;
 import space.yurisi.universecorev2.subplugins.universediscord.UniverseDiscordMessage;
 import space.yurisi.universecorev2.utils.Message;
 
@@ -28,13 +27,11 @@ public class PlayerEvent implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(PlayerJoinEvent event) {
         UniverseDiscordMessage.sendJoinMessageToDiscord(event.getPlayer(), discordChannel);
-        UniverseDiscordChannel.updateDiscordChannelTopic(discordChannel, event.getPlayer().getServer().getOnlinePlayers().size());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onQuit(PlayerQuitEvent event) {
         UniverseDiscordMessage.sendQuitMessageToDiscord(event.getPlayer(), discordChannel);
-        UniverseDiscordChannel.updateDiscordChannelTopic(discordChannel, event.getPlayer().getServer().getOnlinePlayers().size());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
