@@ -20,8 +20,7 @@ public class TeleportEvent implements Listener {
     @EventHandler
     public void onTeleport(PlayerTeleportEvent event) {
         Player player = event.getPlayer();
-        boolean allowFlight = player.isOp() && player.getGameMode() != GameMode.SURVIVAL
-                || LuckPermsWrapper.isUserInGroup(player, "developer")
+        boolean allowFlight = LuckPermsWrapper.isUserInAdminOrDevGroup(player) && player.getGameMode() != GameMode.SURVIVAL
                 || event.getTo().getWorld().getName().equals("lobby");
 
         new BukkitRunnable() {
