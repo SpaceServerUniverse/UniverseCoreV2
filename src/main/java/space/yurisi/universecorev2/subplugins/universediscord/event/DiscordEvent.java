@@ -32,6 +32,12 @@ public class DiscordEvent extends ListenerAdapter {
             return;
         }
 
+        if (content.equals("!playerlist")) {
+            // すでに環境変数で指定されたチャンネルであることは確認済みなので, 暗黙的キャストでテキストチャンネル *として* 扱う
+            UniverseDiscordMessage.sendStatusMessageToMinecraft(event.getChannel().asTextChannel());
+            return;
+        }
+
         UniverseDiscordMessage.sendMessageToMinecraft(member, content);
     }
 

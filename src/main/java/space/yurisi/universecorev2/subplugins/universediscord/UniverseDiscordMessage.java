@@ -9,6 +9,8 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import space.yurisi.universecorev2.utils.Message;
 
+import java.util.stream.Collectors;
+
 public class UniverseDiscordMessage {
 
     /** Minecraft へのメッセージ */
@@ -65,6 +67,23 @@ public class UniverseDiscordMessage {
         embed.setColor(0x687EFF);
 
         discordChannel.sendMessageEmbeds(embed.build()).queue();
+    }
+
+    public static void sendStatusMessageToMinecraft(TextChannel discordChannel) {
+        String players = Bukkit.getOnlinePlayers().stream()
+                .map(Player::getName)
+                .collect(Collectors.joining(", "));
+        int online_players = Bukkit.getOnlinePlayers().size();
+        int max_players = Bukkit.getMaxPlayers();
+
+        EmbedBuilder embed = new EmbedBuilder();
+        embed.setTitle("サーバー情報");
+        embed.setDescription("```\n" + players + "\n```");
+        embed.setFooter("現在のプレイヤー数: " + online_players + " / " + max_players);
+        embed.setColor(0xFFA74B);
+
+        discordChannel.sendMessageEmbeds(embed.build()).queue();
+
     }
 
 }
