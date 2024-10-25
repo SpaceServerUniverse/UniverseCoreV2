@@ -25,7 +25,7 @@ public class passwordCommand implements CommandExecutor {
 
         if (strings.length == 0) {
             Message.sendNormalMessage(player, "[管理AI]", "パスワードの再設定: /password <パスワードの文字列>");
-            Message.sendNormalMessage(player, "[管理AI]", "パスワードは大文字小文字数字含む 8〜36文字");
+            Message.sendNormalMessage(player, "[管理AI]", "パスワードは大文字小文字数字含む 8〜32文字");
             return false;
         }
 
