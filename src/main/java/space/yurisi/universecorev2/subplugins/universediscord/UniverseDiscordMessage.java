@@ -28,7 +28,7 @@ public class UniverseDiscordMessage {
             name_format = discordMember.getUser().getName() + " (" + discordMember.getNickname() + ")";
         }
 
-        Bukkit.broadcast(Component.text("§a[Discord#" + name_format + "] " + "§f" + discordMessage));
+        Bukkit.broadcast(Component.text("§a[Discord] §r<" + name_format + "> " + discordMessage));
     }
 
 
@@ -38,7 +38,7 @@ public class UniverseDiscordMessage {
         Location location = player.getLocation();
         String world_name = location.getWorld().getName();
 
-        discordChannel.sendMessage("[" + player.getName() + " | " + world_name + "]" + " " + message).queue();
+        discordChannel.sendMessage("[" + player.getName() + "@" + world_name + "]" + " " + message).queue();
     }
 
     public static void sendEventMessageToDiscord(TextChannel discordChannel, String message, int color) {
@@ -53,7 +53,7 @@ public class UniverseDiscordMessage {
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("入室");
         embed.setDescription(player.getName() + " がログインしました");
-        embed.setThumbnail("https://mc-heads.net/avatar/" + player.getUniqueId() + "/100/nohelm.png");
+        embed.setThumbnail("https://mc-heads.net/head/" + player.getUniqueId());
         embed.setColor(0x2AFF5C);
 
         discordChannel.sendMessageEmbeds(embed.build()).queue();
@@ -63,7 +63,7 @@ public class UniverseDiscordMessage {
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("退出");
         embed.setDescription(player.getName() + " がログアウトしました");
-        embed.setThumbnail("https://mc-heads.net/avatar/" + player.getUniqueId() + "/100/nohelm.png");
+        embed.setThumbnail("https://mc-heads.net/head/" + player.getUniqueId());
         embed.setColor(0x687EFF);
 
         discordChannel.sendMessageEmbeds(embed.build()).queue();
