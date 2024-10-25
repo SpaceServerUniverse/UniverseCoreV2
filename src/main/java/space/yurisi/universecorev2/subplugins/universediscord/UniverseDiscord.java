@@ -3,6 +3,7 @@ package space.yurisi.universecorev2.subplugins.universediscord;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.bukkit.Bukkit;
@@ -39,17 +40,21 @@ public class UniverseDiscord implements SubPlugin {
         try {
             jda.awaitReady();
         } catch (InterruptedException e) {
-            throw new DiscordJDANotReadyException("JDA is not ready!");
+            throw new DiscordJDANotReadyException("JDA の初期化に失敗しました。詳しくは JDA のスタックトレースを確認してください");
         }
 
         Guild guild = jda.getGuildById(config.getDiscordGuildId());
         if (guild == null) {
-            throw new DiscordGuildNotFoundException("Guild not found with ID: " + config.getDiscordGuildId());
+            throw new DiscordGuildNotFoundException("指定されたギルドIDは無効です: " + config.getDiscordGuildId());
         }
 
         TextChannel channel = guild.getTextChannelById(config.getDiscordChannelId());
         if (channel == null) {
-            throw new DiscordChannelNotFoundException("Channel not found with ID: " + config.getDiscordChannelId());
+            throw new DiscordChannelNotFoundException("指定されたチャンネルIDは無効です: " + config.getDiscordChannelId());
+        }
+
+        if (channel.getType() != ChannelType.TEXT) {
+            throw new DiscordChannelNotFoundException("指定されたチャンネルIDはテキストチャンネルではありません: " + config.getDiscordChannelId());
         }
 
         new EventManager(core, channel);
