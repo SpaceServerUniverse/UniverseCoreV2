@@ -1,6 +1,7 @@
 package space.yurisi.universecorev2.subplugins.rankcounter.event;
 
 import org.bukkit.GameMode;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,6 +24,10 @@ public class OreCountEvents implements Listener {
         OreCount oreCount = manager.get(player).getOreCount();
 
         if (player.getGameMode() != GameMode.SURVIVAL) {
+            return;
+        }
+
+        if (player.getInventory().getItemInMainHand().getEnchantments().containsKey(Enchantment.SILK_TOUCH)) {
             return;
         }
 

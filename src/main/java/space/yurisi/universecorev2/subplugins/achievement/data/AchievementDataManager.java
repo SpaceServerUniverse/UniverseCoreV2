@@ -2,6 +2,7 @@ package space.yurisi.universecorev2.subplugins.achievement.data;
 
 import org.bukkit.entity.Player;
 import space.yurisi.universecorev2.database.models.count.LifeCount;
+import space.yurisi.universecorev2.database.models.count.OreCount;
 import space.yurisi.universecorev2.subplugins.achievement.data.config.AchievementConfig;
 import space.yurisi.universecorev2.subplugins.rankcounter.manager.CounterModelManager;
 
@@ -92,6 +93,151 @@ public class AchievementDataManager {
                 status.getColor()+"ブロック設置数",
                 new ArrayList<>(List.of(
                         (status.isAchieved() ? "":"Next: ")+placeCount+"/"+status.getGoal()
+                ))
+        );
+    }
+
+    public static AchievementData getCoal(Player player){
+        if(manager == null) return null;
+        OreCount oreCount = manager.get(player).getOreCount();
+        Long coalCount = oreCount.getCoal_ore();
+        List<Long> coal = AchievementConfig.getInstance().getCoal();
+        AchievementStatus status = getStatus(coalCount, coal);
+        return AchievementData.create(
+                status.getStage(),
+                status.getColor()+"石炭:原石破壊数",
+                new ArrayList<>(List.of(
+                        (status.isAchieved() ? "":"Next: ")+coalCount+"/"+status.getGoal()
+                ))
+        );
+    }
+
+    public static AchievementData getIron(Player player){
+        if(manager == null) return null;
+        OreCount oreCount = manager.get(player).getOreCount();
+        Long ironCount = oreCount.getIron_ore();
+        List<Long> iron = AchievementConfig.getInstance().getIron();
+        AchievementStatus status = getStatus(ironCount, iron);
+        return AchievementData.create(
+                status.getStage(),
+                status.getColor()+"鉄:原石破壊数",
+                new ArrayList<>(List.of(
+                        (status.isAchieved() ? "":"Next: ")+ironCount+"/"+status.getGoal()
+                ))
+        );
+    }
+
+    public static AchievementData getGold(Player player){
+        if(manager == null) return null;
+        OreCount oreCount = manager.get(player).getOreCount();
+        Long goldCount = oreCount.getGold_ore();
+        List<Long> gold = AchievementConfig.getInstance().getGold();
+        AchievementStatus status = getStatus(goldCount, gold);
+        return AchievementData.create(
+                status.getStage(),
+                status.getColor()+"金:原石破壊数",
+                new ArrayList<>(List.of(
+                        (status.isAchieved() ? "":"Next: ")+goldCount+"/"+status.getGoal()
+                ))
+        );
+    }
+
+    public static AchievementData getLapis(Player player){
+        if(manager == null) return null;
+        OreCount oreCount = manager.get(player).getOreCount();
+        Long lapisCount = oreCount.getLapis_ore();
+        List<Long> lapis = AchievementConfig.getInstance().getLapis();
+        AchievementStatus status = getStatus(lapisCount, lapis);
+        return AchievementData.create(
+                status.getStage(),
+                status.getColor()+"ラピス:原石破壊数",
+                new ArrayList<>(List.of(
+                        (status.isAchieved() ? "":"Next: ")+lapisCount+"/"+status.getGoal()
+                ))
+        );
+    }
+
+    public static AchievementData getRedStone(Player player){
+        if(manager == null) return null;
+        OreCount oreCount = manager.get(player).getOreCount();
+        Long redStoneCount = oreCount.getRedstone_ore();
+        List<Long> redStone = AchievementConfig.getInstance().getRedStone();
+        AchievementStatus status = getStatus(redStoneCount, redStone);
+        return AchievementData.create(
+                status.getStage(),
+                status.getColor()+"赤石:原石破壊数",
+                new ArrayList<>(List.of(
+                        (status.isAchieved() ? "":"Next: ")+redStoneCount+"/"+status.getGoal()
+                ))
+        );
+    }
+
+    public static AchievementData getEmerald(Player player){
+        if(manager == null) return null;
+        OreCount oreCount = manager.get(player).getOreCount();
+        Long emeraldCount = oreCount.getEmerald_ore();
+        List<Long> emerald = AchievementConfig.getInstance().getEmerald();
+        AchievementStatus status = getStatus(emeraldCount, emerald);
+        return AchievementData.create(
+                status.getStage(),
+                status.getColor()+"エメラルド:原石破壊数",
+                new ArrayList<>(List.of(
+                        (status.isAchieved() ? "":"Next: ")+emeraldCount+"/"+status.getGoal()
+                ))
+        );
+    }
+
+    public static AchievementData getDiamond(Player player){
+        if(manager == null) return null;
+        OreCount oreCount = manager.get(player).getOreCount();
+        Long diamondCount = oreCount.getDiamond_ore();
+        List<Long> diamond = AchievementConfig.getInstance().getDiamond();
+        AchievementStatus status = getStatus(diamondCount, diamond);
+        return AchievementData.create(
+                status.getStage(),
+                status.getColor()+"ダイヤ:原石破壊数",
+                new ArrayList<>(List.of(
+                        (status.isAchieved() ? "":"Next: ")+diamondCount+"/"+status.getGoal()
+                ))
+        );
+    }
+
+    public static AchievementData getCopper(Player player){
+        if(manager == null) return null;
+        OreCount oreCount = manager.get(player).getOreCount();
+        Long copperCount = oreCount.getCopper_ore();
+        List<Long> copper = AchievementConfig.getInstance().getCopper();
+        AchievementStatus status = getStatus(copperCount, copper);
+        return AchievementData.create(
+                status.getStage(),
+                status.getColor()+"銅:原石破壊数",
+                new ArrayList<>(List.of(
+                        (status.isAchieved() ? "":"Next: ")+copperCount+"/"+status.getGoal()
+                ))
+        );
+    }
+
+    public static AchievementData getOre(Player player){
+        if(manager == null) return null;
+        OreCount oreCount = manager.get(player).getOreCount();
+        Long oreSum = (
+                  oreCount.getCoal_ore()
+                + oreCount.getIron_ore()
+                + oreCount.getGold_ore()
+                + oreCount.getLapis_ore()
+                + oreCount.getRedstone_ore()
+                + oreCount.getEmerald_ore()
+                + oreCount.getDiamond_ore()
+                + oreCount.getCopper_ore()
+        );
+
+        List<Long> ore = AchievementConfig.getInstance().getOre();
+        AchievementStatus status = getStatus(oreSum, ore);
+        return AchievementData.create(
+                status.getStage(),
+                status.getColor()+"鉱石破壊数",
+                new ArrayList<>(List.of(
+                        (status.isAchieved() ? "":"Next: ")+oreSum+"/"+status.getGoal()
                 ))
         );
     }

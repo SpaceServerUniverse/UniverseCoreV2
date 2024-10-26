@@ -46,5 +46,50 @@ public class AchievementConfig {
         List<Long> place = this.config.getLongList("place");
         return List.of(place.getFirst(), place.getLast());
     }
+
+    public List<Long> getCoal(){
+        List<Long> coal = this.config.getLongList("coal");
+        return List.of(coal.getFirst(), coal.getLast());
+    }
+
+    public List<Long> getIron(){
+        List<Long> iron = this.config.getLongList("iron");
+        return List.of(iron.getFirst(), iron.getLast());
+    }
+
+    public List<Long> getGold(){
+        List<Long> gold = this.config.getLongList("gold");
+        return List.of(gold.getFirst(), gold.getLast());
+    }
+
+    public List<Long> getLapis(){
+        List<Long> lap = this.config.getLongList("lapis");
+        return List.of(lap.getFirst(), lap.getLast());
+    }
+
+    public List<Long> getRedStone(){
+        List<Long> redStone = this.config.getLongList("redstone");
+        return List.of(redStone.getFirst(), redStone.getLast());
+    }
+
+    public List<Long> getEmerald(){
+        List<Long> emerald = this.config.getLongList("emerald");
+        return List.of(emerald.getFirst(), emerald.getLast());
+    }
+
+    public List<Long> getDiamond(){
+        List<Long> diamond = this.config.getLongList("diamond");
+        return List.of(diamond.getFirst(), diamond.getLast());
+    }
+
+    public List<Long> getCopper(){
+        List<Long> copper = this.config.getLongList("copper");
+        return List.of(copper.getFirst(), copper.getLast());
+    }
+
+    public List<Long> getOre(){
+        List<Long> ore = this.config.getLongList("ore");
+        return List.of(ore.getFirst(), ore.getLast());
+    }
 }
 
