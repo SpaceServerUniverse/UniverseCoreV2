@@ -17,9 +17,8 @@ public class AchievementMenu implements BaseMenu {
     @Override
     public void sendMenu(Player player) {
         List<Item> items = new java.util.ArrayList<>(List.of());
-        if(AchievementDataManager.getFlower(player) != null) {
-            items.add(new AchievementItem(AchievementDataManager.getFlower(player)));
-        }
+        if(AchievementDataManager.getBreak(player) != null) {items.add(new AchievementItem(AchievementDataManager.getBreak(player)));}
+        if(AchievementDataManager.getFlower(player) != null) {items.add(new AchievementItem(AchievementDataManager.getFlower(player)));}
 
         Gui gui = PagedGui.items()
                 .setStructure(

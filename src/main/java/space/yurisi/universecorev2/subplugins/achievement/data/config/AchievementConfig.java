@@ -36,5 +36,10 @@ public class AchievementConfig {
         List<Long> flower = this.config.getLongList("flower");
         return List.of(flower.getFirst(), flower.getLast());
     }
+
+    public List<Long> getBreak(){
+        List<Long> breakCount = this.config.getLongList("break");
+        return List.of(breakCount.getFirst(), breakCount.getLast());
+    }
 }
 

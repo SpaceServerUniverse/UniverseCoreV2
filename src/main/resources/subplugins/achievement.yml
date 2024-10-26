@@ -3,6 +3,10 @@
 #   - Normal [Long]
 #   - Gold [Long]
 
+break:
+  - 100000
+  - 1000000
+
 flower:
   - 25
   - 100

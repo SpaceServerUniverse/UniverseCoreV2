@@ -4,15 +4,12 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import space.yurisi.universecorev2.subplugins.achievement.data.AchievementData;
 import space.yurisi.universecorev2.subplugins.achievement.data.AchievementDataManager;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
-
-import java.util.List;
 
 public class AchievementItem extends AbstractItem {
 
