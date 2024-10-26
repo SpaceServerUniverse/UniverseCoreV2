@@ -41,5 +41,10 @@ public class AchievementConfig {
         List<Long> breakCount = this.config.getLongList("break");
         return List.of(breakCount.getFirst(), breakCount.getLast());
     }
+
+    public List<Long> getPlace(){
+        List<Long> place = this.config.getLongList("place");
+        return List.of(place.getFirst(), place.getLast());
+    }
 }
 

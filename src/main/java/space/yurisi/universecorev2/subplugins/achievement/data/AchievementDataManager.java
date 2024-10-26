@@ -24,64 +24,70 @@ public class AchievementDataManager {
         AchievementDataManager.manager = manager;
     }
 
+    private static AchievementStatus getStatus(Long now, List<Long> conf){
+        String stage;
+        String color;
+        if(now >= conf.getLast()){
+            stage = Achievement_GOLD;
+            color = Name_GOLD;
+        }else if(now >= conf.getFirst()){
+            stage = Achievement_SILVER;
+            color = Name_SILVER;
+        }else{
+            stage = Achievement_NORMAL;
+            color = Name_NORMAL;
+        }
+        return AchievementStatus.create(
+                now >= conf.getLast(),
+                (now >= conf.getFirst() ? conf.getLast():conf.getFirst()),
+                stage,
+                color
+        );
+    }
+
     @Nullable
     public static AchievementData getFlower(Player player) {
         if(manager == null) return null;
         LifeCount lifeCount = manager.get(player).getLifeCount();
         Long place = lifeCount.getFlower_place();
         List<Long> flower = AchievementConfig.getInstance().getFlower();
-        Long goal;
-        String stage;
-        String color;
-        if(place >= flower.getLast()) {
-            goal = flower.getLast();
-            stage = Achievement_GOLD;
-            color = Name_GOLD;
-        }else if (place >= flower.getFirst()) {
-            goal = flower.getLast();
-            stage = Achievement_SILVER;
-            color = Name_SILVER;
-        }else{
-            goal = flower.getFirst();
-            stage = Achievement_NORMAL;
-            color = Name_NORMAL;
-        }
-
-        return AchievementData.createData(
-                stage,
-                color + "花を植えた数",
+        AchievementStatus status = getStatus(place, flower);
+        return AchievementData.create(
+                status.getStage(),
+                status.getColor() + "花を植えた数",
                 new ArrayList<>(List.of(
-                        place + "/" + goal
+                        (status.isAchieved() ? "":"Next: ")+place + "/" + status.getGoal()
                 ))
         );
     }
 
+    @Nullable
     public static AchievementData getBreak(Player player) {
         if(manager == null) return null;
         LifeCount lifeCount = manager.get(player).getLifeCount();
         Long breakCount = lifeCount.getBlock_break();
         List<Long> blockBreak = AchievementConfig.getInstance().getBreak();
-        Long goal;
-        String stage;
-        String color;
-        if(breakCount >= blockBreak.getLast()) {
-            goal = blockBreak.getLast();
-            stage = Achievement_GOLD;
-            color = Name_GOLD;
-        }else if (breakCount >= blockBreak.getFirst()) {
-            goal = blockBreak.getLast();
-            stage = Achievement_SILVER;
-            color = Name_SILVER;
-        }else{
-            goal = blockBreak.getFirst();
-            stage = Achievement_NORMAL;
-            color = Name_NORMAL;
-        }
-        return AchievementData.createData(
-                stage,
-                color+"ブロック破壊数",
+        AchievementStatus status = getStatus(breakCount, blockBreak);
+        return AchievementData.create(
+                status.getStage(),
+                status.getColor()+"ブロック破壊数",
                 new ArrayList<>(List.of(
-                        breakCount+"/"+goal
+                        (status.isAchieved() ? "":"Next: ")+breakCount+"/"+status.getGoal()
+                ))
+        );
+    }
+
+    public static AchievementData getPlace(Player player){
+        if(manager == null) return null;
+        LifeCount lifeCount = manager.get(player).getLifeCount();
+        Long placeCount = lifeCount.getBlock_place();
+        List<Long> place = AchievementConfig.getInstance().getPlace();
+        AchievementStatus status = getStatus(placeCount, place);
+        return AchievementData.create(
+                status.getStage(),
+                status.getColor()+"ブロック設置数",
+                new ArrayList<>(List.of(
+                        (status.isAchieved() ? "":"Next: ")+placeCount+"/"+status.getGoal()
                 ))
         );
     }

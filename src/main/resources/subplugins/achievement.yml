@@ -1,11 +1,15 @@
 # コンフィグの書き方
 # achievement:
-#   - Normal [Long]
+#   - Silver [Long]
 #   - Gold [Long]
 
 break:
   - 100000
   - 1000000
+
+place:
+  - 50000
+  - 250000
 
 flower:
   - 25

@@ -16,9 +16,6 @@ public class AchievementMenu implements BaseMenu {
 
     @Override
     public void sendMenu(Player player) {
-        List<Item> items = new java.util.ArrayList<>(List.of());
-        if(AchievementDataManager.getBreak(player) != null) {items.add(new AchievementItem(AchievementDataManager.getBreak(player)));}
-        if(AchievementDataManager.getFlower(player) != null) {items.add(new AchievementItem(AchievementDataManager.getFlower(player)));}
 
         Gui gui = PagedGui.items()
                 .setStructure(
@@ -26,7 +23,7 @@ public class AchievementMenu implements BaseMenu {
                         "x x x x x x x x x",
                         "x x x x x x x x x")
                 .addIngredient('x', Markers.CONTENT_LIST_SLOT_HORIZONTAL)
-                .setContent(items)
+                .setContent(getItems(player))
                 .build();
 
         Window window = Window.single()
@@ -36,5 +33,13 @@ public class AchievementMenu implements BaseMenu {
                 .build();
 
         window.open();
+    }
+
+    public List<Item> getItems(Player player) {
+        List<Item> items = new java.util.ArrayList<>(List.of());
+        if(AchievementDataManager.getBreak(player) != null) {items.add(new AchievementItem(AchievementDataManager.getBreak(player)));}
+        if(AchievementDataManager.getPlace(player) != null) {items.add(new AchievementItem(AchievementDataManager.getPlace(player)));}
+        if(AchievementDataManager.getFlower(player) != null) {items.add(new AchievementItem(AchievementDataManager.getFlower(player)));}
+        return items;
     }
 }

@@ -16,18 +16,21 @@ public final class AchievementData {
         this.itemLore = itemLore;
     }
 
-    public static AchievementData createData(@NotNull String stage, @NotNull String ItemName, @NotNull ArrayList<String> ItemLore){
+    public static AchievementData create(@NotNull String stage, @NotNull String ItemName, @NotNull ArrayList<String> ItemLore){
         return new AchievementData(stage, ItemName, ItemLore);
     }
 
+    @NotNull
     public String getStage() {
         return stage;
     }
 
+    @NotNull
     public String getItemName() {
         return itemName;
     }
 
+    @NotNull
     public ArrayList<String> getItemLore() {
         return itemLore;
     }
