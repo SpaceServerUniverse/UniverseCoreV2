@@ -24,6 +24,10 @@ public class AchievementDataManager {
         AchievementDataManager.manager = manager;
     }
 
+    public static boolean canGetManager(){
+        return manager != null;
+    }
+
     private static AchievementStatus getStatus(Long now, List<Long> conf){
         String stage;
         String color;

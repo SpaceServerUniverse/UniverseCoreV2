@@ -37,9 +37,11 @@ public class AchievementMenu implements BaseMenu {
 
     public List<Item> getItems(Player player) {
         List<Item> items = new java.util.ArrayList<>(List.of());
-        if(AchievementDataManager.getBreak(player) != null) {items.add(new AchievementItem(AchievementDataManager.getBreak(player)));}
-        if(AchievementDataManager.getPlace(player) != null) {items.add(new AchievementItem(AchievementDataManager.getPlace(player)));}
-        if(AchievementDataManager.getFlower(player) != null) {items.add(new AchievementItem(AchievementDataManager.getFlower(player)));}
+        if(AchievementDataManager.canGetManager()){
+            items.add(new AchievementItem(AchievementDataManager.getBreak(player)));
+            items.add(new AchievementItem(AchievementDataManager.getPlace(player)));
+            items.add(new AchievementItem(AchievementDataManager.getFlower(player)));
+        }
         return items;
     }
 }
