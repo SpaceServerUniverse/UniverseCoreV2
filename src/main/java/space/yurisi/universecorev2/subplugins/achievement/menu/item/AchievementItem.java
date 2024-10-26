@@ -45,6 +45,6 @@ public class AchievementItem extends AbstractItem {
 
     @Override
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent inventoryClickEvent) {
-
+        //クリックで実績解除報酬をプレゼント！とかあったらいいなと思った午前2時
     }
 }
