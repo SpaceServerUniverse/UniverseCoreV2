@@ -3,6 +3,14 @@
 #   - Silver [Long]
 #   - Gold [Long]
 
+login:
+  - 10
+  - 30
+
+consecutive_login:
+  - 10
+  - 30
+
 break:
   - 100000
   - 1000000
@@ -10,6 +18,10 @@ break:
 place:
   - 50000
   - 250000
+
+flower:
+  - 25
+  - 100
 
 ore:
   - 10000
@@ -47,6 +59,14 @@ diamond:
   - 50
   - 250
 
-flower:
-  - 25
+fishing:
+  - 30
   - 100
+
+gacha:
+  - 50
+  - 250
+
+kill:
+  - 250
+  - 1000

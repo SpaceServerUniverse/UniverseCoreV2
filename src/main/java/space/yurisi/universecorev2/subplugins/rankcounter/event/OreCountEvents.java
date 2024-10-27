@@ -27,10 +27,6 @@ public class OreCountEvents implements Listener {
             return;
         }
 
-        if (player.getInventory().getItemInMainHand().getEnchantments().containsKey(Enchantment.SILK_TOUCH)) {
-            return;
-        }
-
         switch (event.getBlock().getType()) {
             case COAL_ORE, DEEPSLATE_COAL_ORE -> oreCount.setCoal_ore(oreCount.getCoal_ore() + 1);
             case LAPIS_ORE, DEEPSLATE_LAPIS_ORE -> oreCount.setLapis_ore(oreCount.getLapis_ore() + 1);

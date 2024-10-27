@@ -91,5 +91,30 @@ public class AchievementConfig {
         List<Long> ore = this.config.getLongList("ore");
         return List.of(ore.getFirst(), ore.getLast());
     }
+
+    public List<Long> getFishing(){
+        List<Long> fishing = this.config.getLongList("fishing");
+        return List.of(fishing.getFirst(), fishing.getLast());
+    }
+
+    public List<Long> getGacha(){
+        List<Long> gacha = this.config.getLongList("gacha");
+        return List.of(gacha.getFirst(), gacha.getLast());
+    }
+
+    public List<Long> getKill(){
+        List<Long> kill = this.config.getLongList("kill");
+        return List.of(kill.getFirst(), kill.getLast());
+    }
+
+    public List<Long> getLogin(){
+        List<Long> login = this.config.getLongList("login");
+        return List.of(login.getFirst(), login.getLast());
+    }
+
+    public List<Long> getConsecutiveLogin(){
+        List<Long> consecutiveLogin = this.config.getLongList("consecutive_login");
+        return List.of(consecutiveLogin.getFirst(), consecutiveLogin.getLast());
+    }
 }
 
