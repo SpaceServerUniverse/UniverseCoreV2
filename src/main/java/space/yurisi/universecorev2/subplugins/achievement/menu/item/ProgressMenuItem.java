@@ -23,7 +23,7 @@ public class ProgressMenuItem extends AbstractItem {
 
     @Override
     public ItemProvider getItemProvider() {
-        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE).setDisplayName("§a進行状況を表示");
+        return new ItemBuilder(Material.LIME_STAINED_GLASS_PANE).setDisplayName("§a"+row+"列目: 進行状況を表示");
     }
 
     @Override
