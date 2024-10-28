@@ -7,10 +7,15 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import space.yurisi.universecorev2.subplugins.changemessages.data.SuicidePlayerData;
 
 import java.util.Random;
 
 public class suCommand implements CommandExecutor{
+
+    public suCommand(){
+        new SuicidePlayerData();
+    }
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
@@ -19,6 +24,7 @@ public class suCommand implements CommandExecutor{
 
         }
 
+        SuicidePlayerData.getInstance().setChoke(player, true);
         player.setHealth(0.0);
         Bukkit.broadcast(getMessage(player));
 
@@ -32,10 +38,10 @@ public class suCommand implements CommandExecutor{
 
     private Component getMessage(Player player) {
         Component[] messages = new Component[]{
-                Component.text("§a §l[死亡管理AI]§b " + player.getName() + "§a は消滅した"),
-                Component.text("§a §l[死亡管理AI]§b " + player.getName() + "§a は存在がなくなった"),
-                Component.text("§a §l[死亡管理AI]§b " + player.getName() + "§a はちりになった"),
-                Component.text("§a §l[死亡管理AI]§b " + player.getName() + "§a は星になった")
+                Component.text("§a§l[死亡管理AI]§b " + player.getName() + "§a は消滅した"),
+                Component.text("§a§l[死亡管理AI]§b " + player.getName() + "§a は存在がなくなった"),
+                Component.text("§a§l[死亡管理AI]§b " + player.getName() + "§a はちりになった"),
+                Component.text("§a§l[死亡管理AI]§b " + player.getName() + "§a は星になった")
         };
         int i = this.getRandom(messages);
         return messages[i];

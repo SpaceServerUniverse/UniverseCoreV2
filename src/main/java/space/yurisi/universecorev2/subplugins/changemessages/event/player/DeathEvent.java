@@ -6,6 +6,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import space.yurisi.universecorev2.subplugins.changemessages.data.SuicidePlayerData;
 import space.yurisi.universecorev2.subplugins.changemessages.message.event.player_death.*;
 
 import javax.annotation.Nullable;
@@ -16,6 +17,11 @@ public class DeathEvent implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onDeath(PlayerDeathEvent event) {
         Player player = event.getPlayer();
+        if(SuicidePlayerData.getInstance().isSuicide(player)) {
+            SuicidePlayerData.getInstance().setChoke(player, false);
+            event.deathMessage(null);
+            return;
+        }
         Player killer = event.getEntity().getKiller();
         EntityDamageEvent.DamageCause cause = Optional.ofNullable(event.getEntity().getLastDamageCause())
                 .map(EntityDamageEvent::getCause)
