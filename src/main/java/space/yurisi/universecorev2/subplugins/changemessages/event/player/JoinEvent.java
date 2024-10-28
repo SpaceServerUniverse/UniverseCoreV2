@@ -8,6 +8,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import space.yurisi.universecorev2.UniverseCoreV2;
+import space.yurisi.universecorev2.subplugins.changemessages.data.SuicidePlayerData;
 import space.yurisi.universecorev2.subplugins.changemessages.file.Config;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public final class JoinEvent implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        SuicidePlayerData.getInstance().register(player);
         player.sendTitle("§eWelcome to SpaceServer", "- Universe -");
         if (!player.hasPlayedBefore()) {
             event.joinMessage(getFirstJoinMessage(player));
