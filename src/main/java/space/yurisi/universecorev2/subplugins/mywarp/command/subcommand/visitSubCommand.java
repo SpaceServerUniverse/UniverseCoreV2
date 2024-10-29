@@ -19,7 +19,7 @@ public class visitSubCommand implements MywarpSubCommand {
             return false;
         }
 
-        if(args.length <= 3){
+        if(args.length < 3){
             player.sendMessage("/mw visit <プレイヤー名> <ワープ名>");
             return false;
         }
