@@ -28,9 +28,9 @@ public class ProgressBarItem extends AbstractItem {
     public ItemProvider getItemProvider() {
         Material material;
         if(Objects.equals(stage, AchievementDataManager.Achievement_NORMAL)){
-            material = isAchieved ? Material.LIGHT_BLUE_STAINED_GLASS_PANE:Material.LIGHT_GRAY_STAINED_GLASS_PANE;
+            material = isAchieved ? Material.LIGHT_BLUE_STAINED_GLASS_PANE : Material.LIGHT_GRAY_STAINED_GLASS_PANE;
         }else{
-            material = isAchieved ? Material.BLUE_STAINED_GLASS_PANE:Material.LIGHT_BLUE_STAINED_GLASS_PANE;
+            material = isAchieved ? Material.BLUE_STAINED_GLASS_PANE : Material.LIGHT_BLUE_STAINED_GLASS_PANE;
         }
         return new ItemBuilder(material).setDisplayName(name);
     }

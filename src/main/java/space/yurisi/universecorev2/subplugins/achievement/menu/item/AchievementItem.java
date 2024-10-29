@@ -21,7 +21,11 @@ public class AchievementItem extends AbstractItem {
     @Override
     public ItemProvider getItemProvider() {
         if(data == null) {
-            return new ItemBuilder(Material.LIGHT_GRAY_STAINED_GLASS_PANE);
+            return new ItemBuilder(Material.LIGHT_GRAY_STAINED_GLASS_PANE)
+                    .setDisplayName("§c§l§n読み込みエラー")
+                    .addLoreLines(
+                            "運営に連絡してください"
+                    );
         }
         ItemBuilder builder = new ItemBuilder(data.getMaterial())
                 .setDisplayName(data.getItemName());
@@ -33,6 +37,6 @@ public class AchievementItem extends AbstractItem {
 
     @Override
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent inventoryClickEvent) {
-        //クリックで実績解除報酬をプレゼント！とかあったらいいなと思った午前2時
+        // TODO: 実績解除報酬を追加する
     }
 }
