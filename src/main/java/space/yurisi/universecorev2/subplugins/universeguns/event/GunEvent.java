@@ -11,9 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.CraftingInventory;
@@ -45,7 +43,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-import java.util.Arrays;
 
 public class GunEvent implements Listener {
 
@@ -576,21 +573,28 @@ public class GunEvent implements Listener {
         }
         try {
             int reloadTime = gun.getReloadTime();
+            double reloadTimeCoefficient = 1.0;
             ItemStack leggings = player.getInventory().getLeggings();
             if (leggings != null && leggings.hasItemMeta()) {
-                ItemMeta meta = leggings.getItemMeta();
-                PersistentDataContainer container = meta.getPersistentDataContainer();
+                ItemMeta leggingsMeta = leggings.getItemMeta();
+                PersistentDataContainer container = leggingsMeta.getPersistentDataContainer();
                 NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
-                double reloadTimeCoefficient = 1.0;
                 if (container.has(itemKey, PersistentDataType.STRING) &&  Objects.equals(container.get(itemKey, PersistentDataType.STRING), "tactical_leggings")) {
                     reloadTimeCoefficient -= 0.2;
                 }
+            }
+            ItemStack chestplate = player.getInventory().getChestplate();
+            if (chestplate != null && chestplate.hasItemMeta()) {
+                ItemMeta chestplateMeta = chestplate.getItemMeta();
+                PersistentDataContainer container = chestplateMeta.getPersistentDataContainer();
+                NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
                 if (container.has(itemKey, PersistentDataType.STRING) &&  Objects.equals(container.get(itemKey, PersistentDataType.STRING), "tactical_vest")) {
                     reloadTimeCoefficient -= 0.3;
                 }
-                double newReloadTime = reloadTime * reloadTimeCoefficient;
-                reloadTime = (int) newReloadTime;
             }
+
+            double newReloadTime = reloadTime * reloadTimeCoefficient;
+            reloadTime = (int) newReloadTime;
 
             boolean result = gunStatus.startReload(reloadTime, player);
             if (!result) {
