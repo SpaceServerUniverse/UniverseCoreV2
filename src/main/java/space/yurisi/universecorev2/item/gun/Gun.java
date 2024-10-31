@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.item.CustomItem;
+import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.subplugins.universeguns.constants.GunType;
 
 import java.util.List;
@@ -209,7 +210,7 @@ public abstract class Gun extends CustomItem {
         return lore;
     }
 
-    public static boolean isGun(ItemStack itemStack){
+    public static Gun getGun(ItemStack itemStack){
         ItemMeta meta = itemStack.getItemMeta();
 
         PersistentDataContainer container = meta.getPersistentDataContainer();
@@ -222,8 +223,13 @@ public abstract class Gun extends CustomItem {
                 || !container.has(gunKey, PersistentDataType.BOOLEAN)
                 || !container.has(gunSerialKey, PersistentDataType.STRING)
         ){
-            return false;
+            return null;
         }
-        return true;
+        String itemID = container.get(itemKey, PersistentDataType.STRING);
+        CustomItem item = UniverseItem.getItem(itemID);
+        if((item instanceof Gun gun)){
+            return gun;
+        }
+        return null;
     }
 }

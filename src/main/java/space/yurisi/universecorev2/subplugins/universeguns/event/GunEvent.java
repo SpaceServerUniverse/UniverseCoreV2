@@ -92,18 +92,12 @@ public class GunEvent implements Listener {
             return;
         }
 
-        if (!Gun.isGun(itemInHand)) {
+        Gun gun = Gun.getGun(itemInHand);
+        if(gun == null){
             return;
         }
 
-        String handItemID = container.get(itemKey, PersistentDataType.STRING);
         String gunSerial = container.get(gunSerialKey, PersistentDataType.STRING);
-
-        CustomItem gunItem = UniverseItem.getItem(handItemID);
-
-        if (!(gunItem instanceof Gun gun)) {
-            return;
-        }
 
         if (!GunStatusManager.isExists(gunSerial)) {
             GunStatusManager.register(gunSerial, gun, connector);
@@ -416,7 +410,8 @@ public class GunEvent implements Listener {
             NamespacedKey newItemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
             NamespacedKey gunSerialKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN_SERIAL);
 
-            if (!Gun.isGun(newInHand)) {
+            Gun gun = Gun.getGun(newInHand);
+            if (gun == null) {
                 player.setWalkSpeed(0.2f);
                 return;
             }
@@ -462,19 +457,13 @@ public class GunEvent implements Listener {
     private void cancelOldGun(ItemStack oldInHand, Player player) {
         ItemMeta oldMeta = oldInHand.getItemMeta();
         PersistentDataContainer oldContainer = oldMeta.getPersistentDataContainer();
-        NamespacedKey oldItemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
         NamespacedKey gunSerialKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN_SERIAL);
-        if (!Gun.isGun(oldInHand)) {
+        Gun oldGun = Gun.getGun(oldInHand);
+        if (oldGun == null) {
             return;
         }
 
-        String oldHandItemID = oldContainer.get(oldItemKey, PersistentDataType.STRING);
         String oldGunSerial = oldContainer.get(gunSerialKey, PersistentDataType.STRING);
-        CustomItem oldGunItem = UniverseItem.getItem(oldHandItemID);
-
-        if (!(oldGunItem instanceof Gun oldGun)) {
-            return;
-        }
 
         if(!connector.isExistsAmmoData(player)){
             try {
@@ -506,23 +495,14 @@ public class GunEvent implements Listener {
     public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
         ItemStack offHandItem = event.getOffHandItem();
         if (offHandItem.hasItemMeta()) {
-            ItemMeta meta = offHandItem.getItemMeta();
-            PersistentDataContainer container = meta.getPersistentDataContainer();
-            NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
-            NamespacedKey gunKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN);
 
-            if (!Gun.isGun(offHandItem)) {
-                return;
-            }
-            String handItemID = container.get(itemKey, PersistentDataType.STRING);
-            CustomItem gunItem = UniverseItem.getItem(handItemID);
-            if (!(gunItem instanceof Gun)) {
+            Gun gun = Gun.getGun(offHandItem);
+            if (gun == null) {
                 return;
             }
 
             event.setCancelled(true);
             Message.sendWarningMessage(event.getPlayer(), "[武器AI]", "オフハンドに武器を持つことはできません。");
-
         }
     }
 
@@ -567,23 +547,12 @@ public class GunEvent implements Listener {
         }
 
         ItemStack itemInHand = player.getInventory().getItemInMainHand();
-        ItemMeta meta = itemInHand.getItemMeta();
         if (!itemInHand.hasItemMeta()) {
             return;
         }
-        PersistentDataContainer container = meta.getPersistentDataContainer();
 
-        NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
-        NamespacedKey gunKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN);
-
-        if (!Gun.isGun(itemInHand)) {
-            return;
-        }
-
-        String handItemID = container.get(itemKey, PersistentDataType.STRING);
-        CustomItem gunItem = UniverseItem.getItem(handItemID);
-
-        if (!(gunItem instanceof Gun gun)) {
+        Gun gun = Gun.getGun(itemInHand);
+        if (gun == null) {
             return;
         }
 
@@ -679,7 +648,8 @@ public class GunEvent implements Listener {
             if (item == null || !item.hasItemMeta()) {
                 return;
             }
-            if(!Gun.isGun(item)){
+            Gun gun = Gun.getGun(item);
+            if(gun == null){
                 return;
             }
 
@@ -707,19 +677,10 @@ public class GunEvent implements Listener {
                 return;
             }
 
-            ItemMeta meta = item.getItemMeta();
-            PersistentDataContainer container = meta.getPersistentDataContainer();
-            NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
-            String clickedItemID = container.get(itemKey, PersistentDataType.STRING);
-            CustomItem clickedGunItem = UniverseItem.getItem(clickedItemID);
-            if(!(clickedGunItem instanceof Gun clickedGun)){
-                return;
-            }
-
-            if(clickedGun.getEquipmentType() == GunType.PRIMARY && !result[0]){
+            if(gun.getEquipmentType() == GunType.PRIMARY && !result[0]){
                 Message.sendWarningMessage(player, "[武器AI]", "プライマリの所持制限を超えています。");
                 event.setCancelled(true);
-            }else if(clickedGun.getEquipmentType() == GunType.SECONDARY && !result[1]){
+            }else if(gun.getEquipmentType() == GunType.SECONDARY && !result[1]){
                 Message.sendWarningMessage(player, "[武器AI]", "セカンダリの所持制限を超えています。");
                 event.setCancelled(true);
             }
@@ -736,18 +697,8 @@ public class GunEvent implements Listener {
         if (!item.hasItemMeta()) {
             return;
         }
-        if (!Gun.isGun(item)) {
-            return;
-        }
-
-        ItemMeta meta = item.getItemMeta();
-        PersistentDataContainer container = meta.getPersistentDataContainer();
-        NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
-
-        String handItemID = container.get(itemKey, PersistentDataType.STRING);
-        CustomItem gunItem = UniverseItem.getItem(handItemID);
-
-        if (!(gunItem instanceof Gun gun)) {
+        Gun gun = Gun.getGun(item);
+        if (gun == null) {
             return;
         }
 
@@ -808,24 +759,14 @@ public class GunEvent implements Listener {
     private int[] scanHotbar(Player player){
         int primaryCount = 0;
         int secondaryCount = 0;
-        NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
 
         for (ItemStack item : player.getInventory().getContents()) {
             if (item == null || !item.hasItemMeta()) {
                 continue;
             }
 
-            ItemMeta meta = item.getItemMeta();
-            PersistentDataContainer container = meta.getPersistentDataContainer();
-
-            if (!Gun.isGun(item)) {
-                continue;
-            }
-
-            String handItemID = container.get(itemKey, PersistentDataType.STRING);
-            CustomItem gunItem = UniverseItem.getItem(handItemID);
-
-            if (!(gunItem instanceof Gun gun)) {
+            Gun gun = Gun.getGun(item);
+            if (gun == null) {
                 continue;
             }
 
@@ -848,17 +789,10 @@ public class GunEvent implements Listener {
             return;
         }
         PersistentDataContainer container = meta.getPersistentDataContainer();
-        NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
         NamespacedKey gunSerialKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN_SERIAL);
 
-        if (!Gun.isGun(droppedItem)) {
-            return;
-        }
-
-        String handItemID = container.get(itemKey, PersistentDataType.STRING);
-        CustomItem gunItem = UniverseItem.getItem(handItemID);
-
-        if (!(gunItem instanceof Gun gun)) {
+        Gun gun = Gun.getGun(droppedItem);
+        if (gun == null) {
             return;
         }
 
