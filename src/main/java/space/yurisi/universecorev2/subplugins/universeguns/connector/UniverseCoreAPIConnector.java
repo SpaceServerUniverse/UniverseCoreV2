@@ -1,17 +1,12 @@
 package space.yurisi.universecorev2.subplugins.universeguns.connector;
 
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import space.yurisi.universecorev2.database.DatabaseManager;
-import space.yurisi.universecorev2.database.models.Ammo;
-import space.yurisi.universecorev2.database.models.User;
 import space.yurisi.universecorev2.database.repositories.AmmoRepository;
-import space.yurisi.universecorev2.database.repositories.MoneyRepository;
 import space.yurisi.universecorev2.database.repositories.UserRepository;
 import space.yurisi.universecorev2.exception.AmmoNotFoundException;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
 import space.yurisi.universecorev2.subplugins.universeguns.constants.GunType;
-import space.yurisi.universecorev2.utils.Message;
 
 
 public class UniverseCoreAPIConnector {

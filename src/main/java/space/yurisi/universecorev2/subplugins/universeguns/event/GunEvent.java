@@ -41,7 +41,11 @@ import space.yurisi.universecorev2.subplugins.universeguns.manager.GunStatusMana
 import space.yurisi.universecorev2.subplugins.universeguns.menu.AmmoManagerInventoryMenu;
 import space.yurisi.universecorev2.utils.Message;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
+import java.util.Arrays;
 
 public class GunEvent implements Listener {
 
