@@ -5,10 +5,12 @@
 
 SpaceServer Universe のコアプラグイン
 
+**Support: Minecraft 1.21.3**
+
 ## 使い方
 
 1. `plugins/` に `UniverseCoreV2.jar` を配置します。
-2. サーバーを起動し, `plugins/UniverseCoreV2/` に生成された `config.yml` を編集します。 ([設定方法](#discord-との連携))
+2. [LuckPerms](https://luckperms.net/) を導入します。
 3. サーバーを起動する。
 
 ## 依存関係
@@ -24,12 +26,11 @@ UniverseCoreV2 は以下のプラグインの API を使用しているため, �
    - `Public Bot` -> 無効 (あなた以外のユーザーが Bot を追加できないようにするため)
    - `Message Content Intent` -> 有効 (メッセージの内容を取得するため)
 3. Bot をギルドに招待します。
-4. `config.yml` に以下の設定を追加します。
+4. `UniverseCoreV2/subplugins/universe-discord.yml` に以下の設定を追加します。
    ```yaml
-   universe-discord:
-     token: ""
-     guild-id: ""
-     channel-id: ""
+   token: ""
+   guild-id: ""
+   channel-id: ""
    ```
 5. サーバーを再起動します。
 
