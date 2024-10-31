@@ -18,6 +18,7 @@ public final class SMG11 extends Gun {
         );
 
         this.type = GunType.SMG;
+        this.equipmentType = GunType.SECONDARY;
         this.magazineSize = 16;
         this.burst = 0;
         this.reloadTime = 800;

@@ -19,6 +19,7 @@ public final class M1911 extends Gun {
         );
 
         this.type = GunType.HG;
+        this.equipmentType = GunType.SECONDARY;
         this.magazineSize = 7;
         this.burst = 0;
         this.reloadTime = 800;

@@ -8,7 +8,9 @@ public enum GunType {
     SG(30),
     HG(40),
     LMG(50),
-    EX(60);
+    EX(60),
+    PRIMARY(70),
+    SECONDARY(71);
     
     
     private int id;

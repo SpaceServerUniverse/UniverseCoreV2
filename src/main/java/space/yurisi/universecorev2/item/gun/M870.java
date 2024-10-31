@@ -19,6 +19,7 @@ public final class M870 extends Gun {
         );
 
         this.type = GunType.SG;
+        this.equipmentType = GunType.PRIMARY;
         this.magazineSize = 7;
         this.burst = 0;
         this.reloadTime = 4000;

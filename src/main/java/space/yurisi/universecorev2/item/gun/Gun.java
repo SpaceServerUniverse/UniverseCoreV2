@@ -20,6 +20,8 @@ public abstract class Gun extends CustomItem {
 
     protected GunType type;
 
+    protected GunType equipmentType;
+
     protected int magazineSize;
 
     protected int burst;
@@ -69,6 +71,10 @@ public abstract class Gun extends CustomItem {
 
     public GunType getType(){
         return this.type;
+    }
+
+    public GunType getEquipmentType(){
+        return this.equipmentType;
     }
 
     public int getMagazineSize(){
@@ -184,8 +190,18 @@ public abstract class Gun extends CustomItem {
                 category += "特殊系";
                 break;
         }
+        String equipmentCategory = "§7装備カテゴリ: ";
+        switch (equipmentType){
+            case PRIMARY:
+                equipmentCategory += "プライマリ";
+                break;
+            case SECONDARY:
+                equipmentCategory += "セカンダリ";
+                break;
+        }
         List<Component> lore = List.of(
                 Component.text(category),
+                Component.text(equipmentCategory),
                 Component.text("§7マガジンサイズ: " + magazineSize),
                 Component.text("§7リロード時間: " + (double)reloadTime/1000 + "s"),
                 Component.text(flavorText)

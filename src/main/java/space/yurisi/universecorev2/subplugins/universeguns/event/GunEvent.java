@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
@@ -40,10 +41,7 @@ import space.yurisi.universecorev2.subplugins.universeguns.manager.GunStatusMana
 import space.yurisi.universecorev2.subplugins.universeguns.menu.AmmoManagerInventoryMenu;
 import space.yurisi.universecorev2.utils.Message;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class GunEvent implements Listener {
 
@@ -398,48 +396,7 @@ public class GunEvent implements Listener {
 
         ItemStack oldInHand = player.getInventory().getItem(event.getPreviousSlot());
         if (oldInHand != null && oldInHand.hasItemMeta()) {
-            ItemMeta oldMeta = oldInHand.getItemMeta();
-            PersistentDataContainer oldContainer = oldMeta.getPersistentDataContainer();
-            NamespacedKey oldItemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
-            NamespacedKey gunSerialKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN_SERIAL);
-            if (!Gun.isGun(oldInHand)) {
-                return;
-            }
-
-            String oldHandItemID = oldContainer.get(oldItemKey, PersistentDataType.STRING);
-            String oldGunSerial = oldContainer.get(gunSerialKey, PersistentDataType.STRING);
-            CustomItem oldGunItem = UniverseItem.getItem(oldHandItemID);
-
-            if (!(oldGunItem instanceof Gun oldGun)) {
-                return;
-            }
-
-            if(!connector.isExistsAmmoData(player)){
-                try {
-                    connector.AmmoDataInit(player);
-                } catch (UserNotFoundException e) {
-                    Message.sendErrorMessage(player, "[武器AI]", "ユーザーが見つかりませんでした。");
-                }
-            }
-
-            if (!GunStatusManager.isExists(oldGunSerial)) {
-                GunStatusManager.register(oldGunSerial, oldGun, connector);
-            }
-
-            GunStatus oldGunStatus = GunStatusManager.get(oldGunSerial);
-            try {
-                oldGunStatus.updateAmmo(player, isZoom.contains(player));
-            } catch (UserNotFoundException | AmmoNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-
-            if (reloadingTasks.containsKey(player)) {
-                taskCancel(reloadingTasks, player);
-                oldGunStatus.cancelReload();
-                oldGunStatus.updateActionBar(player, false);
-            }
-
-
+            cancelOldGun(oldInHand, player);
         }
 
         ItemStack newInHand = player.getInventory().getItem(event.getNewSlot());
@@ -495,6 +452,49 @@ public class GunEvent implements Listener {
         }
         if (isZoom.contains(player)) {
             isZoom.remove(player);
+        }
+    }
+
+    private void cancelOldGun(ItemStack oldInHand, Player player) {
+        ItemMeta oldMeta = oldInHand.getItemMeta();
+        PersistentDataContainer oldContainer = oldMeta.getPersistentDataContainer();
+        NamespacedKey oldItemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
+        NamespacedKey gunSerialKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN_SERIAL);
+        if (!Gun.isGun(oldInHand)) {
+            return;
+        }
+
+        String oldHandItemID = oldContainer.get(oldItemKey, PersistentDataType.STRING);
+        String oldGunSerial = oldContainer.get(gunSerialKey, PersistentDataType.STRING);
+        CustomItem oldGunItem = UniverseItem.getItem(oldHandItemID);
+
+        if (!(oldGunItem instanceof Gun oldGun)) {
+            return;
+        }
+
+        if(!connector.isExistsAmmoData(player)){
+            try {
+                connector.AmmoDataInit(player);
+            } catch (UserNotFoundException e) {
+                Message.sendErrorMessage(player, "[武器AI]", "ユーザーが見つかりませんでした。");
+            }
+        }
+
+        if (!GunStatusManager.isExists(oldGunSerial)) {
+            GunStatusManager.register(oldGunSerial, oldGun, connector);
+        }
+
+        GunStatus oldGunStatus = GunStatusManager.get(oldGunSerial);
+        try {
+            oldGunStatus.updateAmmo(player, isZoom.contains(player));
+        } catch (UserNotFoundException | AmmoNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (reloadingTasks.containsKey(player)) {
+            taskCancel(reloadingTasks, player);
+            oldGunStatus.cancelReload();
+            oldGunStatus.updateActionBar(player, false);
         }
     }
 
@@ -666,10 +666,159 @@ public class GunEvent implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (event.getWhoClicked() instanceof Player player) {
+            ItemStack item = event.getCurrentItem();
+            if (item == null || !item.hasItemMeta()) {
+                return;
+            }
+            if(!Gun.isGun(item)){
+                return;
+            }
+
             if (reloadingTasks.containsKey(player)) {
+                event.setCancelled(true);
+                return;
+            }
+
+            int destinationSlot = event.getRawSlot();
+            if(destinationSlot == 40){
+                // オフハンド
+                Message.sendWarningMessage(player, "[武器AI]", "オフハンドに武器を持つことはできません。");
+                event.setCancelled(true);
+                return;
+            }
+
+            if(destinationSlot > 8) {
+                return;
+            }
+
+            boolean[] result = checkEquipmentLimit(player);
+            if(!result[0] && !result[1]){
+                Message.sendWarningMessage(player, "[武器AI]", "これ以上武器を持つことはできません。");
+                event.setCancelled(true);
+                return;
+            }
+
+            ItemMeta meta = item.getItemMeta();
+            PersistentDataContainer container = meta.getPersistentDataContainer();
+            NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
+            String clickedItemID = container.get(itemKey, PersistentDataType.STRING);
+            CustomItem clickedGunItem = UniverseItem.getItem(clickedItemID);
+            if(!(clickedGunItem instanceof Gun clickedGun)){
+                return;
+            }
+
+            if(clickedGun.getEquipmentType() == GunType.PRIMARY && !result[0]){
+                Message.sendWarningMessage(player, "[武器AI]", "プライマリの所持制限を超えています。");
+                event.setCancelled(true);
+            }else if(clickedGun.getEquipmentType() == GunType.SECONDARY && !result[1]){
+                Message.sendWarningMessage(player, "[武器AI]", "セカンダリの所持制限を超えています。");
                 event.setCancelled(true);
             }
         }
+    }
+
+
+    @EventHandler(priority = EventPriority.LOW)
+    public void onPlayerPickupItem(EntityPickupItemEvent event) {
+        if (!(event.getEntity() instanceof Player player)) {
+            return;
+        }
+        ItemStack item = event.getItem().getItemStack();
+        if (!item.hasItemMeta()) {
+            return;
+        }
+        if (!Gun.isGun(item)) {
+            return;
+        }
+
+        ItemMeta meta = item.getItemMeta();
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
+
+        String handItemID = container.get(itemKey, PersistentDataType.STRING);
+        CustomItem gunItem = UniverseItem.getItem(handItemID);
+
+        if (!(gunItem instanceof Gun gun)) {
+            return;
+        }
+
+        boolean[] result = checkEquipmentLimit(player);
+        if(result[0] && result[1]){
+            return;
+        }
+        int emptySlot = -1;
+        ItemStack[] contents = player.getInventory().getContents();
+        boolean isHotbarFull = Arrays.stream(contents, 0, 9).allMatch(Objects::isNull);
+        if (isHotbarFull) {
+            return;
+        }
+
+        for (int i = 9; i < contents.length; i++) {
+            if (contents[i] == null) {
+                emptySlot = i;
+                break;
+            }
+        }
+        if(emptySlot == -1){
+            if(!result[0] && gun.getEquipmentType() == GunType.PRIMARY) {
+                Message.sendWarningMessage(player, "[武器AI]", "プライマリの所持制限を超えています。");
+                event.setCancelled(true);
+            }else if(!result[1] && gun.getEquipmentType() == GunType.SECONDARY){
+                Message.sendWarningMessage(player, "[武器AI]", "セカンダリの所持制限を超えています。");
+                event.setCancelled(true);
+            }
+        } else {
+            if((!result[0] && gun.getEquipmentType() == GunType.PRIMARY) || (!result[1] && gun.getEquipmentType() == GunType.SECONDARY)) {
+                player.getInventory().setItem(emptySlot, item);
+                event.getItem().remove();
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    private boolean[] checkEquipmentLimit(Player player){
+        int primaryLimit = 1;
+        int secondaryLimit = 1;
+        int[] hotbarCount = scanHotbar(player);
+        boolean[] result = new boolean[2];
+        // 超えてたらfalse
+        result[0] = hotbarCount[0] < primaryLimit;
+        result[1] = hotbarCount[1] < secondaryLimit;
+        return result;
+    }
+
+    private int[] scanHotbar(Player player){
+        int primaryCount = 0;
+        int secondaryCount = 0;
+        NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
+
+        for (ItemStack item : player.getInventory().getContents()) {
+            if (item == null || !item.hasItemMeta()) {
+                continue;
+            }
+
+            ItemMeta meta = item.getItemMeta();
+            PersistentDataContainer container = meta.getPersistentDataContainer();
+
+            if (!Gun.isGun(item)) {
+                continue;
+            }
+
+            String handItemID = container.get(itemKey, PersistentDataType.STRING);
+            CustomItem gunItem = UniverseItem.getItem(handItemID);
+
+            if (!(gunItem instanceof Gun gun)) {
+                continue;
+            }
+
+            if (gun.getEquipmentType() == GunType.PRIMARY) {
+                primaryCount++;
+            } else if (gun.getEquipmentType() == GunType.SECONDARY) {
+                secondaryCount++;
+            }
+        }
+
+        return new int[]{primaryCount, secondaryCount};
     }
 
     @EventHandler
