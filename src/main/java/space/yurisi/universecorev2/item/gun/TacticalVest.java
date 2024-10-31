@@ -5,40 +5,39 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import space.yurisi.universecorev2.item.CustomItem;
 
 import java.util.List;
 import java.util.Random;
 
-public class TacticalLeggings extends CustomItem {
+public class TacticalVest extends CustomItem {
 
-    public static final String id = "tactical_leggings";
+    public static final String id = "tactical_vest";
 
-    public TacticalLeggings() {
+    public TacticalVest() {
         super(
                 id,
-                "§dタクティカルレギンス",
-                ItemStack.of(Material.LEATHER_LEGGINGS)
+                "§dタクティカルベスト",
+                ItemStack.of(Material.LEATHER_CHESTPLATE)
         );
     }
 
     @Override
     protected void registerItemFunction() {
         default_setting = (item) -> {
-            LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
-            if (meta != null) {
-                meta.addEnchant(Enchantment.UNBREAKING, 4, true);
+            LeatherArmorMeta leatherMeta = (LeatherArmorMeta) item.getItemMeta();
+            if (leatherMeta != null) {
+                leatherMeta.addEnchant(Enchantment.UNBREAKING, 4, true);
                 List<Component> lore = List.of(
-                        Component.text("§7マガジンを取り出しやすくした戦闘用のレギンス"),
-                        Component.text("§7装備することでリロード速度が上昇する")
+                        Component.text("§7銃やマガジンを装備するアタッチメントのあるベスト"),
+                        Component.text("§7リロード速度上昇とセカンダリの所持枠が§d1§7増加")
                 );
-                meta.lore(lore);
+                leatherMeta.lore(lore);
                 Random random = new Random();
                 Color colour = Color.fromRGB(random.nextInt(256), random.nextInt(256), random.nextInt(256));
-                meta.setColor(colour);
-                item.setItemMeta(meta);
+                leatherMeta.setColor(colour);
+                item.setItemMeta(leatherMeta);
             }
             return item;
         };

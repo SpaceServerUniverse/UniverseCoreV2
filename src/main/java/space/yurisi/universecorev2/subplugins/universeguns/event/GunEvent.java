@@ -608,10 +608,15 @@ public class GunEvent implements Listener {
                 ItemMeta meta = leggings.getItemMeta();
                 PersistentDataContainer container = meta.getPersistentDataContainer();
                 NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
+                double reloadTimeCoefficient = 1.0;
                 if (container.has(itemKey, PersistentDataType.STRING) &&  Objects.equals(container.get(itemKey, PersistentDataType.STRING), "tactical_leggings")) {
-                    double newReloadTime = reloadTime * 0.7;
-                    reloadTime = (int) newReloadTime;
+                    reloadTimeCoefficient -= 0.3;
                 }
+                if (container.has(itemKey, PersistentDataType.STRING) &&  Objects.equals(container.get(itemKey, PersistentDataType.STRING), "tactical_vest")) {
+                    reloadTimeCoefficient -= 0.1;
+                }
+                double newReloadTime = reloadTime * reloadTimeCoefficient;
+                reloadTime = (int) newReloadTime;
             }
 
             boolean result = gunStatus.startReload(reloadTime, player);
@@ -779,6 +784,15 @@ public class GunEvent implements Listener {
     private boolean[] checkEquipmentLimit(Player player){
         int primaryLimit = 1;
         int secondaryLimit = 1;
+        ItemStack chestplate = player.getInventory().getChestplate();
+        if(chestplate != null && chestplate.hasItemMeta()){
+            ItemMeta meta = chestplate.getItemMeta();
+            PersistentDataContainer container = meta.getPersistentDataContainer();
+            NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
+            if(container.has(itemKey, PersistentDataType.STRING) && Objects.equals(container.get(itemKey, PersistentDataType.STRING), "tactical_vest")){
+                secondaryLimit = 2;
+            }
+        }
         int[] hotbarCount = scanHotbar(player);
         boolean[] result = new boolean[2];
         // 超えてたらfalse
