@@ -15,6 +15,7 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.CraftingInventory;
@@ -695,12 +696,11 @@ public class GunEvent implements Listener {
         if(event.getWhoClicked() instanceof Player player){
             new EquipmentLimit().debuffEquipmentLimit(player);
             int destinationSlot = event.getRawSlot();
-            int slot = event.getSlot();
             ItemStack item = event.getCurrentItem();
+
             if(item != null && item.hasItemMeta()){
                 Gun newGun = Gun.getGun(item);
                 if(newGun != null){
-                    player.getInventory().setItem(slot, null);
                     return;
                 }
             }
@@ -719,14 +719,15 @@ public class GunEvent implements Listener {
                 return;
             }
 
-            if(destinationSlot == 45){
+            if(event.getInventory().getType().equals(InventoryType.CRAFTING) && destinationSlot == 45){
                 // オフハンド
                 Message.sendWarningMessage(player, "[武器AI]", "オフハンドに武器を持つことはできません。");
                 event.setCancelled(true);
                 player.getInventory().addItem(oldItem);
                 return;
             }
-            if(destinationSlot <= 35) {
+
+            if(!event.getSlotType().equals(InventoryType.SlotType.QUICKBAR)){
                 return;
             }
 
@@ -748,8 +749,10 @@ public class GunEvent implements Listener {
 
             if(gun.getEquipmentType() == GunType.PRIMARY && !result[0]){
                 new EquipmentLimit().setEquipmentEffect(player, true);
+                Message.sendWarningMessage(player, "[武器AI]", "プライマリの所持制限を超えています。");
             }else if(gun.getEquipmentType() == GunType.SECONDARY && !result[1]){
                 new EquipmentLimit().setEquipmentEffect(player, true);
+                Message.sendWarningMessage(player, "[武器AI]", "セカンダリの所持制限を超えています。");
             }
         }
     }
