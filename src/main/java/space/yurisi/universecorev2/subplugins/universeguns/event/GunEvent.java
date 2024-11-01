@@ -11,7 +11,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.CraftingInventory;
@@ -44,6 +47,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.Arrays;
 
 public class GunEvent implements Listener {
 
@@ -339,6 +343,7 @@ public class GunEvent implements Listener {
             float radius = gun.getExplosionRadius();
             isHandlingExplosion.set(true);
             try {
+
                 snowball.getWorld().createExplosion(loc, radius, false, false, snowball);
 
                 snowball.getWorld().spawnParticle(Particle.EXPLOSION_EMITTER, loc, 1);
@@ -400,6 +405,7 @@ public class GunEvent implements Listener {
         }
 
         ItemStack newInHand = player.getInventory().getItem(event.getNewSlot());
+        new EquipmentLimit().debuffEquipmentLimit(player);
         if (newInHand == null) {
             player.setWalkSpeed(0.2f);
         } else {
@@ -417,7 +423,6 @@ public class GunEvent implements Listener {
                 player.setWalkSpeed(0.2f);
                 return;
             }
-            new EquipmentLimit().debuffEquipmentLimit(player);
 
             if(!connector.isExistsAmmoData(player)){
                 try {
@@ -683,6 +688,88 @@ public class GunEvent implements Listener {
         if (!reloadingTasks.containsKey(player)) {
             startReload(player, gun, gunStatus);
         }
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event){
+        if(event.getWhoClicked() instanceof Player player){
+            new EquipmentLimit().debuffEquipmentLimit(player);
+            int destinationSlot = event.getRawSlot();
+            int slot = event.getSlot();
+            ItemStack item = event.getCurrentItem();
+            if(item != null && item.hasItemMeta()){
+                Gun newGun = Gun.getGun(item);
+                if(newGun != null){
+                    player.getInventory().setItem(slot, null);
+                    return;
+                }
+            }
+
+            ItemStack oldItem = event.getCursor();
+            if (!oldItem.hasItemMeta()) {
+                return;
+            }
+            Gun gun = Gun.getGun(oldItem);
+            if(gun == null){
+                return;
+            }
+
+            if (reloadingTasks.containsKey(player)) {
+                event.setCancelled(true);
+                return;
+            }
+
+            if(destinationSlot == 45){
+                // オフハンド
+                Message.sendWarningMessage(player, "[武器AI]", "オフハンドに武器を持つことはできません。");
+                event.setCancelled(true);
+                player.getInventory().addItem(oldItem);
+                return;
+            }
+            if(destinationSlot <= 35) {
+                return;
+            }
+
+            int primaryLimit = 1;
+            int secondaryLimit = 1;
+            ItemStack chestplate = player.getInventory().getChestplate();
+            if(chestplate != null && chestplate.hasItemMeta()){
+                ItemMeta meta = chestplate.getItemMeta();
+                PersistentDataContainer container = meta.getPersistentDataContainer();
+                NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
+                if(container.has(itemKey, PersistentDataType.STRING) && Objects.equals(container.get(itemKey, PersistentDataType.STRING), "tactical_vest")){
+                    secondaryLimit = 2;
+                }
+            }
+            int[] hotbarCount = new EquipmentLimit().scanHotbar(player);
+            boolean[] result = new boolean[2];
+            result[0] = hotbarCount[0] < primaryLimit;
+            result[1] = hotbarCount[1] < secondaryLimit;
+
+            if(gun.getEquipmentType() == GunType.PRIMARY && !result[0]){
+                new EquipmentLimit().setEquipmentEffect(player, true);
+            }else if(gun.getEquipmentType() == GunType.SECONDARY && !result[1]){
+                new EquipmentLimit().setEquipmentEffect(player, true);
+            }
+        }
+    }
+
+
+    @EventHandler(priority = EventPriority.LOW)
+    public void onPlayerPickupItem(EntityPickupItemEvent event) {
+        if (!(event.getEntity() instanceof Player player)) {
+            return;
+        }
+        ItemStack item = event.getItem().getItemStack();
+        if (!item.hasItemMeta()) {
+            return;
+        }
+        Gun gun = Gun.getGun(item);
+        if (gun == null) {
+            return;
+        }
+
+        new EquipmentLimit().debuffEquipmentLimit(player);
     }
 }
 

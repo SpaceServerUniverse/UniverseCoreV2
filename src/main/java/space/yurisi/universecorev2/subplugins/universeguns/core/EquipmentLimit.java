@@ -32,12 +32,12 @@ public class EquipmentLimit {
         int[] hotbarCount = scanHotbar(player);
         boolean[] result = new boolean[2];
         // 超えてたらfalse
-        result[0] = hotbarCount[0] < primaryLimit;
-        result[1] = hotbarCount[1] < secondaryLimit;
+        result[0] = hotbarCount[0] <= primaryLimit;
+        result[1] = hotbarCount[1] <= secondaryLimit;
         return result;
     }
 
-    private int[] scanHotbar(Player player){
+    public int[] scanHotbar(Player player){
         int primaryCount = 0;
         int secondaryCount = 0;
 
@@ -64,16 +64,27 @@ public class EquipmentLimit {
 
     public boolean debuffEquipmentLimit(Player player){
         boolean[] result = checkEquipmentLimit(player);
-        if(!result[0]){
-            Message.sendWarningMessage(player, "[武器AI]", "プライマリの所持制限を超えています。");
-        }
-        if(!result[1]){
-            Message.sendWarningMessage(player, "[武器AI]", "セカンダリの所持制限を超えています。");
-        }
         if(!result[0] || !result[1]){
-            player.addPotionEffect(PotionEffectType.SLOWNESS.createEffect(1000000, 5));
+            setEquipmentEffect(player, true);
+            if(!result[0]){
+                Message.sendWarningMessage(player, "[武器AI]", "プライマリの所持制限を超えています。");
+            }
+            if(!result[1]){
+                Message.sendWarningMessage(player, "[武器AI]", "セカンダリの所持制限を超えています。");
+            }
             return true;
         }
+        setEquipmentEffect(player, false);
         return false;
+    }
+
+    public void setEquipmentEffect(Player player, Boolean isOver){
+        if(isOver){
+            player.addPotionEffect(PotionEffectType.SLOWNESS.createEffect(1000000, 10));
+            player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(1000000, 10));
+        }else{
+            player.removePotionEffect(PotionEffectType.SLOWNESS);
+            player.removePotionEffect(PotionEffectType.BLINDNESS);
+        }
     }
 }
