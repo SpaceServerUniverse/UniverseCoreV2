@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import space.yurisi.universecorev2.subplugins.universeguns.connector.UniverseCoreAPIConnector;
 import space.yurisi.universecorev2.subplugins.universeguns.menu.AmmoManagerInventoryMenu;
-import space.yurisi.universecorev2.utils.Message;
 
 public class GunCommand implements CommandExecutor {
 

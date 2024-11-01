@@ -18,6 +18,7 @@ public final class R4C extends Gun {
         );
 
         this.type = GunType.AR;
+        this.equipmentType = GunType.PRIMARY;
         this.magazineSize = 30;
         this.burst = 0;
         this.reloadTime = 2500;

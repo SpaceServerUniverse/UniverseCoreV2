@@ -19,6 +19,7 @@ public final class F2 extends Gun {
         );
 
         this.type = GunType.AR;
+        this.equipmentType = GunType.PRIMARY;
         this.magazineSize = 30;
         this.burst = 2;
         this.reloadTime = 3500;

@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.item.CustomItem;
+import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.subplugins.universeguns.constants.GunType;
 
 import java.util.List;
@@ -19,6 +20,8 @@ import java.util.UUID;
 public abstract class Gun extends CustomItem {
 
     protected GunType type;
+
+    protected GunType equipmentType;
 
     protected int magazineSize;
 
@@ -69,6 +72,10 @@ public abstract class Gun extends CustomItem {
 
     public GunType getType(){
         return this.type;
+    }
+
+    public GunType getEquipmentType(){
+        return this.equipmentType;
     }
 
     public int getMagazineSize(){
@@ -171,7 +178,7 @@ public abstract class Gun extends CustomItem {
             case SG:
                 category += "ショットガン";
                 break;
-            case SR:
+            case SR, SR_SEMI, SR_BOLT:
                 category += "スナイパーライフル";
                 break;
             case HG:
@@ -184,8 +191,18 @@ public abstract class Gun extends CustomItem {
                 category += "特殊系";
                 break;
         }
+        String equipmentCategory = "§7装備カテゴリ: ";
+        switch (equipmentType){
+            case PRIMARY:
+                equipmentCategory += "プライマリ";
+                break;
+            case SECONDARY:
+                equipmentCategory += "セカンダリ";
+                break;
+        }
         List<Component> lore = List.of(
                 Component.text(category),
+                Component.text(equipmentCategory),
                 Component.text("§7マガジンサイズ: " + magazineSize),
                 Component.text("§7リロード時間: " + (double)reloadTime/1000 + "s"),
                 Component.text(flavorText)
@@ -193,7 +210,7 @@ public abstract class Gun extends CustomItem {
         return lore;
     }
 
-    public static boolean isGun(ItemStack itemStack){
+    public static Gun getGun(ItemStack itemStack){
         ItemMeta meta = itemStack.getItemMeta();
 
         PersistentDataContainer container = meta.getPersistentDataContainer();
@@ -206,8 +223,13 @@ public abstract class Gun extends CustomItem {
                 || !container.has(gunKey, PersistentDataType.BOOLEAN)
                 || !container.has(gunSerialKey, PersistentDataType.STRING)
         ){
-            return false;
+            return null;
         }
-        return true;
+        String itemID = container.get(itemKey, PersistentDataType.STRING);
+        CustomItem item = UniverseItem.getItem(itemID);
+        if((item instanceof Gun gun)){
+            return gun;
+        }
+        return null;
     }
 }

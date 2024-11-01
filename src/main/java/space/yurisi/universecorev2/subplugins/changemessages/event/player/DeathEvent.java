@@ -51,7 +51,7 @@ public class DeathEvent implements Listener {
             case BLOCK_EXPLOSION:
                 return new BlockExplosionBasePlayerDeathEventMessage(player);
             case ENTITY_EXPLOSION:
-                return new EntityExplosionBasePlayerDeathEventMessage(player);
+                return new EntityExplosionBasePlayerDeathEventMessage(player, killer);
             case VOID:
                 return new VoidBasePlayerDeathEventMessage(player);
             case SUICIDE:

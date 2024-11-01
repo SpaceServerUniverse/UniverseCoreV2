@@ -19,6 +19,7 @@ public final class RPG extends Gun {
         );
 
         this.type = GunType.EX;
+        this.equipmentType = GunType.PRIMARY;
         this.magazineSize = 1;
         this.burst = 0;
         this.reloadTime = 10000;

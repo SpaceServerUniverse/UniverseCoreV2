@@ -53,6 +53,10 @@ public final class EventListener implements Listener {
             return;
         }
 
+        if (!player.getInventory().getItemInMainHand().getType().isAir()) {
+            return;
+        }
+
         if (!block.getType().toString().contains("STAIRS")) {
             return;
         }
