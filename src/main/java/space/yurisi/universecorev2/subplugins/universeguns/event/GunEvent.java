@@ -34,6 +34,7 @@ import space.yurisi.universecorev2.subplugins.universeguns.connector.UniverseCor
 import space.yurisi.universecorev2.subplugins.universeguns.constants.GunType;
 import space.yurisi.universecorev2.subplugins.universeguns.core.BulletData;
 import space.yurisi.universecorev2.subplugins.universeguns.core.DamageCalculator;
+import space.yurisi.universecorev2.subplugins.universeguns.core.EquipmentLimit;
 import space.yurisi.universecorev2.subplugins.universeguns.core.GunStatus;
 import space.yurisi.universecorev2.subplugins.universeguns.manager.GunStatusManager;
 import space.yurisi.universecorev2.subplugins.universeguns.menu.AmmoManagerInventoryMenu;
@@ -91,6 +92,10 @@ public class GunEvent implements Listener {
 
         Gun gun = Gun.getGun(itemInHand);
         if(gun == null){
+            return;
+        }
+
+        if(new EquipmentLimit().debuffEquipmentLimit(player)){
             return;
         }
 
@@ -153,7 +158,7 @@ public class GunEvent implements Listener {
                                 }
                             }
 
-                        } else if (gun.getType().equals(GunType.SR)) {
+                        } else if (gun.getType().equals(GunType.SR_BOLT) || gun.getType().equals(GunType.SR_SEMI) || gun.getType().equals(GunType.SR)) {
                             if (!isZoom.contains(player)) {
                                 Message.sendWarningMessage(player, "[武器AI]", "狙撃時のみ発射できます。");
                                 return;
@@ -161,7 +166,7 @@ public class GunEvent implements Listener {
 
                             gunStatus.shoot();
                             new SniperShot(player, gun, gunStatus);
-                            if (Objects.equals(gun.getName(), "L96A1")) {
+                            if (gun.getType().equals(GunType.SR_BOLT)) {
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {
@@ -184,7 +189,7 @@ public class GunEvent implements Listener {
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    if (Objects.equals(gun.getName(), "L96A1")) {
+                                    if (gun.getType().equals(GunType.SR_BOLT)) {
                                         player.playSound(player.getLocation(), Sound.BLOCK_COPPER_DOOR_CLOSE, 1.0F, 0.6F);
                                     }
                                 }
@@ -412,6 +417,7 @@ public class GunEvent implements Listener {
                 player.setWalkSpeed(0.2f);
                 return;
             }
+            new EquipmentLimit().debuffEquipmentLimit(player);
 
             if(!connector.isExistsAmmoData(player)){
                 try {
@@ -644,182 +650,6 @@ public class GunEvent implements Listener {
         }
 
     }
-
-//    @EventHandler
-//    public void onInventoryClick(InventoryClickEvent event) {
-//        if (event.getWhoClicked() instanceof Player player) {
-//            player.sendMessage("called");
-//            int destinationSlot = event.getRawSlot();
-//            int slot = event.getSlot();
-//            ItemStack item = event.getCurrentItem();
-//            if(item != null && item.hasItemMeta()){
-//                Gun newGun = Gun.getGun(item);
-//                if(newGun != null){
-//                    player.getInventory().setItem(slot, null);
-//                    return;
-//                }
-//            }
-//
-//            ItemStack oldItem = event.getCursor();
-//            if (!oldItem.hasItemMeta()) {
-//                return;
-//            }
-//            Gun gun = Gun.getGun(oldItem);
-//            if(gun == null){
-//                return;
-//            }
-//
-//            if (reloadingTasks.containsKey(player)) {
-//                event.setCancelled(true);
-//                return;
-//            }
-//
-//            if(destinationSlot == 45){
-//                // オフハンド
-//                Message.sendWarningMessage(player, "[武器AI]", "オフハンドに武器を持つことはできません。");
-//                event.setCancelled(true);
-//                putGunToEmptySlot(player, oldItem);
-//                return;
-//            }
-//            if(destinationSlot <= 35) {
-//                return;
-//            }
-//
-//            boolean[] result = checkEquipmentLimit(player);
-//            if(!result[0] && !result[1]){
-//                event.setCancelled(true);
-//                Message.sendWarningMessage(player, "[武器AI]", "これ以上武器を持つことはできません。");
-//                putGunToEmptySlot(player, oldItem);
-//
-//                return;
-//            }
-//
-//            if(gun.getEquipmentType() == GunType.PRIMARY && !result[0]){
-//                event.setCancelled(true);
-//                Message.sendWarningMessage(player, "[武器AI]", "プライマリの所持制限を超えています。");
-//                putGunToEmptySlot(player, oldItem);
-//            }else if(gun.getEquipmentType() == GunType.SECONDARY && !result[1]){
-//                event.setCancelled(true);
-//                Message.sendWarningMessage(player, "[武器AI]", "セカンダリの所持制限を超えています。");
-//                putGunToEmptySlot(player, oldItem);
-//            }
-//            player.updateInventory();
-//        }
-//    }
-//
-//    private void putGunToEmptySlot(Player player, ItemStack item){
-//        ItemStack[] contents = player.getInventory().getContents();
-//        int emptySlot = -1;
-//
-//        for (int i = 9; i < 36; i++) {
-//            if (contents[i] == null) {
-//                emptySlot = i;
-//                break;
-//            }else{
-//                player.sendMessage(contents[i].toString());
-//            }
-//        }
-//        if(emptySlot == -1){
-//            player.getWorld().dropItemNaturally(player.getLocation(), item);
-//            return;
-//        }
-//        player.getInventory().setItem(emptySlot, item);
-//    }
-//
-//
-//    @EventHandler(priority = EventPriority.LOW)
-//    public void onPlayerPickupItem(EntityPickupItemEvent event) {
-//        if (!(event.getEntity() instanceof Player player)) {
-//            return;
-//        }
-//        ItemStack item = event.getItem().getItemStack();
-//        if (!item.hasItemMeta()) {
-//            return;
-//        }
-//        Gun gun = Gun.getGun(item);
-//        if (gun == null) {
-//            return;
-//        }
-//
-//        boolean[] result = checkEquipmentLimit(player);
-//        if(result[0] && result[1]){
-//            return;
-//        }
-//        int emptySlot = -1;
-//        ItemStack[] contents = player.getInventory().getContents();
-//        boolean isHotbarFull = Arrays.stream(contents, 0, 9).allMatch(Objects::isNull);
-//        if (isHotbarFull) {
-//            return;
-//        }
-//
-//        for (int i = 9; i < 36; i++) {
-//            if (contents[i] == null) {
-//                emptySlot = i;
-//                break;
-//            }
-//        }
-//        if(emptySlot == -1){
-//            if(!result[0] && gun.getEquipmentType() == GunType.PRIMARY) {
-//                Message.sendWarningMessage(player, "[武器AI]", "プライマリの所持制限を超えています。");
-//                event.setCancelled(true);
-//            }else if(!result[1] && gun.getEquipmentType() == GunType.SECONDARY){
-//                Message.sendWarningMessage(player, "[武器AI]", "セカンダリの所持制限を超えています。");
-//                event.setCancelled(true);
-//            }
-//        } else {
-//            if((!result[0] && gun.getEquipmentType() == GunType.PRIMARY) || (!result[1] && gun.getEquipmentType() == GunType.SECONDARY)) {
-//                player.getInventory().setItem(emptySlot, item);
-//                event.getItem().remove();
-//                event.setCancelled(true);
-//                player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 1.0F, 1.0F);
-//            }
-//        }
-//    }
-//
-//    private boolean[] checkEquipmentLimit(Player player){
-//        int primaryLimit = 1;
-//        int secondaryLimit = 1;
-//        ItemStack chestplate = player.getInventory().getChestplate();
-//        if(chestplate != null && chestplate.hasItemMeta()){
-//            ItemMeta meta = chestplate.getItemMeta();
-//            PersistentDataContainer container = meta.getPersistentDataContainer();
-//            NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
-//            if(container.has(itemKey, PersistentDataType.STRING) && Objects.equals(container.get(itemKey, PersistentDataType.STRING), "tactical_vest")){
-//                secondaryLimit = 2;
-//            }
-//        }
-//        int[] hotbarCount = scanHotbar(player);
-//        boolean[] result = new boolean[2];
-//        // 超えてたらfalse
-//        result[0] = hotbarCount[0] < primaryLimit;
-//        result[1] = hotbarCount[1] < secondaryLimit;
-//        return result;
-//    }
-//
-//    private int[] scanHotbar(Player player){
-//        int primaryCount = 0;
-//        int secondaryCount = 0;
-//
-//        for (int i = 0; i < 9; i++) {
-//            ItemStack item = player.getInventory().getItem(i);
-//            if (item == null || !item.hasItemMeta()) {
-//                continue;
-//            }
-//
-//            Gun gun = Gun.getGun(item);
-//            if (gun == null) {
-//                continue;
-//            }
-//
-//            if (gun.getEquipmentType() == GunType.PRIMARY) {
-//                primaryCount++;
-//            } else if (gun.getEquipmentType() == GunType.SECONDARY) {
-//                secondaryCount++;
-//            }
-//        }
-//
-//        return new int[]{primaryCount, secondaryCount};
-//    }
 
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {

@@ -31,8 +31,8 @@ public class TacticalVest extends CustomItem {
                 leatherMeta.addEnchant(Enchantment.UNBREAKING, 4, true);
                 List<Component> lore = List.of(
                         Component.text("§7銃やマガジンを装備するアタッチメントのあるベスト"),
-//                        Component.text("§7リロード速度上昇とセカンダリの所持枠が§d1§7増加")
-                        Component.text("§7リロード速度上昇")
+                        Component.text("§7リロード速度上昇とセカンダリの所持枠が§d1§7増加")
+//                        Component.text("§7リロード速度上昇")
                 );
                 leatherMeta.lore(lore);
                 Random random = new Random();

@@ -4,6 +4,8 @@ public enum GunType {
 
     AR(1),
     SR(10),
+    SR_BOLT(11),
+    SR_SEMI(12),
     SMG(20),
     SG(30),
     HG(40),

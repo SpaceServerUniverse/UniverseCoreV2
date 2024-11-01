@@ -17,7 +17,7 @@ public final class L96A1 extends Gun {
                 ItemStack.of(Material.DIAMOND_HOE)
         );
 
-        this.type = GunType.SR;
+        this.type = GunType.SR_SEMI;
         this.equipmentType = GunType.PRIMARY;
         this.magazineSize = 5;
         this.burst = 0;

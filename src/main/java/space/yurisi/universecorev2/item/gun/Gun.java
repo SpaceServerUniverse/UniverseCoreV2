@@ -178,7 +178,7 @@ public abstract class Gun extends CustomItem {
             case SG:
                 category += "ショットガン";
                 break;
-            case SR:
+            case SR, SR_SEMI, SR_BOLT:
                 category += "スナイパーライフル";
                 break;
             case HG:
