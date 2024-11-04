@@ -43,7 +43,13 @@ public class EquipmentLimit {
 
         for (int i = 0; i < 9; i++) {
             ItemStack item = player.getInventory().getItem(i);
-            if (item == null || !item.hasItemMeta()) {
+            if(item == null){
+                continue;
+            }
+            if(item.getType().isAir()){
+                continue;
+            }
+            if (!item.hasItemMeta()) {
                 continue;
             }
 
