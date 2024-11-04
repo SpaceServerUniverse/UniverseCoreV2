@@ -1,4 +1,4 @@
-package space.yurisi.universecorev2.subplugins.universeguns.menu.item;
+package space.yurisi.universecorev2.subplugins.universeguns.menu.ammo_menu.item;
 
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -15,7 +15,7 @@ import space.yurisi.universecorev2.subplugins.universeeconomy.exception.CanNotRe
 import space.yurisi.universecorev2.subplugins.universeeconomy.exception.ParameterException;
 import space.yurisi.universecorev2.subplugins.universeguns.connector.UniverseCoreAPIConnector;
 import space.yurisi.universecorev2.subplugins.universeguns.constants.GunType;
-import space.yurisi.universecorev2.subplugins.universeguns.menu.AmmoManagerInventoryMenu;
+import space.yurisi.universecorev2.subplugins.universeguns.menu.ammo_menu.AmmoManagerInventoryMenu;
 import space.yurisi.universecorev2.utils.Message;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;

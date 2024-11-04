@@ -38,6 +38,8 @@ public final class R4C extends Gun {
         this.volumeSound = 4.0F;
         this.pitchSound = 1.8F;
         this.flavorText = "§7威力は低いものの高い連射速度でレインボーな特殊部隊に愛用されている";
+        this.textureNumber = 1;
+        this.price = 5;
     }
 
 
@@ -46,7 +48,7 @@ public final class R4C extends Gun {
         default_setting = (item) -> {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
-                meta.setCustomModelData(1);
+                meta.setCustomModelData(textureNumber);
             }
             item.setItemMeta(meta);
             return item;

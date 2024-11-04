@@ -17,6 +17,7 @@ import space.yurisi.universecorev2.item.repair_cream.RepairCream;
 import space.yurisi.universecorev2.item.solar_system.*;
 import space.yurisi.universecorev2.item.stick.BlockCopyStick;
 import space.yurisi.universecorev2.item.ticket.GachaTicket;
+import space.yurisi.universecorev2.item.ticket.GunTicket;
 import space.yurisi.universecorev2.menu.MainMenu;
 
 import java.util.HashMap;
@@ -39,6 +40,7 @@ public class UniverseItem {
         items.put(SolarSystemLeggings.id, new SolarSystemLeggings());
         items.put(SolarSystemBoots.id, new SolarSystemBoots());
         items.put(GachaTicket.id, new GachaTicket());
+        items.put(GunTicket.id, new GunTicket());
         items.put(RepairCream.id, new RepairCream());
         items.put(BlockCopyStick.id, new BlockCopyStick());
         items.put(FishingRod.id, new FishingRod());
@@ -91,9 +93,11 @@ public class UniverseItem {
     }
 
 
-    public static Boolean removeItem(Player player, String item_name){
+    public static Boolean removeItem(Player player, String item_name, int amount){
         PlayerInventory inventory = player.getInventory();
         NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
+        int remainingAmount = amount;
+        int totalAmount = 0;
 
         for (ItemStack item : inventory.getContents()) {
             if (item != null && item.hasItemMeta()) {
@@ -104,12 +108,41 @@ public class UniverseItem {
                     String isGachaTicket = container.get(itemKey, PersistentDataType.STRING);
 
                     if (Objects.equals(isGachaTicket, item_name)) {
-                        if (item.getAmount() > 1) {
-                            item.setAmount(item.getAmount() - 1);
-                        } else {
-                            inventory.remove(item);
+                        totalAmount += item.getAmount();
+                        if(totalAmount >= amount){
+                            break;
                         }
-                        return true;
+                    }
+                }
+            }
+        }
+
+        if (totalAmount < amount) {
+            return false;
+        }
+
+        for (ItemStack item : inventory.getContents()) {
+            if (item != null && item.hasItemMeta()) {
+                ItemMeta meta = item.getItemMeta();
+                PersistentDataContainer container = meta.getPersistentDataContainer();
+
+                if (container.has(itemKey, PersistentDataType.STRING)) {
+                    String isGachaTicket = container.get(itemKey, PersistentDataType.STRING);
+
+                    if (Objects.equals(isGachaTicket, item_name)) {
+                        int itemAmount = item.getAmount();
+                        if (itemAmount <= remainingAmount) {
+                            remainingAmount -= itemAmount;
+                            player.sendMessage(remainingAmount + " " + item_name);
+                            item.setAmount(0);
+                        } else {
+                            item.setAmount(itemAmount - remainingAmount);
+                            remainingAmount = 0;
+                        }
+
+                        if (remainingAmount == 0) {
+                            return true;
+                        }
                     }
                 }
             }

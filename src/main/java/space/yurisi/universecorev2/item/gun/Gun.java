@@ -66,6 +66,10 @@ public abstract class Gun extends CustomItem {
 
     protected String flavorText;
 
+    protected int textureNumber;
+
+    protected int price;
+
     public Gun(String id, String name, ItemStack baseItem) {
         super(id, name, baseItem);
     }
@@ -151,6 +155,18 @@ public abstract class Gun extends CustomItem {
         return pitchSound;
     }
 
+    public String getFlavorText(){
+        return flavorText;
+    }
+
+    public int getTextureNumber(){
+        return textureNumber;
+    }
+
+    public int getPrice(){
+        return price;
+    }
+
     @Override
     public ItemStack getItem(){
         ItemStack item = getBaseItem().clone();
@@ -160,14 +176,14 @@ public abstract class Gun extends CustomItem {
         container.set(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN), PersistentDataType.BOOLEAN, true);
         container.set(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN_SERIAL), PersistentDataType.STRING, UUID.randomUUID().toString());
         meta.displayName(Component.text(name));
-        List<Component> lore = getComponents();
+        List<Component> lore = getGunComponents();
         meta.lore(lore);
         item.setItemMeta(meta);
         return default_setting.apply(item);
     }
 
-    private @NotNull List<Component> getComponents() {
-        String category = "§7カテゴリ: ";
+    public @NotNull List<Component> getGunComponents() {
+        String category = "§7カテゴリ: §b";
         switch (type){
             case AR:
                 category += "アサルトライフル";
@@ -191,7 +207,7 @@ public abstract class Gun extends CustomItem {
                 category += "特殊系";
                 break;
         }
-        String equipmentCategory = "§7装備カテゴリ: ";
+        String equipmentCategory = "§7装備カテゴリ: §b";
         switch (equipmentType){
             case PRIMARY:
                 equipmentCategory += "プライマリ";
@@ -203,9 +219,8 @@ public abstract class Gun extends CustomItem {
         List<Component> lore = List.of(
                 Component.text(category),
                 Component.text(equipmentCategory),
-                Component.text("§7マガジンサイズ: " + magazineSize),
-                Component.text("§7リロード時間: " + (double)reloadTime/1000 + "s"),
-                Component.text(flavorText)
+                Component.text("§7マガジンサイズ: §b" + magazineSize),
+                Component.text("§7リロード時間: §b" + (double)reloadTime/1000 + "§7秒")
         );
         return lore;
     }

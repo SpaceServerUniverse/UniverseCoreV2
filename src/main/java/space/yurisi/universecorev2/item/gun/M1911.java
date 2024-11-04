@@ -39,6 +39,8 @@ public final class M1911 extends Gun {
         this.volumeSound = 5.0F;
         this.pitchSound = 2.0F;
         this.flavorText = "§7アメリカで開発された自動拳銃。第一次世界大戦時代に生まれ、現在でも多くの国で使用されている";
+        this.textureNumber = 7;
+        this.price = 1;
     }
 
     @Override
@@ -46,7 +48,7 @@ public final class M1911 extends Gun {
         default_setting = (item) -> {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
-                meta.setCustomModelData(7);
+                meta.setCustomModelData(textureNumber);
             }
             item.setItemMeta(meta);
             return item;
