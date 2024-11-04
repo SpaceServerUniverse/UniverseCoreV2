@@ -135,3 +135,6 @@ commands:
   birthday:
     description: お誕生日カードメニューを開きます
 
+  # Achievement
+  achievement:
+    description: 実績メニューを開きます
