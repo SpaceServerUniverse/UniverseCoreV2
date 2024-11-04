@@ -17,9 +17,9 @@ public class AchievementDataManager {
     public static final String Achievement_NORMAL = "normal";
     public static final String Achievement_SILVER = "silver";
     public static final String Achievement_GOLD = "gold";
-    public static final String Name_GOLD = "§e";
-    public static final String Name_SILVER = "§b";
     public static final String Name_NORMAL = "§f";
+    public static final String Name_SILVER = "§b";
+    public static final String Name_GOLD = "§e";
 
     public static CounterModelManager manager = null;
 
