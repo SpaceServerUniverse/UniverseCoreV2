@@ -115,7 +115,7 @@ public class AmmoRepository {
                 case SG -> {
                     return ammo.getSg();
                 }
-                case SR -> {
+                case SR, SR_BOLT, SR_SEMI -> {
                     return ammo.getSr();
                 }
                 case LMG -> {
@@ -152,7 +152,7 @@ public class AmmoRepository {
                 case SMG -> ammo.setSmg(newAmmo);
                 case AR -> ammo.setAr(newAmmo);
                 case SG -> ammo.setSg(newAmmo);
-                case SR -> ammo.setSr(newAmmo);
+                case SR, SR_BOLT, SR_SEMI -> ammo.setSr(newAmmo);
                 case LMG -> ammo.setLmg(newAmmo);
                 case EX -> ammo.setEx(newAmmo);
             }

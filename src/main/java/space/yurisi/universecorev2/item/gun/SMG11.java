@@ -18,6 +18,7 @@ public final class SMG11 extends Gun {
         );
 
         this.type = GunType.SMG;
+        this.equipmentType = GunType.SECONDARY;
         this.magazineSize = 16;
         this.burst = 0;
         this.reloadTime = 800;
@@ -37,6 +38,8 @@ public final class SMG11 extends Gun {
         this.volumeSound = 3.0F;
         this.pitchSound = 0.8F;
         this.flavorText = "§7随一の連射速度と軽量さが特徴のサブマシンガン。覗かないとまともに当たらない";
+        this.textureNumber = 4;
+        this.price = 2;
     }
 
     @Override
@@ -44,7 +47,7 @@ public final class SMG11 extends Gun {
         default_setting = (item) -> {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
-                meta.setCustomModelData(4);
+                meta.setCustomModelData(textureNumber);
             }
             item.setItemMeta(meta);
             return item;

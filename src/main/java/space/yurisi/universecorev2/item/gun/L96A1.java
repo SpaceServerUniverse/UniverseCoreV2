@@ -17,7 +17,8 @@ public final class L96A1 extends Gun {
                 ItemStack.of(Material.DIAMOND_HOE)
         );
 
-        this.type = GunType.SR;
+        this.type = GunType.SR_BOLT;
+        this.equipmentType = GunType.PRIMARY;
         this.magazineSize = 5;
         this.burst = 0;
         this.reloadTime = 5000;
@@ -37,6 +38,8 @@ public final class L96A1 extends Gun {
         this.volumeSound = 10.0F;
         this.pitchSound = 0.8F;
         this.flavorText = "§7イギリスで使用される軍用ボルトアクション式スナイパーライフル";
+        this.textureNumber = 2;
+        this.price = 10;
     }
 
     @Override
@@ -44,7 +47,7 @@ public final class L96A1 extends Gun {
         default_setting = (item) -> {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
-                meta.setCustomModelData(2);
+                meta.setCustomModelData(textureNumber);
             }
             item.setItemMeta(meta);
             return item;
