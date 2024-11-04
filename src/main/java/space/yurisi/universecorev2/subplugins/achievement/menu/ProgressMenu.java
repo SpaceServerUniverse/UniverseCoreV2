@@ -52,7 +52,7 @@ public class ProgressMenu implements BaseMenu{
             Long currentGoal = data.getCurrentGoal();
             int cell = (int) (currentGoal / 7);
             int achievedCells = (int) (currentCount / cell);
-            builder = builder.addContent(new ProgressBarItem((i % 7) <= achievedCells, data.getStage(), data.getItemName()));
+            builder = builder.addContent(new ProgressBarItem((i % 8) <= achievedCells, data.getStage(), data.getItemName()));
         }
 
         Window window = Window.single()
