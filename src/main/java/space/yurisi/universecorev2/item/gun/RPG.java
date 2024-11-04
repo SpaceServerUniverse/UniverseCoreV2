@@ -39,6 +39,8 @@ public final class RPG extends Gun {
         this.volumeSound = 10.0F;
         this.pitchSound = 0.5F;
         this.flavorText = "§7ロケットランチャーの代名詞。爆風で広範囲にダメージを与える";
+        this.textureNumber = 3;
+        this.price = 10;
     }
 
     @Override
@@ -46,7 +48,7 @@ public final class RPG extends Gun {
         default_setting = (item) -> {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
-                meta.setCustomModelData(3);
+                meta.setCustomModelData(textureNumber);
             }
             item.setItemMeta(meta);
             return item;

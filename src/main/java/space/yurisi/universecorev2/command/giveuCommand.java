@@ -14,6 +14,7 @@ import space.yurisi.universecorev2.item.CustomItem;
 import space.yurisi.universecorev2.item.LevellingCustomItem;
 import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.item.ticket.GachaTicket;
+import space.yurisi.universecorev2.item.ticket.GunTicket;
 import space.yurisi.universecorev2.utils.Message;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class giveuCommand implements CommandExecutor, TabCompleter {
             §6-- Give Universe Item Help --
                §7/giveu add <ID> [レベル] [アイテム数] : 指定されたIDのアイテムをインベントリに追加します
                §7/giveu list : 入手可能なアイテムのリストを表示します
-               §7/giveu ticket [枚数] : チケットを指定した枚数分インベントリに追加します
+               §7/giveu ticket <gacha | gun> [枚数] : ガチャや銃のチケットを指定した枚数分インベントリに追加します
                §7/giveu help : このヘルプを表示します
             """.split("\n");
 
@@ -99,12 +100,27 @@ public class giveuCommand implements CommandExecutor, TabCompleter {
                 int amount;
 
                 if (args.length < 2) {
+                    Message.sendErrorMessage(player, "[管理AI]", "チケットの種類をgachaかgunで指定してください。");
+                    return false;
+                }
+
+                if(args.length < 3){
                     Message.sendErrorMessage(player, "[管理AI]", "枚数を指定してください。");
+                }
+
+                String ticketType = args[1];
+                ItemStack ticket;
+                if(ticketType.equalsIgnoreCase("gacha")){
+                    ticket = UniverseItem.getItem(GachaTicket.id).getItem();
+                } else if(ticketType.equalsIgnoreCase("gun")) {
+                    ticket = UniverseItem.getItem(GunTicket.id).getItem();
+                } else {
+                    Message.sendErrorMessage(player, "[管理AI]", "チケットの種類をgachaかgunで指定してください。");
                     return false;
                 }
 
                 try {
-                    amount = Integer.parseInt(args[1]);
+                    amount = Integer.parseInt(args[2]);
                 } catch (NumberFormatException e) {
                     Message.sendErrorMessage(player, "[管理AI]", "枚数は数値で指定してください。");
                     return false;
@@ -115,7 +131,6 @@ public class giveuCommand implements CommandExecutor, TabCompleter {
                     return false;
                 }
 
-                ItemStack ticket = UniverseItem.getItem(GachaTicket.id).getItem();
                 for (int i = 1; i <= amount; i++) {
                     player.getInventory().addItem(ticket);
                 }

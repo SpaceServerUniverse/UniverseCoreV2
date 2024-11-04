@@ -14,7 +14,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.*;
@@ -41,14 +40,13 @@ import space.yurisi.universecorev2.subplugins.universeguns.core.DamageCalculator
 import space.yurisi.universecorev2.subplugins.universeguns.core.EquipmentLimit;
 import space.yurisi.universecorev2.subplugins.universeguns.core.GunStatus;
 import space.yurisi.universecorev2.subplugins.universeguns.manager.GunStatusManager;
-import space.yurisi.universecorev2.subplugins.universeguns.menu.AmmoManagerInventoryMenu;
+import space.yurisi.universecorev2.subplugins.universeguns.menu.ammo_menu.AmmoManagerInventoryMenu;
 import space.yurisi.universecorev2.utils.Message;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-import java.util.Arrays;
 
 public class GunEvent implements Listener {
 

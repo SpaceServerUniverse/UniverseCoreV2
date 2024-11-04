@@ -39,6 +39,8 @@ public final class M870 extends Gun {
         this.volumeSound = 5.0F;
         this.pitchSound = 0.6F;
         this.flavorText = "§7ポンプアクション式ショットガン。有効射程が長いが連射速度は遅い";
+        this.textureNumber = 6;
+        this.price = 5;
     }
 
     @Override
@@ -46,7 +48,7 @@ public final class M870 extends Gun {
         default_setting = (item) -> {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
-                meta.setCustomModelData(6);
+                meta.setCustomModelData(textureNumber);
             }
             item.setItemMeta(meta);
             return item;
