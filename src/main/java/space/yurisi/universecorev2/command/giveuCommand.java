@@ -37,7 +37,7 @@ public class giveuCommand implements CommandExecutor, TabCompleter {
             §6-- Give Universe Item Help --
                §7/giveu add <ID> [レベル] [アイテム数] : 指定されたIDのアイテムをインベントリに追加します
                §7/giveu list : 入手可能なアイテムのリストを表示します
-               §7/giveu ticket gacha/gun [枚数] : ガチャや銃のチケットを指定した枚数分インベントリに追加します
+               §7/giveu ticket <gacha | gun> [枚数] : ガチャや銃のチケットを指定した枚数分インベントリに追加します
                §7/giveu help : このヘルプを表示します
             """.split("\n");
 
@@ -99,9 +99,23 @@ public class giveuCommand implements CommandExecutor, TabCompleter {
             case "ticket":
                 int amount;
 
-                if (args.length < 3) {
+                if (args.length < 2) {
                     Message.sendErrorMessage(player, "[管理AI]", "チケットの種類をgachaかgunで指定してください。");
+                    return false;
+                }
+
+                if(args.length < 3){
                     Message.sendErrorMessage(player, "[管理AI]", "枚数を指定してください。");
+                }
+
+                String ticketType = args[1];
+                ItemStack ticket;
+                if(ticketType.equalsIgnoreCase("gacha")){
+                    ticket = UniverseItem.getItem(GachaTicket.id).getItem();
+                } else if(ticketType.equalsIgnoreCase("gun")) {
+                    ticket = UniverseItem.getItem(GunTicket.id).getItem();
+                } else {
+                    Message.sendErrorMessage(player, "[管理AI]", "チケットの種類をgachaかgunで指定してください。");
                     return false;
                 }
 
@@ -114,17 +128,6 @@ public class giveuCommand implements CommandExecutor, TabCompleter {
 
                 if (player.getInventory().firstEmpty() == -amount) {
                     Message.sendErrorMessage(player, "[管理AI]", "インベントリに空きがありません。");
-                    return false;
-                }
-
-                String ticketType = args[1];
-                ItemStack ticket;
-                if(ticketType.equalsIgnoreCase("gacha")){
-                    ticket = UniverseItem.getItem(GachaTicket.id).getItem();
-                } else if(ticketType.equalsIgnoreCase("gun")) {
-                    ticket = UniverseItem.getItem(GunTicket.id).getItem();
-                } else {
-                    Message.sendErrorMessage(player, "[管理AI]", "チケットの種類をgachaかgunで指定してください。");
                     return false;
                 }
 
