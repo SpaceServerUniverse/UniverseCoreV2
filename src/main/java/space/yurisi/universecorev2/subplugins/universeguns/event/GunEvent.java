@@ -79,10 +79,10 @@ public class GunEvent implements Listener {
             return;
         }
         ItemStack itemInHand = player.getInventory().getItemInMainHand();
-        ItemMeta meta = itemInHand.getItemMeta();
         if (!itemInHand.hasItemMeta()) {
             return;
         }
+        ItemMeta meta = itemInHand.getItemMeta();
         PersistentDataContainer container = meta.getPersistentDataContainer();
 
         NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
