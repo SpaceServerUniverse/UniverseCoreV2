@@ -4,6 +4,7 @@ main: space.yurisi.universecorev2.UniverseCoreV2
 api-version: '1.21'
 depend:
   - LuckPerms
+  - ProtocolLib
 commands:
   # UniverseCoreV2
   menu:

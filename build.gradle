@@ -34,6 +34,10 @@ repositories {
         name = "InvUI"
         url 'https://repo.xenondevs.xyz/releases'
     }
+    maven {
+        name = "ProtocolLib"
+        url 'https://repo.dmulloy2.net/nexus/repository/public/'
+    }
 }
 
 dependencies {
@@ -48,6 +52,7 @@ dependencies {
     api "at.favre.lib:bcrypt:0.10.2"
     compileOnly 'io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT'
     compileOnly 'net.luckperms:api:5.4'
+    compileOnly 'com.comphenix.protocol:ProtocolLib:5.3.0'
     implementation "xyz.xenondevs.invui:invui:1.37"
 }
 

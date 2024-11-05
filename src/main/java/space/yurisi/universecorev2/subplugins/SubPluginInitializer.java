@@ -9,6 +9,7 @@ import space.yurisi.universecorev2.subplugins.blockcopystick.BlockCopyStick;
 import space.yurisi.universecorev2.subplugins.changemessages.ChangeMessages;
 import space.yurisi.universecorev2.subplugins.chestshop.ChestShop;
 import space.yurisi.universecorev2.subplugins.customname.CustomName;
+import space.yurisi.universecorev2.subplugins.dekakinanticheat.DAC;
 import space.yurisi.universecorev2.subplugins.elevator.Elevator;
 import space.yurisi.universecorev2.subplugins.evolutionitem.EvolutionItem;
 import space.yurisi.universecorev2.subplugins.fishingsystem.FishingSystem;
@@ -88,6 +89,7 @@ public class SubPluginInitializer {
         this.subPlugins.add(new BirthdayCard());
         this.subPlugins.add(new AutoCollect());
         this.subPlugins.add(new Achievement());
+        this.subPlugins.add(new DAC());
     }
 
     public void onEnable() {
