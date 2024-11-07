@@ -13,6 +13,8 @@ import space.yurisi.universecorev2.item.gun.Gun;
 import space.yurisi.universecorev2.subplugins.universeguns.constants.GunType;
 import space.yurisi.universecorev2.utils.Message;
 
+import net.kyori.adventure.text.Component;
+
 import java.util.Objects;
 
 public class EquipmentLimit {
@@ -73,10 +75,10 @@ public class EquipmentLimit {
         if(!result[0] || !result[1]){
             setEquipmentEffect(player, true);
             if(!result[0]){
-                Message.sendWarningMessage(player, "[武器AI]", "プライマリの所持制限を超えています。");
+                player.sendActionBar(Component.text("§6プライマリの所持制限を超えています。"));
             }
             if(!result[1]){
-                Message.sendWarningMessage(player, "[武器AI]", "セカンダリの所持制限を超えています。");
+                player.sendActionBar(Component.text("§6セカンダリの所持制限を超えています。"));
             }
             return true;
         }
