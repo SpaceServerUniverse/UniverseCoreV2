@@ -1,5 +1,6 @@
 package space.yurisi.universecorev2.subplugins.universeguns.event;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
@@ -509,7 +510,7 @@ public class GunEvent implements Listener {
             }
 
             event.setCancelled(true);
-            Message.sendWarningMessage(event.getPlayer(), "[武器AI]", "オフハンドに武器を持つことはできません。");
+            event.getPlayer().sendActionBar(Component.text("§6オフハンドに武器を持つことはできません。"));
         }
     }
 
@@ -608,7 +609,7 @@ public class GunEvent implements Listener {
 
             boolean result = gunStatus.startReload(reloadTime, player);
             if (!result) {
-                Message.sendWarningMessage(player, "[武器AI]", "弾薬を補充してください");
+                player.sendActionBar(Component.text("§6弾薬を補充してください"));
                 return;
             }
             player.getWorld().playSound(player.getLocation(), Sound.BLOCK_IRON_DOOR_OPEN, 1.0F, 1.0F);
@@ -719,7 +720,7 @@ public class GunEvent implements Listener {
 
             if(event.getInventory().getType().equals(InventoryType.CRAFTING) && destinationSlot == 45){
                 // オフハンド
-                Message.sendWarningMessage(player, "[武器AI]", "オフハンドに武器を持つことはできません。");
+                player.sendActionBar(Component.text("§6オフハンドに武器を持つことはできません。"));
                 event.setCancelled(true);
                 player.getInventory().addItem(oldItem);
                 return;
@@ -747,10 +748,10 @@ public class GunEvent implements Listener {
 
             if(gun.getEquipmentType() == GunType.PRIMARY && !result[0]){
                 new EquipmentLimit().setEquipmentEffect(player, true);
-                Message.sendWarningMessage(player, "[武器AI]", "プライマリの所持制限を超えています。");
+                player.sendActionBar(Component.text("§6プライマリの所持制限を超えています。"));
             }else if(gun.getEquipmentType() == GunType.SECONDARY && !result[1]){
                 new EquipmentLimit().setEquipmentEffect(player, true);
-                Message.sendWarningMessage(player, "[武器AI]", "セカンダリの所持制限を超えています。");
+                player.sendActionBar(Component.text("§6セカンダリの所持制限を超えています。"));
             }
         }
     }
