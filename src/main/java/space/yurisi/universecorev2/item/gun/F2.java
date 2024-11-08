@@ -19,6 +19,7 @@ public final class F2 extends Gun {
         );
 
         this.type = GunType.AR;
+        this.equipmentType = GunType.PRIMARY;
         this.magazineSize = 30;
         this.burst = 2;
         this.reloadTime = 3500;
@@ -38,6 +39,8 @@ public final class F2 extends Gun {
         this.volumeSound = 5.0F;
         this.pitchSound = 0.8F;
         this.flavorText = "§7フランスで開発された3点バースト式のアサルトライフル。高いレートと命中精度が特徴";
+        this.textureNumber = 5;
+        this.price = 4;
     }
 
     @Override
@@ -45,7 +48,7 @@ public final class F2 extends Gun {
         default_setting = (item) -> {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
-                meta.setCustomModelData(5);
+                meta.setCustomModelData(textureNumber);
             }
             item.setItemMeta(meta);
             return item;

@@ -7,8 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import space.yurisi.universecorev2.subplugins.universeguns.connector.UniverseCoreAPIConnector;
-import space.yurisi.universecorev2.subplugins.universeguns.menu.AmmoManagerInventoryMenu;
-import space.yurisi.universecorev2.utils.Message;
+import space.yurisi.universecorev2.subplugins.universeguns.menu.ammo_menu.AmmoManagerInventoryMenu;
 
 public class GunCommand implements CommandExecutor {
 
@@ -28,7 +27,6 @@ public class GunCommand implements CommandExecutor {
         AmmoManagerInventoryMenu ammoManagerInventoryMenu = new AmmoManagerInventoryMenu(connector);
         ammoManagerInventoryMenu.sendMenu(player);
 
-//        Message.sendSuccessMessage(player, "[武器AI]", "弾薬管理メニューを開きました");
         return true;
     }
 }

@@ -2,6 +2,7 @@ package space.yurisi.universecorev2.subplugins.rankcounter;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import space.yurisi.universecorev2.UniverseCoreV2;
+import space.yurisi.universecorev2.subplugins.achievement.data.AchievementDataManager;
 import space.yurisi.universecorev2.subplugins.rankcounter.manager.CounterModelManager;
 import space.yurisi.universecorev2.subplugins.rankcounter.manager.EventManager;
 import space.yurisi.universecorev2.subplugins.SubPlugin;
@@ -13,6 +14,7 @@ public final class RankCounter implements SubPlugin {
     public void onEnable(UniverseCoreV2 core) {
         this.counterManager = new CounterModelManager();
         new EventManager(core, getCounterManager());
+        AchievementDataManager.setManager(getCounterManager());
     }
 
     public CounterModelManager getCounterManager() {

@@ -1,4 +1,4 @@
-package space.yurisi.universecorev2.subplugins.universeguns.menu.item;
+package space.yurisi.universecorev2.subplugins.universeguns.menu.ammo_menu.item;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

@@ -1,0 +1,72 @@
+# コンフィグの書き方
+# achievement:
+#   - Silver [Long]
+#   - Gold [Long]
+
+login:
+  - 10
+  - 30
+
+consecutive_login:
+  - 10
+  - 30
+
+break:
+  - 100000
+  - 1000000
+
+place:
+  - 50000
+  - 250000
+
+flower:
+  - 25
+  - 100
+
+ore:
+  - 10000
+  - 50000
+
+coal:
+  - 1000
+  - 5000
+
+copper:
+  - 1000
+  - 5000
+
+iron:
+  - 500
+  - 1000
+
+gold:
+  - 100
+  - 500
+
+redstone:
+  - 1000
+  - 7000
+
+lapis:
+  - 50
+  - 500
+
+emerald:
+  - 10
+  - 50
+
+diamond:
+  - 50
+  - 250
+
+fishing:
+  - 30
+  - 100
+
+gacha:
+  - 50
+  - 250
+
+kill:
+  - 250
+  - 1000

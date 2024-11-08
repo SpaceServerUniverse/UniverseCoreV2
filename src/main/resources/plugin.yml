@@ -99,6 +99,10 @@ commands:
   ## UniverseGuns
   ammo:
     description: 弾薬管理メニューを開く
+  spawnGunClerk:
+    description: 銃ショップの店員召喚
+  killGunClerk:
+    description: 半径5ブロック以内の指定したショップの店員を排除します
 
   ## PlayerHead
   head:
@@ -135,3 +139,6 @@ commands:
   birthday:
     description: お誕生日カードメニューを開きます
 
+  # Achievement
+  achievement:
+    description: 実績メニューを開きます

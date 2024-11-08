@@ -1,14 +1,12 @@
-package space.yurisi.universecorev2.subplugins.universeguns.menu;
+package space.yurisi.universecorev2.subplugins.universeguns.menu.ammo_menu;
 
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import space.yurisi.universecorev2.exception.AmmoNotFoundException;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
 import space.yurisi.universecorev2.menu.BaseMenu;
 import space.yurisi.universecorev2.subplugins.universeguns.connector.UniverseCoreAPIConnector;
-import space.yurisi.universecorev2.subplugins.universeguns.menu.item.*;
+import space.yurisi.universecorev2.subplugins.universeguns.menu.ammo_menu.item.*;
 import space.yurisi.universecorev2.utils.Message;
 import xyz.xenondevs.invui.gui.Gui;
 import xyz.xenondevs.invui.item.Item;
