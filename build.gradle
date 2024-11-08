@@ -10,6 +10,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("org.flywaydb.flyway") version "8.0.0"
     id('maven-publish')
+    id("io.papermc.paperweight.userdev") version "1.7.4"
 }
 
 group = 'space.yurisi'
@@ -54,6 +55,7 @@ dependencies {
     compileOnly 'net.luckperms:api:5.4'
     compileOnly 'com.comphenix.protocol:ProtocolLib:5.3.0'
     implementation "xyz.xenondevs.invui:invui:1.37"
+    paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
 }
 
 
