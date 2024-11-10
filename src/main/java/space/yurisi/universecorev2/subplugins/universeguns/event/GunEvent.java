@@ -721,8 +721,7 @@ public class GunEvent implements Listener {
             if(event.getInventory().getType().equals(InventoryType.CRAFTING) && destinationSlot == 45){
                 // オフハンド
                 player.sendActionBar(Component.text("§6オフハンドに武器を持つことはできません。"));
-                event.setCancelled(true);
-                player.getInventory().addItem(oldItem);
+                new EquipmentLimit().setEquipmentEffect(player, true);
                 return;
             }
 

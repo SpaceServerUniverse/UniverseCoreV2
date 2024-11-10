@@ -71,6 +71,14 @@ public class EquipmentLimit {
     }
 
     public boolean debuffEquipmentLimit(Player player){
+        ItemStack offHandItem = player.getInventory().getItemInOffHand();
+        if(offHandItem.hasItemMeta()){
+            Gun offHandGun = Gun.getGun(offHandItem);
+            if(offHandGun != null){
+                setEquipmentEffect(player, true);
+                return true;
+            }
+        }
         boolean[] result = checkEquipmentLimit(player);
         if(!result[0] || !result[1]){
             setEquipmentEffect(player, true);

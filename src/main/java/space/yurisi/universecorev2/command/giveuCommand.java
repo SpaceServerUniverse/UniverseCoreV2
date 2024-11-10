@@ -106,6 +106,7 @@ public class giveuCommand implements CommandExecutor, TabCompleter {
 
                 if(args.length < 3){
                     Message.sendErrorMessage(player, "[管理AI]", "枚数を指定してください。");
+                    return false;
                 }
 
                 String ticketType = args[1];
