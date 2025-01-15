@@ -43,7 +43,7 @@ dependencies {
     api("org.flywaydb:flyway-core:8.0.0")
     api("at.favre.lib:bcrypt:0.10.2")
     // compileOnly: コンパイル時のみに依存するライブラリを追加する
-    compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
     compileOnly("net.luckperms:api:5.4")
 }
 
