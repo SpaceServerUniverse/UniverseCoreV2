@@ -39,16 +39,16 @@ repositories {
 dependencies {
     implementation 'org.apache.logging.log4j:log4j-api:2.21.0'
     implementation 'org.apache.logging.log4j:log4j-core:2.21.0'
-    implementation 'net.wesjd:anvilgui:1.10.2-SNAPSHOT'
+    implementation 'net.wesjd:anvilgui:1.10.10-SNAPSHOT'
     implementation 'net.dv8tion:JDA:5.1.0'
 
     api "org.hibernate:hibernate-core:6.1.5.Final"
     api "com.mysql:mysql-connector-j:8.0.32"
     api "org.flywaydb:flyway-core:8.0.0"
     api "at.favre.lib:bcrypt:0.10.2"
-    compileOnly 'io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT'
+    compileOnly 'io.papermc.paper:paper-api:1.21.10-R0.1-SNAPSHOT'
     compileOnly 'net.luckperms:api:5.4'
-    implementation "xyz.xenondevs.invui:invui:1.37"
+    implementation "xyz.xenondevs.invui:invui:1.49"
 }
 
 
