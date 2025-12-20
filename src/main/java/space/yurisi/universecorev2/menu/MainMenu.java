@@ -34,6 +34,10 @@ public class MainMenu implements BaseMenu {
         Item border = new SimpleItem(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE));
         Item inMenuBorder = new SimpleItem(new ItemBuilder(Material.LIGHT_BLUE_STAINED_GLASS_PANE));
 
+        Item executeAchievement = new CommandItem(new ItemBuilder(Material.TOTEM_OF_UNDYING)
+                .setDisplayName("アチーブメント")
+                .setLegacyLore(List.of("§6アチーブメントを確認します")),
+                "/achievement");
         Item executeMywarp = new CommandItem(new ItemBuilder(Material.COMPASS)
                 .setDisplayName("マイワープ")
                 .setLegacyLore(List.of("§6保存した場所にテレポートします")),
@@ -87,7 +91,7 @@ public class MainMenu implements BaseMenu {
         Gui gui = Gui.normal()
                 .setStructure(
                         "# # # i # = # # #",
-                        "# + a m t o y + #",
+                        "# c a m t o y + #",
                         "# + k n s h p + #",
                         "b # # # l # # # #"
                 )
@@ -95,6 +99,7 @@ public class MainMenu implements BaseMenu {
                 .addIngredient('+', inMenuBorder)
                 .addIngredient('=', createServerInfoItem())
                 .addIngredient('i', createPlayerInfoHead(player))
+                .addIngredient('c', executeAchievement)
                 .addIngredient('a', executeGacha)
                 .addIngredient('m', executeMywarp)
                 .addIngredient('t', executeTpp)
