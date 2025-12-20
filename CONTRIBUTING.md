@@ -36,13 +36,6 @@ UniverseCoreV2 をデバッグする際は次の手順を踏みます.
 3. `docker compose restart` を実行する
 4. `localhost:25565` で Minecraft サーバーに接続する
 
-#### デバッグ鯖で OP を付与する方法
-
-Docker 上のデバッグ鯖が起動した状態で 
-
-1. `docker compose exec paper rcon-cli` を実行する
-2. `op <自分のID>` を実行する
-
 ## 権限周り
 
 SpaceServer Universe では権限周りを LuckPerms で管理しています.

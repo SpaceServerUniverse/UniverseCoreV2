@@ -31,8 +31,8 @@ public class GunShopClerk {
         villager.getEquipment().setBoots(new ItemStack(Material.AIR));
         villager.getPersistentDataContainer().set(new NamespacedKey(UniverseCoreV2.getInstance(), shopType.getName()),
                 PersistentDataType.STRING, shopType.getName());
-        villager.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.0D);
-        villager.getAttribute(Attribute.ATTACK_KNOCKBACK).setBaseValue(0.0D);
+        villager.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.0D);
+        villager.getAttribute(Attribute.GENERIC_ATTACK_KNOCKBACK).setBaseValue(0.0D);
         villager.setCollidable(false);
         villager.setSilent(true);
         villager.setInvulnerable(true);
