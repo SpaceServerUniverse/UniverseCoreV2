@@ -46,7 +46,7 @@ dependencies {
     api "com.mysql:mysql-connector-j:8.0.32"
     api "org.flywaydb:flyway-core:8.0.0"
     api "at.favre.lib:bcrypt:0.10.2"
-    compileOnly 'io.papermc.paper:paper-api:1.21.10-R0.1-SNAPSHOT'
+    compileOnly 'io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT'
     compileOnly 'net.luckperms:api:5.4'
     implementation "xyz.xenondevs.invui:invui:1.49"
 }
