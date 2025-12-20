@@ -25,7 +25,8 @@ public class lockCommand implements CommandExecutor {
         if(!lockManager.hasFlag(player, LockManager.LOCK)) {
             lockManager.setFlag(player, LockManager.LOCK);
             Message.sendNormalMessage(player, "[金庫AI]", "保護したいコンテナをクリックしてください");
-        }else{
+        } else {
+            lockManager.removeFlag(player);
             Message.sendSuccessMessage(player, "[金庫AI]", "キャンセルしました");
         }
 
