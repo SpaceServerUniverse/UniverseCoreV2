@@ -10,6 +10,7 @@ import org.bukkit.persistence.PersistentDataType;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.item.book.MainMenuBook;
+import space.yurisi.universecorev2.item.book.TutorialBook;
 import space.yurisi.universecorev2.item.fishingrod.FishingRod;
 import space.yurisi.universecorev2.item.pickaxe.FishingPickaxe;
 import space.yurisi.universecorev2.item.gun.*;
@@ -56,6 +57,7 @@ public class UniverseItem {
         items.put(TacticalLeggings.id, new TacticalLeggings());
         items.put(TacticalVest.id, new TacticalVest());
         items.put(MainMenuBook.id, new MainMenuBook());
+        items.put(TutorialBook.id, new TutorialBook());
     }
 
     public static CustomItem getItem(String id){
