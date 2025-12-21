@@ -23,6 +23,7 @@ import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomyAPI
 import space.yurisi.universecorev2.subplugins.universeeconomy.exception.CanNotAddMoneyException;
 import space.yurisi.universecorev2.subplugins.universeeconomy.exception.ParameterException;
 import space.yurisi.universecorev2.utils.Message;
+import space.yurisi.universecorev2.utils.Sound;
 
 import java.util.*;
 
@@ -71,11 +72,12 @@ public class LoginBonusCommand implements CommandExecutor, TabCompleter {
 
             loginBonus.setIs_received(true);
             loginBonusRepository.update(loginBonus);
+            Sound.sendSuccessSound(player);
 
             if (bonusItem.getType() == Material.GOLD_NUGGET) {
                 try {
                     UniverseEconomyAPI.getInstance().addMoney(player, 10000L);
-                    player.sendMessage(MessageHelper.getSuccessMessage("[銀行AI] §aログインボーナス様から10000円振り込まれました！"));
+                    Message.sendErrorMessage(player, "[銀行AI] ", "ログインボーナス様から10000円振り込まれました！");
                 } catch (UserNotFoundException | MoneyNotFoundException | CanNotAddMoneyException |
                          ParameterException ex) {
                     loginBonus.setIs_received(false);
