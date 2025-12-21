@@ -7,9 +7,10 @@
 plugins {
     id('java')
     id('java-library')
-    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("io.github.goooler.shadow") version "8.1.8"
     id("org.flywaydb.flyway") version "8.0.0"
     id('maven-publish')
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.19"
 }
 
 group = 'space.yurisi'
@@ -46,10 +47,12 @@ dependencies {
     api "com.mysql:mysql-connector-j:8.0.32"
     api "org.flywaydb:flyway-core:8.0.0"
     api "at.favre.lib:bcrypt:0.10.2"
-    compileOnly 'io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT'
+    compileOnly 'io.papermc.paper:paper-api:1.21.10-R0.1-SNAPSHOT'
     compileOnly 'net.luckperms:api:5.4'
-    implementation "xyz.xenondevs.invui:invui:1.49"
+    implementation("xyz.xenondevs.invui:invui:1.49")
+    paperweight.paperDevBundle("1.21.10-R0.1-SNAPSHOT")
 }
+
 
 
 def targetJavaVersion = 21
@@ -70,3 +73,30 @@ tasks.withType(JavaCompile).configureEach {
 
 compileJava.options.encoding = 'UTF-8'
 
+shadowJar {
+    archiveClassifier.set('')
+
+    dependencies {
+        exclude(dependency('io.papermc.paper:paper-api:.*'))
+        exclude(dependency('net.luckperms:api:.*'))
+    }
+
+    mergeServiceFiles()
+}
+
+jar {
+    enabled = false
+}
+
+tasks.named('assemble') {
+    dependsOn tasks.named('reobfJar')
+}
+
+tasks.named('build') {
+    dependsOn tasks.named('reobfJar')
+}
+
+tasks.named('reobfJar') {
+    dependsOn tasks.named('shadowJar')
+    inputJar.set(tasks.shadowJar.archiveFile)
+}
