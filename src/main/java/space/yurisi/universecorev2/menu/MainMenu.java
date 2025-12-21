@@ -38,6 +38,10 @@ public class MainMenu implements BaseMenu {
                 .setDisplayName("アチーブメント")
                 .setLegacyLore(List.of("§6アチーブメントを確認します")),
                 "/achievement");
+        Item executeLoginBonus = new CommandItem(new ItemBuilder(Material.GOLD_BLOCK)
+                .setDisplayName("ログインボーナス")
+                .setLegacyLore(List.of("§6ログインボーナスを確認します")),
+                "/loginbonus");
         Item executeMywarp = new CommandItem(new ItemBuilder(Material.COMPASS)
                 .setDisplayName("マイワープ")
                 .setLegacyLore(List.of("§6現在の場所をワープポイントに設定、設定された場所にワープします")),
@@ -90,7 +94,7 @@ public class MainMenu implements BaseMenu {
 
         Gui gui = Gui.normal()
                 .setStructure(
-                        "i c # m t # # k #",
+                        "i c v # m t # k #",
                         "a y h n # # # o y",
                         "# # # # # # # # #",
                         "b # # # # # p s l"
@@ -100,6 +104,7 @@ public class MainMenu implements BaseMenu {
                 //.addIngredient('=', createServerInfoItem())
                 .addIngredient('i', createPlayerInfoHead(player))
                 .addIngredient('c', executeAchievement)
+                .addIngredient('v', executeLoginBonus)
                 .addIngredient('a', executeGacha)
                 .addIngredient('m', executeMywarp)
                 .addIngredient('t', executeTpp)
