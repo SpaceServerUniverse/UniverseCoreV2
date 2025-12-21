@@ -40,11 +40,11 @@ public class MainMenu implements BaseMenu {
                 "/achievement");
         Item executeMywarp = new CommandItem(new ItemBuilder(Material.COMPASS)
                 .setDisplayName("マイワープ")
-                .setLegacyLore(List.of("§6保存した場所にテレポートします")),
+                .setLegacyLore(List.of("§6現在の場所をワープポイントに設定、設定された場所にワープします")),
                 "/mywarp");
         Item executeMarket = new CommandItem(new ItemBuilder(Material.EMERALD)
                 .setDisplayName("マーケット")
-                .setLegacyLore(List.of("§6プレイヤー間のアイテム取引ができます")),
+                .setLegacyLore(List.of("§6ショップを開きます")),
                 "/market");
         Item executeTpp = new CommandItem(new ItemBuilder(Material.ENDER_PEARL)
                 .setDisplayName("プレイヤー間テレポート")
@@ -77,11 +77,11 @@ public class MainMenu implements BaseMenu {
         Item executeAmmo = new CommandItem(new ItemBuilder(ammoItem), "/ammo");
         Item executeReceive = new CommandItem(new ItemBuilder(Material.CHEST)
                 .setDisplayName("報酬受け取り")
-                .setLegacyLore(List.of("§6報酬受け取りメニューを開きます")),
+                .setLegacyLore(List.of("§6報酬受け取りボックスを開きます")),
                 "/receive");
         Item executeBirthday = new CommandItem(new ItemBuilder(Material.CAKE)
                 .setDisplayName("誕生日カードメニュー")
-                .setLegacyLore(List.of("§6誕生日カードメニューを開きます")),
+                .setLegacyLore(List.of("§6誕生日を設定、他のプレイヤーをお祝いすることが出来ます")),
                 "/birthday");
         Item executeMenuBook = new CommandItem(new ItemBuilder(Material.KNOWLEDGE_BOOK)
                 .setDisplayName("メインメニューの本を召喚する")
@@ -90,14 +90,14 @@ public class MainMenu implements BaseMenu {
 
         Gui gui = Gui.normal()
                 .setStructure(
-                        "# # # i # = # # #",
-                        "# c a m t o y + #",
-                        "# + k n s h p + #",
-                        "b # # # l # # # #"
+                        "i c # m t # # k #",
+                        "a y h n # # # o y",
+                        "# # # # # # # # #",
+                        "b # # # # # p s l"
                 )
                 .addIngredient('#', border)
                 .addIngredient('+', inMenuBorder)
-                .addIngredient('=', createServerInfoItem())
+                //.addIngredient('=', createServerInfoItem())
                 .addIngredient('i', createPlayerInfoHead(player))
                 .addIngredient('c', executeAchievement)
                 .addIngredient('a', executeGacha)
