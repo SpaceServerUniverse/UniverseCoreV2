@@ -77,7 +77,7 @@ public class LoginBonusCommand implements CommandExecutor, TabCompleter {
             if (bonusItem.getType() == Material.GOLD_NUGGET) {
                 try {
                     UniverseEconomyAPI.getInstance().addMoney(player, 10000L);
-                    Message.sendErrorMessage(player, "[銀行AI] ", "ログインボーナス様から10000円振り込まれました！");
+                    Message.sendSuccessMessage(player, "[銀行AI] ", "ログインボーナス様から10000円振り込まれました！");
                 } catch (UserNotFoundException | MoneyNotFoundException | CanNotAddMoneyException |
                          ParameterException ex) {
                     loginBonus.setIs_received(false);
