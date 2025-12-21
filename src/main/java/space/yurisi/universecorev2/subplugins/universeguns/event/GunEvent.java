@@ -5,15 +5,13 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.Particle;
+import org.bukkit.damage.DamageSource;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageByBlockEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityPickupItemEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
@@ -304,6 +302,26 @@ public class GunEvent implements Listener {
             livingEntity.setMaximumNoDamageTicks(10);
             livingEntity.setNoDamageTicks(10);
         }
+    }
+
+    @EventHandler
+    public void onPlayerDamageExceptGun(EntityDamageEvent event) {
+        if (isHandlingExplosion.get()) {
+            return;
+        }
+        Entity entity = event.getEntity();
+        if (entity.isDead()) {
+            return;
+        }
+        if (!(entity instanceof LivingEntity livingEntity)) {
+            return;
+        }
+        // 雪玉ダメージは虫
+        if (event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
+            return;
+        }
+        livingEntity.setMaximumNoDamageTicks(10);
+        livingEntity.setNoDamageTicks(10);
     }
 
     @EventHandler
