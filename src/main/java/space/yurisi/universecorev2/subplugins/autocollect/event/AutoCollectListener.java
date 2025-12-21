@@ -27,7 +27,6 @@ public class AutoCollectListener implements Listener{
         int size = itemEntity.size();
         outside:for(int i = 0; i < size; i++){
             ItemStack dropItem = itemEntity.getFirst().getItemStack();
-            player.sendMessage(dropItem.getType().name() + ", i: " + i + ", size: " + size);
             for (int j = 0; j < player.getInventory().getStorageContents().length; j++) {
                 ItemStack item = player.getInventory().getItem(j);
                 if(item == null){
