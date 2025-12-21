@@ -142,3 +142,7 @@ commands:
   # Achievement
   achievement:
     description: 実績メニューを開きます
+
+  #loginbonus
+  loginbonus:
+    description: ログインボーナスを開きます

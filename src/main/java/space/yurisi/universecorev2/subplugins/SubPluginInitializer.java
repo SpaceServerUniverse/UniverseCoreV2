@@ -17,6 +17,7 @@ import space.yurisi.universecorev2.subplugins.itemhat.ItemHat;
 import space.yurisi.universecorev2.subplugins.freemarket.FreeMarket;
 import space.yurisi.universecorev2.subplugins.levelaward.LevelAward;
 import space.yurisi.universecorev2.subplugins.levelsystem.LevelSystem;
+import space.yurisi.universecorev2.subplugins.loginbonus.LoginBonus;
 import space.yurisi.universecorev2.subplugins.mywarp.Mywarp;
 import space.yurisi.universecorev2.subplugins.navigation.Navigation;
 import space.yurisi.universecorev2.subplugins.playerhead.PlayerHead;
@@ -88,6 +89,7 @@ public class SubPluginInitializer {
         this.subPlugins.add(new BirthdayCard());
         this.subPlugins.add(new AutoCollect());
         this.subPlugins.add(new Achievement());
+        this.subPlugins.add(new LoginBonus());
     }
 
     public void onEnable() {

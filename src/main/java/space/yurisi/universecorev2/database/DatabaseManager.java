@@ -30,6 +30,7 @@ public class DatabaseManager {
     private final MarketRepository marketRepository;
     private final ReceiveBoxRepository receiveBoxRepository;
     private final BirthdayCardRepository birthdayCardRepository;
+    private final LoginBonusRepository loginBonusRepository;
 
     public DatabaseManager(SessionFactory sessionFactory) {
         this.userRepository = new UserRepository(sessionFactory);
@@ -55,6 +56,7 @@ public class DatabaseManager {
         this.ammoRepository = new AmmoRepository(sessionFactory);
         this.receiveBoxRepository = new ReceiveBoxRepository(sessionFactory);
         this.birthdayCardRepository = new BirthdayCardRepository(sessionFactory);
+        this.loginBonusRepository = new LoginBonusRepository(sessionFactory);
     }
 
     /**
@@ -262,4 +264,10 @@ public class DatabaseManager {
     public BirthdayCardRepository getBirthdayCardRepository() {
         return birthdayCardRepository;
     }
+
+    /**
+     * ログインボーナスリポジトリを取得
+     * @return LoginBonusRepository
+     */
+    public LoginBonusRepository getLoginBonusRepository(){ return loginBonusRepository; }
 }
