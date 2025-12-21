@@ -1,6 +1,7 @@
 package space.yurisi.universecorev2.subplugins.autocollect.event;
 
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,13 +24,15 @@ public class AutoCollectListener implements Listener{
         if(!AutoCollectMap.getInstance().isAutoCollect(player)) return;
         event.setCancelled(true);
         List<Item> itemEntity = event.getItems();
-        outside:for(int i = 0; i < itemEntity.size(); i++){
-            ItemStack dropItem = itemEntity.get(i).getItemStack();
+        int size = itemEntity.size();
+        outside:for(int i = 0; i < size; i++){
+            ItemStack dropItem = itemEntity.getFirst().getItemStack();
+            player.sendMessage(dropItem.getType().name() + ", i: " + i + ", size: " + size);
             for (int j = 0; j < player.getInventory().getStorageContents().length; j++) {
                 ItemStack item = player.getInventory().getItem(j);
                 if(item == null){
                     player.getInventory().addItem(dropItem);
-                    itemEntity.remove(i);
+                    itemEntity.removeFirst();
                     continue outside;
                 }
                 if(Objects.equals(item.getType(), dropItem.getType())){
@@ -39,7 +42,7 @@ public class AutoCollectListener implements Listener{
                     if(!Objects.equals(item.getItemMeta(), dropItem.getItemMeta())) continue;
                     if(maxStackSize - currentItemAmount < dropAmount) continue;
                     player.getInventory().addItem(dropItem);
-                    itemEntity.remove(i);
+                    itemEntity.removeFirst();
                     continue outside;
                 }
             }

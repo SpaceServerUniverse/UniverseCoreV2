@@ -20,7 +20,7 @@ public class AchievementMenu implements BaseMenu {
 
     @Override
     public void sendMenu(Player player) {
-        Item border = new SimpleItem(new ItemBuilder(Material.LIGHT_GRAY_STAINED_GLASS_PANE));
+        Item border = new SimpleItem(new ItemBuilder(Material.LIGHT_GRAY_STAINED_GLASS_PANE).setDisplayName(""));
         Gui gui = PagedGui.items()
                 .setStructure(
                         "1 x x x x x x b b",
