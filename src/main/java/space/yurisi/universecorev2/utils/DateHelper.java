@@ -1,5 +1,7 @@
 package space.yurisi.universecorev2.utils;
 
+import org.apache.commons.lang3.time.DateUtils;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -39,5 +41,9 @@ public class DateHelper {
         calendar.set(Calendar.MILLISECOND, 999);
 
         return calendar.getTime();
+    }
+
+    public static Date today(){
+        return DateUtils.truncate(new Date(), Calendar.DAY_OF_MONTH);
     }
 }

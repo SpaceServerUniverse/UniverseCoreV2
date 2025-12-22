@@ -42,6 +42,10 @@ public class MainMenu implements BaseMenu {
                 .setDisplayName("ログインボーナス")
                 .setLegacyLore(List.of("§6ログインボーナスを確認します")),
                 "/loginbonus");
+        Item executeLevelAward = new CommandItem(new ItemBuilder(Material.DIAMOND_BLOCK)
+                .setDisplayName("レベル報酬")
+                .setLegacyLore(List.of("§6レベル報酬を確認します")),
+                "/reward");
         Item executeMywarp = new CommandItem(new ItemBuilder(Material.COMPASS)
                 .setDisplayName("マイワープ")
                 .setLegacyLore(List.of("§6現在の場所をワープポイントに設定、設定された場所にワープします")),
@@ -92,12 +96,19 @@ public class MainMenu implements BaseMenu {
                 .setLegacyLore(List.of("§6右クリックでメニューが開ける本を召喚します")),
                 "/menu book");
 
+        Item category1 = new SimpleItem(new ItemBuilder(Material.YELLOW_STAINED_GLASS_PANE).setDisplayName("ワープ関連"));
+        Item category2 = new SimpleItem(new ItemBuilder(Material.BLUE_STAINED_GLASS_PANE).setDisplayName("武器関連"));
+        Item category3 = new SimpleItem(new ItemBuilder(Material.RED_STAINED_GLASS_PANE).setDisplayName("経済関連"));
+        Item category4 = new SimpleItem(new ItemBuilder(Material.PINK_STAINED_GLASS_PANE).setDisplayName("その他"));
+
         Gui gui = Gui.normal()
                 .setStructure(
-                        "i c v # m t # k #",
-                        "a y h n # # # o y",
-                        "# # # # # # # # #",
-                        "b # # # # # p s l"
+                        "i c v d # # # # #",
+                        "1 m t # # # # # # ",
+                        "2 o # # # # # # #",
+                        "3 y a h n # # # #",
+                        "4 # # # # # # # #",
+                        "b # # # # k p s l"
                 )
                 .addIngredient('#', border)
                 .addIngredient('+', inMenuBorder)
@@ -105,6 +116,7 @@ public class MainMenu implements BaseMenu {
                 .addIngredient('i', createPlayerInfoHead(player))
                 .addIngredient('c', executeAchievement)
                 .addIngredient('v', executeLoginBonus)
+                .addIngredient('d', executeLevelAward)
                 .addIngredient('a', executeGacha)
                 .addIngredient('m', executeMywarp)
                 .addIngredient('t', executeTpp)
@@ -117,6 +129,10 @@ public class MainMenu implements BaseMenu {
                 .addIngredient('p', executeReceive)
                 .addIngredient('b', executeMenuBook)
                 .addIngredient('l', new LaunchNavigationItem())
+                .addIngredient('1', category1)
+                .addIngredient('2', category2)
+                .addIngredient('3', category3)
+                .addIngredient('4', category4)
                 .build();
 
         Window window = Window.single()

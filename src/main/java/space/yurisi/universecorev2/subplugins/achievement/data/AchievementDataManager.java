@@ -31,22 +31,32 @@ public class AchievementDataManager {
         return manager != null;
     }
 
-    private static AchievementStatus getStatus(Long now, List<Long> conf){
+    private static AchievementStatus getStatus(long now, List<Long> conf) {
+        if (conf == null || conf.isEmpty()) {
+            // 仕様に合わせて：0扱い / 例外 / NORMAL固定など
+            return AchievementStatus.create(false, 0L, Achievement_NORMAL, Name_NORMAL);
+        }
+
+        long first = conf.get(0);
+        long last = conf.get(conf.size() - 1);
+
         String stage;
         String color;
-        if(now >= conf.getLast()){
+
+        if (now >= last) {
             stage = Achievement_GOLD;
             color = Name_GOLD;
-        }else if(now >= conf.getFirst()){
+        } else if (now >= first) {
             stage = Achievement_SILVER;
             color = Name_SILVER;
-        }else{
+        } else {
             stage = Achievement_NORMAL;
             color = Name_NORMAL;
         }
+
         return AchievementStatus.create(
-                now >= conf.getLast(),
-                (now >= conf.getFirst() ? conf.getLast():conf.getFirst()),
+                now >= last,
+                (now >= first ? last : first),
                 stage,
                 color
         );

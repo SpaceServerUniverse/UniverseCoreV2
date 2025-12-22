@@ -8,7 +8,7 @@ services:
       - TYPE=PAPER
       - VERSION=1.21.1
       - MEMORY=2G
-      - RCON_PASSWORD=${RCON_PASSWORD}
+      - RCON_PASSWORD=minecraft
       - TZ=Asia/Tokyo
       - RESOURCE_PACK=https://github.com/SpaceServerUniverse/UniverseResourcePack/releases/latest/download/UniverseResources.zip
       - REQUIRE_RESOURCE_PACK=true
