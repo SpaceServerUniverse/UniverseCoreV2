@@ -73,7 +73,7 @@ public class LevelRewardItem extends AbstractItem {
 
         try {
             levelReward = levelRewardRepository.findByPlayer(player, level);
-            if (levelReward.getIs_received()) {
+            if (levelReward.isReceived()) {
                 Message.sendErrorMessage(player, "[報酬AI]", "すでに受け取っています。");
                 Sound.sendErrorSound(player);
                 return;
@@ -90,7 +90,7 @@ public class LevelRewardItem extends AbstractItem {
             return;
         }
 
-        levelReward.setIs_received(true);
+        levelReward.setReceived(true);
         levelRewardRepository.update(levelReward);
 
         Calendar expireDate = Calendar.getInstance();

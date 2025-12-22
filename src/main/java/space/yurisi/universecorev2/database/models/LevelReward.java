@@ -32,19 +32,19 @@ public class LevelReward {
         this.level = level;
     }
 
-    public Boolean getIs_received() {
+    public Boolean isReceived() {
         return is_received;
     }
 
-    public void setIs_received(Boolean is_received) {
+    public void setReceived(Boolean is_received) {
         this.is_received = is_received;
     }
 
-    public Date getCreated_at() {
+    public Date getCreatedAt() {
         return created_at;
     }
 
-    public void setCreated_at(Date created_at) {
+    public void setCreatedAt(Date created_at) {
         this.created_at = created_at;
     }
 

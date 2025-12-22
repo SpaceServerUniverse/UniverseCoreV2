@@ -105,7 +105,7 @@ public class LevelRewardRepository {
     }
 
     /**
-     *
+     * LevelRewardモデルに基づき、データをアップデートする
      * @param levelReward
      */
     public void update(LevelReward levelReward) {

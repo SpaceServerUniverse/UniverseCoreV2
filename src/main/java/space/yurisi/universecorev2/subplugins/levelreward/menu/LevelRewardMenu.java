@@ -33,7 +33,7 @@ public class LevelRewardMenu implements BaseMenu {
 
         for (int i = 50; i <= 1000; i = i + 50) {
             int finalI = i;
-            boolean received = levelRewards.stream().anyMatch(levelReward -> levelReward.getLevel() == finalI && levelReward.getIs_received());
+            boolean received = levelRewards.stream().anyMatch(levelReward -> levelReward.getLevel() == finalI && levelReward.isReceived());
             currentItems.add(new LevelRewardItem(i, received));
         }
 
