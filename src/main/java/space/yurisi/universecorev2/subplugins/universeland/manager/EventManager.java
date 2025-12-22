@@ -6,12 +6,14 @@ import space.yurisi.universecorev2.subplugins.universeland.event.block.BreakEven
 import space.yurisi.universecorev2.subplugins.universeland.event.block.FromToEvent;
 import space.yurisi.universecorev2.subplugins.universeland.event.block.PlaceEvent;
 import space.yurisi.universecorev2.subplugins.universeland.event.entity.DamageEvent;
+import space.yurisi.universecorev2.subplugins.universeland.event.player.ArmorStandManipulateEvent;
 import space.yurisi.universecorev2.subplugins.universeland.event.player.BucketEvent;
 import space.yurisi.universecorev2.subplugins.universeland.event.player.TouchEvent;
 
 public class EventManager {
 
     public static void init(UniverseCoreV2 core) {
+        core.getServer().getPluginManager().registerEvents(new ArmorStandManipulateEvent(), core);
         core.getServer().getPluginManager().registerEvents(new BreakEvent(), core);
         core.getServer().getPluginManager().registerEvents(new BucketEvent(), core);
         //plugin.getServer().getPluginManager().registerEvents(new FromToEvent(), plugin);
