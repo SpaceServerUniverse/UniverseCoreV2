@@ -31,8 +31,8 @@ public class GunShot {
 
         Vector direction = player.getEyeLocation().getDirection().normalize();
 
-        if((gun.getType().equals(GunType.SG) || gun.getType().equals(GunType.EX)) && !player.isSneaking()){
-            Knockback(player, direction);
+        if((gun.getType().equals(GunType.SG) || gun.getType().equals(GunType.EX) || gun.getType().equals(GunType.LMG)) && !player.isSneaking()){
+            Knockback(player, direction, gun.getRecoil());
         }
         // ADSしていない場合は精度を下げる
         if(!isZoom.contains(player)){
@@ -72,9 +72,9 @@ public class GunShot {
         return direction.add(new Vector(spreadX, spreadY, spreadZ)).normalize();
     }
 
-    private void Knockback(Player player, Vector direction) {
+    private void Knockback(Player player, Vector direction, int recoil) {
         // 水平方向ベクトル
-        Vector horizontalKnockback = direction.clone().setY(0).normalize().multiply(-1);
+        Vector horizontalKnockback = direction.clone().setY(0).normalize().multiply(-0.1 * recoil);
         player.setVelocity(player.getVelocity().add(horizontalKnockback));
     }
 

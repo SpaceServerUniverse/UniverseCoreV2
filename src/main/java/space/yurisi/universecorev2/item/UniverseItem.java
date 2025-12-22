@@ -53,6 +53,7 @@ public class UniverseItem {
         items.put(F2.id, new F2());
         items.put(M870.id, new M870());
         items.put(M1911.id, new M1911());
+        items.put(M134.id, new M134());
         items.put(MagazineBag.id, new MagazineBag());
         items.put(TacticalLeggings.id, new TacticalLeggings());
         items.put(TacticalVest.id, new TacticalVest());

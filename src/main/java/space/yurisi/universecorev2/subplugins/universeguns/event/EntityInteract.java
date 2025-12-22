@@ -42,12 +42,16 @@ public class EntityInteract implements Listener{
                 sniperRifleShopMenu.sendMenu(player);
                 break;
             case LMGShop:
+                LightMachineGunShopMenu lightMachineGunShopMenu = new LightMachineGunShopMenu();
+                lightMachineGunShopMenu.sendMenu(player);
                 break;
             case EXShop:
                 ExplosiveShopMenu explosiveShopMenu = new ExplosiveShopMenu();
                 explosiveShopMenu.sendMenu(player);
                 break;
             case EQUIPMENTShop:
+                ArmorShopMenu armorShopMenu = new ArmorShopMenu();
+                armorShopMenu.sendMenu(player);
                 break;
         }
     }
