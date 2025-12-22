@@ -72,7 +72,8 @@ public class DatabaseConnector {
                 .addAnnotatedClass(ReceiveBox.class)
                 .addAnnotatedClass(BirthdayData.class)
                 .addAnnotatedClass(BirthdayMessages.class)
-                .addAnnotatedClass(LoginBonus.class);
+                .addAnnotatedClass(LoginBonus.class)
+                .addAnnotatedClass(LevelReward.class);
     }
 
     private Configuration registerProperties(Configuration configuration) {
