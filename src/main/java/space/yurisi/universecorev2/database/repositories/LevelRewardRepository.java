@@ -81,7 +81,6 @@ public class LevelRewardRepository {
      * プレイヤーのログインボーナスをすべて取得します
      * @param player
      * @return
-     * @throws LevelRewardNotFoundException
      */
     public List<LevelReward> getAllByPlayer(Player player) {
         try (Session session = sessionFactory.getCurrentSession()) {
