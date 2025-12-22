@@ -27,7 +27,7 @@ public class LevelRewardMenu implements BaseMenu {
         currentItems = new ArrayList<>();
         Item border = new SimpleItem(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE));
 
-        //データを先に首都く
+        //データを先に取得
         LevelRewardRepository levelRewardRepository = UniverseCoreV2API.getInstance().getDatabaseManagerV2().get(LevelRewardRepository.class);
         List<LevelReward> levelRewards = levelRewardRepository.getAllByPlayer(player);
 
