@@ -88,7 +88,7 @@ public class MarketRepository {
      * プレイヤーの出品しているアイテムを取得します
      *
      * @param uuid uuid
-     * @return List<Market>
+     * @return List
      */
     public List<Market> getItemFromPlayer(String uuid, boolean isPurchaseSearchEnabled) {
         Session session = this.sessionFactory.getCurrentSession();
