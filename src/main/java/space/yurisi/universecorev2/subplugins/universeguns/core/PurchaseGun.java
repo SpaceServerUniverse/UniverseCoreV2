@@ -45,4 +45,36 @@ public class PurchaseGun {
         Message.sendSuccessMessage(player, "[武器AI]", gun.getName() + "を購入しました。");
         player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_CELEBRATE, 1, 1);
     }
+
+    public static void armorPurchase(Player player, String id){
+        Boolean canPurchase = UniverseItem.removeItem(player, "gun_ticket", 2);
+
+        if(!canPurchase) {
+            Message.sendWarningMessage(player, "[武器AI]", "チケットが足りません。");
+            player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
+            return;
+        }
+
+        CustomItem item = UniverseItem.getItem(id);
+        if(item == null) {
+            player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
+            Message.sendErrorMessage(player, "[武器AI]", "アイテムが見つかりませんでした。運営にお問い合わせください。");
+            return;
+        }
+        Inventory inventory = player.getInventory();
+        ItemStack itemStack = item.getItem();
+
+        if(inventory.firstEmpty() == -1) {
+            player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_YES, 1, 1);
+            Message.sendSuccessMessage(player, "[武器AI]", "インベントリがいっぱいなので、受け取りboxに送りました。");
+            Message.sendSuccessMessage(player, "[武器AI]", "受け取りboxは /receive で確認できます。");
+            Date expireDate = new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7);
+            ReceiveBoxAPI.AddReceiveItem(itemStack, player.getUniqueId(), expireDate, "購入した武器");
+            return;
+        }
+
+        inventory.addItem(itemStack);
+        Message.sendSuccessMessage(player, "[武器AI]", item.getName() + "を購入しました。");
+        player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_CELEBRATE, 1, 1);
+    }
 }

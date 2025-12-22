@@ -29,7 +29,7 @@ public final class M870 extends Gun {
         this.explosionRadius = 0.0F;
         this.weight = 0.16F;
         this.fireRate = 20;
-        this.recoil = 1;
+        this.recoil = 10;
         this.spread = 0.2D;
         this.bulletNumber = 8;
         this.bulletSpeed = 2.5D;
