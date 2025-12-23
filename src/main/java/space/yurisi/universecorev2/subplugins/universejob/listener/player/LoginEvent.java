@@ -8,11 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import space.yurisi.universecorev2.database.repositories.JobRepository;
 import space.yurisi.universecorev2.exception.JobTypeNotFoundException;
-import space.yurisi.universecorev2.exception.UserNotFoundException;
-import space.yurisi.universecorev2.subplugins.levelsystem.exception.UnknownLevelModeException;
-import space.yurisi.universecorev2.subplugins.levelsystem.utils.connector.UniverseCoreAPIConnector;
 import space.yurisi.universecorev2.subplugins.universejob.UniverseJob;
-import space.yurisi.universecorev2.subplugins.universejob.constants.JobType;
 
 public class LoginEvent implements Listener {
 
@@ -34,7 +30,7 @@ public class LoginEvent implements Listener {
                 jobRepository.createJob(player);
                 jobID = 0;
             } else {
-                jobID = jobRepository.getJobID(player);
+                jobID = jobRepository.getJobIDFromPlayer(player);
             }
 
             main.getPlayerJobManager().registerPlayer(player, jobID);

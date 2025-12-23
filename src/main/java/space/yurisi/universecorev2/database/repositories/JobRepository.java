@@ -41,7 +41,7 @@ public class JobRepository {
         }
     }
 
-    public int getJobID(Player player){
+    public int getJobIDFromPlayer(Player player){
         Session session = sessionFactory.openSession();
         try {
             Job job = (Job) session.createQuery("FROM Job WHERE uuid = :uuid")
@@ -49,6 +49,21 @@ public class JobRepository {
                     .uniqueResult();
             if(job == null){
                 createJob(player);
+                return 0;
+            }
+            return job.getJob_id();
+        } finally {
+            session.close();
+        }
+    }
+
+    public int getJobIDFromUUID(String uuid){
+        Session session = sessionFactory.openSession();
+        try {
+            Job job = (Job) session.createQuery("FROM Job WHERE uuid = :uuid")
+                    .setParameter("uuid", uuid)
+                    .uniqueResult();
+            if(job == null){
                 return 0;
             }
             return job.getJob_id();
@@ -70,9 +85,9 @@ public class JobRepository {
             Date date = job.getLast_changed();
             // 1週間以上経過していないと変更できない
             long diff = new Date().getTime() - date.getTime();
-            if(diff < 7 * 24 * 60 * 60 * 1000){
-                return false;
-            }
+//            if(diff < 7 * 24 * 60 * 60 * 1000){
+//                return false;
+//            }
             job.setJob_id(jobID);
             job.setUpdated_at(new Date());
             session.merge(job);

@@ -1,7 +1,6 @@
 package space.yurisi.universecorev2.subplugins.universejob.manager;
 
 import org.bukkit.entity.Player;
-import space.yurisi.universecorev2.database.repositories.JobRepository;
 import space.yurisi.universecorev2.exception.JobTypeNotFoundException;
 import space.yurisi.universecorev2.subplugins.universejob.UniverseJob;
 import space.yurisi.universecorev2.subplugins.universejob.constants.JobType;

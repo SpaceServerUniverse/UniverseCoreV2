@@ -15,14 +15,13 @@ import space.yurisi.universecorev2.database.DatabaseManager;
 import space.yurisi.universecorev2.database.models.Land;
 import space.yurisi.universecorev2.database.models.LandPermission;
 import space.yurisi.universecorev2.database.models.User;
-import space.yurisi.universecorev2.exception.LandNotFoundException;
-import space.yurisi.universecorev2.exception.LandPermissionNotFoundException;
-import space.yurisi.universecorev2.exception.MoneyNotFoundException;
-import space.yurisi.universecorev2.exception.UserNotFoundException;
+import space.yurisi.universecorev2.exception.*;
 import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomyAPI;
 import space.yurisi.universecorev2.subplugins.universeeconomy.exception.CanNotAddMoneyException;
 import space.yurisi.universecorev2.subplugins.universeeconomy.exception.CanNotReduceMoneyException;
 import space.yurisi.universecorev2.subplugins.universeeconomy.exception.ParameterException;
+import space.yurisi.universecorev2.subplugins.universejob.UniverseJobAPI;
+import space.yurisi.universecorev2.subplugins.universejob.constants.JobType;
 import space.yurisi.universecorev2.subplugins.universeland.UniverseLand;
 import space.yurisi.universecorev2.subplugins.universeland.manager.LandDataManager;
 import space.yurisi.universecorev2.subplugins.universeland.store.LandData;
@@ -77,6 +76,12 @@ public class LandCommand implements CommandExecutor, TabCompleter {
 
             DatabaseManager database = UniverseLand.getInstance().getDatabaseManager();
             Long price = landData.getPrice();
+
+            JobType jobType = UniverseJobAPI.getInstance().getJobType(player);
+            if (jobType != null && jobType == JobType.REAL_ESTATE_AGENT) {
+                price = (long) (price * 0.9);
+            }
+
             try {
                 Long money = UniverseEconomyAPI.getInstance().getMoney(player);
                 if (price > money) {

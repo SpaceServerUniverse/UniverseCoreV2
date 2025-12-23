@@ -13,6 +13,7 @@ import space.yurisi.universecorev2.exception.MoneyNotFoundException;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
 import space.yurisi.universecorev2.subplugins.autocollect.data.AutoCollectMap;
 import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomyAPI;
+import space.yurisi.universecorev2.subplugins.universejob.UniverseJob;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -99,7 +100,7 @@ public final class ScoreBoardTask extends BukkitRunnable {
 
     private void setJob(Objective objective, int score) {
         //TODO
-        Objects.requireNonNull(objective).getScore("§6仕事: 無職").setScore(score);
+        Objects.requireNonNull(objective).getScore("§6仕事: " + UniverseJob.getInstance().getPlayerJobManager().getPlayerJobType(player).getDisplayName()).setScore(score);
     }
 
     private void setOnline(Objective objective, int score) {
