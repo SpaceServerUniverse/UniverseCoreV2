@@ -1,0 +1,10 @@
+USE SpaceServerUniverse;
+
+CREATE TABLE IF NOT EXISTS job (
+    id              BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    uuid            VARCHAR(255) NOT NULL,
+    job_id          INTEGER NOT NULL,
+    last_changed    DATE NOT NULL DEFAULT CURRENT_DATE,
+    created_at      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at      DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

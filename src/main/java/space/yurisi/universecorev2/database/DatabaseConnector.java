@@ -73,7 +73,8 @@ public class DatabaseConnector {
                 .addAnnotatedClass(BirthdayData.class)
                 .addAnnotatedClass(BirthdayMessages.class)
                 .addAnnotatedClass(LoginBonus.class)
-                .addAnnotatedClass(LevelReward.class);
+                .addAnnotatedClass(LevelReward.class)
+                .addAnnotatedClass(Job.class);
     }
 
     private Configuration registerProperties(Configuration configuration) {
