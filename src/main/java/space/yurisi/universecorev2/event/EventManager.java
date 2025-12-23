@@ -5,9 +5,11 @@ import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.event.block.BExplodeEvent;
 import space.yurisi.universecorev2.event.block.BreakEvent;
 import space.yurisi.universecorev2.event.block.PlaceEvent;
+import space.yurisi.universecorev2.event.entity.PortalEvent;
 import space.yurisi.universecorev2.event.entity.EExplodeEvent;
 import space.yurisi.universecorev2.event.entity.EntityHangingBreakEvent;
 import space.yurisi.universecorev2.event.player.*;
+import space.yurisi.universecorev2.event.world.PortalCreateEvent;
 
 public class EventManager {
     public EventManager(UniverseCoreV2 main){
@@ -24,5 +26,9 @@ public class EventManager {
         Bukkit.getPluginManager().registerEvents(new EExplodeEvent(),main);
         Bukkit.getPluginManager().registerEvents(new BlockProtectEvent(), main);
         Bukkit.getPluginManager().registerEvents(new EntityHangingBreakEvent(),main);
+
+        Bukkit.getPluginManager().registerEvents(new space.yurisi.universecorev2.event.player.PortalEvent(),main);
+        Bukkit.getPluginManager().registerEvents(new PortalCreateEvent(),main);
+        Bukkit.getPluginManager().registerEvents(new PortalEvent(),main);
     }
 }
