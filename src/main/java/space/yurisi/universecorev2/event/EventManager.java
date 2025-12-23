@@ -12,7 +12,7 @@ import space.yurisi.universecorev2.event.player.*;
 import space.yurisi.universecorev2.event.world.PortalCreateEvent;
 
 public class EventManager {
-    public EventManager(UniverseCoreV2 main){
+    public EventManager(UniverseCoreV2 main) {
         init(main);
     }
 
@@ -22,13 +22,13 @@ public class EventManager {
         Bukkit.getPluginManager().registerEvents(new BreakEvent(), main);
         Bukkit.getPluginManager().registerEvents(new PlaceEvent(), main);
         Bukkit.getPluginManager().registerEvents(new OpenMainMenuEvent(), main);
-        Bukkit.getPluginManager().registerEvents(new BExplodeEvent(),main);
-        Bukkit.getPluginManager().registerEvents(new EExplodeEvent(),main);
+        Bukkit.getPluginManager().registerEvents(new BExplodeEvent(), main);
+        Bukkit.getPluginManager().registerEvents(new EExplodeEvent(), main);
         Bukkit.getPluginManager().registerEvents(new BlockProtectEvent(), main);
-        Bukkit.getPluginManager().registerEvents(new EntityHangingBreakEvent(),main);
+        Bukkit.getPluginManager().registerEvents(new EntityHangingBreakEvent(), main);
 
-        Bukkit.getPluginManager().registerEvents(new space.yurisi.universecorev2.event.player.PortalEvent(),main);
-        Bukkit.getPluginManager().registerEvents(new PortalCreateEvent(),main);
-        Bukkit.getPluginManager().registerEvents(new PortalEvent(),main);
+        Bukkit.getPluginManager().registerEvents(new space.yurisi.universecorev2.event.player.PortalEvent(), main);
+        Bukkit.getPluginManager().registerEvents(new PortalCreateEvent(main), main);
+        Bukkit.getPluginManager().registerEvents(new PortalEvent(), main);
     }
 }
