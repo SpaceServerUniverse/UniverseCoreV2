@@ -30,7 +30,9 @@ public class JobRepository {
     }
 
     public void createJob(Player player){
-        Job job = new Job(null, player.getUniqueId().toString(), 0, new Date(), new Date(), new Date());
+        // 初期は8日前にしておく
+        Date lastChanged = new Date(System.currentTimeMillis() - 8L * 24 * 60 * 60 * 1000);
+        Job job = new Job(null, player.getUniqueId().toString(), 0, lastChanged, new Date(), new Date());
         Session session = sessionFactory.openSession();
         try {
             session.beginTransaction();

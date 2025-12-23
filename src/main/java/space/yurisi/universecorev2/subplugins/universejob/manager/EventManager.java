@@ -10,6 +10,7 @@ public class EventManager {
 
     public EventManager(UniverseCoreV2 core, UniverseJob universeJob) {
         Bukkit.getServer().getPluginManager().registerEvents(new LoginEvent(universeJob), core);
+        Bukkit.getServer().getPluginManager().registerEvents(new QuitEvent(universeJob), core);
         Bukkit.getServer().getPluginManager().registerEvents(new NetherrackBreakEvent(), core);
     }
 }
