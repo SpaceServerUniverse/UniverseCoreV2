@@ -85,9 +85,9 @@ public class JobRepository {
             Date date = job.getLast_changed();
             // 1週間以上経過していないと変更できない
             long diff = new Date().getTime() - date.getTime();
-//            if(diff < 7 * 24 * 60 * 60 * 1000){
-//                return false;
-//            }
+            if(diff < 7 * 24 * 60 * 60 * 1000){
+                return false;
+            }
             job.setJob_id(jobID);
             job.setUpdated_at(new Date());
             session.merge(job);
