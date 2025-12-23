@@ -36,7 +36,9 @@ public class Armor {
             Material.GOLDEN_HELMET,
             Material.DIAMOND_HELMET,
             Material.CHAINMAIL_HELMET,
-            Material.NETHERITE_HELMET
+            Material.NETHERITE_HELMET,
+
+            Material.SHIELD
     };
 
     public static boolean isArmor(Material material){
