@@ -1,5 +1,7 @@
 package space.yurisi.universecorev2.subplugins.rankcounter;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.subplugins.achievement.data.AchievementDataManager;
@@ -22,7 +24,12 @@ public final class RankCounter implements SubPlugin {
     }
 
     public void onDisable() {
-        // Plugin shutdown logic
+        for(Player player: Bukkit.getOnlinePlayers()){
+            if(counterManager.exists(player)){
+                counterManager.get(player).saveAll();
+                counterManager.unregister(player);
+            }
+        }
     }
 
     @Override
