@@ -13,8 +13,13 @@ import java.util.Stack;
 public class Transaction {
     private final Queue<AtomicRollbackableAction> actions = new ArrayDeque<>();
 
-    public void add(AtomicRollbackableAction action) {
+    public static Transaction create() {
+        return new Transaction();
+    }
+
+    public Transaction then(AtomicRollbackableAction action) {
         actions.add(action);
+        return this;
     }
 
     public void commit() throws TransactionException {
