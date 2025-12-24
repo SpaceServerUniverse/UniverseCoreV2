@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.DoubleChest;
 import org.bukkit.block.data.type.Chest;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.entity.Player;
@@ -15,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import space.yurisi.universecorev2.UniverseCoreV2API;
 import space.yurisi.universecorev2.database.models.ChestShop;
@@ -85,19 +87,7 @@ public class InteractEvent implements Listener {
                     }
                     boolean doItemRemove;
                     int remaining = itemStack.getAmount();
-                    doItemRemove = InventoryUtils.RemoveItemFormChest(chest, itemStack, remaining);
-                    Chest chestBlockData = (Chest) chest.getBlockData();
-                    if (!doItemRemove) {
-                        if (chestBlockData.getType() != Chest.Type.SINGLE) {
-                            BlockFace face = DoubleChestFinder.getNeighboringChestBlockFace(chestBlockData);
-                            if (face != null) {
-                                Block neighborBlock = chestBlock.getRelative(face);
-                                if (neighborBlock.getState() instanceof org.bukkit.block.Chest) {
-                                    doItemRemove = InventoryUtils.RemoveItemFormChest((org.bukkit.block.Chest) neighborBlock, itemStack, remaining);
-                                }
-                            }
-                        }
-                    }
+                    doItemRemove = InventoryUtils.RemoveItemFormChest(chest.getInventory(), itemStack, remaining, true);
                     if (!(doItemRemove)) {
                         SuperMessageHelper.sendErrorMessage(player, "チェスト内の在庫が不足しています");
                         event.setCancelled(true);
@@ -105,6 +95,7 @@ public class InteractEvent implements Listener {
                     }
                     try {
                         universeEconomyAPI.reduceMoney(player, chestShop.getPrice(), "チェストショップでの購入:" + ItemUtils.name(itemStack) + ":" + itemStack.getAmount());
+                        InventoryUtils.RemoveItemFormChest(chest.getInventory(), itemStack, remaining, false);
                     } catch (UserNotFoundException | MoneyNotFoundException e) {
                         event.setCancelled(true);
                         return;

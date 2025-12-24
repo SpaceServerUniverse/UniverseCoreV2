@@ -5,14 +5,11 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class InventoryUtils {
-    public static boolean RemoveItemFormChest(Chest chest, ItemStack itemStack, int amountToRemove) {
-        Inventory chestInventory = chest.getBlockInventory();
-        if (chestInventory == null) {
-            return false;
-        }
-        for (ItemStack chestItemSlot : chestInventory.getContents()) {
+    public static boolean RemoveItemFormChest(Inventory inv, ItemStack itemStack, int amountToRemove, boolean simulate) {
+        for (ItemStack chestItemSlot : inv.getContents()) {
             if (chestItemSlot != null && chestItemSlot.getType() == itemStack.getType()) {
                 if (chestItemSlot.getAmount() >= amountToRemove) {
+                    if(simulate) return true;
                     chestItemSlot.setAmount(chestItemSlot.getAmount() - amountToRemove);
                     return true;
                 }
