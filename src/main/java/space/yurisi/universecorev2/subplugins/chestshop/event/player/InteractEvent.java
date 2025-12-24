@@ -84,8 +84,7 @@ public class InteractEvent implements Listener {
                         return;
                     }
                     boolean doItemRemove;
-                    int remaining = itemStack.getAmount();
-                    doItemRemove = InventoryUtils.RemoveItemFormChest(chest, itemStack, remaining);
+                    doItemRemove = InventoryUtils.RemoveItemFormChest(chest, itemStack);
                     Chest chestBlockData = (Chest) chest.getBlockData();
                     if (!doItemRemove) {
                         if (chestBlockData.getType() != Chest.Type.SINGLE) {
@@ -93,7 +92,7 @@ public class InteractEvent implements Listener {
                             if (face != null) {
                                 Block neighborBlock = chestBlock.getRelative(face);
                                 if (neighborBlock.getState() instanceof org.bukkit.block.Chest) {
-                                    doItemRemove = InventoryUtils.RemoveItemFormChest((org.bukkit.block.Chest) neighborBlock, itemStack, remaining);
+                                    doItemRemove = InventoryUtils.RemoveItemFormChest((org.bukkit.block.Chest) neighborBlock, itemStack);
                                 }
                             }
                         }

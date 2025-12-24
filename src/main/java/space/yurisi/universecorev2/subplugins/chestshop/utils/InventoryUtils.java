@@ -5,19 +5,18 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class InventoryUtils {
-    public static boolean RemoveItemFormChest(Chest chest, ItemStack itemStack, int amountToRemove) {
+    public static boolean RemoveItemFromChest(Chest chest, ItemStack itemStack) {
         Inventory chestInventory = chest.getBlockInventory();
         if (chestInventory == null) {
             return false;
         }
-        for (ItemStack chestItemSlot : chestInventory.getContents()) {
-            if (chestItemSlot != null && chestItemSlot.getType() == itemStack.getType()) {
-                if (chestItemSlot.getAmount() >= amountToRemove) {
-                    chestItemSlot.setAmount(chestItemSlot.getAmount() - amountToRemove);
-                    return true;
-                }
-            }
+
+        // early return if no sufficient items in inventory.
+        if (!chestInventory.containsAtLeast(itemStack, itemStack.getAmount())) {
+            return false;
         }
-        return false;
+        chestInventory.removeItem(itemStack);
+
+        return true;
     }
 }
