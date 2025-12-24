@@ -2,10 +2,11 @@ package space.yurisi.universecorev2.subplugins.chestshop.transaction.action;
 
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.checkerframework.checker.units.qual.N;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import space.yurisi.universecorev2.subplugins.chestshop.transaction.TransactionException;
+
+import java.util.HashMap;
 
 public class AddItemAction implements AtomicRollbackableAction {
     private @NotNull final Inventory inventory;
@@ -18,18 +19,17 @@ public class AddItemAction implements AtomicRollbackableAction {
 
     @Override
     public @NonNull RollbackFunc execute() throws TransactionException {
-        ItemStack[] snapshot = inventory.getStorageContents();
-        boolean successfullyAdded = inventory.addItem(item).isEmpty();
+        HashMap<Integer, ItemStack> leftover = inventory.addItem(item.clone());
 
-        if (!successfullyAdded) {
+        if (!leftover.isEmpty()) {
             // 原子性の保証のために最初の状態に戻す
-            inventory.setStorageContents(snapshot);
+            inventory.removeItem(item.clone().subtract(leftover.get(0).getAmount()));
             throw new TransactionException(
                     "インベントリーがいっぱいです",
                     "failed to add item to inventory"
             );
         }
 
-        return () -> inventory.setStorageContents(snapshot);
+        return () -> inventory.removeItem(item.clone());
     }
 }

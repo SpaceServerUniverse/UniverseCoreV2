@@ -23,9 +23,8 @@ public class RemoveItemAction implements AtomicRollbackableAction {
                     "insufficient item in inventory"
             );
         }
-        ItemStack[] snapshot = inventory.getStorageContents();
-        inventory.removeItem(item);
+        inventory.removeItem(item.clone());
 
-        return () -> inventory.setStorageContents(snapshot);
+        return () -> inventory.addItem(item.clone());
     }
 }
