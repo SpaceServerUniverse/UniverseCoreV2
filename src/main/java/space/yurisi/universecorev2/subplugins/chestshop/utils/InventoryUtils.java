@@ -1,6 +1,5 @@
 package space.yurisi.universecorev2.subplugins.chestshop.utils;
 
-import org.bukkit.block.Chest;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
