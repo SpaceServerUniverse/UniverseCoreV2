@@ -12,6 +12,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import space.yurisi.universecorev2.exception.MoneyNotFoundException;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
 import space.yurisi.universecorev2.subplugins.autocollect.data.AutoCollectMap;
+import space.yurisi.universecorev2.subplugins.spaceship.SpaceShipAPI;
 import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomyAPI;
 
 import java.time.LocalTime;
@@ -109,9 +110,8 @@ public final class ScoreBoardTask extends BukkitRunnable {
     }
 
     private void setSpaceShipPoint(Objective objective, int score) {
-        int online = Bukkit.getServer().getOnlinePlayers().size();
-        int max = Bukkit.getServer().getMaxPlayers();
-        Objects.requireNonNull(objective).getScore("§c宇宙船ポイント: 1000p").setScore(score);
+        Long spaceShipPoint = SpaceShipAPI.getInstance().getPoint(player.getUniqueId());
+        Objects.requireNonNull(objective).getScore("§c宇宙船ポイント: "+spaceShipPoint+"p").setScore(score);
     }
 
     private String getTickTitle() {
