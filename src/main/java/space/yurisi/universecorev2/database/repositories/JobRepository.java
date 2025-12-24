@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import space.yurisi.universecorev2.database.models.Job;
+import space.yurisi.universecorev2.utils.Message;
 
 import java.util.Date;
 
@@ -82,15 +83,22 @@ public class JobRepository {
                     .setParameter("uuid", player.getUniqueId().toString())
                     .uniqueResult();
             if(job == null){
+                Message.sendErrorMessage(player, "[職業AI]", "職業情報が見つかりません。");
+                return false;
+            }
+            if(job.getJob_id() == jobID){
+                Message.sendErrorMessage(player, "[職業AI]", "あなたは既にその職業に就いています。");
                 return false;
             }
             Date date = job.getLast_changed();
             // 1週間以上経過していないと変更できない
             long diff = new Date().getTime() - date.getTime();
             if(diff < 7 * 24 * 60 * 60 * 1000){
+                Message.sendErrorMessage(player, "[職業AI]", "職業は一度変更すると1週間変更できません。");
                 return false;
             }
             job.setJob_id(jobID);
+            job.setLast_changed(new Date());
             job.setUpdated_at(new Date());
             session.merge(job);
             session.getTransaction().commit();

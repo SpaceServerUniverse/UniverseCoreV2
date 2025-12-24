@@ -35,8 +35,6 @@ public class ChangeJobMenuItem extends AbstractItem {
             UniverseJob.getInstance().getPlayerJobManager().registerPlayer(player, jobtype.getId());
             Message.sendSuccessMessage(player, "[職業AI]", "あなたの職業が " + jobtype.getDisplayName() + " に変更されました。");
             player.closeInventory();
-        }else{
-            Message.sendErrorMessage(player, "[職業AI]", "職業は一度変更すると1週間変更できません。");
         }
     }
 }

@@ -28,7 +28,6 @@ public class ChangeJobMenu implements BaseMenu {
         int level;
         try{
             level = LevelSystemAPI.getInstance().getLevel(player);
-            player.sendMessage(level + "");
         } catch (PlayerDataNotFoundException e) {
             return;
         }
