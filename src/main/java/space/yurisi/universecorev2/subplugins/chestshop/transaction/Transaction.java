@@ -23,13 +23,13 @@ public class Transaction {
     }
 
     public void commit() throws TransactionException {
-        Stack<RollbackFunc> rollbackStack = new Stack<>();
+        ArrayDeque<RollbackFunc> rollbackStack = new ArrayDeque<>();
         try {
             while(!actions.isEmpty()) {
                 rollbackStack.push(actions.poll().execute());
             }
         } catch (TransactionException e) {
-            while(!rollbackStack.empty()) {
+            while(!rollbackStack.isEmpty()) {
                 try {
                     rollbackStack.pop().execute();
                 } catch (TransactionException rollbackException) {
