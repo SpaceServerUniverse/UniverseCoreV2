@@ -26,6 +26,7 @@ import space.yurisi.universecorev2.subplugins.rankcounter.RankCounter;
 import space.yurisi.universecorev2.subplugins.receivebox.ReceiveBox;
 import space.yurisi.universecorev2.subplugins.repaircream.RepairCream;
 import space.yurisi.universecorev2.subplugins.snowsafeframe.SnowSafeFrame;
+import space.yurisi.universecorev2.subplugins.spaceship.SpaceShip;
 import space.yurisi.universecorev2.subplugins.tickfreezer.TickFreezer;
 import space.yurisi.universecorev2.subplugins.universeguns.UniverseGuns;
 import space.yurisi.universecorev2.subplugins.universejob.UniverseJob;
@@ -93,6 +94,7 @@ public class SubPluginInitializer {
         this.subPlugins.add(new Achievement());
         this.subPlugins.add(new LoginBonus());
         this.subPlugins.add(new UniverseJob());
+        this.subPlugins.add(new SpaceShip());
     }
 
     public void onEnable() {

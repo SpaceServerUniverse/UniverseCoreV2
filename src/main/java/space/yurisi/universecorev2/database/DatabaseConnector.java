@@ -75,6 +75,7 @@ public class DatabaseConnector {
                 .addAnnotatedClass(LoginBonus.class)
                 .addAnnotatedClass(LevelReward.class)
                 .addAnnotatedClass(Job.class);
+                .addAnnotatedClass(SpaceShip.class);
     }
 
     private Configuration registerProperties(Configuration configuration) {
