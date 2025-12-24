@@ -86,7 +86,7 @@ public class InteractEvent implements Listener {
                         return;
                     }
                     boolean doItemRemove;
-                    doItemRemove = InventoryUtils.RemoveItemFormChest(chest.getInventory(), itemStack);
+                    doItemRemove = InventoryUtils.RemoveItemFromChest(chest.getInventory(), itemStack);
                     if (!(doItemRemove)) {
                         SuperMessageHelper.sendErrorMessage(player, "チェスト内の在庫が不足しています");
                         event.setCancelled(true);
