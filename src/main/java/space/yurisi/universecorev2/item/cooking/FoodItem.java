@@ -17,8 +17,9 @@ public abstract class FoodItem extends CustomItem {
 
     public abstract void onEat(Player player);
 
-                               /**
+    /**
      * 満腹度を返します
+     * 例:ステーキの場合は8
      * @return int
      */
     public int getNutrition() {
@@ -27,7 +28,8 @@ public abstract class FoodItem extends CustomItem {
 
     /**
      * 隠し満腹度を返します
-     * @return int
+     * 例:ステーキの場合は12.8
+     * @return float
      */
     public float getSaturation() {
         return saturation;

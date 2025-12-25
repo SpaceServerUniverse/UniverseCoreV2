@@ -29,6 +29,12 @@ public class CookingEventListener implements Listener {
         CustomItem customItem = UniverseItem.getItem(container.get(key, PersistentDataType.STRING));
         if(customItem instanceof FoodItem foodItem){
             foodItem.onEat(player);
+            int nutrition = player.getFoodLevel();
+            float saturation = player.getSaturation();
+            int addedNutrition = Math.min(20, nutrition + foodItem.getNutrition());
+            float addedSaturation = Math.min(addedNutrition, saturation + foodItem.getSaturation());
+            player.setFoodLevel(addedNutrition);
+            player.setSaturation(addedSaturation);
         }
     }
 }

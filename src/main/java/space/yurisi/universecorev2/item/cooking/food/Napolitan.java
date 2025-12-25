@@ -22,7 +22,7 @@ public final class Napolitan extends FoodItem {
                 "ナポリタン",
                 ItemStack.of(Material.BEETROOT_SOUP),
                 10,
-                10
+                15.0f
         );
     }
 
