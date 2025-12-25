@@ -142,3 +142,15 @@ commands:
   # Achievement
   achievement:
     description: 実績メニューを開きます
+
+  #loginbonus
+  loginbonus:
+    description: ログインボーナスを開きます
+
+  #levelreward
+  reward:
+    description: レベル報酬を受け取る
+
+  #job
+  job:
+    description: 仕事メニューを開きます

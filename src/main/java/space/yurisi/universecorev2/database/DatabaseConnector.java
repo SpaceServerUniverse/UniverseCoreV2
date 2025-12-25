@@ -71,7 +71,11 @@ public class DatabaseConnector {
                 .addAnnotatedClass(Ammo.class)
                 .addAnnotatedClass(ReceiveBox.class)
                 .addAnnotatedClass(BirthdayData.class)
-                .addAnnotatedClass(BirthdayMessages.class);
+                .addAnnotatedClass(BirthdayMessages.class)
+                .addAnnotatedClass(LoginBonus.class)
+                .addAnnotatedClass(LevelReward.class)
+                .addAnnotatedClass(Job.class)
+                .addAnnotatedClass(SpaceShip.class);
     }
 
     private Configuration registerProperties(Configuration configuration) {

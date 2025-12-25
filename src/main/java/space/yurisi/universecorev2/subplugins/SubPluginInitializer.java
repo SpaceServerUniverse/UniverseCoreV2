@@ -15,8 +15,9 @@ import space.yurisi.universecorev2.subplugins.fishingsystem.FishingSystem;
 import space.yurisi.universecorev2.subplugins.gacha.Gacha;
 import space.yurisi.universecorev2.subplugins.itemhat.ItemHat;
 import space.yurisi.universecorev2.subplugins.freemarket.FreeMarket;
-import space.yurisi.universecorev2.subplugins.levelaward.LevelAward;
+import space.yurisi.universecorev2.subplugins.levelreward.LevelReward;
 import space.yurisi.universecorev2.subplugins.levelsystem.LevelSystem;
+import space.yurisi.universecorev2.subplugins.loginbonus.LoginBonus;
 import space.yurisi.universecorev2.subplugins.mywarp.Mywarp;
 import space.yurisi.universecorev2.subplugins.navigation.Navigation;
 import space.yurisi.universecorev2.subplugins.playerhead.PlayerHead;
@@ -25,8 +26,11 @@ import space.yurisi.universecorev2.subplugins.rankcounter.RankCounter;
 import space.yurisi.universecorev2.subplugins.receivebox.ReceiveBox;
 import space.yurisi.universecorev2.subplugins.repaircream.RepairCream;
 import space.yurisi.universecorev2.subplugins.snowsafeframe.SnowSafeFrame;
+import space.yurisi.universecorev2.subplugins.spaceship.SpaceShip;
 import space.yurisi.universecorev2.subplugins.tickfreezer.TickFreezer;
 import space.yurisi.universecorev2.subplugins.universeguns.UniverseGuns;
+import space.yurisi.universecorev2.subplugins.universejob.UniverseJob;
+import space.yurisi.universecorev2.subplugins.universejob.command.JobCommand;
 import space.yurisi.universecorev2.subplugins.universeutilcommand.UniverseUtilCommand;
 import space.yurisi.universecorev2.subplugins.signcommand.SignCommand;
 import space.yurisi.universecorev2.subplugins.sitdown.Sitdown;
@@ -56,7 +60,7 @@ public class SubPluginInitializer {
         this.subPlugins.add(new LevelSystem());
         this.subPlugins.add(new UniverseEconomy());
         this.subPlugins.add(new ChangeMessages());
-        this.subPlugins.add(new LevelAward());
+        this.subPlugins.add(new LevelReward());
         this.subPlugins.add(new UniverseLand());
         this.subPlugins.add(new UniverseDiscord());
         this.subPlugins.add(new Mywarp());
@@ -88,6 +92,9 @@ public class SubPluginInitializer {
         this.subPlugins.add(new BirthdayCard());
         this.subPlugins.add(new AutoCollect());
         this.subPlugins.add(new Achievement());
+        this.subPlugins.add(new LoginBonus());
+        this.subPlugins.add(new UniverseJob());
+        this.subPlugins.add(new SpaceShip());
     }
 
     public void onEnable() {

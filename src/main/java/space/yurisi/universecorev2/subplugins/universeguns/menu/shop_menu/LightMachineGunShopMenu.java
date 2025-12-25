@@ -23,8 +23,9 @@ public class LightMachineGunShopMenu implements BaseMenu{
 
         Gui.Builder.@NotNull Normal gui = Gui.normal()
                 .setStructure(
-                        "# # # # # # # # #")
-                .addIngredient('#', border);
+                        "a # # # # # # # #")
+                .addIngredient('#', border)
+                .addIngredient('a', new GunShopMenuItem(new M134()));
 
         xyz.xenondevs.invui.window.Window window = Window.single()
                 .setViewer(player)

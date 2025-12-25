@@ -34,14 +34,30 @@ public class MainMenu implements BaseMenu {
         Item border = new SimpleItem(new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE));
         Item inMenuBorder = new SimpleItem(new ItemBuilder(Material.LIGHT_BLUE_STAINED_GLASS_PANE));
 
+        Item executeAchievement = new CommandItem(new ItemBuilder(Material.TOTEM_OF_UNDYING)
+                .setDisplayName("アチーブメント")
+                .setLegacyLore(List.of("§6アチーブメントを確認します")),
+                "/achievement");
+        Item executeLoginBonus = new CommandItem(new ItemBuilder(Material.GOLD_BLOCK)
+                .setDisplayName("ログインボーナス")
+                .setLegacyLore(List.of("§6ログインボーナスを確認します")),
+                "/loginbonus");
+        Item executeLevelAward = new CommandItem(new ItemBuilder(Material.DIAMOND_BLOCK)
+                .setDisplayName("レベル報酬")
+                .setLegacyLore(List.of("§6レベル報酬を確認します")),
+                "/reward");
         Item executeMywarp = new CommandItem(new ItemBuilder(Material.COMPASS)
                 .setDisplayName("マイワープ")
-                .setLegacyLore(List.of("§6保存した場所にテレポートします")),
+                .setLegacyLore(List.of("§6現在の場所をワープポイントに設定、設定された場所にワープします")),
                 "/mywarp");
         Item executeMarket = new CommandItem(new ItemBuilder(Material.EMERALD)
                 .setDisplayName("マーケット")
-                .setLegacyLore(List.of("§6プレイヤー間のアイテム取引ができます")),
+                .setLegacyLore(List.of("§6ショップを開きます")),
                 "/market");
+        Item executeJob = new CommandItem(new ItemBuilder(Material.DIAMOND_AXE)
+                .setDisplayName("ジョブ")
+                .setLegacyLore(List.of("§6職業を変更できます", "§c※職業は1週間変更することが出来ません")),
+                "/job");
         Item executeTpp = new CommandItem(new ItemBuilder(Material.ENDER_PEARL)
                 .setDisplayName("プレイヤー間テレポート")
                 .setLegacyLore(List.of("§6他のプレイヤーにテレポートできます")),
@@ -73,28 +89,38 @@ public class MainMenu implements BaseMenu {
         Item executeAmmo = new CommandItem(new ItemBuilder(ammoItem), "/ammo");
         Item executeReceive = new CommandItem(new ItemBuilder(Material.CHEST)
                 .setDisplayName("報酬受け取り")
-                .setLegacyLore(List.of("§6報酬受け取りメニューを開きます")),
+                .setLegacyLore(List.of("§6報酬受け取りボックスを開きます")),
                 "/receive");
         Item executeBirthday = new CommandItem(new ItemBuilder(Material.CAKE)
                 .setDisplayName("誕生日カードメニュー")
-                .setLegacyLore(List.of("§6誕生日カードメニューを開きます")),
+                .setLegacyLore(List.of("§6誕生日を設定、他のプレイヤーをお祝いすることが出来ます")),
                 "/birthday");
         Item executeMenuBook = new CommandItem(new ItemBuilder(Material.KNOWLEDGE_BOOK)
                 .setDisplayName("メインメニューの本を召喚する")
                 .setLegacyLore(List.of("§6右クリックでメニューが開ける本を召喚します")),
                 "/menu book");
 
+        Item category1 = new SimpleItem(new ItemBuilder(Material.YELLOW_STAINED_GLASS_PANE).setDisplayName("ワープ関連"));
+        Item category2 = new SimpleItem(new ItemBuilder(Material.BLUE_STAINED_GLASS_PANE).setDisplayName("武器関連"));
+        Item category3 = new SimpleItem(new ItemBuilder(Material.RED_STAINED_GLASS_PANE).setDisplayName("経済関連"));
+        Item category4 = new SimpleItem(new ItemBuilder(Material.PINK_STAINED_GLASS_PANE).setDisplayName("その他"));
+
         Gui gui = Gui.normal()
                 .setStructure(
-                        "# # # i # = # # #",
-                        "# + a m t o y + #",
-                        "# + k n s h p + #",
-                        "b # # # l # # # #"
+                        "i c v d # # # # #",
+                        "1 m t # # # # # # ",
+                        "2 o # # # # # # #",
+                        "3 j y a h n # # #",
+                        "4 # # # # # # # #",
+                        "b # # # # k p s l"
                 )
                 .addIngredient('#', border)
                 .addIngredient('+', inMenuBorder)
-                .addIngredient('=', createServerInfoItem())
+                //.addIngredient('=', createServerInfoItem())
                 .addIngredient('i', createPlayerInfoHead(player))
+                .addIngredient('c', executeAchievement)
+                .addIngredient('v', executeLoginBonus)
+                .addIngredient('d', executeLevelAward)
                 .addIngredient('a', executeGacha)
                 .addIngredient('m', executeMywarp)
                 .addIngredient('t', executeTpp)
@@ -106,7 +132,12 @@ public class MainMenu implements BaseMenu {
                 .addIngredient('o', executeAmmo)
                 .addIngredient('p', executeReceive)
                 .addIngredient('b', executeMenuBook)
+                .addIngredient('j', executeJob)
                 .addIngredient('l', new LaunchNavigationItem())
+                .addIngredient('1', category1)
+                .addIngredient('2', category2)
+                .addIngredient('3', category3)
+                .addIngredient('4', category4)
                 .build();
 
         Window window = Window.single()

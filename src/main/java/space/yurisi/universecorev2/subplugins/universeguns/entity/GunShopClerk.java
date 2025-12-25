@@ -34,6 +34,8 @@ public class GunShopClerk {
         villager.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.0D);
         villager.getAttribute(Attribute.ATTACK_KNOCKBACK).setBaseValue(0.0D);
         villager.setCollidable(false);
+        villager.setAI(false);
+        villager.setJumping(false);
         villager.setSilent(true);
         villager.setInvulnerable(true);
     }

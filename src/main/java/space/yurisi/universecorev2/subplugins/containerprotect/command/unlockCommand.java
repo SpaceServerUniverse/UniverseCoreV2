@@ -25,7 +25,8 @@ public class unlockCommand implements CommandExecutor {
         if(!lockManager.hasFlag(player, LockManager.UNLOCK)) {
             lockManager.setFlag(player, LockManager.UNLOCK);
             Message.sendNormalMessage(player, "[金庫AI]", "保護を解除したいコンテナをクリックしてください");
-        }else{
+        } else {
+            lockManager.removeFlag(player);
             Message.sendSuccessMessage(player, "[金庫AI]", "キャンセルしました");
         }
 
