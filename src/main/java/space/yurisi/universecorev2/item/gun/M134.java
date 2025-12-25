@@ -37,7 +37,7 @@ public class M134 extends Gun {
         this.range = 500;
         this.isJumpEnabled = false;
         this.shotSound = Sound.ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR;
-        this.volumeSound = 0.1F;
+        this.volumeSound = 0.3F;
         this.pitchSound = 1.5F;
         this.flavorText = "§7ヘリコプターなどに搭載される6連装のガトリング式機関銃を改造した携行型ミニガン。圧倒的な弾幕を誇るが、重すぎてまともに動けない。";
         this.textureNumber = 8;
