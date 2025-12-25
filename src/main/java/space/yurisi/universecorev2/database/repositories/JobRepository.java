@@ -5,8 +5,13 @@ import org.bukkit.entity.Player;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import space.yurisi.universecorev2.database.models.Job;
+import space.yurisi.universecorev2.exception.AlreadyOnJobException;
+import space.yurisi.universecorev2.exception.NotEnoughDurationJobChangeException;
+import space.yurisi.universecorev2.exception.PlayerJobNotFoundException;
 import space.yurisi.universecorev2.utils.Message;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Date;
 
 
@@ -30,10 +35,12 @@ public class JobRepository {
         }
     }
 
-    public void createJob(Player player){
+    public Job createJob(Player player){
         // 初期は8日前にしておく
-        Date lastChanged = new Date(System.currentTimeMillis() - 8L * 24 * 60 * 60 * 1000);
-        Job job = new Job(null, player.getUniqueId().toString(), 0, lastChanged, new Date(), new Date());
+        Date newLastChanged = new Date(
+                System.currentTimeMillis() - Duration.ofDays(8).toMillis()
+        );
+        Job job = new Job(null, player.getUniqueId().toString(), 0, newLastChanged, new Date(), new Date());
         Session session = sessionFactory.openSession();
         try {
             session.beginTransaction();
@@ -42,19 +49,34 @@ public class JobRepository {
         } finally {
             session.close();
         }
+        return job;
     }
 
-    public int getJobIDFromPlayer(Player player){
+    public int getJobIDFromPlayer(Player player) throws PlayerJobNotFoundException {
         Session session = sessionFactory.openSession();
         try {
             Job job = (Job) session.createQuery("FROM Job WHERE uuid = :uuid")
                     .setParameter("uuid", player.getUniqueId().toString())
                     .uniqueResult();
             if(job == null){
-                createJob(player);
-                return 0;
+                throw new PlayerJobNotFoundException("プレイヤーの職業データが見つかりませんでした。" + player.getName());
             }
             return job.getJob_id();
+        } finally {
+            session.close();
+        }
+    }
+
+    public Job getJobFromPlayer(Player player) throws PlayerJobNotFoundException {
+        Session session = sessionFactory.openSession();
+        try {
+            Job job = (Job) session.createQuery("FROM Job WHERE uuid = :uuid")
+                    .setParameter("uuid", player.getUniqueId().toString())
+                    .uniqueResult();
+            if(job == null){
+                throw new PlayerJobNotFoundException("プレイヤーの職業データが見つかりませんでした。" + player.getName());
+            }
+            return job;
         } finally {
             session.close();
         }
@@ -75,7 +97,7 @@ public class JobRepository {
         }
     }
 
-    public boolean updateJob(Player player, int jobID){
+    public void updateJob(Player player, int jobID) throws PlayerJobNotFoundException, AlreadyOnJobException, NotEnoughDurationJobChangeException {
         Session session = sessionFactory.openSession();
         try {
             session.beginTransaction();
@@ -83,26 +105,26 @@ public class JobRepository {
                     .setParameter("uuid", player.getUniqueId().toString())
                     .uniqueResult();
             if(job == null){
-                Message.sendErrorMessage(player, "[職業AI]", "職業情報が見つかりません。");
-                return false;
+                throw new PlayerJobNotFoundException("プレイヤーの職業データが見つかりませんでした。" + player.getName());
             }
             if(job.getJob_id() == jobID){
-                Message.sendErrorMessage(player, "[職業AI]", "あなたは既にその職業に就いています。");
-                return false;
+                throw new AlreadyOnJobException("プレイヤーはすでにその職業に就いています。" + player.getName() + " jobID:" + jobID);
             }
-            Date date = job.getLast_changed();
+
+            Date lastChanged = job.getLast_changed();
             // 1週間以上経過していないと変更できない
-            long diff = new Date().getTime() - date.getTime();
-            if(diff < 7 * 24 * 60 * 60 * 1000){
-                Message.sendErrorMessage(player, "[職業AI]", "職業は一度変更すると1週間変更できません。");
-                return false;
+            Instant lastChangedInstant = lastChanged.toInstant();
+            Instant now = Instant.now();
+            int diff = Duration.between(lastChangedInstant, now).compareTo(Duration.ofDays(7));
+            if(diff < 0){
+                throw new NotEnoughDurationJobChangeException("プレイヤーはまだ職業を変更できる期間に達していません。" + player.getName() + " lastChanged:" + lastChanged);
             }
+
             job.setJob_id(jobID);
             job.setLast_changed(new Date());
             job.setUpdated_at(new Date());
             session.merge(job);
             session.getTransaction().commit();
-            return true;
         } finally {
             session.close();
         }

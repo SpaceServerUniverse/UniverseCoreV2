@@ -1,11 +1,9 @@
 package space.yurisi.universecorev2.database.repositories;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.yaml.snakeyaml.error.Mark;
 import space.yurisi.universecorev2.UniverseCoreV2API;
 import space.yurisi.universecorev2.database.models.Market;
 import space.yurisi.universecorev2.database.models.Money;
@@ -18,6 +16,7 @@ import space.yurisi.universecorev2.subplugins.universeeconomy.exception.CanNotAd
 import space.yurisi.universecorev2.subplugins.universeeconomy.exception.CanNotReduceMoneyException;
 import space.yurisi.universecorev2.subplugins.universeeconomy.exception.ParameterException;
 import space.yurisi.universecorev2.subplugins.universejob.UniverseJob;
+import space.yurisi.universecorev2.subplugins.universejob.util.MarketPriceChanger;
 
 import java.util.List;
 import java.util.UUID;
@@ -163,16 +162,19 @@ public class MarketRepository {
 
     public void buyItem(Long id, Player player) throws MarketItemNotFoundException, UserNotFoundException, ParameterException, MoneyNotFoundException, CanNotReduceMoneyException, CanNotAddMoneyException {
         Market market = getItemFromId(id, true);
-        List<Long> newPrice = UniverseJob.marketPriceChanger(market.getPlayerUuid(), player, ItemStack.deserializeBytes(market.getSerializedItem()), market.getPrice());
-        long sellerPrice = newPrice.get(0);
-        long buyerPrice = newPrice.get(1);
+
+        ItemStack itemStack = ItemStack.deserializeBytes(market.getSerializedItem());
+
+        long sellerPrice = MarketPriceChanger.sellerPriceChanger(market.getPlayerUuid(), itemStack, market.getPrice());
+        long purchaserPrice = MarketPriceChanger.purchaserPriceChanger(player, itemStack, market.getPrice());
         if(sellerPrice < 1){
             sellerPrice = 1;
         }
-        if(buyerPrice < 1){
-            buyerPrice = 1;
+        if(purchaserPrice < 1){
+            purchaserPrice = 1;
         }
-        UniverseEconomyAPI.getInstance().reduceMoney(player, buyerPrice, "フリーマーケット[購入]");
+
+        UniverseEconomyAPI.getInstance().reduceMoney(player, purchaserPrice, "フリーマーケット[購入]");
         User user = UniverseCoreV2API.getInstance().getDatabaseManager().getUserRepository().getUserFromUUID(UUID.fromString(market.getPlayerUuid()));
         Money money = UniverseCoreV2API.getInstance().getDatabaseManager().getMoneyRepository().getMoneyFromUserId(user.getId());
         money.setMoney(money.getMoney() + sellerPrice);

@@ -6,8 +6,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
+import space.yurisi.universecorev2.database.models.Job;
 import space.yurisi.universecorev2.database.repositories.JobRepository;
 import space.yurisi.universecorev2.exception.JobTypeNotFoundException;
+import space.yurisi.universecorev2.exception.PlayerJobNotFoundException;
 import space.yurisi.universecorev2.subplugins.universejob.UniverseJob;
 
 public class LoginEvent implements Listener {
@@ -23,21 +25,18 @@ public class LoginEvent implements Listener {
         Player player = event.getPlayer();
         JobRepository jobRepository = main.getJobRepository();
 
+        Job job;
+
         try {
-            int jobID;
 
-            if(!jobRepository.isExistJob(player)){
-                jobRepository.createJob(player);
-                jobID = 0;
-            } else {
-                jobID = jobRepository.getJobIDFromPlayer(player);
-            }
+            job = jobRepository.getJobFromPlayer(player);
 
-            main.getPlayerJobManager().registerPlayer(player, jobID);
-
-        } catch (JobTypeNotFoundException e) {
-            player.kick(Component.text("§c[職業AI] 職業データの取得に失敗しました。管理者にお問い合わせください。"));
-            throw new RuntimeException(e);
+        } catch (PlayerJobNotFoundException e) {
+            job = jobRepository.createJob(player);
         }
+
+        int jobID = job.getJob_id();
+
+        main.getPlayerJobManager().registerPlayer(player, jobID);
     }
 }

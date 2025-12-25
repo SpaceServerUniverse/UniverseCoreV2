@@ -17,6 +17,8 @@ import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 public class RemoveItem extends AbstractItem {
@@ -42,7 +44,10 @@ public class RemoveItem extends AbstractItem {
     @Override
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent inventoryClickEvent) {
         try {
-            Date expireDate = new Date(System.currentTimeMillis() + 7L * 24 * 60 * 60 * 1000);
+            // 7日後に期限切れ
+            Instant expireInstant = Instant.now().plus(7, ChronoUnit.DAYS);
+            Date expireDate = Date.from(expireInstant);
+
             ReceiveBoxAPI.AddReceiveItem(ItemStack.deserializeBytes(this.item.getSerializedItem()), player.getUniqueId(), expireDate, "フリーマーケットでの出品を取り消しました。");
             Market market = UniverseCoreV2API.getInstance().getDatabaseManager().getMarketRepository().removeItem(this.item.getId(), true);
             UniverseCoreV2API.getInstance().getDatabaseManager().getMarketRepository().addPurchased(market, player);
