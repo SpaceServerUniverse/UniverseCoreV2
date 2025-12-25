@@ -40,7 +40,7 @@ public class M134 extends Gun {
         this.volumeSound = 0.1F;
         this.pitchSound = 1.5F;
         this.flavorText = "§7ヘリコプターなどに搭載される6連装のガトリング式機関銃を改造した携行型ミニガン。圧倒的な弾幕を誇るが、重すぎてまともに動けない。";
-        this.textureNumber = 4;
+        this.textureNumber = 8;
         this.price = 20;
     }
 
@@ -50,7 +50,7 @@ public class M134 extends Gun {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
                 //TODO: テクスチャ未実装
-//                meta.setCustomModelData(textureNumber);
+                meta.setCustomModelData(textureNumber);
             }
             item.setItemMeta(meta);
             return item;
