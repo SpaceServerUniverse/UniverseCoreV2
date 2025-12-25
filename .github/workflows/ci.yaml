@@ -36,8 +36,8 @@ jobs:
         uses: gradle/actions/setup-gradle@v5
 
       # UniverseCoreV2 は大規模なので，並列ビルドした方が早いかも
-      - name: Build with shadowJar
-        run: ./gradlew shadowJar --parallel
+      - name: Build
+        run: ./gradlew build --parallel
 
       # ビルドした成果物を CI の Artifact へアップロードする
       # アップロードした成果物は CI のページから制限期間内でダウンロードできる
