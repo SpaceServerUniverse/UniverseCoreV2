@@ -6,9 +6,9 @@ services:
     environment:
       - EULA=TRUE
       - TYPE=PAPER
-      - VERSION=1.21.1
+      - VERSION=1.21.10
       - MEMORY=2G
-      - RCON_PASSWORD=minecraft
+      - RCON_PASSWORD='minecraft'
       - TZ=Asia/Tokyo
       - RESOURCE_PACK=https://github.com/SpaceServerUniverse/UniverseResourcePack/releases/latest/download/UniverseResources.zip
       - REQUIRE_RESOURCE_PACK=true
@@ -27,7 +27,6 @@ services:
 
   db:
     image: mariadb:10.5.3-bionic
-    platform: linux/x86_64
     ports:
       - "3306:3306"
     environment:
