@@ -1,8 +1,13 @@
 package space.yurisi.universecorev2.item.gun;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.CustomModelData;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import space.yurisi.universecorev2.UniverseCoreV2;
+import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.subplugins.universeguns.constants.GunType;
 
 import org.bukkit.Material;
@@ -39,7 +44,7 @@ public final class RPG extends Gun {
         this.volumeSound = 10.0F;
         this.pitchSound = 0.5F;
         this.flavorText = "§7ロケットランチャーの代名詞。爆風で広範囲にダメージを与える";
-        this.textureNumber = 3;
+        this.textureID = "rpg";
         this.price = 10;
     }
 
@@ -48,9 +53,11 @@ public final class RPG extends Gun {
         default_setting = (item) -> {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
-                meta.setCustomModelData(textureNumber);
+                meta.setItemModel(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN_ITEM_MODEL));
             }
             item.setItemMeta(meta);
+            CustomModelData modelData = CustomModelData.customModelData().addString(textureID).build();
+            item.setData(DataComponentTypes.CUSTOM_MODEL_DATA, modelData);
             return item;
         };
     }

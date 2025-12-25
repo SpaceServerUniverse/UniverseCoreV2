@@ -1,12 +1,16 @@
 package space.yurisi.universecorev2.item.gun;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.CustomModelData;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.components.CustomModelDataComponent;
+import space.yurisi.universecorev2.UniverseCoreV2;
+import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.subplugins.universeguns.constants.GunType;
-
-import static org.bukkit.Sound.ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR;
 
 public class M134 extends Gun {
 
@@ -40,7 +44,7 @@ public class M134 extends Gun {
         this.volumeSound = 0.3F;
         this.pitchSound = 1.5F;
         this.flavorText = "§7ヘリコプターなどに搭載される6連装のガトリング式機関銃を改造した携行型ミニガン。圧倒的な弾幕を誇るが、重すぎてまともに動けない。";
-        this.textureNumber = 8;
+        this.textureID = "m134";
         this.price = 20;
     }
 
@@ -49,9 +53,11 @@ public class M134 extends Gun {
         default_setting = (item) -> {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
-                meta.setCustomModelData(textureNumber);
+                meta.setItemModel(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN_ITEM_MODEL));
             }
             item.setItemMeta(meta);
+            CustomModelData modelData = CustomModelData.customModelData().addString(textureID).build();
+            item.setData(DataComponentTypes.CUSTOM_MODEL_DATA, modelData);
             return item;
         };
     }

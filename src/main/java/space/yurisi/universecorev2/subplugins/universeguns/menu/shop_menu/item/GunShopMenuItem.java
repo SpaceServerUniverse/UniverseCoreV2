@@ -2,12 +2,14 @@ package space.yurisi.universecorev2.subplugins.universeguns.menu.shop_menu.item;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.item.gun.Gun;
 import space.yurisi.universecorev2.subplugins.universeguns.core.PurchaseGun;
 import xyz.xenondevs.invui.item.ItemProvider;
@@ -30,7 +32,7 @@ public class GunShopMenuItem extends AbstractItem {
         ItemStack itemStack = new ItemStack(Material.DIAMOND_HOE);
         ItemMeta itemMeta = itemStack.getItemMeta();
         if(itemMeta != null) {
-            itemMeta.setCustomModelData(gun.getTextureNumber());
+            itemMeta.setItemModel(new NamespacedKey(UniverseCoreV2.getInstance(), gun.getTextureID()));
             itemMeta.setDisplayName(gun.getName());
             List<Component> lore = new ArrayList<>(gun.getGunComponents());
             lore.add(Component.text(gun.getFlavorText()));
