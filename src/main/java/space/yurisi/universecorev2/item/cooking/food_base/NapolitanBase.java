@@ -18,7 +18,7 @@ public final class NapolitanBase extends FoodBaseItem {
     public NapolitanBase(){
         super(
                 NapolitanBase.id,
-                "§c§lナポリタンの素",
+                "ナポリタンの素",
                 ItemStack.of(Material.RABBIT_STEW)
         );
     }
