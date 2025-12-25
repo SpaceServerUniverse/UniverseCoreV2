@@ -10,6 +10,7 @@ import space.yurisi.universecorev2.database.models.Money;
 import space.yurisi.universecorev2.database.models.User;
 import space.yurisi.universecorev2.exception.MarketItemNotFoundException;
 import space.yurisi.universecorev2.exception.MoneyNotFoundException;
+import space.yurisi.universecorev2.exception.OwnerBuyMarketItemException;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
 import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomyAPI;
 import space.yurisi.universecorev2.subplugins.universeeconomy.exception.CanNotAddMoneyException;
@@ -160,8 +161,11 @@ public class MarketRepository {
         return market;
     }
 
-    public void buyItem(Long id, Player player) throws MarketItemNotFoundException, UserNotFoundException, ParameterException, MoneyNotFoundException, CanNotReduceMoneyException, CanNotAddMoneyException {
+    public void buyItem(Long id, Player player) throws MarketItemNotFoundException, UserNotFoundException, ParameterException, MoneyNotFoundException, CanNotReduceMoneyException, CanNotAddMoneyException, OwnerBuyMarketItemException {
         Market market = getItemFromId(id, true);
+        if(market.getPlayerUuid().equals(player.getUniqueId().toString())){
+            throw new OwnerBuyMarketItemException("自分の出品しているアイテムは購入できません。");
+        }
 
         ItemStack itemStack = ItemStack.deserializeBytes(market.getSerializedItem());
 
