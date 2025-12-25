@@ -8,6 +8,7 @@ import space.yurisi.universecorev2.subplugins.birthdaycard.BirthdayCard;
 import space.yurisi.universecorev2.subplugins.blockcopystick.BlockCopyStick;
 import space.yurisi.universecorev2.subplugins.changemessages.ChangeMessages;
 import space.yurisi.universecorev2.subplugins.chestshop.ChestShop;
+import space.yurisi.universecorev2.subplugins.cooking.Cooking;
 import space.yurisi.universecorev2.subplugins.customname.CustomName;
 import space.yurisi.universecorev2.subplugins.elevator.Elevator;
 import space.yurisi.universecorev2.subplugins.evolutionitem.EvolutionItem;
@@ -92,6 +93,7 @@ public class SubPluginInitializer {
         this.subPlugins.add(new Achievement());
         this.subPlugins.add(new LoginBonus());
         this.subPlugins.add(new SpaceShip());
+        this.subPlugins.add(new Cooking());
     }
 
     public void onEnable() {
