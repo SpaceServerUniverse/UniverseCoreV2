@@ -22,7 +22,7 @@ public abstract class FoodItem extends CustomItem {
      * 例:ステーキの場合は8
      * @return int
      */
-    public int getNutrition() {
+    public final int getNutrition() {
         return nutrition;
     }
 
@@ -31,7 +31,7 @@ public abstract class FoodItem extends CustomItem {
      * 例:ステーキの場合は12.8
      * @return float
      */
-    public float getSaturation() {
+    public final float getSaturation() {
         return saturation;
     }
 }

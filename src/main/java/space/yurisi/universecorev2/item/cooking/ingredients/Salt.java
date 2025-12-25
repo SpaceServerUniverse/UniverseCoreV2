@@ -9,7 +9,6 @@ import org.bukkit.persistence.PersistentDataType;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.item.cooking.IngredientItem;
-import space.yurisi.universecorev2.item.cooking.food.Napolitan;
 
 public final class Salt extends IngredientItem {
 

@@ -10,7 +10,6 @@ import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.item.cooking.FoodItem;
 import org.bukkit.entity.Player;
-import space.yurisi.universecorev2.item.cooking.food_base.NapolitanBase;
 
 public final class Napolitan extends FoodItem {
 
