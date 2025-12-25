@@ -11,21 +11,40 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
-    runs-on: ubuntu-latest
+    # latest を使って Runner Image に破壊的変更が入ると Workflow が壊れるのでバージョン指定をしておく
+    # https://docs.github.com/en/actions/reference/runners/github-hosted-runners
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v5
 
       - name: Setup JDK 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: 21
-          distribution: 'adopt'
+          # 'adopt' で指定すると使える AdoptOpenJDK プロジェクトは、Eclipse Foundation に移管されて Eclipse Adoptium になったため，レガシーになっている
+          # 詳細: https://blog.adoptopenjdk.net/2021/08/goodbye-adoptopenjdk-hello-adoptium/
+          distribution: 'temurin'
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
 
-      - name: Build (ShadowJar)
-        run: ./gradlew ShadowJar
+      # UniverseCoreV2 は大規模なので，並列ビルドした方が早いかも
+      - name: Build with shadowJar
+        run: ./gradlew shadowJar --parallel
 
+      # ビルドした成果物を CI の Artifact へアップロードする
+      # アップロードした成果物は CI のページから制限期間内でダウンロードできる
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v6
+        if: success()
+        with:
+          name: UniverseCoreV2-${{ github.sha }}
+          path: build/libs/UniverseCoreV2-*.jar
+          retention-days: 7 # ダウンロード制限は1週間
