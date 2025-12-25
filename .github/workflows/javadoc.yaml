@@ -17,36 +17,39 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    # latest を使って Runner Image に破壊的変更が入ると Workflow が壊れるのでバージョン指定をしておく
+    # https://docs.github.com/en/actions/reference/runners/github-hosted-runners
+    runs-on: ubuntu-24.04
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v5
 
       - name: Setup JDK 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: 21
-          distribution: 'adopt'
+          # 'adopt' で指定すると使える AdoptOpenJDK プロジェクトは、Eclipse Foundation に移管されて Eclipse Adoptium になったため，レガシーになっている
+          # 詳細: https://blog.adoptopenjdk.net/2021/08/goodbye-adoptopenjdk-hello-adoptium/
+          distribution: 'temurin'
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
 
       - name: Generate JavaDoc
+        # TODO: 正しい JavaDoc に修正して --warning-mode を削除する
         run: ./gradlew javadoc --warning-mode all
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
+        id: development
         with:
-          path: 'build/docs/javadoc'  # Gradle の場合
+          path: 'build/docs/javadoc'
 
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: build
     steps:
       - name: Deploy to GitHub Pages
