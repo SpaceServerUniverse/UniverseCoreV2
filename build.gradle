@@ -88,11 +88,8 @@ jar {
     enabled = false
 }
 
+// ./gradlew build を行えば build, assemble, reobfJarm shadowJar の順で実行される
 tasks.named('assemble') {
-    dependsOn tasks.named('reobfJar')
-}
-
-tasks.named('build') {
     dependsOn tasks.named('reobfJar')
 }
 
