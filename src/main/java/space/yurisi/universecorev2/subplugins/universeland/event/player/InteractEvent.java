@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
@@ -12,11 +13,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import space.yurisi.universecorev2.exception.LandNotFoundException;
-import space.yurisi.universecorev2.subplugins.universeland.UniverseLand;
 import space.yurisi.universecorev2.subplugins.universeland.manager.LandDataManager;
 import space.yurisi.universecorev2.subplugins.universeland.store.LandData;
 import space.yurisi.universecorev2.subplugins.universeland.store.LandStore;
@@ -26,7 +27,7 @@ import space.yurisi.universecorev2.utils.Message;
 
 import java.util.UUID;
 
-public class TouchEvent implements Listener {
+public class InteractEvent implements Listener {
 
     private final LandDataManager landDataManager = new LandDataManager();
 
@@ -126,6 +127,20 @@ public class TouchEvent implements Listener {
 
         OfflinePlayer p = Bukkit.getServer().getOfflinePlayer(data.getOwnerUUID());
         player.sendActionBar(Component.text("この土地は" + p.getName() + "によって保護されています"));
+    }
+
+    @EventHandler
+    public void onPlayerTrample(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        Block block = event.getClickedBlock();
+        if (event.getAction() != Action.PHYSICAL || block == null) return;
+
+        Location location = block.getLocation();
+        BoundingBox bb = new BoundingBox((int) location.getX(), (int) location.getZ(), (int) location.getX(), (int) location.getZ(), location.getWorld().getName());
+
+        if (block.getType() != Material.FARMLAND || landDataManager.canAccess(player, bb)) return;
+
+        event.setCancelled(true);
     }
 
     private void initLandData(Player player) {

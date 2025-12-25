@@ -54,6 +54,10 @@ public class MainMenu implements BaseMenu {
                 .setDisplayName("マーケット")
                 .setLegacyLore(List.of("§6ショップを開きます")),
                 "/market");
+        Item executeJob = new CommandItem(new ItemBuilder(Material.DIAMOND_AXE)
+                .setDisplayName("ジョブ")
+                .setLegacyLore(List.of("§6職業を変更できます", "§c※職業は1週間変更することが出来ません")),
+                "/job");
         Item executeTpp = new CommandItem(new ItemBuilder(Material.ENDER_PEARL)
                 .setDisplayName("プレイヤー間テレポート")
                 .setLegacyLore(List.of("§6他のプレイヤーにテレポートできます")),
@@ -106,7 +110,7 @@ public class MainMenu implements BaseMenu {
                         "i c v d # # # # #",
                         "1 m t # # # # # # ",
                         "2 o # # # # # # #",
-                        "3 y a h n # # # #",
+                        "3 j y a h n # # #",
                         "4 # # # # # # # #",
                         "b # # # # k p s l"
                 )
@@ -128,6 +132,7 @@ public class MainMenu implements BaseMenu {
                 .addIngredient('o', executeAmmo)
                 .addIngredient('p', executeReceive)
                 .addIngredient('b', executeMenuBook)
+                .addIngredient('j', executeJob)
                 .addIngredient('l', new LaunchNavigationItem())
                 .addIngredient('1', category1)
                 .addIngredient('2', category2)

@@ -84,8 +84,7 @@ public class LoginBonusRepository {
     /**
      * プレイヤーに日付範囲に基づきログインボーナスを取得します
      * @param player
-     * @return
-     * @throws LoginBonusNotFoundException
+     * @return List
      */
     public List<LoginBonus> getLoginBonusesByPlayerAndDateBetween(Player player, Date startDate, Date endDate) {
         try (Session session = sessionFactory.getCurrentSession()) {

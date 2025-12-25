@@ -43,6 +43,10 @@ public class PurchasedItem extends AbstractItem {
 
     @Override
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
+        if(this.item.getPlayerUuid().equals(player.getUniqueId().toString())) {
+            Message.sendErrorMessage(player, marketCommand.FreeMarketMessage, "自分の出品したアイテムは購入できません");
+            return;
+        }
         if (player.getInventory().firstEmpty() != -1) {
             try {
                 UniverseCoreV2API.getInstance().getDatabaseManager().getMarketRepository().receiveItem(this.item.getId(), player);

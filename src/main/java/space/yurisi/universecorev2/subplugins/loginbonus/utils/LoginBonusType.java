@@ -3,7 +3,9 @@ package space.yurisi.universecorev2.subplugins.loginbonus.utils;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import space.yurisi.universecorev2.exception.CustomItemLevelNotFoundException;
 import space.yurisi.universecorev2.item.CustomItem;
+import space.yurisi.universecorev2.item.LevellingCustomItem;
 import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.item.fishingrod.FishingRod;
 import space.yurisi.universecorev2.item.ticket.GachaTicket;
@@ -79,9 +81,15 @@ public class LoginBonusType {
             }
 
             case Calendar.TUESDAY -> {
-                CustomItem ui = UniverseItem.getItem(FishingRod.id);
-                yield ui != null ? ui.getItem().clone()
-                        : new ItemStack(Material.BARRIER);
+                try {
+                    LevellingCustomItem item = (LevellingCustomItem) UniverseItem.getItem(FishingRod.id);
+                    ItemStack ui = item.getItem(1);
+
+                    yield ui != null ? ui.clone()
+                            : new ItemStack(Material.BARRIER);
+                }catch (CustomItemLevelNotFoundException e){
+                   yield new ItemStack(Material.BARRIER);
+                }
             }
 
             case Calendar.THURSDAY -> {

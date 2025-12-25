@@ -22,11 +22,6 @@ public class repairCommand implements CommandExecutor {
 
         ItemStack item = player.getInventory().getItemInMainHand();
 
-        if (!(Armor.isArmor(item.getType())) && !(Weapon.isWeapon(item.getType()))) {
-            Message.sendErrorMessage(player, "[修復AI]", "そのアイテムには対応していません。");
-            return false;
-        }
-
         ItemMeta meta = item.getItemMeta();
 
         if (!(meta instanceof Damageable damageable_meta)) {
