@@ -7,7 +7,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.util.Date;
 
 @Entity
-@Table(name = "job")
+@Table(name = "jobs")
 public class Job {
     @Id
     @Column(name = "id", unique = true, columnDefinition = "BIGINT UNSIGNED")

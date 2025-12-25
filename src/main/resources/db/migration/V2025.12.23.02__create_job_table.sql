@@ -1,6 +1,6 @@
 USE SpaceServerUniverse;
 
-CREATE TABLE IF NOT EXISTS job (
+CREATE TABLE IF NOT EXISTS jobs (
     id              BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     uuid            VARCHAR(255) NOT NULL,
     job_id          INTEGER NOT NULL DEFAULT 0,
