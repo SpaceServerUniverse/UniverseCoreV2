@@ -94,7 +94,7 @@ public class SubPluginInitializer {
         this.subPlugins.add(new Achievement());
         this.subPlugins.add(new LoginBonus());
         this.subPlugins.add(new UniverseJob());
-        this.subPlugins.add(new SpaceShip());
+        //this.subPlugins.add(new SpaceShip());
     }
 
     public void onEnable() {

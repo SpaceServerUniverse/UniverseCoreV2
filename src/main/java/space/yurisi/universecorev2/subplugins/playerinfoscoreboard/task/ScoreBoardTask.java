@@ -111,7 +111,7 @@ public final class ScoreBoardTask extends BukkitRunnable {
     }
 
     private void setSpaceShipPoint(Objective objective, int score) {
-        Long spaceShipPoint = SpaceShipAPI.getInstance().getPoint(player.getUniqueId());
+        long spaceShipPoint = 0L;//SpaceShipAPI.getInstance().getPoint(player.getUniqueId());
         Objects.requireNonNull(objective).getScore("§c宇宙船ポイント: "+spaceShipPoint+"p").setScore(score);
     }
 
