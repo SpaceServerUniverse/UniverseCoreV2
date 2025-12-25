@@ -32,6 +32,7 @@ public class CookingEventListener implements Listener {
             int nutrition = player.getFoodLevel();
             float saturation = player.getSaturation();
             int addedNutrition = Math.min(20, nutrition + foodItem.getNutrition());
+            //隠し満腹値の最大値は自身の満腹度と一致する(ChatGPT調べ)
             float addedSaturation = Math.min(addedNutrition, saturation + foodItem.getSaturation());
             player.setFoodLevel(addedNutrition);
             player.setSaturation(addedSaturation);
