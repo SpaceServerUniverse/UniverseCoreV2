@@ -33,7 +33,7 @@ public class M134 extends Gun {
         this.recoil = 1;
         this.spread = 4.0D;
         this.bulletNumber = 1;
-        this.bulletSpeed = 6.0D;
+        this.bulletSpeed = 4.0D;
         this.range = 500;
         this.isJumpEnabled = false;
         this.shotSound = Sound.ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR;
@@ -49,7 +49,6 @@ public class M134 extends Gun {
         default_setting = (item) -> {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
-                //TODO: テクスチャ未実装
                 meta.setCustomModelData(textureNumber);
             }
             item.setItemMeta(meta);
