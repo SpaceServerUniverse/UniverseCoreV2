@@ -2,9 +2,8 @@ package space.yurisi.universecorev2.item.cooking;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import space.yurisi.universecorev2.item.CustomItem;
 
-public abstract class FoodItem extends CustomItem {
+public abstract class FoodItem extends CookingItem {
 
     private final int nutrition;
     private final float saturation;

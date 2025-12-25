@@ -4,15 +4,15 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import space.yurisi.universecorev2.item.cooking.IngredientItem;
 
-public final class Salt extends IngredientItem {
+public final class Shimeji extends IngredientItem {
 
-    public static final String id = "salt";
+    public static final String id = "shimeji";
 
-    public Salt() {
+    public Shimeji() {
         super(
-                Salt.id,
-                "塩",
-                ItemStack.of(Material.SUGAR)
+                id,
+                "しめじ",
+                ItemStack.of(Material.BROWN_MUSHROOM)
         );
     }
 }
