@@ -1,8 +1,13 @@
 package space.yurisi.universecorev2.item.gun;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.CustomModelData;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import space.yurisi.universecorev2.UniverseCoreV2;
+import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.subplugins.universeguns.constants.GunType;
 
 import org.bukkit.Material;
@@ -39,7 +44,7 @@ public final class M870 extends Gun {
         this.volumeSound = 5.0F;
         this.pitchSound = 0.6F;
         this.flavorText = "§7ポンプアクション式ショットガン。有効射程が長いが連射速度は遅い";
-        this.textureNumber = 6;
+        this.textureID = "m870";
         this.price = 5;
     }
 
@@ -48,9 +53,11 @@ public final class M870 extends Gun {
         default_setting = (item) -> {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
-                meta.setCustomModelData(textureNumber);
+                meta.setItemModel(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN_ITEM_MODEL));
             }
             item.setItemMeta(meta);
+            CustomModelData modelData = CustomModelData.customModelData().addString(textureID).build();
+            item.setData(DataComponentTypes.CUSTOM_MODEL_DATA, modelData);
             return item;
         };
     }

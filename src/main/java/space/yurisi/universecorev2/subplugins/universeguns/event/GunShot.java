@@ -1,6 +1,8 @@
 package space.yurisi.universecorev2.subplugins.universeguns.event;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.Location;
@@ -10,7 +12,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import space.yurisi.universecorev2.UniverseCoreV2;
+import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.item.gun.Gun;
+import space.yurisi.universecorev2.subplugins.universeguns.UniverseGuns;
 import space.yurisi.universecorev2.subplugins.universeguns.constants.GunType;
 import space.yurisi.universecorev2.subplugins.universeguns.core.GunStatus;
 
@@ -44,8 +48,9 @@ public class GunShot {
         ItemStack itemStack = new ItemStack(Material.SNOWBALL);
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta != null) {
-            itemMeta.setCustomModelData(1);
+            itemMeta.setItemModel(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN_ITEM_MODEL));
             itemStack.setItemMeta(itemMeta);
+            itemStack.setData(DataComponentTypes.CUSTOM_MODEL_DATA, UniverseGuns.getInstance().getBulletData());
         }
         projectile.setItem(itemStack);
         projectile.setGravity(false);
