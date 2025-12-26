@@ -5,8 +5,18 @@ import space.yurisi.universecorev2.item.CustomItem;
 
 public interface Craftable {
 
+    /**
+     * レシピを返します
+     *
+     * @return CookingItem[]
+     */
     CookingItem[] getRecipe();
 
+    /**
+     * レシピが形状付きかどうかを返します
+     *
+     * @return boolean
+     */
     boolean isShaped();
 
     default CookingItem[] normalizeRecipe(CookingItem item, CustomItem[] recipe) throws NotCookingItemException {
