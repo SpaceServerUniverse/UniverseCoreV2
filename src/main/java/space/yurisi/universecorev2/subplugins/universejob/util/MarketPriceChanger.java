@@ -91,7 +91,7 @@ public class MarketPriceChanger {
 
                 case BUILDER:
                     if(itemStack.getType().name().contains("CONCRETE")){
-                        // 切り上げ
+                        // 購入者割引は切り捨て
                         basePrice = superUltraMegaHyperShinkuKawaiiAletheia(basePrice, 9, 10);
                     }else if(itemStack.equals(ItemStack.of(Material.STONE)) || itemStack.equals(ItemStack.of(Material.COBBLESTONE)) ||
                             itemStack.equals(ItemStack.of(Material.END_STONE))){
