@@ -20,10 +20,7 @@ public class CookingEventListener implements Listener {
     @EventHandler
     public void onFoodEat(PlayerItemConsumeEvent e){
         Player player = e.getPlayer();
-        ItemStack item = e.getItem();
-        if(!UniverseItem.isUniverseItem(item)) return;
-        ItemMeta meta = item.getItemMeta();
-        PersistentDataContainer container = meta.getPersistentDataContainer();
+        PersistentDataContainer container = e.getItem().getItemMeta().getPersistentDataContainer();
         NamespacedKey key = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.FOOD);
         if(!container.has(key)) return;
         CustomItem customItem = UniverseItem.getItem(container.get(key, PersistentDataType.STRING));
