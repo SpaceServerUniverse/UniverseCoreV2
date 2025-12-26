@@ -27,7 +27,7 @@ public final class NapolitanBase extends FoodBaseItem implements Craftable {
 
     @Override
     public CookingItem[] getRecipe() {
-        CustomItem[] recipe = new CustomItem[8];
+        CustomItem[] recipe = new CustomItem[9];
         recipe[0] = UniverseItem.getItem(Tomato.id);
         recipe[1] = UniverseItem.getItem(GreenPepper.id);
         recipe[2] = UniverseItem.getItem(Pasta.id);
