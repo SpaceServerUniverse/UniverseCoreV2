@@ -1,9 +1,8 @@
 package space.yurisi.universecorev2.item.cooking;
 
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public abstract class FoodItem extends CookingItem {
+public abstract class FoodItem extends CookingItem implements Edible {
 
     private final int nutrition;
     private final float saturation;
@@ -14,23 +13,13 @@ public abstract class FoodItem extends CookingItem {
         this.saturation = saturation;
     }
 
-    public abstract void onEat(Player player);
-
-    /**
-     * 満腹度を返します
-     * 例:ステーキの場合は8
-     * @return int
-     */
-    public final int getNutrition() {
-        return nutrition;
+    @Override
+    public int getNutrition() {
+        return this.nutrition;
     }
 
-    /**
-     * 隠し満腹度を返します
-     * 例:ステーキの場合は12.8
-     * @return float
-     */
-    public final float getSaturation() {
-        return saturation;
+    @Override
+    public float getSaturation() {
+        return this.saturation;
     }
 }

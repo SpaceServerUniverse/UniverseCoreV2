@@ -19,6 +19,7 @@ public final class Napolitan extends FoodItem {
         );
     }
 
+    @Override
     public void onEat(Player player) {
 
     }
