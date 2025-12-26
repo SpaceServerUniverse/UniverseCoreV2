@@ -4,14 +4,14 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import space.yurisi.universecorev2.item.cooking.IngredientItem;
 
-public final class Sugar extends IngredientItem {
+public final class Rice extends IngredientItem {
 
-    public static final String id = "sugar";
+    public static final String id = "rice";
 
-    public Sugar() {
+    public Rice() {
         super(
-                Sugar.id,
-                "砂糖",
+                Rice.id,
+                "米",
                 ItemStack.of(Material.SUGAR)
         );
     }

@@ -13,7 +13,7 @@ public final class SoySauce extends IngredientItem {
 
     public SoySauce() {
         super(
-                id,
+                SoySauce.id,
                 "醤油",
                 ItemStack.of(Material.POTION)
         );

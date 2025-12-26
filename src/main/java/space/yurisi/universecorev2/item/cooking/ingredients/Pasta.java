@@ -4,15 +4,15 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import space.yurisi.universecorev2.item.cooking.IngredientItem;
 
-public final class Sugar extends IngredientItem {
+public final class Pasta extends IngredientItem {
 
-    public static final String id = "sugar";
+    public static final String id = "pasta";
 
-    public Sugar() {
+    public Pasta() {
         super(
-                Sugar.id,
-                "砂糖",
-                ItemStack.of(Material.SUGAR)
+                Pasta.id,
+                "パスタ",
+                ItemStack.of(Material.SEA_PICKLE)
         );
     }
 }

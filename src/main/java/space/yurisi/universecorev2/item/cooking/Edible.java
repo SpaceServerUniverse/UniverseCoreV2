@@ -22,6 +22,7 @@ public interface Edible {
     /**
      * 隠し満腹度を返します
      * 例:ステーキの場合は12.8
+     *
      * @return float
      */
     float getSaturation() ;
