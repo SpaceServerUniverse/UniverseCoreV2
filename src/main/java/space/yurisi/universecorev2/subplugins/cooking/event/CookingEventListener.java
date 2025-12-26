@@ -13,7 +13,10 @@ import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.item.CustomItem;
 import space.yurisi.universecorev2.item.UniverseItem;
+import space.yurisi.universecorev2.item.cooking.Craftable;
 import space.yurisi.universecorev2.item.cooking.Edible;
+import space.yurisi.universecorev2.item.cooking.FoodBaseItem;
+import space.yurisi.universecorev2.subplugins.cooking.utils.CookingItems;
 
 public class CookingEventListener implements Listener {
 
@@ -21,11 +24,13 @@ public class CookingEventListener implements Listener {
     public void onFoodEat(PlayerItemConsumeEvent e){
         Player player = e.getPlayer();
         PersistentDataContainer container = e.getItem().getItemMeta().getPersistentDataContainer();
-        NamespacedKey key = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.FOOD);
+        NamespacedKey key = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.COOKING_ITEM);
         if(!container.has(key)) return;
         CustomItem customItem = UniverseItem.getItem(container.get(key, PersistentDataType.STRING));
         if(customItem instanceof Edible foodItem){
+            e.setCancelled(true);
             foodItem.onEat(player);
+            UniverseItem.removeItem(player, customItem.getId(), 1);
             int nutrition = player.getFoodLevel();
             float saturation = player.getSaturation();
             int addedNutrition = Math.min(20, nutrition + foodItem.getNutrition());
@@ -39,5 +44,14 @@ public class CookingEventListener implements Listener {
     @EventHandler
     public void onPrepareCraft(PrepareItemCraftEvent e){
         ItemStack[] matrix = e.getInventory().getMatrix();
+        FoodBaseItem[] foodBaseItems = CookingItems.getAllCookingItems();
+        for(FoodBaseItem foodBaseItem : foodBaseItems){
+            if(!(foodBaseItem instanceof Craftable craftable)) continue;
+            if(craftable.isCraftedWith(matrix)){
+                CustomItem result = UniverseItem.getItem(foodBaseItem.getId());
+                if(result == null) return;
+                e.getInventory().setResult(result.getItem());
+            }
+        }
     }
 }

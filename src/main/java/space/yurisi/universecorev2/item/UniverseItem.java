@@ -11,6 +11,9 @@ import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.item.book.MainMenuBook;
 import space.yurisi.universecorev2.item.book.TutorialBook;
+import space.yurisi.universecorev2.item.cooking.food.Napolitan;
+import space.yurisi.universecorev2.item.cooking.foodbase.NapolitanBase;
+import space.yurisi.universecorev2.item.cooking.ingredients.*;
 import space.yurisi.universecorev2.item.fishingrod.FishingRod;
 import space.yurisi.universecorev2.item.pickaxe.FishingPickaxe;
 import space.yurisi.universecorev2.item.gun.*;
@@ -59,6 +62,19 @@ public class UniverseItem {
         items.put(TacticalVest.id, new TacticalVest());
         items.put(MainMenuBook.id, new MainMenuBook());
         items.put(TutorialBook.id, new TutorialBook());
+        items.put(Carrot.id, new Carrot());
+        items.put(GreenPepper.id, new GreenPepper());
+        items.put(Pasta.id, new Pasta());
+        items.put(RawBeef.id, new RawBeef());
+        items.put(RawPork.id, new RawPork());
+        items.put(Rice.id, new Rice());
+        items.put(Salt.id, new Salt());
+        items.put(Shimeji.id, new Shimeji());
+        items.put(SoySauce.id, new SoySauce());
+        items.put(Sugar.id, new Sugar());
+        items.put(Tomato.id, new Tomato());
+        items.put(NapolitanBase.id, new NapolitanBase());
+        items.put(Napolitan.id, new Napolitan());
     }
 
     public static CustomItem getItem(String id){

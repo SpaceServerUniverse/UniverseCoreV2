@@ -74,11 +74,10 @@ public interface Craftable {
                 for(int l = 0; l <= 8; l++){
                     CookingItem checkedItem = checkedRecipe[l];
                     if(checkedItem == null) continue;
-                    if(requiredItem.getId().equals(checkedItem.getId())){
-                        found = true;
-                        checkedRecipe[l] = null;
-                        break;
-                    }
+                    if(!requiredItem.getId().equals(checkedItem.getId())) continue;
+                    found = true;
+                    checkedRecipe[l] = null;
+                    break;
                 }
                 if(!found) return false;
             }
