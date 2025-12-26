@@ -11,7 +11,6 @@ import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.database.repositories.JobRepository;
 import space.yurisi.universecorev2.exception.JobTypeNotFoundException;
 import space.yurisi.universecorev2.subplugins.universejob.UniverseJob;
-import space.yurisi.universecorev2.subplugins.universejob.constants.EatableList;
 import space.yurisi.universecorev2.subplugins.universejob.constants.JobType;
 import space.yurisi.universecorev2.subplugins.universejob.constants.WoodenList;
 
@@ -36,10 +35,14 @@ public class MarketPriceChanger {
                     break;
 
                 case JobType.MINER:
-                    if(itemStack.getType().name().contains("ORE"))
+                    if(itemStack.getType().name().contains("ORE") || itemStack.getType().name().contains("INGOT")
+                    || itemStack.getType().name().contains("NUGGET") || itemStack.getType().name().contains("COAL")
+                    || itemStack.getType().name().contains("QUARTZ") || itemStack.getType().name().contains("AMETHYST"))
                     {
                         basePrice = superUltraMegaHyperMathCeil(basePrice, 11, 10);
-                    }else if(itemStack.equals(ItemStack.of(Material.DIAMOND)) || itemStack.equals(ItemStack.of(Material.EMERALD)) ||
+                    }
+                    else if(itemStack.equals(ItemStack.of(Material.DIAMOND)) || itemStack.equals(ItemStack.of(Material.EMERALD)) ||
+                            itemStack.equals(ItemStack.of(Material.LAPIS_LAZULI)) ||
                             itemStack.equals(ItemStack.of(Material.STONE)) || itemStack.equals(ItemStack.of(Material.COBBLESTONE)))
                     {
                         basePrice = superUltraMegaHyperMathCeil(basePrice, 11, 10);
@@ -47,7 +50,7 @@ public class MarketPriceChanger {
                     break;
 
                 case JobType.CHEF:
-                    if(Arrays.asList(EatableList.EATABLE_MATERIALS).contains(itemStack.getType())){
+                    if(itemStack.getType().isEdible()){
                         basePrice = superUltraMegaHyperMathCeil(basePrice, 11, 10);
                     }
                     break;
