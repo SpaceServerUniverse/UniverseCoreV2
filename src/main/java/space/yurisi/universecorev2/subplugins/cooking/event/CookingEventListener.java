@@ -13,7 +13,7 @@ import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.item.CustomItem;
 import space.yurisi.universecorev2.item.UniverseItem;
-import space.yurisi.universecorev2.item.cooking.FoodItem;
+import space.yurisi.universecorev2.item.cooking.Edible;
 
 public class CookingEventListener implements Listener {
 
@@ -27,7 +27,7 @@ public class CookingEventListener implements Listener {
         NamespacedKey key = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.FOOD);
         if(!container.has(key)) return;
         CustomItem customItem = UniverseItem.getItem(container.get(key, PersistentDataType.STRING));
-        if(customItem instanceof FoodItem foodItem){
+        if(customItem instanceof Edible foodItem){
             foodItem.onEat(player);
             int nutrition = player.getFoodLevel();
             float saturation = player.getSaturation();
