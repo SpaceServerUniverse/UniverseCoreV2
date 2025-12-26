@@ -171,12 +171,6 @@ public class MarketRepository {
 
         long sellerPrice = MarketPriceChanger.sellerPriceChanger(market.getPlayerUuid(), itemStack, market.getPrice());
         long purchaserPrice = MarketPriceChanger.purchaserPriceChanger(player, itemStack, market.getPrice());
-        if(sellerPrice < 1){
-            sellerPrice = 1;
-        }
-        if(purchaserPrice < 1){
-            purchaserPrice = 1;
-        }
 
         UniverseEconomyAPI.getInstance().reduceMoney(player, purchaserPrice, "フリーマーケット[購入]");
         User user = UniverseCoreV2API.getInstance().getDatabaseManager().getUserRepository().getUserFromUUID(UUID.fromString(market.getPlayerUuid()));

@@ -30,6 +30,7 @@ import space.yurisi.universecorev2.subplugins.chestshop.transaction.action.Remov
 import space.yurisi.universecorev2.subplugins.chestshop.utils.ItemUtils;
 import space.yurisi.universecorev2.subplugins.chestshop.utils.SuperMessageHelper;
 import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomyAPI;
+import space.yurisi.universecorev2.subplugins.universejob.util.MarketPriceChanger;
 
 import java.util.List;
 import java.util.UUID;
@@ -76,10 +77,10 @@ public class InteractEvent implements Listener {
                     }
 
                     Transaction tx = Transaction.create()
-                            .then(new ReduceMoneyAction(universeEconomyAPI, player, chestShop.getPrice(), "チェストショップでの購入:" + ItemUtils.name(itemStack) + ":" + itemStack.getAmount()))
+                            .then(new ReduceMoneyAction(universeEconomyAPI, player, MarketPriceChanger.purchaserPriceChanger(player, itemStack, chestShop.getPrice()), "チェストショップでの購入:" + ItemUtils.name(itemStack) + ":" + itemStack.getAmount()))
                             .then(new AddItemAction(player.getInventory(), itemStack))
                             .then(new RemoveItemAction(chest.getInventory(), itemStack))
-                            .then(new AddMoneyAction(userRepository, moneyRepository, UUID.fromString(chestShop.getUuid()), chestShop.getPrice(), "チェストショップでの売却:" + ItemUtils.name(itemStack) + ":" + itemStack.getAmount()));
+                            .then(new AddMoneyAction(userRepository, moneyRepository, UUID.fromString(chestShop.getUuid()), MarketPriceChanger.sellerPriceChanger(chestShop.getUuid(), itemStack, chestShop.getPrice()), "チェストショップでの売却:" + ItemUtils.name(itemStack) + ":" + itemStack.getAmount()));
 
                     try {
                         tx.commit();
