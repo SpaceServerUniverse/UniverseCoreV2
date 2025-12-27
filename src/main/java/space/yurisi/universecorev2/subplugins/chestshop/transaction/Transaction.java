@@ -5,7 +5,6 @@ import space.yurisi.universecorev2.subplugins.chestshop.transaction.action.Rollb
 
 import java.util.ArrayDeque;
 import java.util.Queue;
-import java.util.Stack;
 
 /**
  * 原子性のある一連の操作を表します
@@ -22,17 +21,17 @@ public class Transaction {
         return this;
     }
 
-    public void commit() throws TransactionException {
+    public void commit() throws InterruptTransactionException {
         ArrayDeque<RollbackFunc> rollbackStack = new ArrayDeque<>();
         try {
             while(!actions.isEmpty()) {
                 rollbackStack.push(actions.poll().execute());
             }
-        } catch (TransactionException e) {
+        } catch (InterruptTransactionException e) {
             while(!rollbackStack.isEmpty()) {
                 try {
                     rollbackStack.pop().execute();
-                } catch (TransactionException rollbackException) {
+                } catch (InterruptTransactionException rollbackException) {
                     e.addSuppressed(rollbackException);
                 }
             }

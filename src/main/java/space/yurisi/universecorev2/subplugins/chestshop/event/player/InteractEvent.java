@@ -22,10 +22,10 @@ import space.yurisi.universecorev2.database.repositories.MoneyRepository;
 import space.yurisi.universecorev2.database.repositories.UserRepository;
 import space.yurisi.universecorev2.exception.ChestShopNotFoundException;
 import space.yurisi.universecorev2.subplugins.chestshop.transaction.Transaction;
-import space.yurisi.universecorev2.subplugins.chestshop.transaction.TransactionException;
+import space.yurisi.universecorev2.subplugins.chestshop.transaction.InterruptTransactionException;
 import space.yurisi.universecorev2.subplugins.chestshop.transaction.action.AddItemAction;
-import space.yurisi.universecorev2.subplugins.chestshop.transaction.action.AddMoneyAction;
-import space.yurisi.universecorev2.subplugins.chestshop.transaction.action.ReduceMoneyAction;
+import space.yurisi.universecorev2.subplugins.chestshop.transaction.action.DepositMoneyAction;
+import space.yurisi.universecorev2.subplugins.chestshop.transaction.action.WithdrawMoneyAction;
 import space.yurisi.universecorev2.subplugins.chestshop.transaction.action.RemoveItemAction;
 import space.yurisi.universecorev2.subplugins.chestshop.utils.ItemUtils;
 import space.yurisi.universecorev2.subplugins.chestshop.utils.SuperMessageHelper;
@@ -76,15 +76,27 @@ public class InteractEvent implements Listener {
                     }
 
                     Transaction tx = Transaction.create()
-                            .then(new ReduceMoneyAction(universeEconomyAPI, player, chestShop.getPrice(), "チェストショップでの購入:" + ItemUtils.name(itemStack) + ":" + itemStack.getAmount()))
-                            .then(new AddItemAction(player.getInventory(), itemStack))
-                            .then(new RemoveItemAction(chest.getInventory(), itemStack))
-                            .then(new AddMoneyAction(userRepository, moneyRepository, UUID.fromString(chestShop.getUuid()), chestShop.getPrice(), "チェストショップでの売却:" + ItemUtils.name(itemStack) + ":" + itemStack.getAmount()));
+                            .then(new WithdrawMoneyAction(universeEconomyAPI, player, chestShop.getPrice(), "チェストショップでの購入:" + ItemUtils.name(itemStack) + ":" + itemStack.getAmount())
+                                    .whenMissingAccount(ctx -> SuperMessageHelper.sendErrorMessage(player, "購入者の口座が見つかりませんでした"))
+                                    .whenInsufficientBalance(ctx -> SuperMessageHelper.sendErrorMessage(player, "お金が不足しています"))
+                                    .whenRollbackMissingAccount(ctx -> SuperMessageHelper.sendErrorMessage(player, "あなたの口座が見つかりませんでした"))
+                                    .whenRollbackExceededBalance(ctx -> SuperMessageHelper.sendErrorMessage(player, "組戻しに失敗しました: 購入者の口座上限です"))
+                            )
+                            .then(new AddItemAction(player.getInventory(), itemStack)
+                                    .whenNoSpaceLeft(ctx -> SuperMessageHelper.sendErrorMessage(player, "インベントリーがいっぱいです"))
+                            )
+                            .then(new RemoveItemAction(chest.getInventory(), itemStack)
+                                    .whenInsufficientItem(ctx -> SuperMessageHelper.sendErrorMessage(player, "チェスト内の在庫が不足しています"))
+                            )
+                            .then(new DepositMoneyAction(userRepository, moneyRepository, UUID.fromString(chestShop.getUuid()), chestShop.getPrice(), "チェストショップでの売却:" + ItemUtils.name(itemStack) + ":" + itemStack.getAmount())
+                                    .whenMissingAccount(ctx -> SuperMessageHelper.sendErrorMessage(player, "販売者の口座が見つかりませんでした"))
+                                    .whenRollbackMissingAccount(ctx -> SuperMessageHelper.sendErrorMessage(player, "組戻しに失敗しました: 販売者の講座が見つまりません"))
+                            );
 
                     try {
                         tx.commit();
-                    } catch (TransactionException e) {
-                        SuperMessageHelper.sendErrorMessage(player, formatErrorMessage(e));
+                    } catch (InterruptTransactionException e) {
+                        // may be better logging?
                         return;
                     }
 
@@ -93,19 +105,5 @@ public class InteractEvent implements Listener {
                 }
             }
         }
-    }
-
-    private static @NonNull String formatErrorMessage(TransactionException e) {
-        List<String> messages = new java.util.ArrayList<>();
-        messages.add(e.getFriendlyMessage());
-        for (Throwable suppressed: e.getSuppressed()) {
-            if (suppressed instanceof TransactionException txException) {
-                messages.add(txException.getFriendlyMessage());
-            } else {
-                messages.add(suppressed.getMessage());
-            }
-        }
-
-        return String.join("\n + ", messages);
     }
 }
