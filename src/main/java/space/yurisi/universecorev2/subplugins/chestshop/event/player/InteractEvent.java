@@ -32,6 +32,7 @@ import space.yurisi.universecorev2.subplugins.chestshop.utils.ItemUtils;
 import space.yurisi.universecorev2.subplugins.chestshop.utils.SuperMessageHelper;
 import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomyAPI;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class InteractEvent implements Listener {
@@ -77,28 +78,32 @@ public class InteractEvent implements Listener {
                         return;
                     }
 
+                    ArrayList<String> notes = new ArrayList<>();
                     Transaction tx = Transaction.create(logger)
                             .then(new WithdrawMoneyAction(universeEconomyAPI, player, chestShop.getPrice(), "チェストショップでの購入:" + ItemUtils.name(itemStack) + ":" + itemStack.getAmount())
-                                    .whenMissingAccount(ctx -> SuperMessageHelper.sendErrorMessage(player, "購入者の口座が見つかりませんでした"))
-                                    .whenInsufficientBalance(ctx -> SuperMessageHelper.sendErrorMessage(player, "お金が不足しています"))
-                                    .whenRollbackMissingAccount(ctx -> SuperMessageHelper.sendErrorMessage(player, "あなたの口座が見つかりませんでした"))
-                                    .whenRollbackExceededBalance(ctx -> SuperMessageHelper.sendErrorMessage(player, "組戻しに失敗しました: 購入者の口座上限です"))
+                                    .whenMissingAccount(ctx -> notes.add("購入者の口座が見つかりませんでした"))
+                                    .whenInsufficientBalance(ctx -> notes.add("お金が不足しています"))
+                                    .whenRollbackMissingAccount(ctx -> notes.add("あなたの口座が見つかりませんでした"))
+                                    .whenRollbackExceededBalance(ctx -> notes.add("組戻しに失敗しました: 購入者の口座上限です"))
                             )
                             .then(new AddItemAction(player.getInventory(), itemStack)
-                                    .whenNoSpaceLeft(ctx -> SuperMessageHelper.sendErrorMessage(player, "インベントリーがいっぱいです"))
+                                    .whenNoSpaceLeft(ctx -> notes.add("インベントリーがいっぱいです"))
                             )
                             .then(new RemoveItemAction(chest.getInventory(), itemStack)
-                                    .whenInsufficientItem(ctx -> SuperMessageHelper.sendErrorMessage(player, "チェスト内の在庫が不足しています"))
+                                    .whenInsufficientItem(ctx -> notes.add("チェスト内の在庫が不足しています"))
                             )
                             .then(new DepositMoneyAction(userRepository, moneyRepository, UUID.fromString(chestShop.getUuid()), chestShop.getPrice(), "チェストショップでの売却:" + ItemUtils.name(itemStack) + ":" + itemStack.getAmount())
-                                    .whenMissingAccount(ctx -> SuperMessageHelper.sendErrorMessage(player, "販売者の口座が見つかりませんでした"))
-                                    .whenRollbackMissingAccount(ctx -> SuperMessageHelper.sendErrorMessage(player, "組戻しに失敗しました: 販売者の講座が見つまりません"))
+                                    .whenMissingAccount(ctx -> notes.add("販売者の口座が見つかりませんでした"))
+                                    .whenRollbackMissingAccount(ctx -> notes.add("組戻しに失敗しました: 販売者の講座が見つまりません"))
                             );
                     try {
                         tx.commit();
                     } catch (InterruptTransactionException e) {
                         if (e.isCritical()) {
                             logger.warn("回復不能な例外が発生しました: txId={}", tx.getId(), e);
+                        }
+                        for (String note: notes) {
+                            SuperMessageHelper.sendErrorMessage(player, note);
                         }
                         return;
                     }
