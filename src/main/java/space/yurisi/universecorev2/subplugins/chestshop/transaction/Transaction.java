@@ -47,27 +47,25 @@ public class Transaction {
     }
 
     public void commit() throws InterruptTransactionException {
-        try (var ignored = MDC.putCloseable("txId", id)) {
-            logger.info("Transaction started.");
-            ArrayDeque<RollbackFunc> rollbackStack = new ArrayDeque<>();
-            try {
-                while (!actions.isEmpty()) {
-                    rollbackStack.push(actions.poll().execute());
-                }
-            } catch (InterruptTransactionException e) {
-                while (!rollbackStack.isEmpty()) {
-                    try {
-                        rollbackStack.pop().execute();
-                    } catch (Exception rollbackException) {
-                        e.markAsCritical();
-                        e.addSuppressed(rollbackException);
-                        logger.error("Critical error occurred in rollback", rollbackException);
-                    }
-                }
-
-                throw e;
+        logger.info("[tx-{}]Transaction started.", id);
+        ArrayDeque<RollbackFunc> rollbackStack = new ArrayDeque<>();
+        try {
+            while (!actions.isEmpty()) {
+                rollbackStack.push(actions.poll().execute());
             }
-            logger.info("Transaction committed successfully.");
+        } catch (InterruptTransactionException e) {
+            while (!rollbackStack.isEmpty()) {
+                try {
+                    rollbackStack.pop().execute();
+                } catch (Exception rollbackException) {
+                    e.markAsCritical();
+                    e.addSuppressed(rollbackException);
+                    logger.error("[tx-{}]Critical error occurred in rollback", id, rollbackException);
+                }
+            }
+
+            throw e;
         }
+        logger.info("[tx-{}]Transaction committed successfully.", id);
     }
 }
