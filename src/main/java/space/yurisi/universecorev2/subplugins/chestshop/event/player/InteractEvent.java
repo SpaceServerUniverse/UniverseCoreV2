@@ -105,7 +105,6 @@ public class InteractEvent implements Listener {
                         }
                         return;
                     } catch (InconsistentTransactionException e) {
-                        logger.error("Transaction atomicity has been destroyed", e);
                         Bukkit.shutdown();
                     }
 

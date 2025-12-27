@@ -59,7 +59,6 @@ public class Transaction {
                     rollbackStack.pop().execute();
                 } catch (Exception rollbackException) {
                     rollbackExceptions.add(rollbackException);
-                    logger.error("[tx-{}]Critical error occurred in rollback", id, rollbackException);
                 }
             }
 
@@ -69,6 +68,7 @@ public class Transaction {
                 for (Exception rollbackException: rollbackExceptions) {
                     fatal.addSuppressed(rollbackException);
                 }
+                logger.error("[tx-{}]Transaction was incompletely rolled back", id, fatal);
                 throw fatal;
             }
 
