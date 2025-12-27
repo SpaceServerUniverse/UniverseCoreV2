@@ -2,14 +2,12 @@ package space.yurisi.universecorev2.subplugins.chestshop.transaction;
 
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
-import org.slf4j.MDC;
 import space.yurisi.universecorev2.subplugins.chestshop.transaction.action.AtomicRollbackableAction;
 import space.yurisi.universecorev2.subplugins.chestshop.transaction.action.RollbackFunc;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Queue;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -46,7 +44,7 @@ public class Transaction {
         return this;
     }
 
-    public void commit() throws InterruptTransactionException {
+    public void commit() throws InterruptTransactionException, InconsistentTransactionException {
         logger.info("[tx-{}]Transaction started.", id);
         ArrayDeque<RollbackFunc> rollbackStack = new ArrayDeque<>();
         try {
@@ -55,14 +53,23 @@ public class Transaction {
             }
         } catch (InterruptTransactionException e) {
             logger.info("[tx-{}]Transaction was interrupted: {}", id, e.getMessage());
+            ArrayList<Exception> rollbackExceptions = new ArrayList<>();
             while (!rollbackStack.isEmpty()) {
                 try {
                     rollbackStack.pop().execute();
                 } catch (Exception rollbackException) {
-                    e.markAsCritical();
-                    e.addSuppressed(rollbackException);
+                    rollbackExceptions.add(rollbackException);
                     logger.error("[tx-{}]Critical error occurred in rollback", id, rollbackException);
                 }
+            }
+
+            // ロールバック時にエラーが出ていたらもう呼び出し側でも何もできない
+            if (!rollbackExceptions.isEmpty()) {
+                InconsistentTransactionException fatal = new InconsistentTransactionException("Transaction has not been recovered completely.", e);
+                for (Exception rollbackException: rollbackExceptions) {
+                    fatal.addSuppressed(rollbackException);
+                }
+                throw fatal;
             }
 
             throw e;

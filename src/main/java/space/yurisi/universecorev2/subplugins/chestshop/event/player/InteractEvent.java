@@ -22,6 +22,7 @@ import space.yurisi.universecorev2.database.repositories.ChestShopRepository;
 import space.yurisi.universecorev2.database.repositories.MoneyRepository;
 import space.yurisi.universecorev2.database.repositories.UserRepository;
 import space.yurisi.universecorev2.exception.ChestShopNotFoundException;
+import space.yurisi.universecorev2.subplugins.chestshop.transaction.InconsistentTransactionException;
 import space.yurisi.universecorev2.subplugins.chestshop.transaction.Transaction;
 import space.yurisi.universecorev2.subplugins.chestshop.transaction.InterruptTransactionException;
 import space.yurisi.universecorev2.subplugins.chestshop.transaction.action.AddItemAction;
@@ -99,13 +100,13 @@ public class InteractEvent implements Listener {
                     try {
                         tx.commit();
                     } catch (InterruptTransactionException e) {
-                        if (e.isCritical()) {
-                            logger.warn("回復不能な例外が発生しました: txId={}", tx.getId(), e);
-                        }
                         for (String note: notes) {
                             SuperMessageHelper.sendErrorMessage(player, note);
                         }
                         return;
+                    } catch (InconsistentTransactionException e) {
+                        logger.error("Transaction atomicity has been destroyed", e);
+                        Bukkit.shutdown();
                     }
 
                     SuperMessageHelper.sendSuccessMessage(player, "チェストショップから" + ItemUtils.name(itemStack) + "を" + itemStack.getAmount() + "こ購入しました");
