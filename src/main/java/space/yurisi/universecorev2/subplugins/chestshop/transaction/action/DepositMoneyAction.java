@@ -16,11 +16,11 @@ import java.util.function.Consumer;
  * 指定したユーザーの口座にお金を振り込むアクション
  */
 public class DepositMoneyAction implements AtomicRollbackableAction {
-    private @NotNull UserRepository userRepository;
-    private @NotNull MoneyRepository moneyRepository;
-    private @NotNull UUID uuid;
-    private @NotNull Long price;
-    private @NotNull String reason;
+    private final @NotNull UserRepository userRepository;
+    private final @NotNull MoneyRepository moneyRepository;
+    private final @NotNull UUID uuid;
+    private final @NotNull Long price;
+    private final @NotNull String reason;
 
     public record MissingAccountContext(){}
     private @NotNull Consumer<MissingAccountContext> whenMissingAccountHandler = (ctx) -> {};

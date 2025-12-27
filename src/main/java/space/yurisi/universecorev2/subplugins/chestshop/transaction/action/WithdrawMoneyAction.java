@@ -16,10 +16,10 @@ import java.util.function.Consumer;
  * 指定したプレイヤーの口座から指定額を引き落とすアクション
  */
 public class WithdrawMoneyAction implements AtomicRollbackableAction {
-    private @NotNull UniverseEconomyAPI api;
-    private @NotNull Player player;
-    private @NotNull Long price;
-    private @NotNull String reason;
+    private final @NotNull UniverseEconomyAPI api;
+    private final @NotNull Player player;
+    private final @NotNull Long price;
+    private final @NotNull String reason;
 
     public record MissingAccountContext(){}
     public record InsufficientBalanceContext(){}
