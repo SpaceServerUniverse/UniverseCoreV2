@@ -38,6 +38,7 @@ import space.yurisi.universecorev2.utils.Message;
 import space.yurisi.universecorev2.utils.NumberUtils;
 
 import java.time.DateTimeException;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.MonthDay;
 import java.util.ArrayList;
@@ -245,6 +246,10 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                         Message.sendErrorMessage(player, BirthdayCard.PREFIX, "自分自身にメッセージを送信することはできません");
                         return true;
                     }
+                    Date expire_date = new Date(
+                            System.currentTimeMillis() + Duration.ofDays(10).toMillis()
+                    );
+
                     Book book = (Book) mainHandItem.getItemMeta();
                     Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "お誕生日カードを送信しました");
                     player.getInventory().remove(mainHandItem);
@@ -260,7 +265,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                         Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "お誕生日カードを書いてくれてありがとう\nガチャチケを5枚プレゼント!!");
                         if (player.getInventory().firstEmpty() == -1) {
                             Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "インベントリーがいっぱいなので\n報酬受け取りボックスに追加しました");
-                            ReceiveBoxAPI.AddReceiveItem(ticket, player.getUniqueId(), new Date(), "お誕生日カードを書いてくれたから(インベントリーがいっぱい)");
+                            ReceiveBoxAPI.AddReceiveItem(ticket, player.getUniqueId(), expire_date, "お誕生日カードを書いてくれたから(インベントリーがいっぱい)");
                         } else {
                             player.getInventory().addItem(ticket);
                         }
@@ -296,8 +301,13 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 try {
                     birthdayMessagesList = birthdayCardRepository.getBirthdayMessages(gifToBirthdayData.getId());
                 } catch (BirthdayDataNotFoundException ignored) {
-                    //NOOP 誕生日メッセージがない人なんていないよきっと大丈夫
+                    Message.sendErrorMessage(player, BirthdayCard.PREFIX, "エラーが発生しました。");
+                    return true;
                 }
+                Date expire_date = new Date(
+                        System.currentTimeMillis() + Duration.ofDays(10).toMillis()
+                );
+
                 gifToBirthdayData.setGiftReceived(true);
                 birthdayCardRepository.updateBirthdayData(gifToBirthdayData);
                 ItemStack bookItem = ItemStack.of(Material.WRITTEN_BOOK);
@@ -329,7 +339,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 player.getInventory().addItem(bookItem);
                 ItemStack ticket = UniverseItem.getItem(GachaTicket.id).getItem();
                 ticket.setAmount(10);
-                ReceiveBoxAPI.AddReceiveItem(ticket, player.getUniqueId(), new Date(), "お誕生日プレゼント");
+                ReceiveBoxAPI.AddReceiveItem(ticket, player.getUniqueId(), expire_date, "お誕生日プレゼント");
                 Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "ガチャチケ10枚プレゼント");
                 Bukkit.getServer().broadcast(Component.text("🎉 今日は ", NamedTextColor.YELLOW)
                         .append(Component.text(player.getName(), NamedTextColor.GOLD))
