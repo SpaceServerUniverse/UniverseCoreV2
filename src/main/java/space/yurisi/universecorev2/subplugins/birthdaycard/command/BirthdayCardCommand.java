@@ -301,7 +301,8 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 try {
                     birthdayMessagesList = birthdayCardRepository.getBirthdayMessages(gifToBirthdayData.getId());
                 } catch (BirthdayDataNotFoundException ignored) {
-                    //NOOP 誕生日メッセージがない人なんていないよきっと大丈夫
+                    Message.sendErrorMessage(player, BirthdayCard.PREFIX, "エラーが発生しました。");
+                    return true;
                 }
                 Date expire_date = new Date(
                         System.currentTimeMillis() + Duration.ofDays(10).toMillis()
