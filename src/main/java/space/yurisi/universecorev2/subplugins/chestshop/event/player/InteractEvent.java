@@ -83,8 +83,8 @@ public class InteractEvent implements Listener {
                             .then(new WithdrawMoneyAction(universeEconomyAPI, player, chestShop.getPrice(), "チェストショップでの購入:" + ItemUtils.name(itemStack) + ":" + itemStack.getAmount())
                                     .whenMissingAccount(ctx -> notes.add("購入者の口座が見つかりませんでした"))
                                     .whenInsufficientBalance(ctx -> notes.add("お金が不足しています"))
-                                    .whenRollbackMissingAccount(ctx -> notes.add("あなたの口座が見つかりませんでした"))
-                                    .whenRollbackExceededBalance(ctx -> notes.add("組戻しに失敗しました: 購入者の口座上限です"))
+                                    .whenRollbackMissingAccount(ctx -> notes.add("購入者の口座が見つかりませんでした"))
+                                    .whenRollbackExceededBalance(ctx -> notes.add("組戻し失敗: 購入者の口座上限です"))
                             )
                             .then(new AddItemAction(player.getInventory(), itemStack)
                                     .whenNoSpaceLeft(ctx -> notes.add("インベントリーがいっぱいです"))
@@ -94,7 +94,7 @@ public class InteractEvent implements Listener {
                             )
                             .then(new DepositMoneyAction(userRepository, moneyRepository, UUID.fromString(chestShop.getUuid()), chestShop.getPrice(), "チェストショップでの売却:" + ItemUtils.name(itemStack) + ":" + itemStack.getAmount())
                                     .whenMissingAccount(ctx -> notes.add("販売者の口座が見つかりませんでした"))
-                                    .whenRollbackMissingAccount(ctx -> notes.add("組戻しに失敗しました: 販売者の講座が見つまりません"))
+                                    .whenRollbackMissingAccount(ctx -> notes.add("組戻し失敗: 販売者の講座が見つまりません"))
                             );
                     try {
                         tx.commit();
