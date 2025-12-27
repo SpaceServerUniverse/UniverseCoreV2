@@ -14,7 +14,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.jspecify.annotations.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import space.yurisi.universecorev2.UniverseCoreV2API;
 import space.yurisi.universecorev2.database.models.ChestShop;
 import space.yurisi.universecorev2.database.repositories.ChestShopRepository;
@@ -31,10 +32,11 @@ import space.yurisi.universecorev2.subplugins.chestshop.utils.ItemUtils;
 import space.yurisi.universecorev2.subplugins.chestshop.utils.SuperMessageHelper;
 import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomyAPI;
 
-import java.util.List;
 import java.util.UUID;
 
 public class InteractEvent implements Listener {
+    private static final Logger logger = LoggerFactory.getLogger(InteractEvent.class);
+
     @EventHandler
     public void onInteractEvent(PlayerInteractEvent event) {
 
@@ -75,7 +77,7 @@ public class InteractEvent implements Listener {
                         return;
                     }
 
-                    Transaction tx = Transaction.create()
+                    Transaction tx = Transaction.create(logger)
                             .then(new WithdrawMoneyAction(universeEconomyAPI, player, chestShop.getPrice(), "チェストショップでの購入:" + ItemUtils.name(itemStack) + ":" + itemStack.getAmount())
                                     .whenMissingAccount(ctx -> SuperMessageHelper.sendErrorMessage(player, "購入者の口座が見つかりませんでした"))
                                     .whenInsufficientBalance(ctx -> SuperMessageHelper.sendErrorMessage(player, "お金が不足しています"))
@@ -92,11 +94,12 @@ public class InteractEvent implements Listener {
                                     .whenMissingAccount(ctx -> SuperMessageHelper.sendErrorMessage(player, "販売者の口座が見つかりませんでした"))
                                     .whenRollbackMissingAccount(ctx -> SuperMessageHelper.sendErrorMessage(player, "組戻しに失敗しました: 販売者の講座が見つまりません"))
                             );
-
                     try {
                         tx.commit();
                     } catch (InterruptTransactionException e) {
-                        // may be better logging?
+                        if (e.isCritical()) {
+                            logger.warn("回復不能な例外が発生しました: txId={}", tx.getId(), e);
+                        }
                         return;
                     }
 
