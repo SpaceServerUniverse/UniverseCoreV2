@@ -1,20 +1,42 @@
 package space.yurisi.universecorev2.subplugins.chestshop.transaction;
 
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
 import space.yurisi.universecorev2.subplugins.chestshop.transaction.action.AtomicRollbackableAction;
 import space.yurisi.universecorev2.subplugins.chestshop.transaction.action.RollbackFunc;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Queue;
-import java.util.Stack;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 原子性のある一連の操作を表します
  */
 public class Transaction {
+    private final String id;
+    private final Logger logger;
     private final Queue<AtomicRollbackableAction> actions = new ArrayDeque<>();
 
-    public static Transaction create() {
-        return new Transaction();
+    public Transaction(@NotNull Logger logger) {
+        this.id = generateTxId();
+        this.logger = logger;
+    }
+
+    private static final AtomicInteger counter = new AtomicInteger(0);
+    private static String generateTxId() {
+        String timePart = Long.toString(System.currentTimeMillis(), 36);
+        String countPart = Integer.toString(counter.getAndIncrement() & 0xFFF, 36);
+
+        return (timePart + "-" + countPart).toUpperCase();
+    }
+
+    public static Transaction create(@NotNull Logger logger) {
+        return new Transaction(logger);
+    }
+
+    public String getId() {
+        return id;
     }
 
     public Transaction then(AtomicRollbackableAction action) {
@@ -22,22 +44,36 @@ public class Transaction {
         return this;
     }
 
-    public void commit() throws TransactionException {
+    public void commit() throws InterruptTransactionException, InconsistentTransactionException {
+        logger.info("[tx-{}]Transaction started.", id);
         ArrayDeque<RollbackFunc> rollbackStack = new ArrayDeque<>();
         try {
-            while(!actions.isEmpty()) {
+            while (!actions.isEmpty()) {
                 rollbackStack.push(actions.poll().execute());
             }
-        } catch (TransactionException e) {
-            while(!rollbackStack.isEmpty()) {
+        } catch (InterruptTransactionException e) {
+            logger.info("[tx-{}]Transaction was interrupted: {}", id, e.getMessage());
+            ArrayList<Exception> rollbackExceptions = new ArrayList<>();
+            while (!rollbackStack.isEmpty()) {
                 try {
                     rollbackStack.pop().execute();
-                } catch (TransactionException rollbackException) {
-                    e.addSuppressed(rollbackException);
+                } catch (Exception rollbackException) {
+                    rollbackExceptions.add(rollbackException);
                 }
+            }
+
+            // ロールバック時にエラーが出ていたらもう呼び出し側でも何もできない
+            if (!rollbackExceptions.isEmpty()) {
+                InconsistentTransactionException fatal = new InconsistentTransactionException("Transaction has not been recovered completely.", e);
+                for (Exception rollbackException: rollbackExceptions) {
+                    fatal.addSuppressed(rollbackException);
+                }
+                logger.error("[tx-{}]Transaction was incompletely rolled back", id, fatal);
+                throw fatal;
             }
 
             throw e;
         }
+        logger.info("[tx-{}]Transaction committed successfully.", id);
     }
 }

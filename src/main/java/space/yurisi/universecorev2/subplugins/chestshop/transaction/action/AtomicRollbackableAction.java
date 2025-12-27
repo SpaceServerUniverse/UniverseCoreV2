@@ -1,7 +1,7 @@
 package space.yurisi.universecorev2.subplugins.chestshop.transaction.action;
 
 import org.jetbrains.annotations.NotNull;
-import space.yurisi.universecorev2.subplugins.chestshop.transaction.TransactionException;
+import space.yurisi.universecorev2.subplugins.chestshop.transaction.InterruptTransactionException;
 
 /**
  * 復元可能な原子性のある操作を表します
@@ -12,8 +12,8 @@ public interface AtomicRollbackableAction {
      * 操作を実行します
      * 失敗した場合には実行前の状態に戻されます
      *
-     * @throws TransactionException 実行に失敗した場合
+     * @throws InterruptTransactionException 実行に失敗した場合
      * @return ロールバック用の関数
      */
-    @NotNull RollbackFunc execute() throws TransactionException;
+    @NotNull RollbackFunc execute() throws InterruptTransactionException;
 }
