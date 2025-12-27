@@ -34,7 +34,7 @@ public final class NapolitanBase extends FoodBaseItem implements Craftable, Edib
         recipe[1] = UniverseItem.getItem(GreenPepper.id);
         recipe[2] = UniverseItem.getItem(Pasta.id);
         recipe[3] = UniverseItem.getItem(Salt.id);
-        return this.normalizeRecipe(this, recipe);
+        return this.toCookingRecipe(this, recipe);
     }
 
     @Override

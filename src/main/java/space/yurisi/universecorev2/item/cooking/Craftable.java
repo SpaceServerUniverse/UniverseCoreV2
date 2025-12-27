@@ -26,7 +26,7 @@ public interface Craftable {
      */
     boolean isShaped();
 
-    default CookingItem[] normalizeRecipe(CookingItem item, CustomItem[] recipe) throws NotCookingItemException {
+    default CookingItem[] toCookingRecipe(CookingItem item, CustomItem[] recipe) throws NotCookingItemException {
         CookingItem[] ret = new CookingItem[9];
         for(int j = 0; j <= 8; j++){
             if(recipe[j] == null) {

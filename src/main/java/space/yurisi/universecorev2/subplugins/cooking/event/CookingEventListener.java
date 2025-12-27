@@ -16,6 +16,7 @@ import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.item.cooking.Craftable;
 import space.yurisi.universecorev2.item.cooking.Edible;
 import space.yurisi.universecorev2.item.cooking.FoodBaseItem;
+import space.yurisi.universecorev2.item.cooking.flag.RecipeFlags;
 import space.yurisi.universecorev2.subplugins.cooking.utils.CookingItems;
 
 public class CookingEventListener implements Listener {
@@ -25,10 +26,11 @@ public class CookingEventListener implements Listener {
         Player player = e.getPlayer();
         PersistentDataContainer container = e.getItem().getItemMeta().getPersistentDataContainer();
         NamespacedKey key = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.COOKING_ITEM);
+        NamespacedKey itemKey = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME);
         if(!container.has(key)) return;
-        CustomItem customItem = UniverseItem.getItem(container.get(key, PersistentDataType.STRING));
+        CustomItem customItem = UniverseItem.getItem(container.get(itemKey, PersistentDataType.STRING));
+        e.setCancelled(true);
         if(customItem instanceof Edible foodItem){
-            e.setCancelled(true);
             foodItem.onEat(player);
             UniverseItem.removeItem(player, customItem.getId(), 1);
             int nutrition = player.getFoodLevel();

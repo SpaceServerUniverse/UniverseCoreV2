@@ -1,5 +1,6 @@
 package space.yurisi.universecorev2.item.cooking.ingredients;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import space.yurisi.universecorev2.item.cooking.Edible;
@@ -13,7 +14,7 @@ public final class Carrot extends IngredientItem implements Edible {
         super(
                 Carrot.id,
                 "にんじん",
-                ItemStack.of(org.bukkit.Material.CARROT)
+                ItemStack.of(Material.CARROT)
         );
     }
 
