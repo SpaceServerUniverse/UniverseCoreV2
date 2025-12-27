@@ -89,7 +89,7 @@ public class DepositMoneyAction implements AtomicRollbackableAction {
                 moneyRepository.updateMoney(ownerMoney, -price, "[組戻し]" + reason);
             } catch (UserNotFoundException|MoneyNotFoundException e) {
                 whenRollbackMissingAccountHandler.accept(new MissingAccountContext());
-                throw new InterruptTransactionException("Account not found", e);
+                throw e;
             }
         };
     }

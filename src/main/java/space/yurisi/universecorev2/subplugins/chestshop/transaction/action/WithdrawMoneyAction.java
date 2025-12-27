@@ -111,13 +111,10 @@ public class WithdrawMoneyAction implements AtomicRollbackableAction {
                 api.addMoney(player, price, "[組戻し]" + reason);
             } catch (UserNotFoundException | MoneyNotFoundException e) {
                 whenRollbackMissingAccountHandler.accept(new MissingAccountContext());
-                throw new InterruptTransactionException("Account not found", e);
+                throw e;
             } catch (CanNotAddMoneyException e) {
                 whenRollbackExceededBalanceHandler.accept(new ExceededBalanceContext());
-                throw new InterruptTransactionException("Exceeded balance", e);
-            } catch (ParameterException e) {
-                // 復旧不可能であるが念の為返す。
-                throw new InterruptTransactionException("must not occur");
+                throw e;
             }
         };
     }
