@@ -54,6 +54,7 @@ public class Transaction {
                 rollbackStack.push(actions.poll().execute());
             }
         } catch (InterruptTransactionException e) {
+            logger.info("[tx-{}]Transaction was interrupted: {}", id, e.getMessage());
             while (!rollbackStack.isEmpty()) {
                 try {
                     rollbackStack.pop().execute();
