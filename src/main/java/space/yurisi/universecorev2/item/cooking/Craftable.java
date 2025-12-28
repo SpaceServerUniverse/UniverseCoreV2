@@ -4,8 +4,10 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.jspecify.annotations.Nullable;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
+import space.yurisi.universecorev2.exception.InvalidRecipeException;
 import space.yurisi.universecorev2.exception.NotCookingItemException;
 import space.yurisi.universecorev2.item.CustomItem;
 import space.yurisi.universecorev2.item.UniverseItem;
@@ -17,7 +19,7 @@ public interface Craftable {
      *
      * @return CookingItem[]
      */
-    CookingItem[] getRecipe();
+    CookingItem[] @Nullable getRecipe();
 
     /**
      * レシピが形状付きかどうかを返します
@@ -26,8 +28,10 @@ public interface Craftable {
      */
     boolean isShaped();
 
-    default CookingItem[] toCookingRecipe(CookingItem item, CustomItem[] recipe) throws NotCookingItemException {
+    default CookingItem[] toCookingRecipe(CookingItem item, CustomItem[] recipe) throws InvalidRecipeException {
         CookingItem[] ret = new CookingItem[9];
+        boolean isThrownError = false;
+        InvalidRecipeException exception = new InvalidRecipeException(item.getId());
         for(int j = 0; j <= 8; j++){
             if(recipe[j] == null) {
                 ret[j] = null;
@@ -36,17 +40,21 @@ public interface Craftable {
             if(recipe[j] instanceof CookingItem cookingItem){
                 ret[j] = cookingItem;
             }else{
-                throw new NotCookingItemException(item, j);
+                isThrownError = true;
+                exception.addSuppressed(new NotCookingItemException(item, j));
             }
+        }
+        if(isThrownError){
+            throw exception;
         }
         return ret;
     }
 
-    default boolean isCraftedWith(ItemStack[] recipeToCheck) {
+    default boolean canCraftedWith(ItemStack[] recipeToCheck) {
         if(recipeToCheck.length != 9){
             return false;
         }
-        CookingItem checkedRecipe[] = new CookingItem[9];
+        CookingItem[] checkedRecipe = new CookingItem[9];
         for (int i = 0; i <= 8; i++) {
             ItemStack item = recipeToCheck[i];
             if (item == null) continue;
@@ -58,6 +66,7 @@ public interface Craftable {
             checkedRecipe[i] = cookingItem;
         }
         CookingItem[] recipe = this.getRecipe();
+        if(recipe == null) return false;
         if(this.isShaped()){
             for(int j = 0; j <= 8; j++){
                 CookingItem requiredItem = recipe[j];

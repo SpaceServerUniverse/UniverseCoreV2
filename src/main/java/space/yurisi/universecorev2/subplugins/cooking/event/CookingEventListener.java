@@ -16,7 +16,6 @@ import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.item.cooking.Craftable;
 import space.yurisi.universecorev2.item.cooking.Edible;
 import space.yurisi.universecorev2.item.cooking.FoodBaseItem;
-import space.yurisi.universecorev2.item.cooking.flag.RecipeFlags;
 import space.yurisi.universecorev2.subplugins.cooking.utils.CookingItems;
 
 public class CookingEventListener implements Listener {
@@ -49,7 +48,7 @@ public class CookingEventListener implements Listener {
         FoodBaseItem[] foodBaseItems = CookingItems.getAllCookingItems();
         for(FoodBaseItem foodBaseItem : foodBaseItems){
             if(!(foodBaseItem instanceof Craftable craftable)) continue;
-            if(craftable.isCraftedWith(matrix)){
+            if(craftable.canCraftedWith(matrix)){
                 CustomItem result = UniverseItem.getItem(foodBaseItem.getId());
                 if(result == null) return;
                 e.getInventory().setResult(result.getItem());
