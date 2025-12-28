@@ -19,6 +19,7 @@ public class OreList {
             Material.NETHER_GOLD_ORE,
             Material.ANCIENT_DEBRIS,
             Material.DEEPSLATE_COAL_ORE,
+            Material.DEEPSLATE_COPPER_ORE,
             Material.DEEPSLATE_IRON_ORE,
             Material.DEEPSLATE_GOLD_ORE,
             Material.DEEPSLATE_DIAMOND_ORE,
@@ -29,13 +30,32 @@ public class OreList {
             Material.COPPER_INGOT,
             Material.IRON_INGOT,
             Material.GOLD_INGOT,
+            Material.AMETHYST_CLUSTER,
+            Material.NETHERITE_INGOT,
 
             Material.COPPER_NUGGET,
             Material.IRON_NUGGET,
             Material.GOLD_NUGGET,
-
-            Material.AMETHYST_CLUSTER,
             Material.AMETHYST_SHARD,
-            Material.AMETHYST_BLOCK
+            Material.NETHERITE_SCRAP,
+
+            Material.COAL,
+            Material.DIAMOND,
+            Material.EMERALD,
+            Material.LAPIS_LAZULI,
+            Material.REDSTONE,
+            Material.QUARTZ,
+
+            Material.COAL_BLOCK,
+            Material.COPPER_BLOCK,
+            Material.IRON_BLOCK,
+            Material.GOLD_BLOCK,
+            Material.DIAMOND_BLOCK,
+            Material.EMERALD_BLOCK,
+            Material.LAPIS_BLOCK,
+            Material.REDSTONE_BLOCK,
+            Material.QUARTZ_BLOCK,
+            Material.AMETHYST_BLOCK,
+            Material.NETHERITE_BLOCK
     );
 }
