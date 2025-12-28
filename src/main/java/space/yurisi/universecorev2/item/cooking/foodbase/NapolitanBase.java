@@ -6,6 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.Nullable;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.exception.InvalidRecipeException;
+import space.yurisi.universecorev2.exception.InvalidRecipeSizeException;
 import space.yurisi.universecorev2.item.CustomItem;
 import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.item.cooking.CookingItem;
@@ -36,7 +37,7 @@ public final class NapolitanBase extends FoodBaseItem implements Craftable {
         items[3] = UniverseItem.getItem(Salt.id);
         try {
             this.recipe = this.toCookingRecipe(this, items);
-        }catch (InvalidRecipeException e){
+        }catch (InvalidRecipeException | InvalidRecipeSizeException e){
             UniverseCoreV2.getInstance().getLogger().severe(e.getMessage());
             this.recipe = null;
         }

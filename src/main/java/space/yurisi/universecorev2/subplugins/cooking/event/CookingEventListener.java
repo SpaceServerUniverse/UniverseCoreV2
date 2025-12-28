@@ -45,6 +45,7 @@ public class CookingEventListener implements Listener {
     @EventHandler
     public void onPrepareCraft(PrepareItemCraftEvent e){
         ItemStack[] matrix = e.getInventory().getMatrix();
+        if(matrix.length != 9) return;
         FoodBaseItem[] foodBaseItems = CookingItems.getAllCookingItems();
         for(FoodBaseItem foodBaseItem : foodBaseItems){
             if(!(foodBaseItem instanceof Craftable craftable)) continue;

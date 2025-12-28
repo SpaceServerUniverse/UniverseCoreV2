@@ -8,6 +8,7 @@ import org.jspecify.annotations.Nullable;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.exception.InvalidRecipeException;
+import space.yurisi.universecorev2.exception.InvalidRecipeSizeException;
 import space.yurisi.universecorev2.exception.NotCookingItemException;
 import space.yurisi.universecorev2.item.CustomItem;
 import space.yurisi.universecorev2.item.UniverseItem;
@@ -28,7 +29,10 @@ public interface Craftable {
      */
     boolean isShaped();
 
-    default CookingItem[] toCookingRecipe(CookingItem item, CustomItem[] recipe) throws InvalidRecipeException {
+    default CookingItem[] toCookingRecipe(CookingItem item, CustomItem[] recipe) throws InvalidRecipeSizeException, InvalidRecipeException {
+        if(recipe.length != 9){
+            throw new InvalidRecipeSizeException(recipe.length);
+        }
         CookingItem[] ret = new CookingItem[9];
         boolean isThrownError = false;
         InvalidRecipeException exception = new InvalidRecipeException(item.getId());
