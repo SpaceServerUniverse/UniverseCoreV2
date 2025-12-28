@@ -12,7 +12,7 @@ public final class GreenPepper extends IngredientItem {
         super(
                 GreenPepper.id,
                 "ピーマン",
-                ItemStack.of(Material.POISONOUS_POTATO)
+                ItemStack.of(EDIBLE)
         );
     }
 }

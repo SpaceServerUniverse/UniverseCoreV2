@@ -70,7 +70,6 @@ public interface Craftable {
             checkedRecipe[i] = cookingItem;
         }
         CookingItem[] recipe = this.getRecipe();
-        if(recipe == null) return false;
         if(this.isShaped()){
             for(int j = 0; j <= 8; j++){
                 CookingItem requiredItem = recipe[j];
