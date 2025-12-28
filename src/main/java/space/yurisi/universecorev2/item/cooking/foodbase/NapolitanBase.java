@@ -38,7 +38,7 @@ public final class NapolitanBase extends FoodBaseItem implements Craftable {
         try {
             this.recipe = this.toCookingRecipe(this, items);
         }catch (InvalidRecipeException | InvalidRecipeSizeException e){
-            UniverseCoreV2.getInstance().getLogger().severe(e.getMessage());
+            UniverseCoreV2.getInstance().getLogger().warning(e.getMessage());
             this.recipe = null;
         }
     }
