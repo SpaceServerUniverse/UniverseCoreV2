@@ -1,13 +1,18 @@
 package space.yurisi.universecorev2.menu;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.CustomModelData;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.UniverseCoreV2API;
+import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.database.DatabaseManager;
 import space.yurisi.universecorev2.database.models.User;
 import space.yurisi.universecorev2.database.repositories.CustomNameRepository;
@@ -83,9 +88,11 @@ public class MainMenu implements BaseMenu {
         if (ammoMeta != null) {
             ammoMeta.setDisplayName("弾薬");
             ammoMeta.setLore(List.of("§6弾薬を購入・クラフトします"));
-            ammoMeta.setCustomModelData(1);
+            ammoMeta.setItemModel(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN_ITEM_MODEL));
             ammoItem.setItemMeta(ammoMeta);
         }
+        CustomModelData modelData = CustomModelData.customModelData().addString("ammoporch").build();
+        ammoItem.setData(DataComponentTypes.CUSTOM_MODEL_DATA, modelData);
         Item executeAmmo = new CommandItem(new ItemBuilder(ammoItem), "/ammo");
         Item executeReceive = new CommandItem(new ItemBuilder(Material.CHEST)
                 .setDisplayName("報酬受け取り")

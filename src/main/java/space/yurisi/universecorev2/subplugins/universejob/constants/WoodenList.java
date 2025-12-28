@@ -2,9 +2,12 @@ package space.yurisi.universecorev2.subplugins.universejob.constants;
 
 import org.bukkit.Material;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 public class WoodenList {
 
-    public static final Material[] WOODEN_MATERIALS = {
+    public static final Set<Material> WOODEN_MATERIALS = EnumSet.of(
             Material.OAK_LOG,
             Material.SPRUCE_LOG,
             Material.BIRCH_LOG,
@@ -49,5 +52,5 @@ public class WoodenList {
             Material.DARK_OAK_PLANKS,
             Material.MANGROVE_PLANKS,
             Material.CHERRY_PLANKS
-    };
+    );
 }
