@@ -13,7 +13,7 @@ public class EventManager {
     }
 
     private void init(UniverseCoreV2 core, UniverseSlot main) {
-        Bukkit.getPluginManager().registerEvents(new ShelfInteractEvent(main), core);
-        Bukkit.getPluginManager().registerEvents(new LogoutEvent(main), core);
+        core.getServer().getPluginManager().registerEvents(new ShelfInteractEvent(main), core);
+        core.getServer().getPluginManager().registerEvents(new LogoutEvent(main), core);
     }
 }
