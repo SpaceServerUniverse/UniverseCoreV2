@@ -46,7 +46,7 @@ public class RemoveItemAction implements AtomicAction {
 
     /**
      * アイテムの削除を実行する
-     * @implNote 補償時にインベントリの配置が戻ることまでは保証されない
+     * <p>補償時にインベントリの配置が戻ることまでは保証されない</p>
      * @return 補償処理(アイテムの追加)
      * @throws InterruptTransactionException インベントリに十分な量の指定アイテムがなかった場合
      */
