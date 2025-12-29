@@ -14,8 +14,10 @@ import java.util.function.Consumer;
 
 /**
  * 指定したプレイヤーの口座から指定額を引き落とすアクション
+ * <p>指定額を引き落とすことができなかった場合には
+ * {@link InterruptTransactionException}を投げて実行前の状態を維持する</p>
  */
-public class WithdrawMoneyAction implements AtomicRollbackableAction {
+public class WithdrawMoneyAction implements AtomicAction {
     private final @NotNull UniverseEconomyAPI api;
     private final @NotNull Player player;
     private final @NotNull Long price;
@@ -91,8 +93,13 @@ public class WithdrawMoneyAction implements AtomicRollbackableAction {
         return this;
     }
 
+    /**
+     * 引き出しを実行します
+     * @return 補償処理(組戻し)
+     * @throws InterruptTransactionException 口座不在、または残高不足による引き落としの失敗の場合
+     */
     @Override
-    public @NotNull RollbackFunc execute() throws InterruptTransactionException {
+    public @NotNull Compensation execute() throws InterruptTransactionException {
         try {
             api.reduceMoney(player, price, reason);
         } catch (UserNotFoundException | MoneyNotFoundException e) {

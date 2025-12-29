@@ -9,9 +9,11 @@ import space.yurisi.universecorev2.subplugins.chestshop.transaction.InterruptTra
 import java.util.function.Consumer;
 
 /**
- * 指定したアイテムスタックを指定数量分だけインベントリから削除するアクション
+ * インベントリからのアイテムの削除を原子的に行うアクション
+ * <p>インベントリから全数量が削除できない場合、処理を実行せず
+ * {@link InterruptTransactionException}を投げて実行前の状態を維持する</p>
  */
-public class RemoveItemAction implements AtomicRollbackableAction {
+public class RemoveItemAction implements AtomicAction {
     private final @NotNull Inventory inventory;
     private final @NotNull ItemStack item;
 
@@ -42,8 +44,14 @@ public class RemoveItemAction implements AtomicRollbackableAction {
         return this;
     }
 
+    /**
+     * アイテムの削除を実行する
+     * @implNote 補償時にインベントリの配置が戻ることまでは保証されない
+     * @return 補償処理(アイテムの追加)
+     * @throws InterruptTransactionException インベントリに十分な量の指定アイテムがなかった場合
+     */
     @Override
-    public @NonNull RollbackFunc execute() throws InterruptTransactionException {
+    public @NonNull Compensation execute() throws InterruptTransactionException {
         if (!inventory.containsAtLeast(item, item.getAmount())) {
             whenInsufficientItemHandler.accept(new InsufficientItemContext(inventory, item));
             throw new InterruptTransactionException("Insufficient item in inventory");

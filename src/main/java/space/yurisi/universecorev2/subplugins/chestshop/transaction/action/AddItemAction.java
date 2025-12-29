@@ -10,9 +10,11 @@ import java.util.HashMap;
 import java.util.function.Consumer;
 
 /**
- * 指定したアイテムスタックを指定数量分だけインベントリに追加するアクション
+ * インベントリへのアイテムの追加を原子的に行うアクション
+ * <p>インベントリに全数量が追加できなかった場合、追加した分を削除し
+ * {@link InterruptTransactionException}を投げて実行前の状態を維持する</p>
  */
-public class AddItemAction implements AtomicRollbackableAction {
+public class AddItemAction implements AtomicAction {
     private @NotNull final Inventory inventory;
     private @NotNull final ItemStack item;
 
@@ -38,8 +40,14 @@ public class AddItemAction implements AtomicRollbackableAction {
         return this;
     }
 
+    /**
+     *
+     * @implNote 実行失敗時と補償時にインベントリの配置が戻ることまでは保証されない
+     * @return 補償処理(アイテムの削除)
+     * @throws InterruptTransactionException インベントリにアイテムを追加する余裕がなかった場合
+     */
     @Override
-    public @NonNull RollbackFunc execute() throws InterruptTransactionException {
+    public @NonNull Compensation execute() throws InterruptTransactionException {
         HashMap<Integer, ItemStack> leftover = inventory.addItem(item.clone());
 
         if (!leftover.isEmpty()) {

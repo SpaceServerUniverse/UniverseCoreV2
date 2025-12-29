@@ -13,9 +13,11 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 /**
- * 指定したユーザーの口座にお金を振り込むアクション
+ * 指定したプレイヤーの口座に指定額を振り込むアクション
+ * <p>指定額を振り込むことができなかった場合には
+ * {@link InterruptTransactionException}を投げて実行前の状態を維持する</p>
  */
-public class DepositMoneyAction implements AtomicRollbackableAction {
+public class DepositMoneyAction implements AtomicAction {
     private final @NotNull UserRepository userRepository;
     private final @NotNull MoneyRepository moneyRepository;
     private final @NotNull UUID uuid;
@@ -70,7 +72,7 @@ public class DepositMoneyAction implements AtomicRollbackableAction {
     }
 
     @Override
-    public @NotNull RollbackFunc execute() throws InterruptTransactionException {
+    public @NotNull Compensation execute() throws InterruptTransactionException {
         try {
             User owner = userRepository.getUserFromUUID(uuid);
             Money ownerMoney = moneyRepository.getMoneyFromUserId(owner.getId());
