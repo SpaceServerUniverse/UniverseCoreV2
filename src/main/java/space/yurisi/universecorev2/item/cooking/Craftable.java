@@ -1,17 +1,24 @@
 package space.yurisi.universecorev2.item.cooking;
 
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jspecify.annotations.Nullable;
 import space.yurisi.universecorev2.UniverseCoreV2;
+import space.yurisi.universecorev2.UniverseCoreV2API;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
+import space.yurisi.universecorev2.database.models.CookingRecipe;
+import space.yurisi.universecorev2.exception.CookingRecipeNotFoundException;
 import space.yurisi.universecorev2.exception.InvalidRecipeException;
 import space.yurisi.universecorev2.exception.InvalidRecipeSizeException;
 import space.yurisi.universecorev2.exception.NotCookingItemException;
 import space.yurisi.universecorev2.item.CustomItem;
 import space.yurisi.universecorev2.item.UniverseItem;
+import space.yurisi.universecorev2.subplugins.cooking.utils.RecipeFlagOps;
+
+import java.util.UUID;
 
 public interface Craftable {
 
@@ -28,6 +35,13 @@ public interface Craftable {
      * @return boolean
      */
     boolean isShaped();
+
+    /**
+     * レシピのフラグIDを返します
+     *
+     * @return int
+     */
+    int getFlagId();
 
     default CookingItem[] toCookingRecipe(CookingItem item, CustomItem[] recipe) throws InvalidRecipeSizeException, InvalidRecipeException {
         if(recipe.length != 9){
@@ -54,8 +68,14 @@ public interface Craftable {
         return ret;
     }
 
-    default boolean canCraftedWith(ItemStack[] recipeToCheck) {
+    default boolean canCraftedWith(ItemStack[] recipeToCheck, UUID uuid) {
         if(recipeToCheck.length != 9){
+            return false;
+        }
+        try {
+            byte[] flags = UniverseCoreV2API.getInstance().getDatabaseManager().getCookingRecipeRepository().getRecipeFlagsFromPlayer(uuid.toString());
+            if(!RecipeFlagOps.contains(RecipeFlagOps.fromBytes(flags), this.getFlagId())) return false;
+        } catch (CookingRecipeNotFoundException e) {
             return false;
         }
         CookingItem[] checkedRecipe = new CookingItem[9];

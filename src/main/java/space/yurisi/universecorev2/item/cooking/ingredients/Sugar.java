@@ -12,7 +12,7 @@ public final class Sugar extends IngredientItem {
         super(
                 Sugar.id,
                 "砂糖",
-                ItemStack.of(Material.SUGAR)
+                ItemStack.of(INEDIBLE)
         );
     }
 }

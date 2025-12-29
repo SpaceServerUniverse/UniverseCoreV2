@@ -12,7 +12,7 @@ public final class Shimeji extends IngredientItem {
         super(
                 id,
                 "しめじ",
-                ItemStack.of(Material.BROWN_MUSHROOM)
+                ItemStack.of(EDIBLE)
         );
     }
 }

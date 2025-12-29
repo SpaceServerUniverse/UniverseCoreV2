@@ -12,7 +12,7 @@ public final class RawPork extends IngredientItem {
         super(
                 RawPork.id,
                 "生の豚肉",
-                ItemStack.of(Material.PORKCHOP)
+                ItemStack.of(INEDIBLE)
         );
     }
 }

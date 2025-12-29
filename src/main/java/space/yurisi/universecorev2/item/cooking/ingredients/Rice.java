@@ -12,7 +12,7 @@ public final class Rice extends IngredientItem {
         super(
                 Rice.id,
                 "米",
-                ItemStack.of(Material.SUGAR)
+                ItemStack.of(INEDIBLE)
         );
     }
 }

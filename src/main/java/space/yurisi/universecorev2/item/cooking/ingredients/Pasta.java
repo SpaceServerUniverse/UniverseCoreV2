@@ -12,7 +12,7 @@ public final class Pasta extends IngredientItem {
         super(
                 Pasta.id,
                 "パスタ",
-                ItemStack.of(Material.SEA_PICKLE)
+                ItemStack.of(INEDIBLE)
         );
     }
 }

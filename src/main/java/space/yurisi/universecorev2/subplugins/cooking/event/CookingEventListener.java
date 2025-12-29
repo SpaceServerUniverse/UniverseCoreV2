@@ -6,19 +6,35 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import space.yurisi.universecorev2.UniverseCoreV2;
+import space.yurisi.universecorev2.UniverseCoreV2API;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
+import space.yurisi.universecorev2.database.models.CookingRecipe;
+import space.yurisi.universecorev2.database.repositories.CookingRecipeRepository;
+import space.yurisi.universecorev2.exception.CookingRecipeNotFoundException;
 import space.yurisi.universecorev2.item.CustomItem;
 import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.item.cooking.Craftable;
 import space.yurisi.universecorev2.item.cooking.Edible;
 import space.yurisi.universecorev2.item.cooking.FoodBaseItem;
 import space.yurisi.universecorev2.subplugins.cooking.utils.CookingItems;
+import space.yurisi.universecorev2.subplugins.cooking.utils.RecipeFlagOps;
 
 public class CookingEventListener implements Listener {
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent e){
+        String uuid = e.getPlayer().getUniqueId().toString();
+        try {
+            UniverseCoreV2API.getInstance().getDatabaseManager().getCookingRecipeRepository().getRecipeFlagsFromPlayer(uuid);
+        }catch (CookingRecipeNotFoundException exception){
+            UniverseCoreV2API.getInstance().getDatabaseManager().getCookingRecipeRepository().createCookingRecipe(uuid, RecipeFlagOps.empty().toByteArray());
+        }
+    }
 
     @EventHandler
     public void onFoodEat(PlayerItemConsumeEvent e){
@@ -49,7 +65,7 @@ public class CookingEventListener implements Listener {
         FoodBaseItem[] foodBaseItems = CookingItems.getAllCookingItems();
         for(FoodBaseItem foodBaseItem : foodBaseItems){
             if(!(foodBaseItem instanceof Craftable craftable)) continue;
-            if(craftable.canCraftedWith(matrix)){
+            if(craftable.canCraftedWith(matrix, e.getView().getPlayer().getUniqueId())){
                 CustomItem result = UniverseItem.getItem(foodBaseItem.getId());
                 if(result == null) return;
                 e.getInventory().setResult(result.getItem());

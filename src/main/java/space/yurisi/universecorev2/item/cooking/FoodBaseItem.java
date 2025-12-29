@@ -11,10 +11,8 @@ import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 
 public abstract class FoodBaseItem extends CookingItem {
 
-    protected static final Material BURNABLE = Material.BREAD;
-
-    protected FoodBaseItem(String id, String name, ItemStack baseItem) {
-        super(id, name, baseItem);
+    protected FoodBaseItem(String id, String name) {
+        super(id, name, ItemStack.of(Material.COBBLESTONE));
     }
 
     @Override

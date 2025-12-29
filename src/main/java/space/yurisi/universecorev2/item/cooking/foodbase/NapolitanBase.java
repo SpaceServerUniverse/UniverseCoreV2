@@ -7,6 +7,7 @@ import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.item.cooking.CookingItem;
 import space.yurisi.universecorev2.item.cooking.Craftable;
 import space.yurisi.universecorev2.item.cooking.FoodBaseItem;
+import space.yurisi.universecorev2.item.cooking.flag.RecipeIds;
 import space.yurisi.universecorev2.item.cooking.ingredients.GreenPepper;
 import space.yurisi.universecorev2.item.cooking.ingredients.Pasta;
 import space.yurisi.universecorev2.item.cooking.ingredients.Salt;
@@ -21,8 +22,7 @@ public final class NapolitanBase extends FoodBaseItem implements Craftable {
     public NapolitanBase(){
         super(
                 NapolitanBase.id,
-                "ナポリタンの素",
-                ItemStack.of(Material.RABBIT_STEW)
+                "ナポリタンの素"
         );
 
         CustomItem[] items = new CustomItem[9];
@@ -41,5 +41,10 @@ public final class NapolitanBase extends FoodBaseItem implements Craftable {
     @Override
     public boolean isShaped() {
         return false;
+    }
+
+    @Override
+    public int getFlagId() {
+        return RecipeIds.NAPOLITAN;
     }
 }

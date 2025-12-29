@@ -12,7 +12,7 @@ public final class RawBeef extends IngredientItem {
         super(
                 RawBeef.id,
                 "生の牛肉",
-                ItemStack.of(Material.BEEF)
+                ItemStack.of(INEDIBLE)
         );
     }
 }

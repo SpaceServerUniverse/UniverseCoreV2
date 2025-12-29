@@ -12,7 +12,7 @@ public final class Salt extends IngredientItem {
         super(
                 Salt.id,
                 "塩",
-                ItemStack.of(Material.SUGAR)
+                ItemStack.of(INEDIBLE)
         );
     }
 }
