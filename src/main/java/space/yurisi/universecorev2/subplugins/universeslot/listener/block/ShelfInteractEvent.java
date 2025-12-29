@@ -36,7 +36,6 @@ public class ShelfInteractEvent implements Listener {
     @EventHandler
     public void onInteractShelf(PlayerInteractEvent playerInteractEvent) {
         Player player = playerInteractEvent.getPlayer();
-        if (playerInteractEvent.getHand() != EquipmentSlot.HAND) return;
 
         if(playerInteractEvent.getClickedBlock() == null) {
             return;
@@ -54,7 +53,7 @@ public class ShelfInteractEvent implements Listener {
 
         // slot編集モード
         if(main.getPlayerStatusManager().hasFlag(player.getUniqueId(), PlayerStatusManager.ON_EDIT_MODE)){
-            player.sendMessage("ddd");
+            if (playerInteractEvent.getHand() != EquipmentSlot.HAND) return;
             if(!shelf.getInventory().isEmpty()){
                 Message.sendErrorMessage(player, "[スロットAI]", "棚が空ではないためスロットにできません。");
                 return;
@@ -90,6 +89,7 @@ public class ShelfInteractEvent implements Listener {
                 shelf.getInventory().setItem(0, UniverseSlot.getInstance().getSlotRotateManager().getRandomRotateItem());
                 shelf.getInventory().setItem(1, UniverseSlot.getInstance().getSlotRotateManager().getRandomRotateItem());
                 shelf.getInventory().setItem(2, UniverseSlot.getInstance().getSlotRotateManager().getRandomRotateItem());
+                playerInteractEvent.setCancelled(true);
 
             } catch (UserNotFoundException e) {
                 return;
@@ -115,6 +115,7 @@ public class ShelfInteractEvent implements Listener {
         if(playerStatusManager.hasPlayerSlotCore(player.getUniqueId())){
             return;
         }
+        playerInteractEvent.setCancelled(true);
 
         if(slotStatusManager.isInUse(location)){
             Message.sendErrorMessage(player, "[スロットAI]", "このスロットは他のプレイヤーによって使用中です。");
@@ -134,6 +135,7 @@ public class ShelfInteractEvent implements Listener {
         if (!(event.getWhoClicked() instanceof Player player)) {
             return;
         }
+        player.sendMessage("aaa");
 
         if (!(event.getInventory().getHolder() instanceof Shelf shelf)) {
             return;
@@ -153,6 +155,7 @@ public class ShelfInteractEvent implements Listener {
         if(!playerStatusManager.hasPlayerSlotCore(player.getUniqueId())){
             return;
         }
+
 
         SlotCore slotCore = playerStatusManager.getPlayerSlotCore(player.getUniqueId());
 

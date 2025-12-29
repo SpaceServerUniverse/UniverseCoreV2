@@ -80,8 +80,8 @@ public class SlotCore {
         };
 
         rotateTaskSlot1.runTaskTimer(UniverseCoreV2.getInstance(), 0L, SlotRotateManager.ROTATE_INTERVAL);
-        rotateTaskSlot2.runTaskTimer(UniverseCoreV2.getInstance(), 0L, SlotRotateManager.ROTATE_INTERVAL);
-        rotateTaskSlot3.runTaskTimer(UniverseCoreV2.getInstance(), 0L, SlotRotateManager.ROTATE_INTERVAL);
+        rotateTaskSlot2.runTaskTimer(UniverseCoreV2.getInstance(), 2L, SlotRotateManager.ROTATE_INTERVAL);
+        rotateTaskSlot3.runTaskTimer(UniverseCoreV2.getInstance(), 4L, SlotRotateManager.ROTATE_INTERVAL);
         slotStatusManager.addFlag(location, SlotStatusManager.LANE1_SPINNING);
         slotStatusManager.addFlag(location, SlotStatusManager.LANE2_SPINNING);
         slotStatusManager.addFlag(location, SlotStatusManager.LANE3_SPINNING);

@@ -11,6 +11,7 @@ import space.yurisi.universecorev2.subplugins.universeslot.UniverseSlot;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 public class SlotRotateManager {
 
@@ -25,7 +26,8 @@ public class SlotRotateManager {
         return rotateItems;
     }
     public ItemStack getRandomRotateItem() {
-        int randomIndex = (int) (Math.random() * rotateItems.size());
+        Random random = new Random();
+        int randomIndex = (random.nextInt(rotateItems.size()));
         return rotateItems.get(randomIndex);
     }
 
