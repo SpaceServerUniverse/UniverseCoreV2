@@ -154,3 +154,7 @@ commands:
   #job
   job:
     description: 仕事メニューを開きます
+
+  #slot
+  slot:
+    description: スロットマシンを設定します
