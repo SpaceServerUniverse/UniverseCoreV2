@@ -41,8 +41,9 @@ public class AddItemAction implements AtomicAction {
     }
 
     /**
+     * アイテムを追加する。
+     * <p>実行失敗時と補償時にインベントリの配置が戻ることまでは保証されない</p>
      *
-     * @implNote 実行失敗時と補償時にインベントリの配置が戻ることまでは保証されない
      * @return 補償処理(アイテムの削除)
      * @throws InterruptTransactionException インベントリにアイテムを追加する余裕がなかった場合
      */
