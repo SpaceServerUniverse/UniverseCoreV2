@@ -32,6 +32,7 @@ import space.yurisi.universecorev2.subplugins.chestshop.transaction.action.Remov
 import space.yurisi.universecorev2.subplugins.chestshop.utils.ItemUtils;
 import space.yurisi.universecorev2.subplugins.chestshop.utils.SuperMessageHelper;
 import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomyAPI;
+import space.yurisi.universecorev2.subplugins.universejob.util.MarketPriceChanger;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -81,7 +82,7 @@ public class InteractEvent implements Listener {
 
                     ArrayList<String> notes = new ArrayList<>();
                     Transaction tx = Transaction.create(logger)
-                            .then(new WithdrawMoneyAction(universeEconomyAPI, player, chestShop.getPrice(), "チェストショップでの購入:" + ItemUtils.name(itemStack) + ":" + itemStack.getAmount())
+                            .then(new WithdrawMoneyAction(universeEconomyAPI, player, MarketPriceChanger.purchaserPriceChanger(player, itemStack, chestShop.getPrice()), "チェストショップでの購入:" + ItemUtils.name(itemStack) + ":" + itemStack.getAmount())
                                     .whenMissingAccount(ctx -> notes.add("購入者の口座が見つかりませんでした"))
                                     .whenInsufficientBalance(ctx -> notes.add("お金が不足しています"))
                                     .whenRollbackMissingAccount(ctx -> notes.add("購入者の口座が見つかりませんでした"))
@@ -93,7 +94,7 @@ public class InteractEvent implements Listener {
                             .then(new RemoveItemAction(chest.getInventory(), itemStack)
                                     .whenInsufficientItem(ctx -> notes.add("チェスト内の在庫が不足しています"))
                             )
-                            .then(new DepositMoneyAction(userRepository, moneyRepository, UUID.fromString(chestShop.getUuid()), chestShop.getPrice(), "チェストショップでの売却:" + ItemUtils.name(itemStack) + ":" + itemStack.getAmount())
+                            .then(new DepositMoneyAction(userRepository, moneyRepository, UUID.fromString(chestShop.getUuid()), MarketPriceChanger.sellerPriceChanger(chestShop.getUuid(), itemStack, chestShop.getPrice()), "チェストショップでの売却:" + ItemUtils.name(itemStack) + ":" + itemStack.getAmount())
                                     .whenMissingAccount(ctx -> notes.add("販売者の口座が見つかりませんでした"))
                                     .whenRollbackMissingAccount(ctx -> notes.add("組戻し失敗: 販売者の講座が見つまりません"))
                             );
