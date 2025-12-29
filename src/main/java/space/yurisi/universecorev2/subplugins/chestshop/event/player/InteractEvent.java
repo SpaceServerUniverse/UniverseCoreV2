@@ -14,28 +14,32 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.jspecify.annotations.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import space.yurisi.universecorev2.UniverseCoreV2API;
 import space.yurisi.universecorev2.database.models.ChestShop;
 import space.yurisi.universecorev2.database.repositories.ChestShopRepository;
 import space.yurisi.universecorev2.database.repositories.MoneyRepository;
 import space.yurisi.universecorev2.database.repositories.UserRepository;
 import space.yurisi.universecorev2.exception.ChestShopNotFoundException;
+import space.yurisi.universecorev2.subplugins.chestshop.transaction.InconsistentTransactionException;
 import space.yurisi.universecorev2.subplugins.chestshop.transaction.Transaction;
-import space.yurisi.universecorev2.subplugins.chestshop.transaction.TransactionException;
+import space.yurisi.universecorev2.subplugins.chestshop.transaction.InterruptTransactionException;
 import space.yurisi.universecorev2.subplugins.chestshop.transaction.action.AddItemAction;
-import space.yurisi.universecorev2.subplugins.chestshop.transaction.action.AddMoneyAction;
-import space.yurisi.universecorev2.subplugins.chestshop.transaction.action.ReduceMoneyAction;
+import space.yurisi.universecorev2.subplugins.chestshop.transaction.action.DepositMoneyAction;
+import space.yurisi.universecorev2.subplugins.chestshop.transaction.action.WithdrawMoneyAction;
 import space.yurisi.universecorev2.subplugins.chestshop.transaction.action.RemoveItemAction;
 import space.yurisi.universecorev2.subplugins.chestshop.utils.ItemUtils;
 import space.yurisi.universecorev2.subplugins.chestshop.utils.SuperMessageHelper;
 import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomyAPI;
 import space.yurisi.universecorev2.subplugins.universejob.util.MarketPriceChanger;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class InteractEvent implements Listener {
+    private static final Logger logger = LoggerFactory.getLogger(InteractEvent.class);
+
     @EventHandler
     public void onInteractEvent(PlayerInteractEvent event) {
 
@@ -76,17 +80,33 @@ public class InteractEvent implements Listener {
                         return;
                     }
 
-                    Transaction tx = Transaction.create()
-                            .then(new ReduceMoneyAction(universeEconomyAPI, player, MarketPriceChanger.purchaserPriceChanger(player, itemStack, chestShop.getPrice()), "チェストショップでの購入:" + ItemUtils.name(itemStack) + ":" + itemStack.getAmount()))
-                            .then(new AddItemAction(player.getInventory(), itemStack))
-                            .then(new RemoveItemAction(chest.getInventory(), itemStack))
-                            .then(new AddMoneyAction(userRepository, moneyRepository, UUID.fromString(chestShop.getUuid()), MarketPriceChanger.sellerPriceChanger(chestShop.getUuid(), itemStack, chestShop.getPrice()), "チェストショップでの売却:" + ItemUtils.name(itemStack) + ":" + itemStack.getAmount()));
-
+                    ArrayList<String> notes = new ArrayList<>();
+                    Transaction tx = Transaction.create(logger)
+                            .then(new WithdrawMoneyAction(universeEconomyAPI, player, MarketPriceChanger.purchaserPriceChanger(player, itemStack, chestShop.getPrice()), "チェストショップでの購入:" + ItemUtils.name(itemStack) + ":" + itemStack.getAmount())
+                                    .whenMissingAccount(ctx -> notes.add("購入者の口座が見つかりませんでした"))
+                                    .whenInsufficientBalance(ctx -> notes.add("お金が不足しています"))
+                                    .whenRollbackMissingAccount(ctx -> notes.add("購入者の口座が見つかりませんでした"))
+                                    .whenRollbackExceededBalance(ctx -> notes.add("組戻し失敗: 購入者の口座上限です"))
+                            )
+                            .then(new AddItemAction(player.getInventory(), itemStack)
+                                    .whenNoSpaceLeft(ctx -> notes.add("インベントリーがいっぱいです"))
+                            )
+                            .then(new RemoveItemAction(chest.getInventory(), itemStack)
+                                    .whenInsufficientItem(ctx -> notes.add("チェスト内の在庫が不足しています"))
+                            )
+                            .then(new DepositMoneyAction(userRepository, moneyRepository, UUID.fromString(chestShop.getUuid()), MarketPriceChanger.sellerPriceChanger(chestShop.getUuid(), itemStack, chestShop.getPrice()), "チェストショップでの売却:" + ItemUtils.name(itemStack) + ":" + itemStack.getAmount())
+                                    .whenMissingAccount(ctx -> notes.add("販売者の口座が見つかりませんでした"))
+                                    .whenRollbackMissingAccount(ctx -> notes.add("組戻し失敗: 販売者の講座が見つまりません"))
+                            );
                     try {
                         tx.commit();
-                    } catch (TransactionException e) {
-                        SuperMessageHelper.sendErrorMessage(player, formatErrorMessage(e));
+                    } catch (InterruptTransactionException e) {
+                        for (String note: notes) {
+                            SuperMessageHelper.sendErrorMessage(player, note);
+                        }
                         return;
+                    } catch (InconsistentTransactionException e) {
+                        Bukkit.shutdown();
                     }
 
                     SuperMessageHelper.sendSuccessMessage(player, "チェストショップから" + ItemUtils.name(itemStack) + "を" + itemStack.getAmount() + "こ購入しました");
@@ -94,19 +114,5 @@ public class InteractEvent implements Listener {
                 }
             }
         }
-    }
-
-    private static @NonNull String formatErrorMessage(TransactionException e) {
-        List<String> messages = new java.util.ArrayList<>();
-        messages.add(e.getFriendlyMessage());
-        for (Throwable suppressed: e.getSuppressed()) {
-            if (suppressed instanceof TransactionException txException) {
-                messages.add(txException.getFriendlyMessage());
-            } else {
-                messages.add(suppressed.getMessage());
-            }
-        }
-
-        return String.join("\n + ", messages);
     }
 }
