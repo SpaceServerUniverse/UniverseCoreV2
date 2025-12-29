@@ -1,5 +1,6 @@
 package space.yurisi.universecorev2.subplugins.universeslot.listener;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.subplugins.universeslot.UniverseSlot;

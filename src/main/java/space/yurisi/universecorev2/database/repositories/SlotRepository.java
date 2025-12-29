@@ -58,7 +58,7 @@ public class SlotRepository {
                             Slot.class
                     )
                     .setParameter("uuid", player.getUniqueId().toString())
-                    .getSingleResult();
+                    .uniqueResult();
             session.getTransaction().commit();
 
             if(slot == null){
@@ -86,14 +86,14 @@ public class SlotRepository {
         try {
             session.beginTransaction();
             Slot slot = session.createSelectionQuery(
-                            "from Slot where x = :x and y = :y and z = :z and world_name = :world_name",
+                            "FROM Slot WHERE x = :x AND y = :y AND z = :z AND world_name = :world_name",
                             Slot.class
                     )
                     .setParameter("x", x)
                     .setParameter("y", y)
                     .setParameter("z", z)
                     .setParameter("world_name", world_name)
-                    .getSingleResult();
+                    .uniqueResult();
             session.getTransaction().commit();
 
             if(slot == null){
