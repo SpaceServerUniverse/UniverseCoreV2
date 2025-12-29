@@ -74,6 +74,7 @@ public class DepositMoneyAction implements AtomicAction {
     @Override
     public @NotNull Compensation execute() throws InterruptTransactionException {
         try {
+            // FIXME: ここでトランザクション使ってないからレースコンディション起こりそう。UniverseEconomyAPI が UUID も受け取れるようにしたほうがいいかも？
             User owner = userRepository.getUserFromUUID(uuid);
             Money ownerMoney = moneyRepository.getMoneyFromUserId(owner.getId());
             ownerMoney.setMoney(ownerMoney.getMoney() + price);
