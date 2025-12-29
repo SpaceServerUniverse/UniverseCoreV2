@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Shelf;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -34,17 +35,24 @@ public class ShelfInteractEvent implements Listener {
         this.main = main;
     }
 
+    @EventHandler
     public void onInteractShelf(PlayerInteractEvent playerInteractEvent, InventoryClickEvent inventoryClickEvent) {
         Player player = playerInteractEvent.getPlayer();
         if (playerInteractEvent.getHand() != EquipmentSlot.HAND) return;
+
+        player.sendMessage("aaa");
 
         if(playerInteractEvent.getClickedBlock() == null) {
             return;
         }
 
+        player.sendMessage("bbbb");
+
         if(!(playerInteractEvent.getClickedBlock().getType().toString().contains("SHELF"))) {
             return;
         }
+
+        player.sendMessage("ccc");
 
         Shelf shelf = (Shelf) playerInteractEvent.getClickedBlock();
 
@@ -55,6 +63,7 @@ public class ShelfInteractEvent implements Listener {
 
         // slot編集モード
         if(main.getPlayerStatusManager().hasFlag(player.getUniqueId(), PlayerStatusManager.ON_EDIT_MODE)){
+            player.sendMessage("ddd");
             if(!shelf.getInventory().isEmpty()){
                 Message.sendErrorMessage(player, "[スロットAI]", "棚が空ではないためスロットにできません。");
                 return;
