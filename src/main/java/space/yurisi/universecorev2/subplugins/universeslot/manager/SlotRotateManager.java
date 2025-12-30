@@ -26,7 +26,8 @@ public class SlotRotateManager {
         return rotateItemsLane1;
     }
     public ItemStack getRandomRotateItem() {
-        int randomIndex = (int) (Math.random() * rotateItemsLane1.size());
+        Random random = new Random();
+        int randomIndex = random.nextInt(rotateItemsLane1.size());
         return rotateItemsLane1.get(randomIndex);
     }
 
