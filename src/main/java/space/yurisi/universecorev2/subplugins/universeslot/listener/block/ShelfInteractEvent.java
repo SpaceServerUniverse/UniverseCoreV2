@@ -53,6 +53,7 @@ public class ShelfInteractEvent implements Listener {
 
         // slot編集モード
         if(main.getPlayerStatusManager().hasFlag(player.getUniqueId(), PlayerStatusManager.ON_EDIT_MODE)){
+            if (playerInteractEvent.getHand() != EquipmentSlot.HAND) return;
             playerInteractEvent.setCancelled(true);
             if(!shelf.getInventory().isEmpty()){
                 Message.sendErrorMessage(player, "[スロットAI]", "棚が空ではないためスロットにできません。");

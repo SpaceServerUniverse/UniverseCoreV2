@@ -11,6 +11,7 @@ import space.yurisi.universecorev2.subplugins.universeslot.UniverseSlot;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 public class SlotRotateManager {
 
