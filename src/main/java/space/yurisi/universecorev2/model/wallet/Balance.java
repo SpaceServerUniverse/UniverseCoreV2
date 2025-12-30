@@ -1,7 +1,5 @@
 package space.yurisi.universecorev2.model.wallet;
 
-import java.util.Optional;
-
 /**
  * 金額を表すための値オブジェクト
  */
@@ -27,19 +25,20 @@ public record Balance(long value) {
         return new Balance(value);
     }
 
-    public static Optional<Balance> maybe(long value) {
+    public static BalanceResult maybe(long value) {
         if (isOutOfRange(value)) {
-            return Optional.empty();
+            return new BalanceResult.Err();
         }
 
-        return Optional.of(new Balance(value));
+        return new BalanceResult.Ok(new Balance(value));
     }
 
-    public Optional<Balance> add(TransactionDelta other) {
-        return Balance.maybe(this.value + other.value());
+    public BalanceResult add(TransactionDelta delta) {
+        return maybe(value + delta.value());
     }
 
-    public Optional<Balance> subtract(TransactionDelta other) {
-        return Balance.maybe(this.value - other.value());
+
+    public BalanceResult subtract(TransactionDelta delta) {
+        return maybe(value - delta.value());
     }
 }
