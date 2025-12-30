@@ -17,12 +17,11 @@ public class LogoutEvent implements Listener {
     @EventHandler
     public void onLogout(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        if(player == null) {
-            return;
-        }
+
+        // スロット中なら停止
         if(main.getPlayerStatusManager().hasPlayerSlotCore(player.getUniqueId())){
             main.getPlayerStatusManager().getPlayerSlotCore(player.getUniqueId()).stopSlotMachine();
+            main.getPlayerStatusManager().removePlayerSlotCore(player.getUniqueId());
         }
-
     }
 }

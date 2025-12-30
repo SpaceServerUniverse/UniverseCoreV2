@@ -57,7 +57,7 @@ public class ShelfInteractEvent implements Listener {
 
             LandDataManager landDataManager = LandDataManager.getInstance();
             if(!landDataManager.canAccess(player, new BoundingBox(shelf.getX(), shelf.getZ(), shelf.getX(), shelf.getZ(), shelf.getWorld().getName()))){
-                Message.sendErrorMessage(player, "[スロットAI]", "あなたの土地ではないためスロットに出来ません。");
+                Message.sendErrorMessage(player, "[スロットAI]", "あなたの土地ではないため編集できません。");
                 return;
             }
 
@@ -66,8 +66,10 @@ public class ShelfInteractEvent implements Listener {
             main.getPlayerStatusManager().removeFlag(player.getUniqueId(), PlayerStatusManager.ON_EDIT_MODE);
 
             try{
+                // ここで例外吐いたらスロットではない
                 slot = slotRepository.getSlotFromCoordinates((long)location.getX(), (long)location.getY(), (long)location.getZ(), location.getWorld().getName());
 
+                // 以降スロット解除処理
                 if(player.getUniqueId().equals(UUID.fromString(slot.getUuid()))){
                     SlotCore slotCore = main.getPlayerStatusManager().getPlayerSlotCore(player.getUniqueId());
                     if(slotCore != null){
@@ -84,6 +86,7 @@ public class ShelfInteractEvent implements Listener {
                 Message.sendNormalMessage(player, "[スロットAI]", "他のユーザーによってこのスロットは登録されています。持ち主：" + user.getName());
 
             } catch (SlotNotFoundException e) {
+                // 以降スロット登録
                 if(!shelf.getInventory().isEmpty()){
                     Message.sendErrorMessage(player, "[スロットAI]", "棚が空ではないためスロットにできません。");
                     return;
@@ -92,9 +95,9 @@ public class ShelfInteractEvent implements Listener {
                 slotLocationManager.registerSlotLocation(location, player.getUniqueId());
                 Message.sendSuccessMessage(player, "[スロットAI]", "スロットを作成しました");
 
-                shelf.getInventory().setItem(0, UniverseSlot.getInstance().getSlotRotateManager().getRandomRotateItem());
-                shelf.getInventory().setItem(1, UniverseSlot.getInstance().getSlotRotateManager().getRandomRotateItem());
-                shelf.getInventory().setItem(2, UniverseSlot.getInstance().getSlotRotateManager().getRandomRotateItem());
+                shelf.getInventory().setItem(0, UniverseSlot.getInstance().getRoller().getRandomRotateItem());
+                shelf.getInventory().setItem(1, UniverseSlot.getInstance().getRoller().getRandomRotateItem());
+                shelf.getInventory().setItem(2, UniverseSlot.getInstance().getRoller().getRandomRotateItem());
 
             } catch (UserNotFoundException e) {
                 return;
@@ -121,8 +124,13 @@ public class ShelfInteractEvent implements Listener {
         PlayerStatusManager playerStatusManager = UniverseSlot.getInstance().getPlayerStatusManager();
         SlotStatusManager slotStatusManager = UniverseSlot.getInstance().getSlotStatusManager();
 
-        // スロット既に開始済みの場合は何もしない（クリックはInventoryClickEventで処理）
+        // スロット既に開始済みの処理(レーン止める)
         if(playerStatusManager.hasPlayerSlotCore(player.getUniqueId())){
+            if(!playerStatusManager.getPlayerSlotCore(player.getUniqueId()).getLocation().equals(location)){
+                Message.sendErrorMessage(player, "[スロットAI]", "あなたはこのスロットを操作していません。");
+                return;
+            }
+
             SlotCore slotCore = playerStatusManager.getPlayerSlotCore(player.getUniqueId());
             if(slotStatusManager.isLaneSpinning(location, 1)){
                 slotCore.stopSlot(1);
@@ -141,7 +149,8 @@ public class ShelfInteractEvent implements Listener {
             Message.sendErrorMessage(player, "[スロットAI]", "このスロットは他のプレイヤーによって使用中です。");
             return;
         }
-        SlotCore slotCore = new SlotCore(player.getUniqueId(), shelf);
+
+        SlotCore slotCore = new SlotCore(player, shelf);
         if(!slotCore.startSlot()){
             Message.sendErrorMessage(player, "[スロットAI]", "スロットの開始に失敗しました。");
             return;

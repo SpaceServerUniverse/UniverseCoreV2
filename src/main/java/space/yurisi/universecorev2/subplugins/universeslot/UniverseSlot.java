@@ -6,7 +6,7 @@ import space.yurisi.universecorev2.subplugins.universeslot.command.SlotCommand;
 import space.yurisi.universecorev2.subplugins.universeslot.listener.EventManager;
 import space.yurisi.universecorev2.subplugins.universeslot.manager.PlayerStatusManager;
 import space.yurisi.universecorev2.subplugins.universeslot.manager.SlotLocationManager;
-import space.yurisi.universecorev2.subplugins.universeslot.manager.SlotRotateManager;
+import space.yurisi.universecorev2.subplugins.universeslot.core.Roller;
 import space.yurisi.universecorev2.subplugins.universeslot.manager.SlotStatusManager;
 
 import java.util.Objects;
@@ -33,17 +33,17 @@ public class UniverseSlot implements SubPlugin {
         return slotStatusManager;
     }
 
-    private SlotRotateManager slotRotateManager;
-    public SlotRotateManager getSlotRotateManager() {
-        return slotRotateManager;
+    private Roller roller;
+    public Roller getRoller() {
+        return roller;
     }
 
     public void onEnable(UniverseCoreV2 core) {
         instance = this;
         playerStatusManager = new PlayerStatusManager();
         slotStatusManager = new SlotStatusManager();
-        slotLocationManager = new SlotLocationManager(this);
-        slotRotateManager = new SlotRotateManager(this);
+        slotLocationManager = new SlotLocationManager();
+        roller = new Roller();
         new EventManager(core, this);
 
         Objects.requireNonNull(core.getCommand("slot")).setExecutor(new SlotCommand());

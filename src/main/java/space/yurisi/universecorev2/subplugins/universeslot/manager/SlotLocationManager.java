@@ -8,12 +8,11 @@ import java.util.UUID;
 
 public class SlotLocationManager {
 
+    //dbから読み込んだ後メモリに保存しとくやつ
+
     private HashMap<Location, UUID> slotLocations;
 
-    private UniverseSlot main;
-
-    public SlotLocationManager(UniverseSlot main) {
-        this.main = main;
+    public SlotLocationManager() {
         slotLocations = new HashMap<>();
     }
 
