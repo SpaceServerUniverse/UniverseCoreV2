@@ -41,7 +41,6 @@ public class ShelfInteractEvent implements Listener {
             return;
         }
 
-
         if(!(playerInteractEvent.getClickedBlock().getState() instanceof Shelf shelf)) {
             return;
         }
@@ -55,10 +54,6 @@ public class ShelfInteractEvent implements Listener {
         if(main.getPlayerStatusManager().hasFlag(player.getUniqueId(), PlayerStatusManager.ON_EDIT_MODE)){
             if (playerInteractEvent.getHand() != EquipmentSlot.HAND) return;
             playerInteractEvent.setCancelled(true);
-            if(!shelf.getInventory().isEmpty()){
-                Message.sendErrorMessage(player, "[スロットAI]", "棚が空ではないためスロットにできません。");
-                return;
-            }
 
             LandDataManager landDataManager = LandDataManager.getInstance();
             if(!landDataManager.canAccess(player, new BoundingBox(shelf.getX(), shelf.getZ(), shelf.getX(), shelf.getZ(), shelf.getWorld().getName()))){
@@ -79,6 +74,7 @@ public class ShelfInteractEvent implements Listener {
                         slotCore.stopSlotMachine();
                         main.getPlayerStatusManager().removePlayerSlotCore(player.getUniqueId());
                     }
+                    slotLocationManager.unregisterSlotLocation(location);
                     slotRepository.deleteSlot(slot);
                     shelf.getInventory().clear();
                     Message.sendSuccessMessage(player, "[スロットAI]", "スロットの登録を解除しました。");
@@ -88,6 +84,10 @@ public class ShelfInteractEvent implements Listener {
                 Message.sendNormalMessage(player, "[スロットAI]", "他のユーザーによってこのスロットは登録されています。持ち主：" + user.getName());
 
             } catch (SlotNotFoundException e) {
+                if(!shelf.getInventory().isEmpty()){
+                    Message.sendErrorMessage(player, "[スロットAI]", "棚が空ではないためスロットにできません。");
+                    return;
+                }
                 slotRepository.createSlot(player.getUniqueId(), (long)location.getX(), (long)location.getY(), (long)location.getZ(), location.getWorld().getName());
                 slotLocationManager.registerSlotLocation(location, player.getUniqueId());
                 Message.sendSuccessMessage(player, "[スロットAI]", "スロットを作成しました");
@@ -99,6 +99,9 @@ public class ShelfInteractEvent implements Listener {
             } catch (UserNotFoundException e) {
                 return;
             }
+            return;
+        }
+        if(!playerInteractEvent.getAction().isRightClick()){
             return;
         }
 
@@ -121,13 +124,13 @@ public class ShelfInteractEvent implements Listener {
         // スロット既に開始済みの場合は何もしない（クリックはInventoryClickEventで処理）
         if(playerStatusManager.hasPlayerSlotCore(player.getUniqueId())){
             SlotCore slotCore = playerStatusManager.getPlayerSlotCore(player.getUniqueId());
-            if(slotStatusManager.isLaneSpinning(location, 0)){
+            if(slotStatusManager.isLaneSpinning(location, 1)){
                 slotCore.stopSlot(1);
                 return;
-            }else if (slotStatusManager.isLaneSpinning(location, 1)){
+            }else if (slotStatusManager.isLaneSpinning(location, 2)){
                 slotCore.stopSlot(2);
                 return;
-            } else if (slotStatusManager.isLaneSpinning(location, 2)){
+            } else if (slotStatusManager.isLaneSpinning(location, 3)){
                 slotCore.stopSlot(3);
                 return;
             }
@@ -145,41 +148,5 @@ public class ShelfInteractEvent implements Listener {
         }
         playerStatusManager.setPlayerSlotCore(player.getUniqueId(), slotCore);
 
-    }
-
-    @EventHandler
-    public void onClickShelf(InventoryClickEvent event) {
-        if (!(event.getWhoClicked() instanceof Player player)) {
-            return;
-        }
-
-        if (!(event.getInventory().getHolder() instanceof Shelf shelf)) {
-            return;
-        }
-
-        Location location = shelf.getLocation();
-        SlotLocationManager slotLocationManager = UniverseSlot.getInstance().getSlotManager();
-
-        // スロットとして登録されているか確認
-        if(!slotLocationManager.isSlotLocation(location)){
-            return;
-        }
-
-        PlayerStatusManager playerStatusManager = UniverseSlot.getInstance().getPlayerStatusManager();
-
-        // プレイヤーがスロット使用中でない場合は何もしない
-        if(!playerStatusManager.hasPlayerSlotCore(player.getUniqueId())){
-            return;
-        }
-
-        SlotCore slotCore = playerStatusManager.getPlayerSlotCore(player.getUniqueId());
-
-        // クリックされたスロット番号(0, 1, 2)を取得してレーン番号(1, 2, 3)に変換
-        int slot = event.getSlot();
-        if(slot >= 0 && slot <= 2) {
-            slotCore.stopSlot(slot + 1);
-        }
-
-        event.setCancelled(true);
     }
 }

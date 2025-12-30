@@ -52,6 +52,7 @@ public class SlotCore {
         if(slotStatusManager.isInUse(location)){
             return false;
         }
+        // TODO:お金減らす処理
         slotStatusManager.addFlag(location, SlotStatusManager.IN_USE);
         playerStatusManager.addFlag(uuid, PlayerStatusManager.ON_SLOT);
         List<ItemStack> rotateItemsLane1 = UniverseSlot.getInstance().getSlotRotateManager().getRotateItemsLane1();
@@ -130,7 +131,7 @@ public class SlotCore {
         // とりあえず全部揃ってるか判定
         if(item1 != null && item2 != null && item3 != null &&
            item1.isSimilar(item2) && item2.isSimilar(item3)){
-            // プレイヤーに報酬を与えるなどの処理
+            // TODO:プレイヤーに報酬を与えるなどの処理
             player.sendMessage("§aおめでとう！スロットが揃いました！");
         } else {
             player.sendMessage("§c残念！スロットが揃いませんでした。");
@@ -147,6 +148,7 @@ public class SlotCore {
         slotStatusManager.removeFlag(location, SlotStatusManager.LANE2_SPINNING);
         slotStatusManager.removeFlag(location, SlotStatusManager.LANE3_SPINNING);
         playerStatusManager.removeFlag(uuid, PlayerStatusManager.ON_SLOT);
+        playerStatusManager.removePlayerSlotCore(uuid);
     }
 
 }
