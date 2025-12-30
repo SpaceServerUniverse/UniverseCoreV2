@@ -20,13 +20,23 @@ public class SlotRotateManager {
 
     public static final int ROTATE_INTERVAL = 2;// タスク実行間隔（ティック数）
 
-    private List<ItemStack> rotateItems;
-    public List<ItemStack> getRotateItems() {
-        return rotateItems;
+    private List<ItemStack> rotateItemsLane1;
+    public List<ItemStack> getRotateItemsLane1() {
+        return rotateItemsLane1;
     }
     public ItemStack getRandomRotateItem() {
-        int randomIndex = (int) (Math.random() * rotateItems.size());
-        return rotateItems.get(randomIndex);
+        int randomIndex = (int) (Math.random() * rotateItemsLane1.size());
+        return rotateItemsLane1.get(randomIndex);
+    }
+
+    private List<ItemStack> rotateItemsLane2;
+    public List<ItemStack> getRotateItemsLane2() {
+        return rotateItemsLane2;
+    }
+
+    private List<ItemStack> rotateItemsLane3;
+    public List<ItemStack> getRotateItemsLane3() {
+        return rotateItemsLane3;
     }
 
     public SlotRotateManager(UniverseSlot main) {
@@ -41,7 +51,7 @@ public class SlotRotateManager {
         meyasonSkullMeta.setOwningPlayer(meyason);
         yurisiHead.setItemMeta(yurisiSkullMeta);
         meyasonHead.setItemMeta(meyasonSkullMeta);
-        rotateItems = List.of(
+        rotateItemsLane1 = List.of(
                 yurisiHead,
                 new ItemStack(Material.DIAMOND),
                 new ItemStack(Material.BELL),
@@ -54,6 +64,33 @@ public class SlotRotateManager {
                 new ItemStack(Material.COD),
                 new ItemStack(Material.GLOW_BERRIES)
         );
+        rotateItemsLane2 = List.of(
+                new ItemStack(Material.GLOW_BERRIES),
+                yurisiHead,
+                new ItemStack(Material.COD),
+                new ItemStack(Material.COD),
+                new ItemStack(Material.SWEET_BERRIES),
+                new ItemStack(Material.BELL),
+                new ItemStack(Material.GLOW_BERRIES),
+                meyasonHead,
+                new ItemStack(Material.DIAMOND),
+                new ItemStack(Material.COD),
+                new ItemStack(Material.DIAMOND)
+        );
+        rotateItemsLane3 = List.of(
+                new ItemStack(Material.GLOW_BERRIES),
+                new ItemStack(Material.COD),
+                meyasonHead,
+                new ItemStack(Material.BELL),
+                new ItemStack(Material.SWEET_BERRIES),
+                new ItemStack(Material.DIAMOND),
+                new ItemStack(Material.GLOW_BERRIES),
+                new ItemStack(Material.COD),
+                new ItemStack(Material.BELL),
+                new ItemStack(Material.SWEET_BERRIES),
+                yurisiHead
+        );
+
     }
 
 

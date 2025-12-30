@@ -36,7 +36,6 @@ public class ShelfInteractEvent implements Listener {
     @EventHandler
     public void onInteractShelf(PlayerInteractEvent playerInteractEvent) {
         Player player = playerInteractEvent.getPlayer();
-        if (playerInteractEvent.getHand() != EquipmentSlot.HAND) return;
 
         if(playerInteractEvent.getClickedBlock() == null) {
             return;
@@ -54,7 +53,7 @@ public class ShelfInteractEvent implements Listener {
 
         // slot編集モード
         if(main.getPlayerStatusManager().hasFlag(player.getUniqueId(), PlayerStatusManager.ON_EDIT_MODE)){
-            player.sendMessage("ddd");
+            playerInteractEvent.setCancelled(true);
             if(!shelf.getInventory().isEmpty()){
                 Message.sendErrorMessage(player, "[スロットAI]", "棚が空ではないためスロットにできません。");
                 return;
@@ -74,6 +73,11 @@ public class ShelfInteractEvent implements Listener {
                 slot = slotRepository.getSlotFromCoordinates((long)location.getX(), (long)location.getY(), (long)location.getZ(), location.getWorld().getName());
 
                 if(player.getUniqueId().equals(UUID.fromString(slot.getUuid()))){
+                    SlotCore slotCore = main.getPlayerStatusManager().getPlayerSlotCore(player.getUniqueId());
+                    if(slotCore != null){
+                        slotCore.stopSlotMachine();
+                        main.getPlayerStatusManager().removePlayerSlotCore(player.getUniqueId());
+                    }
                     slotRepository.deleteSlot(slot);
                     shelf.getInventory().clear();
                     Message.sendSuccessMessage(player, "[スロットAI]", "スロットの登録を解除しました。");
@@ -108,11 +112,24 @@ public class ShelfInteractEvent implements Listener {
             }
         }
 
+        playerInteractEvent.setCancelled(true);
+
         PlayerStatusManager playerStatusManager = UniverseSlot.getInstance().getPlayerStatusManager();
         SlotStatusManager slotStatusManager = UniverseSlot.getInstance().getSlotStatusManager();
 
         // スロット既に開始済みの場合は何もしない（クリックはInventoryClickEventで処理）
         if(playerStatusManager.hasPlayerSlotCore(player.getUniqueId())){
+            SlotCore slotCore = playerStatusManager.getPlayerSlotCore(player.getUniqueId());
+            if(slotStatusManager.isLaneSpinning(location, 0)){
+                slotCore.stopSlot(1);
+                return;
+            }else if (slotStatusManager.isLaneSpinning(location, 1)){
+                slotCore.stopSlot(2);
+                return;
+            } else if (slotStatusManager.isLaneSpinning(location, 2)){
+                slotCore.stopSlot(3);
+                return;
+            }
             return;
         }
 
@@ -120,7 +137,7 @@ public class ShelfInteractEvent implements Listener {
             Message.sendErrorMessage(player, "[スロットAI]", "このスロットは他のプレイヤーによって使用中です。");
             return;
         }
-        SlotCore slotCore = new SlotCore(player, shelf);
+        SlotCore slotCore = new SlotCore(player.getUniqueId(), shelf);
         if(!slotCore.startSlot()){
             Message.sendErrorMessage(player, "[スロットAI]", "スロットの開始に失敗しました。");
             return;

@@ -1,5 +1,6 @@
 package space.yurisi.universecorev2.subplugins.universeslot.core;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Shelf;
 import org.bukkit.entity.Player;
@@ -12,10 +13,11 @@ import space.yurisi.universecorev2.subplugins.universeslot.manager.SlotRotateMan
 import space.yurisi.universecorev2.subplugins.universeslot.manager.SlotStatusManager;
 
 import java.util.List;
+import java.util.UUID;
 
 public class SlotCore {
 
-    private Player player;
+    private UUID uuid;
 
     private Shelf shelf;
 
@@ -35,8 +37,8 @@ public class SlotCore {
         return location;
     }
 
-    public SlotCore(Player player, Shelf shelf) {
-        this.player = player;
+    public SlotCore(UUID uuid, Shelf shelf) {
+        this.uuid = uuid;
         this.shelf = shelf;
         playerStatusManager = UniverseSlot.getInstance().getPlayerStatusManager();
         slotStatusManager = UniverseSlot.getInstance().getSlotStatusManager();
@@ -44,38 +46,41 @@ public class SlotCore {
     }
 
     public boolean startSlot(){
-        if(playerStatusManager.hasFlag(player.getUniqueId(), PlayerStatusManager.ON_SLOT)){
+        if(playerStatusManager.hasFlag(uuid, PlayerStatusManager.ON_SLOT)){
             return false;
         }
         if(slotStatusManager.isInUse(location)){
             return false;
         }
         slotStatusManager.addFlag(location, SlotStatusManager.IN_USE);
-        playerStatusManager.addFlag(player.getUniqueId(), PlayerStatusManager.ON_SLOT);
-        List<ItemStack> rotateItems = UniverseSlot.getInstance().getSlotRotateManager().getRotateItems();
-        currentIndexSlot1 = rotateItems.indexOf(shelf.getInventory().getItem(0));
-        currentIndexSlot2 = rotateItems.indexOf(shelf.getInventory().getItem(1));
-        currentIndexSlot3 = rotateItems.indexOf(shelf.getInventory().getItem(2));
+        playerStatusManager.addFlag(uuid, PlayerStatusManager.ON_SLOT);
+        List<ItemStack> rotateItemsLane1 = UniverseSlot.getInstance().getSlotRotateManager().getRotateItemsLane1();
+        List<ItemStack> rotateItemsLane2 = UniverseSlot.getInstance().getSlotRotateManager().getRotateItemsLane2();
+        List<ItemStack> rotateItemsLane3 = UniverseSlot.getInstance().getSlotRotateManager().getRotateItemsLane3();
+
+        currentIndexSlot1 = rotateItemsLane1.indexOf(shelf.getInventory().getItem(0));
+        currentIndexSlot2 = rotateItemsLane2.indexOf(shelf.getInventory().getItem(1));
+        currentIndexSlot3 = rotateItemsLane3.indexOf(shelf.getInventory().getItem(2));
 
         rotateTaskSlot1 = new BukkitRunnable() {
             @Override
             public void run() {
-                currentIndexSlot1 = (currentIndexSlot1 + 1) % rotateItems.size();
-                shelf.getInventory().setItem(0, rotateItems.get(currentIndexSlot1));
+                currentIndexSlot1 = (currentIndexSlot1 + 1) % rotateItemsLane1.size();
+                shelf.getInventory().setItem(0, rotateItemsLane1.get(currentIndexSlot1));
             }
         };
         rotateTaskSlot2 = new BukkitRunnable() {
             @Override
             public void run() {
-                currentIndexSlot2 = (currentIndexSlot2 + 1) % rotateItems.size();
-                shelf.getInventory().setItem(1, rotateItems.get(currentIndexSlot2));
+                currentIndexSlot2 = (currentIndexSlot2 + 1) % rotateItemsLane2.size();
+                shelf.getInventory().setItem(1, rotateItemsLane2.get(currentIndexSlot2));
             }
         };
         rotateTaskSlot3 = new BukkitRunnable() {
             @Override
             public void run() {
-                currentIndexSlot3 = (currentIndexSlot3 + 1) % rotateItems.size();
-                shelf.getInventory().setItem(2, rotateItems.get(currentIndexSlot3));
+                currentIndexSlot3 = (currentIndexSlot3 + 1) % rotateItemsLane3.size();
+                shelf.getInventory().setItem(2, rotateItemsLane3.get(currentIndexSlot3));
             }
         };
 
@@ -116,6 +121,11 @@ public class SlotCore {
         ItemStack item1 = shelf.getInventory().getItem(0);
         ItemStack item2 = shelf.getInventory().getItem(1);
         ItemStack item3 = shelf.getInventory().getItem(2);
+
+        Player player = Bukkit.getServer().getPlayer(uuid);
+        if(player == null){
+            return;
+        }
         // 結果処理をここに実装
         // とりあえず全部揃ってるか判定
         if(item1 != null && item2 != null && item3 != null &&
@@ -136,7 +146,7 @@ public class SlotCore {
         slotStatusManager.removeFlag(location, SlotStatusManager.LANE1_SPINNING);
         slotStatusManager.removeFlag(location, SlotStatusManager.LANE2_SPINNING);
         slotStatusManager.removeFlag(location, SlotStatusManager.LANE3_SPINNING);
-        playerStatusManager.removeFlag(player.getUniqueId(), PlayerStatusManager.ON_SLOT);
+        playerStatusManager.removeFlag(uuid, PlayerStatusManager.ON_SLOT);
     }
 
 }
