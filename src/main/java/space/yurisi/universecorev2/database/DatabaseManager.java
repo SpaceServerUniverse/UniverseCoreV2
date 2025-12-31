@@ -29,7 +29,6 @@ public class DatabaseManager {
     private final CustomNameRepository customNameRepository;
     private final MarketRepository marketRepository;
     private final ReceiveBoxRepository receiveBoxRepository;
-    private final BirthdayCardRepository birthdayCardRepository;
     private final LoginBonusRepository loginBonusRepository;
 
     public DatabaseManager(SessionFactory sessionFactory) {
@@ -254,15 +253,6 @@ public class DatabaseManager {
      */
     public ReceiveBoxRepository getReceiveBoxRepository(){
         return receiveBoxRepository;
-    }
-
-    /**
-     * バースデーカードリポジトリを取得
-     *
-     * @return BirthdayCardRepository
-     */
-    public BirthdayCardRepository getBirthdayCardRepository() {
-        return birthdayCardRepository;
     }
 
     /**

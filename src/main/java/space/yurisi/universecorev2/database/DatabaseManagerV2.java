@@ -1,5 +1,6 @@
 package space.yurisi.universecorev2.database;
 import org.hibernate.SessionFactory;
+import space.yurisi.universecorev2.database.repositories.BirthdayCardRepository;
 import space.yurisi.universecorev2.database.repositories.JobRepository;
 import space.yurisi.universecorev2.database.repositories.LevelRewardRepository;
 import space.yurisi.universecorev2.database.repositories.SpaceShipRepository;
@@ -14,6 +15,7 @@ public final class DatabaseManagerV2 {
     public DatabaseManagerV2(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
 
+        register(new BirthdayCardRepository(sessionFactory));
         register(new LevelRewardRepository(sessionFactory));
         register(new JobRepository(sessionFactory));
         register(new SpaceShipRepository(sessionFactory));

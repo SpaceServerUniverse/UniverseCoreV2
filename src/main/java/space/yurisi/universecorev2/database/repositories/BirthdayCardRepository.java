@@ -11,6 +11,7 @@ import space.yurisi.universecorev2.exception.BirthdayDataNotFoundException;
 import java.time.Month;
 import java.time.MonthDay;
 import java.util.List;
+import java.util.UUID;
 
 public class BirthdayCardRepository {
     private final SessionFactory sessionFactory;
@@ -22,14 +23,13 @@ public class BirthdayCardRepository {
     /**
      * バースデーデータを作成します
      *
-     * @param player   Player
-     * @param monthDay MonthDay
+     * @param uuidMC UUID
+     * @param month 月
+     * @param day 日
      * @return BirthdayData
      */
-    public BirthdayData createBirthdayData(Player player, MonthDay monthDay) {
-        String uuid = player.getUniqueId().toString();
-        int month = monthDay.getMonthValue();
-        int day = monthDay.getDayOfMonth();
+    public BirthdayData createBirthdayData(UUID uuidMC, int month, int day) {
+        String uuid = uuidMC.toString();
         BirthdayData birthdayData = new BirthdayData(null, uuid, month, day, false);
 
         Session session = this.sessionFactory.getCurrentSession();
@@ -61,11 +61,12 @@ public class BirthdayCardRepository {
     /**
      * バースデーをuuidから取得します
      *
-     * @param uuid
+     * @param uuidMC
      * @return BirthdayData
      * @throws BirthdayDataNotFoundException
      */
-    public BirthdayData getBirthdayData(String uuid) throws BirthdayDataNotFoundException {
+    public BirthdayData getBirthdayData(UUID uuidMC) throws BirthdayDataNotFoundException {
+        String uuid = uuidMC.toString();
         Session session = this.sessionFactory.getCurrentSession();
         try {
             session.beginTransaction();
@@ -82,20 +83,58 @@ public class BirthdayCardRepository {
     }
 
     /**
+     * 特定のUUIDのデータが存在するかを確認します
+     * @param uuidMC PlayerのUUID
+     * @return 存在するか
+     */
+    public boolean existsBirthdayData(UUID uuidMC) {
+        String uuid = uuidMC.toString();
+        Session session = sessionFactory.getCurrentSession();
+        try {
+            session.beginTransaction();
+
+            Long count = session.createQuery(
+                            "SELECT COUNT(b) FROM BirthdayData b WHERE b.uuid = :uuid",
+                            Long.class
+                    )
+                    .setParameter("uuid", uuid)
+                    .getSingleResult();
+
+            session.getTransaction().commit();
+            return count != null && count > 0;
+        } finally {
+            session.close();
+        }
+    }
+
+    /**
      * すべてのバースデーデータを取得します
      *
      * @return List
-     * @throws BirthdayDataNotFoundException
      */
-    public List<BirthdayData> getAllBirthdayData() throws BirthdayDataNotFoundException {
+    public List<BirthdayData> getAllBirthdayData() {
         Session session = this.sessionFactory.getCurrentSession();
         try {
             session.beginTransaction();
             List<BirthdayData> data = session.createSelectionQuery("FROM BirthdayData", BirthdayData.class).getResultList();
             session.getTransaction().commit();
-            if (data == null || data.isEmpty()) {
-                throw new BirthdayDataNotFoundException("Birthday data not found");
-            }
+            return data;
+        } finally {
+            session.close();
+        }
+
+    }
+
+    public List<BirthdayData> getAllToPaginate(int offset, int limit) {
+        Session session = this.sessionFactory.getCurrentSession();
+        try {
+            session.beginTransaction();
+            List<BirthdayData> data = session.createSelectionQuery("FROM BirthdayData", BirthdayData.class)
+                    .setFirstResult(offset)
+                    .setMaxResults(limit)
+                    .getResultList();
+
+            session.getTransaction().commit();
             return data;
         } finally {
             session.close();
@@ -184,7 +223,7 @@ public class BirthdayCardRepository {
      * @param birthdayDataId
      * @return
      */
-    public List<BirthdayMessages> getBirthdayMessages(Long birthdayDataId) throws BirthdayDataNotFoundException {
+    public List<BirthdayMessages> getBirthdayMessages(Long birthdayDataId) {
         Session session = this.sessionFactory.getCurrentSession();
 
         try {
@@ -193,9 +232,6 @@ public class BirthdayCardRepository {
                     .setParameter("birthdayDataId", birthdayDataId)
                     .getResultList();
             session.getTransaction().commit();
-            if (birthdayMessagesList.isEmpty()) {
-                throw new BirthdayDataNotFoundException("Birthday messages not found for " + birthdayDataId);
-            }
             return birthdayMessagesList;
         } finally {
             session.close();
