@@ -1,6 +1,7 @@
 package space.yurisi.universecorev2.model.wallet;
 
 import org.jetbrains.annotations.NotNull;
+import space.yurisi.universecorev2.model.user.UserId;
 
 import java.util.UUID;
 
@@ -10,7 +11,7 @@ import java.util.UUID;
  * @param balance
  */
 public record Wallet(
-        @NotNull UUID id,
+        @NotNull WalletId id,
         @NotNull Balance balance
 ) {
     public WalletResult withdraw(TransactionDelta delta) {

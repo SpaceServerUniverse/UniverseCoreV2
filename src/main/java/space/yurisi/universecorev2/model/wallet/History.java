@@ -6,7 +6,7 @@ import space.yurisi.universecorev2.model.user.UserId;
 import java.util.Date;
 
 public record History(
-        @NotNull UserId userId,
+        @NotNull WalletId id,
         @NotNull Long delta,
         @NotNull String reason,
         @NotNull Date timestamp
