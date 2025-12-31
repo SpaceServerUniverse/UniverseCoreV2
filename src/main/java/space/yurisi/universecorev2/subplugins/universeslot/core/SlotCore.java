@@ -11,6 +11,7 @@ import space.yurisi.universecorev2.UniverseCoreV2API;
 import space.yurisi.universecorev2.database.models.Money;
 import space.yurisi.universecorev2.database.repositories.MoneyRepository;
 import space.yurisi.universecorev2.database.repositories.UserRepository;
+import space.yurisi.universecorev2.exception.LaneNumberWrongException;
 import space.yurisi.universecorev2.exception.MoneyNotFoundException;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
 import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomyAPI;
@@ -136,7 +137,12 @@ public class SlotCore {
     }
 
     public void stopSlot(int selectedLane){
-        if(!slotStatusManager.isLaneSpinning(location, selectedLane)){
+        try {
+            if (!slotStatusManager.isLaneSpinning(location, selectedLane)) {
+                return;
+            }
+        } catch (LaneNumberWrongException e){
+            stopSlotMachine();
             return;
         }
         switch (selectedLane){

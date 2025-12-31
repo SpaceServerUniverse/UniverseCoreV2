@@ -11,6 +11,7 @@ import space.yurisi.universecorev2.UniverseCoreV2API;
 import space.yurisi.universecorev2.database.models.Slot;
 import space.yurisi.universecorev2.database.models.User;
 import space.yurisi.universecorev2.database.repositories.SlotRepository;
+import space.yurisi.universecorev2.exception.LaneNumberWrongException;
 import space.yurisi.universecorev2.exception.SlotNotFoundException;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
 import space.yurisi.universecorev2.subplugins.universeland.manager.LandDataManager;
@@ -131,14 +132,19 @@ public class ShelfInteractEvent implements Listener {
             }
 
             SlotCore slotCore = playerStatusManager.getPlayerSlotCore(player.getUniqueId());
-            if(slotStatusManager.isLaneSpinning(location, 1)){
-                slotCore.stopSlot(1);
-                return;
-            }else if (slotStatusManager.isLaneSpinning(location, 2)){
-                slotCore.stopSlot(2);
-                return;
-            } else if (slotStatusManager.isLaneSpinning(location, 3)){
-                slotCore.stopSlot(3);
+            try {
+                if (slotStatusManager.isLaneSpinning(location, 1)) {
+                    slotCore.stopSlot(1);
+                    return;
+                } else if (slotStatusManager.isLaneSpinning(location, 2)) {
+                    slotCore.stopSlot(2);
+                    return;
+                } else if (slotStatusManager.isLaneSpinning(location, 3)) {
+                    slotCore.stopSlot(3);
+                    return;
+                }
+            } catch (LaneNumberWrongException e){
+                Message.sendErrorMessage(player, "[スロットAI]", "レーンの状態の取得に失敗しました。管理者にお問い合わせください。");
                 return;
             }
             return;

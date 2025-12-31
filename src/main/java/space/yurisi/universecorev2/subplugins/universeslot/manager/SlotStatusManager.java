@@ -1,6 +1,7 @@
 package space.yurisi.universecorev2.subplugins.universeslot.manager;
 
 import org.bukkit.Location;
+import space.yurisi.universecorev2.exception.LaneNumberWrongException;
 
 import java.util.HashMap;
 
@@ -80,12 +81,12 @@ public class SlotStatusManager {
      * @param laneNumber レーン番号 (1, 2, 3)
      * @return 回転中の場合true
      */
-    public boolean isLaneSpinning(Location location, int laneNumber) {
+    public boolean isLaneSpinning(Location location, int laneNumber) throws LaneNumberWrongException {
         int flag = switch (laneNumber) {
             case 1 -> LANE1_SPINNING;
             case 2 -> LANE2_SPINNING;
             case 3 -> LANE3_SPINNING;
-            default -> throw new IllegalArgumentException("レーン番号は1-3の範囲で指定してください: " + laneNumber);
+            default -> throw new LaneNumberWrongException("レーン番号は1-3の範囲で指定してください: " + laneNumber);
         };
         return hasFlag(location, flag);
     }
