@@ -45,33 +45,6 @@ public class SlotRepository {
     }
 
     /**
-     * スロットをプレイヤーから検索します
-     * @param player
-     * @return Slot
-     */
-    public Slot getSlotFromPlayer(Player player) throws SlotNotFoundException {
-        Session session = this.sessionFactory.getCurrentSession();
-        try {
-            session.beginTransaction();
-            Slot slot = session.createSelectionQuery(
-                            "from Slot where uuid = :uuid",
-                            Slot.class
-                    )
-                    .setParameter("uuid", player.getUniqueId().toString())
-                    .uniqueResult();
-            session.getTransaction().commit();
-
-            if(slot == null){
-                throw new SlotNotFoundException("スロットが見つかりません");
-            }
-
-            return slot;
-        } finally {
-            session.close();
-        }
-    }
-
-    /**
      * スロットを座標から検索します
      *
      * @param x
