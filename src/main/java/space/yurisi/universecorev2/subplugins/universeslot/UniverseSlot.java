@@ -19,7 +19,7 @@ public class UniverseSlot implements SubPlugin {
     }
 
     private SlotLocationManager slotLocationManager;
-    public SlotLocationManager getSlotManager() {
+    public SlotLocationManager getSlotLocationManager() {
         return slotLocationManager;
     }
 

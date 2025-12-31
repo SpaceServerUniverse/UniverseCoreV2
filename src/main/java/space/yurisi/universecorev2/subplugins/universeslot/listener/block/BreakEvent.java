@@ -12,8 +12,6 @@ import space.yurisi.universecorev2.database.models.User;
 import space.yurisi.universecorev2.database.repositories.SlotRepository;
 import space.yurisi.universecorev2.exception.SlotNotFoundException;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
-import space.yurisi.universecorev2.subplugins.universeland.manager.LandDataManager;
-import space.yurisi.universecorev2.subplugins.universeland.utils.BoundingBox;
 import space.yurisi.universecorev2.subplugins.universeslot.UniverseSlot;
 import space.yurisi.universecorev2.subplugins.universeslot.manager.SlotLocationManager;
 import space.yurisi.universecorev2.subplugins.universeslot.manager.SlotStatusManager;
@@ -31,7 +29,7 @@ public class BreakEvent implements Listener {
             return;
         }
 
-        SlotLocationManager slotLocationManager = UniverseSlot.getInstance().getSlotManager();
+        SlotLocationManager slotLocationManager = UniverseSlot.getInstance().getSlotLocationManager();
         Location location = event.getBlock().getLocation();
         SlotRepository slotRepository = UniverseCoreV2API.getInstance().getDatabaseManagerV2().get(SlotRepository.class);
 

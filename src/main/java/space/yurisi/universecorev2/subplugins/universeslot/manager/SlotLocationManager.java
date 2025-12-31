@@ -30,4 +30,7 @@ public class SlotLocationManager {
         slotLocations.remove(location);
     }
 
+    public UUID getOwnerUUID(Location location) {
+        return slotLocations.get(location);
+    }
 }

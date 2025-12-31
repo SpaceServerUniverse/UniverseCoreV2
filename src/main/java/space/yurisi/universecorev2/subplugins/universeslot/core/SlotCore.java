@@ -1,15 +1,20 @@
 package space.yurisi.universecorev2.subplugins.universeslot.core;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.block.Shelf;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import space.yurisi.universecorev2.UniverseCoreV2;
+import space.yurisi.universecorev2.UniverseCoreV2API;
+import space.yurisi.universecorev2.database.models.Money;
+import space.yurisi.universecorev2.database.repositories.MoneyRepository;
+import space.yurisi.universecorev2.database.repositories.UserRepository;
 import space.yurisi.universecorev2.exception.MoneyNotFoundException;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
 import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomyAPI;
+import space.yurisi.universecorev2.subplugins.universeeconomy.exception.CanNotAddMoneyException;
 import space.yurisi.universecorev2.subplugins.universeeconomy.exception.CanNotReduceMoneyException;
 import space.yurisi.universecorev2.subplugins.universeeconomy.exception.ParameterException;
 import space.yurisi.universecorev2.subplugins.universeslot.UniverseSlot;
@@ -22,8 +27,9 @@ import java.util.UUID;
 
 public class SlotCore {
 
-    private Player player;
-    private UUID uuid;
+    private final Player player;
+    private final UUID uuid;
+    private final UUID ownerUUID;
 
     private Shelf shelf;
 
@@ -35,10 +41,10 @@ public class SlotCore {
     private BukkitRunnable rotateTaskSlot2;
     private BukkitRunnable rotateTaskSlot3;
 
-    private PlayerStatusManager playerStatusManager;
-    private SlotStatusManager slotStatusManager;
+    private final PlayerStatusManager playerStatusManager;
+    private final SlotStatusManager slotStatusManager;
 
-    private Location location;
+    private final Location location;
     public Location getLocation() {
         return location;
     }
@@ -49,6 +55,7 @@ public class SlotCore {
         this.shelf = shelf;
         playerStatusManager = UniverseSlot.getInstance().getPlayerStatusManager();
         slotStatusManager = UniverseSlot.getInstance().getSlotStatusManager();
+        this.ownerUUID = UniverseSlot.getInstance().getSlotLocationManager().getOwnerUUID(shelf.getLocation());
         this.location = shelf.getLocation();
     }
 
@@ -59,9 +66,18 @@ public class SlotCore {
         if(slotStatusManager.isInUse(location)){
             return false;
         }
-        // TODO:お金減らす処理
         try{
             UniverseEconomyAPI.getInstance().reduceMoney(player, 10L, "スロット利用料");
+            if(!player.getUniqueId().equals(ownerUUID)) {
+                Long user_id;
+                Money money;
+                UserRepository userRepository = UniverseCoreV2API.getInstance().getDatabaseManager().getUserRepository();
+                MoneyRepository moneyRepository = UniverseCoreV2API.getInstance().getDatabaseManager().getMoneyRepository();
+                user_id = userRepository.getPrimaryKeyFromUUID(ownerUUID);
+                money = moneyRepository.getMoneyFromUserId(user_id);
+                money.setMoney(money.getMoney() + 2L);
+                moneyRepository.updateMoney(money, 2L, "スロット利用料収益");
+            }
         } catch (UserNotFoundException | MoneyNotFoundException e){
             Message.sendErrorMessage(player, "[スロットAI]", "ユーザーかお金の情報が見つかりません。スロットを利用できません。");
             return false;
@@ -114,6 +130,8 @@ public class SlotCore {
         slotStatusManager.addFlag(location, SlotStatusManager.LANE2_SPINNING);
         slotStatusManager.addFlag(location, SlotStatusManager.LANE3_SPINNING);
 
+        location.getWorld().playSound(location, Sound.BLOCK_NOTE_BLOCK_HARP, 0.8f, 1.0f);
+
         return true;
     }
 
@@ -123,14 +141,17 @@ public class SlotCore {
         }
         switch (selectedLane){
             case 1 -> {
+                location.getWorld().playSound(location, Sound.BLOCK_NOTE_BLOCK_BELL, 0.8f, 0.8f);
                 rotateTaskSlot1.cancel();
                 slotStatusManager.removeFlag(location, SlotStatusManager.LANE1_SPINNING);
             }
             case 2 -> {
+                location.getWorld().playSound(location, Sound.BLOCK_NOTE_BLOCK_BELL, 0.8f, 1.0f);
                 rotateTaskSlot2.cancel();
                 slotStatusManager.removeFlag(location, SlotStatusManager.LANE2_SPINNING);
             }
             case 3 -> {
+                location.getWorld().playSound(location, Sound.BLOCK_NOTE_BLOCK_BELL, 0.8f, 1.2f);
                 rotateTaskSlot3.cancel();
                 slotStatusManager.removeFlag(location, SlotStatusManager.LANE3_SPINNING);
             }
@@ -149,10 +170,47 @@ public class SlotCore {
         // とりあえず全部揃ってるか判定
         if(item1 != null && item2 != null && item3 != null &&
            item1.isSimilar(item2) && item2.isSimilar(item3)){
-            // TODO:プレイヤーに報酬を与えるなどの処理
-            player.sendMessage("§aおめでとう！スロットが揃いました！");
-        } else {
-            player.sendMessage("§c残念！スロットが揃いませんでした。");
+            long rewardAmount = 0L;
+            switch (item1.getType()){
+                case Material.PLAYER_HEAD -> {
+                    String ownerName = "";
+                    if(item1.getItemMeta() instanceof SkullMeta skullMeta){
+                        if(skullMeta.getOwningPlayer() != null){
+                            ownerName = skullMeta.getOwningPlayer().getName();
+                        }else{
+                            break;
+                        }
+                    }
+                    if(ownerName.equals("yurisi")){
+                        location.getWorld().playSound(location, Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
+                        location.getWorld().spawnParticle(Particle.FIREWORK, location, 5);
+                        rewardAmount = 1000L;
+                    }else if(ownerName.equals("Villagermeyason")){
+                        location.getWorld().playSound(location, Sound.ENTITY_VILLAGER_YES, 1.0f, 1.0f);
+                        rewardAmount = 500L;
+                    }
+                }
+                case Material.DIAMOND -> rewardAmount = 100L;
+                case Material.BELL -> rewardAmount = 80L;
+                case Material.GLOW_BERRIES -> rewardAmount = 40L;
+                case Material.SWEET_BERRIES -> rewardAmount = 30L;
+                case Material.COD -> rewardAmount = 15L;
+                case Material.GREEN_BUNDLE -> rewardAmount = 10L;
+            }
+            if(rewardAmount != 0L){
+                try{
+                    UniverseEconomyAPI.getInstance().addMoney(player, rewardAmount, "スロット当選報酬");
+                } catch (UserNotFoundException | MoneyNotFoundException e){
+                    Message.sendErrorMessage(player, "[スロットAI]", "ユーザーかお金の情報が見つかりません。スロットの報酬を付与できません。");
+                    return;
+                } catch (ParameterException e){
+                    Message.sendErrorMessage(player, "[スロットAI]", "エラー:ParameterExceptionが発生しました。運営にお問い合わせください。");
+                    return;
+                } catch (CanNotAddMoneyException e){
+                    Message.sendErrorMessage(player, "[スロットAI]", "エラー:CannotAddMoneyExceptionが発生しました。運営にお問い合わせください。");
+                    return;
+                }
+            }
         }
         stopSlotMachine();
     }

@@ -21,10 +21,10 @@ public class SlotCommand implements CommandExecutor {
 
         if(main.getPlayerStatusManager().hasFlag(player.getUniqueId(), PlayerStatusManager.ON_EDIT_MODE)){
             main.getPlayerStatusManager().removeFlag(player.getUniqueId(), PlayerStatusManager.ON_EDIT_MODE);
-            Message.sendSuccessMessage(player, "[スロットAI]", "スロット編集モードに入りました。登録/解除したいスロットを右クリックしてください。");
+            Message.sendNormalMessage(player, "[スロットAI]", "スロット編集モードを解除しました。");
         } else {
             main.getPlayerStatusManager().addFlag(player.getUniqueId(), PlayerStatusManager.ON_EDIT_MODE);
-            Message.sendNormalMessage(player, "[スロットAI]", "スロット編集モードを解除しました。");
+            Message.sendSuccessMessage(player, "[スロットAI]", "スロット編集モードに入りました。登録/解除したいスロットを右クリックしてください。");
         }
         return true;
 

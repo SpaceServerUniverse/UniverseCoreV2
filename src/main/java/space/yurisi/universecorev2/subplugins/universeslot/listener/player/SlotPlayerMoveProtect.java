@@ -25,7 +25,7 @@ public class SlotPlayerMoveProtect implements Listener {
         }
 
         // スロット中の移動をキャンセル
-        event.setTo(event.getFrom());
+        event.setCancelled(true);
         player.sendActionBar(Component.text("[スロットAI] スロット中は移動できません。"));
     }
 }

@@ -5,7 +5,6 @@ import org.bukkit.block.Shelf;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import space.yurisi.universecorev2.UniverseCoreV2API;
@@ -45,7 +44,7 @@ public class ShelfInteractEvent implements Listener {
             return;
         }
 
-        SlotLocationManager slotLocationManager = UniverseSlot.getInstance().getSlotManager();
+        SlotLocationManager slotLocationManager = UniverseSlot.getInstance().getSlotLocationManager();
 
         Location location = playerInteractEvent.getClickedBlock().getLocation();
         SlotRepository slotRepository = UniverseCoreV2API.getInstance().getDatabaseManagerV2().get(SlotRepository.class);

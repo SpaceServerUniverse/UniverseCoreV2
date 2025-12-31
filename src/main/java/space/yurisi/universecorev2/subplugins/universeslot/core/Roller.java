@@ -22,8 +22,8 @@ public class Roller {
     }
     public ItemStack getRandomRotateItem() {
         Random random = new Random();
-        int randomIndex = random.nextInt(rotateItemsLane1.size());
-        return rotateItemsLane1.get(randomIndex);
+        int randomIndex = random.nextInt(rotateItems.size());
+        return rotateItems.get(randomIndex);
     }
 
     private List<ItemStack> rotateItemsLane2;
