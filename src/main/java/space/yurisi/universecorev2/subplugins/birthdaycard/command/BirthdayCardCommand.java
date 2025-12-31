@@ -300,7 +300,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
                 List<BirthdayMessages> birthdayMessagesList = null;
                 try {
                     birthdayMessagesList = birthdayCardRepository.getBirthdayMessages(gifToBirthdayData.getId());
-                } catch (BirthdayDataNotFoundException ignored) {
+                } catch (BirthdayDataNotFoundException e) {
                     Message.sendErrorMessage(player, BirthdayCard.PREFIX, "エラーが発生しました。");
                     return true;
                 }
