@@ -67,6 +67,10 @@ public class SlotCore {
         if(slotStatusManager.isInUse(location)){
             return false;
         }
+        if(player.getVehicle() == null){
+            Message.sendErrorMessage(player, "[スロットAI]", "椅子に座ってスロットを引いてください。");
+            return false;
+        }
         try{
             UniverseEconomyAPI.getInstance().reduceMoney(player, 10L, "スロット利用料");
             if(!player.getUniqueId().equals(ownerUUID)) {
@@ -119,6 +123,11 @@ public class SlotCore {
         rotateTaskSlot3 = new BukkitRunnable() {
             @Override
             public void run() {
+                if(player.getVehicle() == null){
+                    Message.sendErrorMessage(player, "[スロットAI]", "椅子から降りたためスロットを強制終了します。");
+                    stopSlotMachine();
+                    return;
+                }
                 currentIndexSlot3 = (currentIndexSlot3 + 1) % rotateItemsLane3.size();
                 shelf.getInventory().setItem(2, rotateItemsLane3.get(currentIndexSlot3));
             }
@@ -179,7 +188,7 @@ public class SlotCore {
             long rewardAmount = 0L;
             switch (item1.getType()){
                 case Material.PLAYER_HEAD -> {
-                    String ownerName = "";
+                    String ownerName = "dummy";
                     if(item1.getItemMeta() instanceof SkullMeta skullMeta){
                         if(skullMeta.getOwningPlayer() != null){
                             ownerName = skullMeta.getOwningPlayer().getName();
@@ -187,21 +196,24 @@ public class SlotCore {
                             break;
                         }
                     }
+                    if(ownerName == null){
+                        break;
+                    }
                     if(ownerName.equals("yurisi")){
                         location.getWorld().playSound(location, Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
                         location.getWorld().spawnParticle(Particle.FIREWORK, location, 5);
-                        rewardAmount = 1000L;
+                        rewardAmount = Roller.YURISI_AWARD;
                     }else if(ownerName.equals("Villagermeyason")){
                         location.getWorld().playSound(location, Sound.ENTITY_VILLAGER_YES, 1.0f, 1.0f);
-                        rewardAmount = 500L;
+                        rewardAmount = Roller.MEYASON_AWARD;
                     }
                 }
-                case Material.DIAMOND -> rewardAmount = 100L;
-                case Material.BELL -> rewardAmount = 80L;
-                case Material.GLOW_BERRIES -> rewardAmount = 40L;
-                case Material.SWEET_BERRIES -> rewardAmount = 30L;
-                case Material.COD -> rewardAmount = 15L;
-                case Material.GREEN_BUNDLE -> rewardAmount = 10L;
+                case Material.DIAMOND -> rewardAmount = Roller.DIAMOND_AWARD;
+                case Material.BELL -> rewardAmount = Roller.BELL_AWARD;
+                case Material.GLOW_BERRIES -> rewardAmount = Roller.GLOW_BERRIES_AWARD;
+                case Material.SWEET_BERRIES -> rewardAmount = Roller.SWEET_BERRIES_AWARD;
+                case Material.COD -> rewardAmount = Roller.COD_AWARD;
+                case Material.GREEN_BUNDLE -> rewardAmount = Roller.GREEN_BUNDLE_AWARD;
             }
             if(rewardAmount != 0L){
                 try{

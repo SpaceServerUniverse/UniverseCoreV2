@@ -12,8 +12,12 @@ import space.yurisi.universecorev2.database.models.Slot;
 import space.yurisi.universecorev2.database.models.User;
 import space.yurisi.universecorev2.database.repositories.SlotRepository;
 import space.yurisi.universecorev2.exception.LaneNumberWrongException;
+import space.yurisi.universecorev2.exception.MoneyNotFoundException;
 import space.yurisi.universecorev2.exception.SlotNotFoundException;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
+import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomyAPI;
+import space.yurisi.universecorev2.subplugins.universeeconomy.exception.CanNotReduceMoneyException;
+import space.yurisi.universecorev2.subplugins.universeeconomy.exception.ParameterException;
 import space.yurisi.universecorev2.subplugins.universeland.manager.LandDataManager;
 import space.yurisi.universecorev2.subplugins.universeland.utils.BoundingBox;
 import space.yurisi.universecorev2.subplugins.universeslot.UniverseSlot;
@@ -91,6 +95,19 @@ public class ShelfInteractEvent implements Listener {
                     Message.sendErrorMessage(player, "[スロットAI]", "棚が空ではないためスロットにできません。");
                     return;
                 }
+                try{
+                    UniverseEconomyAPI.getInstance().reduceMoney(player, 10000L, "スロット設置費用");
+                } catch (UserNotFoundException | MoneyNotFoundException exception){
+                    Message.sendErrorMessage(player, "[スロットAI]", "ユーザーかお金の情報の取得に失敗しました。管理者にお問い合わせください。");
+                    return;
+                } catch (CanNotReduceMoneyException exception){
+                    Message.sendErrorMessage(player, "[スロットAI]", "お金が不足しているためスロットを設置できません。");
+                    return;
+                } catch (ParameterException exception){
+                    Message.sendErrorMessage(player, "[スロットAI]", "パラメーターの値が不正です。管理者にお問い合わせください。");
+                    return;
+                }
+
                 slotRepository.createSlot(player.getUniqueId(), (long)location.getX(), (long)location.getY(), (long)location.getZ(), location.getWorld().getName());
                 slotLocationManager.registerSlotLocation(location, player.getUniqueId());
                 Message.sendSuccessMessage(player, "[スロットAI]", "スロットを作成しました");
