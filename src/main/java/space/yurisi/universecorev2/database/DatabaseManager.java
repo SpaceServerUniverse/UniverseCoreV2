@@ -54,7 +54,6 @@ public class DatabaseManager {
         this.chestShopRepository = new ChestShopRepository(sessionFactory);
         this.ammoRepository = new AmmoRepository(sessionFactory);
         this.receiveBoxRepository = new ReceiveBoxRepository(sessionFactory);
-        this.birthdayCardRepository = new BirthdayCardRepository(sessionFactory);
         this.loginBonusRepository = new LoginBonusRepository(sessionFactory);
     }
 
