@@ -1,16 +1,16 @@
 package space.yurisi.universecorev2.subplugins.universeslot.core;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 import space.yurisi.universecorev2.exception.RollLengthNotEnoughException;
-import space.yurisi.universecorev2.subplugins.universeslot.UniverseSlot;
 
-import java.util.*;
+import java.util.List;
+import java.util.Random;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class Roller {
 

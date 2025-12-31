@@ -1,10 +1,8 @@
 package space.yurisi.universecorev2.subplugins.universeslot.manager;
 
-import org.bukkit.entity.Player;
 import space.yurisi.universecorev2.subplugins.universeslot.core.SlotCore;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 public class PlayerStatusManager {

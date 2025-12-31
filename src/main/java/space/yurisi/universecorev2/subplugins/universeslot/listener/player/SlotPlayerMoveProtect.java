@@ -7,7 +7,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import space.yurisi.universecorev2.subplugins.universeslot.UniverseSlot;
 import space.yurisi.universecorev2.subplugins.universeslot.manager.PlayerStatusManager;
-import space.yurisi.universecorev2.utils.Message;
 
 public class SlotPlayerMoveProtect implements Listener {
 

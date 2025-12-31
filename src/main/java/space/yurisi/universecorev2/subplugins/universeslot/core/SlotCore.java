@@ -31,7 +31,7 @@ public class SlotCore {
     private final UUID uuid;
     private final UUID ownerUUID;
 
-    private Shelf shelf;
+    private final Shelf shelf;
 
     private int currentIndexSlot1;
     private int currentIndexSlot2;

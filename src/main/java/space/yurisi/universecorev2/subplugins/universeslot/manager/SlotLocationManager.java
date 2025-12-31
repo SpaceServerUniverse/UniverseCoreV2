@@ -1,7 +1,6 @@
 package space.yurisi.universecorev2.subplugins.universeslot.manager;
 
 import org.bukkit.Location;
-import space.yurisi.universecorev2.subplugins.universeslot.UniverseSlot;
 
 import java.util.HashMap;
 import java.util.UUID;

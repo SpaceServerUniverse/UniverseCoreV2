@@ -1,6 +1,5 @@
 package space.yurisi.universecorev2.subplugins.universeslot.listener.player;
 
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
