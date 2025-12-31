@@ -65,11 +65,10 @@ public class CookingEventListener implements Listener {
         FoodBaseItem[] foodBaseItems = CookingItems.getAllCookingItems();
         for(FoodBaseItem foodBaseItem : foodBaseItems){
             if(!(foodBaseItem instanceof Craftable craftable)) continue;
-            if(craftable.canCraftedWith(matrix, e.getView().getPlayer().getUniqueId())){
-                CustomItem result = UniverseItem.getItem(foodBaseItem.getId());
-                if(result == null) return;
-                e.getInventory().setResult(result.getItem());
-            }
+            if(!craftable.canCraftedWith(matrix, e.getView().getPlayer().getUniqueId())) continue;
+            CustomItem result = UniverseItem.getItem(foodBaseItem.getId());
+            if(result == null) return;
+            e.getInventory().setResult(result.getItem());
         }
     }
 }

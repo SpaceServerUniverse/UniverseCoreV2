@@ -25,7 +25,7 @@ public abstract class FoodBaseItem extends CookingItem {
         if (meta != null) {
             PersistentDataContainer container = meta.getPersistentDataContainer();
             container.set(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME), PersistentDataType.STRING, this.getId());
-            container.set(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.COOKING_ITEM), PersistentDataType.STRING, UniverseItemKeyString.COOKING_ITEM);
+            container.set(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.COOKING_ITEM), PersistentDataType.STRING, this.getId());
             container.set(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.FOOD_BASE), PersistentDataType.STRING, this.getId());
             item.setItemMeta(meta);
         }

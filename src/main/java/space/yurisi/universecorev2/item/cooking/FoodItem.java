@@ -29,7 +29,7 @@ public abstract class FoodItem extends CookingItem implements Edible {
         if (meta != null) {
             PersistentDataContainer container = meta.getPersistentDataContainer();
             container.set(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME), PersistentDataType.STRING, this.getId());
-            container.set(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.COOKING_ITEM), PersistentDataType.STRING, UniverseItemKeyString.COOKING_ITEM);
+            container.set(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.COOKING_ITEM), PersistentDataType.STRING, this.getId());
             container.set(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.FOOD), PersistentDataType.STRING, this.getId());
             item.setItemMeta(meta);
         }

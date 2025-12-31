@@ -30,7 +30,7 @@ public class Napolitan extends FoodItem implements Edible, FurnaceResult {
     }
 
     @Override
-    public FoodBaseItem getFoodBaseItem() {
+    public FoodBaseItem getFurnaceBaseItem() {
         return (FoodBaseItem) UniverseItem.getItem(NapolitanBase.id);
     }
 }
