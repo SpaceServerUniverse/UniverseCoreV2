@@ -20,8 +20,8 @@ public class Roller {
     public static final long BELL_AWARD = 80L; // ベル賞金
     public static final long GLOW_BERRIES_AWARD = 40L; // グロウベリー賞金
     public static final long SWEET_BERRIES_AWARD = 30L; // スイートベリー賞金
-    public static final long COD_AWARD = 16L; // タラ賞金
-    public static final long GREEN_BUNDLE_AWARD = 8L; // 緑のバンドル賞金
+    public static final long COD_AWARD = 15L; // タラ賞金
+    public static final long GREEN_BUNDLE_AWARD = 10L; // 緑のバンドル賞金
     public static final int ROTATE_INTERVAL = 2;// タスク実行間隔（ティック数）
 
     private List<ItemStack> rotateItemsLane1;
