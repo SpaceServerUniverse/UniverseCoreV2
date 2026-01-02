@@ -1,5 +1,6 @@
 package space.yurisi.universecorev2.subplugins.universeguns.event;
 
+import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -566,11 +567,8 @@ public class GunEvent implements Listener {
     }
 
     @EventHandler
-    public void onPlayerJump(PlayerMoveEvent event) {
+    public void onPlayerJump(PlayerJumpEvent event) {
         Player player = event.getPlayer();
-        if(event.getFrom().getY() >= event.getTo().getY()){
-            return;
-        }
 
         ItemStack itemInHand = player.getInventory().getItemInMainHand();
         if (!itemInHand.hasItemMeta()) {
@@ -583,7 +581,7 @@ public class GunEvent implements Listener {
         }
 
         if (!gun.getIsJumpEnabled()) {
-            player.setVelocity(new Vector(0, 0, 0));
+            event.setCancelled(true);
         }
     }
 
