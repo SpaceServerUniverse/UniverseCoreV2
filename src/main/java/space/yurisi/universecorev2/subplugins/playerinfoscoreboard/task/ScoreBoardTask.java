@@ -27,7 +27,7 @@ public final class ScoreBoardTask extends BukkitRunnable {
     public ScoreBoardTask(Player player) {
         this.player = player;
 
-        if (player.getScoreboard() == Bukkit.getScoreboardManager().getMainScoreboard()) {
+        if (player.getScoreboard().equals(Bukkit.getScoreboardManager().getMainScoreboard())) {
             player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
         }
     }
