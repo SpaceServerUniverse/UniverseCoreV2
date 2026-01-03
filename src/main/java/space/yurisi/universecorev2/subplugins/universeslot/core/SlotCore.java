@@ -180,12 +180,12 @@ public class SlotCore {
         ItemStack item1 = shelf.getInventory().getItem(0);
         ItemStack item2 = shelf.getInventory().getItem(1);
         ItemStack item3 = shelf.getInventory().getItem(2);
+        long rewardAmount = 0L;
 
         // 結果処理をここに実装
         // とりあえず全部揃ってるか判定
         if(item1 != null && item2 != null && item3 != null &&
            item1.isSimilar(item2) && item2.isSimilar(item3)){
-            long rewardAmount = 0L;
             switch (item1.getType()){
                 case Material.PLAYER_HEAD -> {
                     String ownerName = "dummy";
@@ -215,18 +215,16 @@ public class SlotCore {
                 case Material.COD -> rewardAmount = Roller.COD_AWARD;
                 case Material.GREEN_BUNDLE -> rewardAmount = Roller.GREEN_BUNDLE_AWARD;
             }
-            if(rewardAmount != 0L){
+            if(rewardAmount > 0L){
                 try{
                     UniverseEconomyAPI.getInstance().addMoney(player, rewardAmount, "スロット当選報酬");
+                    Message.sendSuccessMessage(player, "[スロットAI]", "おめでとうございます！" + rewardAmount + "円を獲得しました！");
                 } catch (UserNotFoundException | MoneyNotFoundException e){
                     Message.sendErrorMessage(player, "[スロットAI]", "ユーザーかお金の情報が見つかりません。スロットの報酬を付与できません。");
-                    return;
                 } catch (ParameterException e){
                     Message.sendErrorMessage(player, "[スロットAI]", "エラー:ParameterExceptionが発生しました。運営にお問い合わせください。");
-                    return;
                 } catch (CanNotAddMoneyException e){
                     Message.sendErrorMessage(player, "[スロットAI]", "エラー:CannotAddMoneyExceptionが発生しました。運営にお問い合わせください。");
-                    return;
                 }
             }
         }
