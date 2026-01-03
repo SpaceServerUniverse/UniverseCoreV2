@@ -31,6 +31,7 @@ import space.yurisi.universecorev2.subplugins.tickfreezer.TickFreezer;
 import space.yurisi.universecorev2.subplugins.universeguns.UniverseGuns;
 import space.yurisi.universecorev2.subplugins.universejob.UniverseJob;
 import space.yurisi.universecorev2.subplugins.universejob.command.JobCommand;
+import space.yurisi.universecorev2.subplugins.universeslot.UniverseSlot;
 import space.yurisi.universecorev2.subplugins.universeutilcommand.UniverseUtilCommand;
 import space.yurisi.universecorev2.subplugins.signcommand.SignCommand;
 import space.yurisi.universecorev2.subplugins.sitdown.Sitdown;
@@ -94,6 +95,7 @@ public class SubPluginInitializer {
         this.subPlugins.add(new Achievement());
         this.subPlugins.add(new LoginBonus());
         this.subPlugins.add(new UniverseJob());
+        this.subPlugins.add(new UniverseSlot());
         //this.subPlugins.add(new SpaceShip());
     }
 
