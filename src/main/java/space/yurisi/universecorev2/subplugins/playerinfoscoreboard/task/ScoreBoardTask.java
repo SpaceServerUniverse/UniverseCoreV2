@@ -1,6 +1,7 @@
 package space.yurisi.universecorev2.subplugins.playerinfoscoreboard.task;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -67,17 +68,8 @@ public final class ScoreBoardTask extends BukkitRunnable {
         Scoreboard mainScoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
 
         for (Team localTeam : scoreboard.getTeams()) {
-            Team mainTeam = mainScoreboard.getTeam(localTeam.getName());
-
-            if (mainTeam == null) {
+            if (mainScoreboard.getTeam(localTeam.getName()) == null) {
                 localTeam.unregister();
-                continue;
-            }
-
-            for (String entry : localTeam.getEntries()) {
-                if (!mainTeam.hasEntry(entry)) {
-                    localTeam.removeEntry(entry);
-                }
             }
         }
 
@@ -91,10 +83,26 @@ public final class ScoreBoardTask extends BukkitRunnable {
             localTeam.displayName(mainTeam.displayName());
             localTeam.prefix(mainTeam.prefix());
             localTeam.suffix(mainTeam.suffix());
+            //localTeam.color(mainTeam.color()); #カラーも同期させたいけどうまくいかない
+            localTeam.setAllowFriendlyFire(mainTeam.allowFriendlyFire());
+            localTeam.setCanSeeFriendlyInvisibles(mainTeam.canSeeFriendlyInvisibles());
+
+            for (Team.Option option : Team.Option.values()) {
+                Team.OptionStatus status = mainTeam.getOption(option);
+                if (localTeam.getOption(option) != status) {
+                    localTeam.setOption(option, status);
+                }
+            }
 
             for (String entry : mainTeam.getEntries()) {
                 if (!localTeam.hasEntry(entry)) {
                     localTeam.addEntry(entry);
+                }
+            }
+
+            for (String entry : localTeam.getEntries()) {
+                if (!mainTeam.hasEntry(entry)) {
+                    localTeam.removeEntry(entry);
                 }
             }
         }
