@@ -69,7 +69,17 @@ public class SignChange implements Listener {
                 return;
             }
             int price = Integer.parseInt(PriceText);
+            if (price < 1) {
+                SuperMessageHelper.sendErrorMessage(player, "値段は1以上で指定してください");
+                event.setCancelled(true);
+                return;
+            }
             int amount = Integer.parseInt(AmountText);
+            if (amount < 1 || amount > 99) {
+                SuperMessageHelper.sendErrorMessage(player, "個数は1〜99の範囲で指定してください");
+                event.setCancelled(true);
+                return;
+            }
             ItemStack itemStack2;
             if (ItemText.equals("?")) {
                 itemStack2 = ItemStack.of(player.getInventory().getItemInMainHand().getType(), amount);
