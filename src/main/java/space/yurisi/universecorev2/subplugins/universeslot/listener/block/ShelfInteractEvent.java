@@ -74,7 +74,7 @@ public class ShelfInteractEvent implements Listener {
                 slot = slotRepository.getSlotFromCoordinates((long)location.getX(), (long)location.getY(), (long)location.getZ(), location.getWorld().getName());
 
                 // 以降スロット解除処理
-                if(player.getUniqueId().equals(UUID.fromString(slot.getUuid()))){
+                if(player.isOp() || player.getUniqueId().equals(UUID.fromString(slot.getUuid()))){
                     SlotCore slotCore = main.getPlayerStatusManager().getPlayerSlotCore(player.getUniqueId());
                     if(slotCore != null){
                         slotCore.stopSlotMachine();

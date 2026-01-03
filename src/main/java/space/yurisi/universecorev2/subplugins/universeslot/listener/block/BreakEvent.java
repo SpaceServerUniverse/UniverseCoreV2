@@ -41,7 +41,7 @@ public class BreakEvent implements Listener {
             return;
         }
 
-        // スロット所有者なら解除可能
+        // スロット所有者なら解除可能(OPの場合は/slotでのみ可能)
         Slot slot;
         try{
             slot = slotRepository.getSlotFromCoordinates((long)location.getX(), (long)location.getY(), (long)location.getZ(), location.getWorld().getName());
