@@ -51,8 +51,8 @@ public class RemoveItem extends AbstractItem {
             Instant expireInstant = Instant.now().plus(7, ChronoUnit.DAYS);
             Date expireDate = Date.from(expireInstant);
 
-            ReceiveBoxAPI.AddReceiveItem(ItemStack.deserializeBytes(this.item.getSerializedItem()), player.getUniqueId(), expireDate, "フリーマーケットでの出品を取り消しました。");
             Market market = UniverseCoreV2API.getInstance().getDatabaseManager().getMarketRepository().removeItem(this.item.getId(), true);
+            ReceiveBoxAPI.AddReceiveItem(ItemStack.deserializeBytes(this.item.getSerializedItem()), player.getUniqueId(), expireDate, "フリーマーケットでの出品を取り消しました。");
             UniverseCoreV2API.getInstance().getDatabaseManager().getMarketRepository().addPurchased(market, player);
             Message.sendSuccessMessage(player, marketCommand.FreeMarketMessage, "出品を取り消しました。受け取りボックスにアイテムを送付しました。");
             Component component = Component.text("§l§n[ここをクリックで受取]")
