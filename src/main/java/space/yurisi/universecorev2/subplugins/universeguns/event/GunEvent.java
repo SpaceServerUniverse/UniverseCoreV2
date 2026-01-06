@@ -1,10 +1,8 @@
 package space.yurisi.universecorev2.subplugins.universeguns.event;
 
+import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Sound;
-import org.bukkit.Particle;
+import org.bukkit.*;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -255,6 +253,8 @@ public class GunEvent implements Listener {
         }
         if (event.getDamager() instanceof Snowball snowball) {
             if (!projectileData.containsKey(snowball)) {
+                livingEntity.setMaximumNoDamageTicks(20);
+                livingEntity.setNoDamageTicks(20);
                 return;
             }
             BulletData data = projectileData.get(snowball);
@@ -299,12 +299,12 @@ public class GunEvent implements Listener {
             event.setDamage(damage);
             projectileData.remove(snowball);
         } else {
-            livingEntity.setMaximumNoDamageTicks(10);
-            livingEntity.setNoDamageTicks(10);
+            livingEntity.setMaximumNoDamageTicks(20);
+            livingEntity.setNoDamageTicks(20);
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerDamageExceptGun(EntityDamageEvent event) {
         if (isHandlingExplosion.get()) {
             return;
@@ -320,24 +320,8 @@ public class GunEvent implements Listener {
         if (event.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
             return;
         }
-        livingEntity.setMaximumNoDamageTicks(10);
-        livingEntity.setNoDamageTicks(10);
-    }
-
-    @EventHandler
-    public void onPlayerHitByBlock(EntityDamageByBlockEvent event) {
-        if (isHandlingExplosion.get()) {
-            return;
-        }
-        Entity entity = event.getEntity();
-        if (entity.isDead()) {
-            return;
-        }
-        if (!(entity instanceof LivingEntity livingEntity)) {
-            return;
-        }
-        livingEntity.setMaximumNoDamageTicks(10);
-        livingEntity.setNoDamageTicks(10);
+        livingEntity.setMaximumNoDamageTicks(20);
+        livingEntity.setNoDamageTicks(20);
     }
 
     @EventHandler
@@ -566,11 +550,8 @@ public class GunEvent implements Listener {
     }
 
     @EventHandler
-    public void onPlayerJump(PlayerMoveEvent event) {
+    public void onPlayerJump(PlayerJumpEvent event) {
         Player player = event.getPlayer();
-        if(event.getFrom().getY() >= event.getTo().getY()){
-            return;
-        }
 
         ItemStack itemInHand = player.getInventory().getItemInMainHand();
         if (!itemInHand.hasItemMeta()) {
@@ -583,7 +564,7 @@ public class GunEvent implements Listener {
         }
 
         if (!gun.getIsJumpEnabled()) {
-            player.setVelocity(new Vector(0, 0, 0));
+            event.setCancelled(true);
         }
     }
 
