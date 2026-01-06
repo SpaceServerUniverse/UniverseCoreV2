@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import space.yurisi.universecorev2.UniverseCoreV2;
@@ -69,10 +70,10 @@ public class sendSubCommand implements BirthdayCardSubCommand {
                 System.currentTimeMillis() + Duration.ofDays(10).toMillis()
         );
 
-        Book book = (Book) mainHandItem.getItemMeta();
-        Component lastPage = book.pages().get(book.pages().size() - 1);
+        BookMeta bookMeta = (BookMeta) mainHandItem.getItemMeta();
+        Component lastPage = bookMeta.pages().getLast();
         Component updatedLastPage = lastPage.append(Component.text("\n" + player.getName() + " より"));
-        List<Component> newPages = new ArrayList<>(book.pages());
+        List<Component> newPages = new ArrayList<>(bookMeta.pages());
         newPages.set(newPages.size() - 1, updatedLastPage);
         String pageJson = PageJsonUtils.serializePageJson(newPages);
 

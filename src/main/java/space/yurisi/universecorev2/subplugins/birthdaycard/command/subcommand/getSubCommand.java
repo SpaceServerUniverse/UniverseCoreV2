@@ -42,8 +42,8 @@ public class getSubCommand implements BirthdayCardSubCommand{
             return true;
         }
 
-        space.yurisi.universecorev2.item.birthday_card.BirthdayCard birthdayCard = new space.yurisi.universecorev2.item.birthday_card.BirthdayCard(player);
-        player.getInventory().addItem(birthdayCard.getItem(player));
+        space.yurisi.universecorev2.item.birthday_card.BirthdayCard birthdayCard = new space.yurisi.universecorev2.item.birthday_card.BirthdayCard(target);
+        player.getInventory().addItem(birthdayCard.getItem(target));
 
         Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "お誕生日カードを入手しました。メッセージを記入して署名して下さい。");
         Message.sendNormalMessage(player, BirthdayCard.PREFIX, "[送る]", ClickEvent.runCommand("/birthday send"), "お誕生日カードを送る");

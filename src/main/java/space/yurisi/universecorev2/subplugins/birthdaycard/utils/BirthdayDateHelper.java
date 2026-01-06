@@ -10,20 +10,7 @@ import java.time.MonthDay;
 
 public class BirthdayDateHelper {
 
-    public static boolean isValidDate(String monthArg, String dayArg) {
-        boolean isMonthMissing = monthArg == null;
-        boolean isDayMissing = dayArg == null;
-
-        boolean isMonthInvalid = !NumberUtils.isNumeric(monthArg);
-        boolean isDayInvalid = !NumberUtils.isNumeric(dayArg);
-
-        return isMonthMissing
-                || isDayMissing
-                || isMonthInvalid
-                || isDayInvalid;
-    }
-
-    public static MonthDay parseMonthDay(String monthArg, String dayArg) throws DateTimeException {
+    public static MonthDay parseMonthDay(String monthArg, String dayArg) throws DateTimeException, NumberFormatException {
         int month = Integer.parseInt(monthArg);
         int day = Integer.parseInt(dayArg);
         return MonthDay.of(month, day);

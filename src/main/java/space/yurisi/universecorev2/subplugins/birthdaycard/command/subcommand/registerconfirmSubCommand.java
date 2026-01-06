@@ -16,6 +16,8 @@ import java.util.UUID;
 import static space.yurisi.universecorev2.subplugins.birthdaycard.utils.BirthdayDateHelper.parseMonthDay;
 
 public class registerconfirmSubCommand implements BirthdayCardSubCommand{
+    private static final int ARG_MONTH = 1;
+    private static final int ARG_DAY   = 2;
 
     @Override
     public boolean execute(Player player, String[] args) {
@@ -26,8 +28,8 @@ public class registerconfirmSubCommand implements BirthdayCardSubCommand{
 
         MonthDay monthDay;
         try {
-            monthDay = parseMonthDay(args[1], args[2]);
-        } catch (DateTimeException e) {
+            monthDay = parseMonthDay(args[ARG_MONTH], args[ARG_DAY]);
+        } catch (DateTimeException | NumberFormatException e) {
             Message.sendErrorMessage(player, BirthdayCard.PREFIX, "エラーが発生しました。月または日が無効です");
             return true;
         }

@@ -15,17 +15,23 @@ import java.util.UUID;
 public class listSubCommand implements BirthdayCardSubCommand{
     @Override
     public boolean execute(Player player, String[] args) {
-        String pageInput = args[1] == null ? "1" : args[1];
         int page = 1;
-        try {
-            page = Integer.parseInt(pageInput);
-        } catch (NumberFormatException ignore) {
-            //適当な文字列だったら1でいいため。
+
+        if(args.length >= 2){
+            try {
+                page = Integer.parseInt(args[1]);
+            } catch (NumberFormatException ignore) {
+                //適当な文字列だったら1でいいため。
+            }
         }
+
+        page = Math.max(1, page);
+
         BirthdayCardRepository repo = UniverseCoreV2API.getInstance().getDatabaseManagerV2().get(BirthdayCardRepository.class);
 
-        int offset = page - 1;
-        int limit = offset + 10;
+        int limit = 10;
+        int offset = (page - 1) * limit;
+
         List<BirthdayData> birthdayDataList = repo.getAllToPaginate(offset, limit);
 
         if(birthdayDataList.isEmpty()) {

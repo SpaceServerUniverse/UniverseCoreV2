@@ -80,29 +80,25 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
 
     private void sendHelp(Player player) {
         player.sendMessage("""
-        §6-- 🎉BirthdayCard Help --
-        🎂 §bバースデーカードのコマンド一覧です 🎂
-           §7/birthday : バースデーカレンダーメニューを開きます
-           §7/birthday register <月> <日> : 誕生日を登録します
-           §7/birthday check [プレイヤー名] : 誕生日を確認します
-           §7/birthday list : 登録されている誕生日一覧
-           §7/birthday get [プレイヤー名] : 誕生日カードを取得
-           §7/birthday send : 誕生日メッセージを送信
-           §7/birthday gift : 誕生日ギフトを受け取る
-           §7/birthday help : このヘルプを表示
-        """.split("\n"));
+                §6-- 🎉BirthdayCard Help --
+                🎂 §bバースデーカードのコマンド一覧です 🎂
+                   §7/birthday : バースデーカレンダーメニューを開きます
+                   §7/birthday register <月> <日> : 誕生日を登録します
+                   §7/birthday check [プレイヤー名] : 誕生日を確認します
+                   §7/birthday list : 登録されている誕生日一覧
+                   §7/birthday get [プレイヤー名] : 誕生日カードを取得
+                   §7/birthday send : 誕生日メッセージを送信
+                   §7/birthday gift : 誕生日ギフトを受け取る
+                   §7/birthday help : このヘルプを表示
+                """.split("\n"));
     }
+
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         List<String> completions = new ArrayList<>();
 
         if (args.length == 1) {
-            completions.add("register");
-            completions.add("check");
-            completions.add("list");
-            completions.add("remove");
-            completions.add("get");
-            completions.add("send");
-            completions.add("gift");
+            List<String> shows = subCommands.keySet().stream().filter(n -> !Objects.equals(n, "registerconfirm")).toList();
+            completions.addAll(shows);
             return completions;
         }
 
@@ -123,17 +119,32 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
             return completions;
         }
 
-        if ((args[0].equals("check") || args[0].equals("get")) && args.length == 2) {
-            BirthdayCardRepository repo = UniverseCoreV2API.getInstance().getDatabaseManagerV2().get(BirthdayCardRepository.class);
-            List<BirthdayData> birthdayData = repo.getAllBirthdayData();
-            if (birthdayData.isEmpty()) {
+        if ((args[0].equalsIgnoreCase("check") || args[0].equalsIgnoreCase("get")) && args.length == 2) {
+
+            BirthdayCardRepository repo = UniverseCoreV2API.getInstance()
+                    .getDatabaseManagerV2()
+                    .get(BirthdayCardRepository.class);
+
+            List<BirthdayData> birthdayDataList = repo.getAllBirthdayData();
+            if (birthdayDataList.isEmpty()) {
                 completions.add("<まだ登録されている人がいません>");
                 return completions;
             }
 
-            birthdayData.forEach(item -> {
-                completions.add(PlayerUtils.getPlayerNameByUuid(UUID.fromString(item.getUuid())));
-            });
+            String input = args[1].toLowerCase();
+
+            birthdayDataList.stream()
+                    .map(item -> {
+                        try {
+                            return PlayerUtils.getPlayerNameByUuid(UUID.fromString(item.getUuid()));
+                        } catch (IllegalArgumentException e) {
+                            return null;
+                        }
+                    })
+                    .filter(Objects::nonNull)
+                    .filter(name -> name.toLowerCase().startsWith(input)) // ← フィルター
+                    .distinct()
+                    .forEach(completions::add);
         }
 
         return completions;

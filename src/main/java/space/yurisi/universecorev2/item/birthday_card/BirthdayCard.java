@@ -3,6 +3,7 @@ package space.yurisi.universecorev2.item.birthday_card;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -26,24 +27,25 @@ public class BirthdayCard extends CustomItem {
         );
     }
 
-    public BirthdayCard(Player player) {
+    public BirthdayCard(OfflinePlayer player) {
         super(
                 id,
-                "お誕生日カード (" + player.getName() + ")\"",
+                "お誕生日カード (" + player.getName() + ")",
                 ItemStack.of(Material.WRITABLE_BOOK)
         );
     }
+
 
     @Override
     protected void registerItemFunction() {
         default_setting = (item) -> item;
     }
 
-    public ItemStack getItem(Player player){
+    public ItemStack getItem(OfflinePlayer player){
         ItemStack item = getBaseItem().clone();
         ItemMeta meta = getBaseItem().getItemMeta();
         PersistentDataContainer container = meta.getPersistentDataContainer();
-        container.set(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.ITEM_NAME), PersistentDataType.STRING, getId());
+        container.set(new NamespacedKey(UniverseCoreV2.getInstance(), BirthdayCard.id), PersistentDataType.STRING, getId());
         container.set(new NamespacedKey(UniverseCoreV2.getInstance(), "BIRTHDAY_DATA"), PersistentDataType.STRING, player.getUniqueId().toString());
         meta.displayName(Component.text(name));
         item.setItemMeta(meta);

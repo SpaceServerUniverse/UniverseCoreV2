@@ -31,26 +31,26 @@ public class giftSubCommand implements BirthdayCardSubCommand{
     public boolean execute(Player player, String[] args) {
         BirthdayCardRepository repo = UniverseCoreV2API.getInstance().getDatabaseManagerV2().get(BirthdayCardRepository.class);
 
-        BirthdayData gifToBirthdayData;
+        BirthdayData birthdayData;
         try {
-            gifToBirthdayData = repo.getBirthdayData(player.getUniqueId());
+            birthdayData = repo.getBirthdayData(player.getUniqueId());
         } catch (BirthdayDataNotFoundException e) {
             Message.sendErrorMessage(player, BirthdayCard.PREFIX, "誕生日が登録されていません");
             return true;
         }
 
-        if (gifToBirthdayData.isGiftReceived()) {
+        if (birthdayData.isGiftReceived()) {
             Message.sendNormalMessage(player, BirthdayCard.PREFIX, "もうすでに誕生日カードを受け取っています");
             return true;
         }
 
         LocalDate today = LocalDate.now();
-        if (!isBirthdayTodayOrLeapAlternative(gifToBirthdayData.getMonth(), gifToBirthdayData.getDay(), today)) {
+        if (!isBirthdayTodayOrLeapAlternative(birthdayData.getMonth(), birthdayData.getDay(), today)) {
             Message.sendErrorMessage(player, BirthdayCard.PREFIX, "まだ誕生日じゃないよ。誕生日を確認して、後で戻ってきてね！");
             return true;
         }
 
-        List<BirthdayMessages> birthdayMessagesList = repo.getBirthdayMessages(gifToBirthdayData.getId());
+        List<BirthdayMessages> birthdayMessagesList = repo.getBirthdayMessages(birthdayData.getId());
 
         Date expire_date = new Date(
                 System.currentTimeMillis() + Duration.ofDays(10).toMillis()
@@ -92,8 +92,8 @@ public class giftSubCommand implements BirthdayCardSubCommand{
                 .append(Component.text(" さんの誕生日です！🎂\n", NamedTextColor.YELLOW))
                 .append(Component.text("素晴らしい一年になりますように！おめでとう！", NamedTextColor.GREEN)));
 
-        gifToBirthdayData.setGiftReceived(true);
-        repo.updateBirthdayData(gifToBirthdayData);
+        birthdayData.setGiftReceived(true);
+        repo.updateBirthdayData(birthdayData);
         return true;
     }
 

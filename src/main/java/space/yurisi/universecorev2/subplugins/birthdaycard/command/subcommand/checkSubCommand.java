@@ -27,7 +27,12 @@ public class checkSubCommand implements BirthdayCardSubCommand {
         String targetName = args[1];
 
         Player online = Bukkit.getPlayerExact(targetName);
-        OfflinePlayer target = (online != null) ? online : Bukkit.getOfflinePlayer(targetName);
+        OfflinePlayer targetOfflinePlayer = Bukkit.getOfflinePlayer(targetName);
+        if(targetOfflinePlayer == null){
+            Message.sendErrorMessage(player, BirthdayCard.PREFIX, "プレイヤーが存在しません");
+            return true;
+        }
+        OfflinePlayer target = (online != null) ? online : targetOfflinePlayer;
 
         //オンラインか、オフラインであれば過去に参加しているか確認
         if (online == null && !target.hasPlayedBefore()) {
