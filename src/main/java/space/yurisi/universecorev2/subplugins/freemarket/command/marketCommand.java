@@ -14,8 +14,10 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import space.yurisi.universecorev2.UniverseCoreV2API;
+import space.yurisi.universecorev2.database.models.Market;
 import space.yurisi.universecorev2.exception.MarketItemNotFoundException;
 import space.yurisi.universecorev2.exception.MoneyNotFoundException;
+import space.yurisi.universecorev2.exception.OwnerBuyMarketItemException;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
 import space.yurisi.universecorev2.subplugins.freemarket.data.Config;
 import space.yurisi.universecorev2.utils.JsonConverter;
@@ -85,6 +87,8 @@ public class marketCommand implements CommandExecutor, TabCompleter {
 
                 Long id = Long.parseLong(args[1]);
 
+                Market item;
+
                 try {
                     UniverseCoreV2API.getInstance().getDatabaseManager().getMarketRepository().buyItem(id, player);
                     Message.sendSuccessMessage(player, FreeMarketMessage, "アイテムを購入しました! 受取を行って下さい！");
@@ -101,6 +105,9 @@ public class marketCommand implements CommandExecutor, TabCompleter {
                     return false;
                 } catch (CanNotReduceMoneyException e) {
                     Message.sendErrorMessage(player, FreeMarketMessage, "お金がたりません");
+                    return false;
+                } catch (OwnerBuyMarketItemException e) {
+                    Message.sendErrorMessage(player, FreeMarketMessage, "自分の出品したアイテムは購入できません");
                     return false;
                 }
                 break;

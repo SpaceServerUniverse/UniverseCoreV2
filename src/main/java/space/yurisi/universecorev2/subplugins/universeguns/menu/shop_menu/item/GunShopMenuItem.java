@@ -1,13 +1,18 @@
 package space.yurisi.universecorev2.subplugins.universeguns.menu.shop_menu.item;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.CustomModelData;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import space.yurisi.universecorev2.UniverseCoreV2;
+import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.item.gun.Gun;
 import space.yurisi.universecorev2.subplugins.universeguns.core.PurchaseGun;
 import xyz.xenondevs.invui.item.ItemProvider;
@@ -30,7 +35,7 @@ public class GunShopMenuItem extends AbstractItem {
         ItemStack itemStack = new ItemStack(Material.DIAMOND_HOE);
         ItemMeta itemMeta = itemStack.getItemMeta();
         if(itemMeta != null) {
-            itemMeta.setCustomModelData(gun.getTextureNumber());
+            itemMeta.setItemModel(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN_ITEM_MODEL));
             itemMeta.setDisplayName(gun.getName());
             List<Component> lore = new ArrayList<>(gun.getGunComponents());
             lore.add(Component.text(gun.getFlavorText()));
@@ -38,6 +43,8 @@ public class GunShopMenuItem extends AbstractItem {
             lore.add(Component.text("§7クリックで購入"));
             itemMeta.lore(lore);
             itemStack.setItemMeta(itemMeta);
+            CustomModelData modelData = CustomModelData.customModelData().addString(gun.getTextureID()).build();
+            itemStack.setData(DataComponentTypes.CUSTOM_MODEL_DATA, modelData);
         }
         return new ItemBuilder(itemStack);
     }

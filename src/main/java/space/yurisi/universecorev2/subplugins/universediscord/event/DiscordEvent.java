@@ -1,10 +1,13 @@
 package space.yurisi.universecorev2.subplugins.universediscord.event;
 
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import space.yurisi.universecorev2.subplugins.universediscord.UniverseDiscordMessage;
+
+import java.util.List;
 
 public class DiscordEvent extends ListenerAdapter {
 
@@ -14,7 +17,6 @@ public class DiscordEvent extends ListenerAdapter {
         this.discordChannelId = discordChannelId;
     }
 
-    // TODO: 画像の送信に対応する
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         if (event.getAuthor().isBot() || !event.isFromType(ChannelType.TEXT)) {
@@ -27,8 +29,14 @@ public class DiscordEvent extends ListenerAdapter {
 
         Member member = event.getMember();
         String content = event.getMessage().getContentDisplay();
+        List<Message.Attachment> file = event.getMessage().getAttachments();
 
         if (member == null) {
+            return;
+        }
+
+        if(!file.isEmpty()) {
+            UniverseDiscordMessage.sendMessageToMinecraft(member, "(ファイルを添付しました)");
             return;
         }
 

@@ -66,7 +66,7 @@ public abstract class Gun extends CustomItem {
 
     protected String flavorText;
 
-    protected int textureNumber;
+    protected String textureID;
 
     protected int price;
 
@@ -159,8 +159,8 @@ public abstract class Gun extends CustomItem {
         return flavorText;
     }
 
-    public int getTextureNumber(){
-        return textureNumber;
+    public String getTextureID(){
+        return textureID;
     }
 
     public int getPrice(){

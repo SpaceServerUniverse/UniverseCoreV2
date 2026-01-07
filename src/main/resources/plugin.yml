@@ -150,3 +150,11 @@ commands:
   #levelreward
   reward:
     description: レベル報酬を受け取る
+
+  #job
+  job:
+    description: 仕事メニューを開きます
+
+  #slot
+  slot:
+    description: スロットマシンを設定します

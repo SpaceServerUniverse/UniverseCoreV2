@@ -1,8 +1,13 @@
 package space.yurisi.universecorev2.item.gun;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.CustomModelData;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import space.yurisi.universecorev2.UniverseCoreV2;
+import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.subplugins.universeguns.constants.GunType;
 
 import org.bukkit.Material;
@@ -39,7 +44,7 @@ public final class M1911 extends Gun {
         this.volumeSound = 5.0F;
         this.pitchSound = 2.0F;
         this.flavorText = "§7アメリカで開発された自動拳銃。第一次世界大戦時代に生まれ、現在でも多くの国で使用されている";
-        this.textureNumber = 7;
+        this.textureID = "m1911";
         this.price = 1;
     }
 
@@ -48,9 +53,11 @@ public final class M1911 extends Gun {
         default_setting = (item) -> {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
-                meta.setCustomModelData(textureNumber);
+                meta.setItemModel(new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.GUN_ITEM_MODEL));
             }
             item.setItemMeta(meta);
+            CustomModelData modelData = CustomModelData.customModelData().addString(textureID).build();
+            item.setData(DataComponentTypes.CUSTOM_MODEL_DATA, modelData);
             return item;
         };
 

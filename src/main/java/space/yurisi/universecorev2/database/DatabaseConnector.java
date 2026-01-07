@@ -74,7 +74,9 @@ public class DatabaseConnector {
                 .addAnnotatedClass(BirthdayMessages.class)
                 .addAnnotatedClass(LoginBonus.class)
                 .addAnnotatedClass(LevelReward.class)
-                .addAnnotatedClass(SpaceShip.class);
+                .addAnnotatedClass(Job.class)
+                .addAnnotatedClass(SpaceShip.class)
+                .addAnnotatedClass(Slot.class);
     }
 
     private Configuration registerProperties(Configuration configuration) {
