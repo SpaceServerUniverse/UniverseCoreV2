@@ -18,16 +18,6 @@ public final class RecipeFlagOps {
         return bits.get(index);
     }
 
-    public static byte[] toBytes(BitSet bits, int byteSize) {
-        byte[] raw = bits.toByteArray();
-        if (raw.length == byteSize) {
-            return raw;
-        }
-        byte[] fixed = new byte[byteSize];
-        System.arraycopy(raw, 0, fixed, 0, Math.min(raw.length, byteSize));
-        return fixed;
-    }
-
     public static BitSet fromBytes(byte[] bytes) {
         return BitSet.valueOf(bytes);
     }

@@ -20,9 +20,12 @@ import space.yurisi.universecorev2.exception.CookingRecipeNotFoundException;
 import space.yurisi.universecorev2.item.CustomItem;
 import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.item.cooking.*;
+import space.yurisi.universecorev2.item.cooking.flag.RecipeIds;
+import space.yurisi.universecorev2.item.cooking.foodbase.NapolitanBase;
 import space.yurisi.universecorev2.subplugins.cooking.utils.CookingItems;
 import space.yurisi.universecorev2.subplugins.cooking.utils.RecipeFlagOps;
 
+import java.util.BitSet;
 import java.util.Objects;
 
 public class CookingEventListener implements Listener {
@@ -31,9 +34,13 @@ public class CookingEventListener implements Listener {
     public void onJoin(PlayerJoinEvent e){
         String uuid = e.getPlayer().getUniqueId().toString();
         try {
-            UniverseCoreV2API.getInstance().getDatabaseManager().getCookingRecipeRepository().getRecipeFlagsFromPlayer(uuid);
+            CookingRecipe cookingRecipe = UniverseCoreV2API.getInstance().getDatabaseManagerV2().get(CookingRecipeRepository.class).getRecipeFlagsFromPlayer(uuid);
+            BitSet bitset = RecipeFlagOps.fromBytes(cookingRecipe.getRecipe());
+            RecipeFlagOps.add(bitset, RecipeIds.NAPOLITAN);
+            cookingRecipe.setRecipe(bitset.toByteArray());
+            UniverseCoreV2API.getInstance().getDatabaseManagerV2().get(CookingRecipeRepository.class).updateRecipeFlags(cookingRecipe);
         }catch (CookingRecipeNotFoundException exception){
-            UniverseCoreV2API.getInstance().getDatabaseManager().getCookingRecipeRepository().createCookingRecipe(uuid, RecipeFlagOps.empty().toByteArray());
+            UniverseCoreV2API.getInstance().getDatabaseManagerV2().get(CookingRecipeRepository.class).createCookingRecipe(uuid, RecipeFlagOps.empty().toByteArray());
         }
     }
 

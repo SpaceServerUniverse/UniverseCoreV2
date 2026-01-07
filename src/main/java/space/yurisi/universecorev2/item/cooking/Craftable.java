@@ -1,7 +1,6 @@
 package space.yurisi.universecorev2.item.cooking;
 
 import org.bukkit.NamespacedKey;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -10,6 +9,7 @@ import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.UniverseCoreV2API;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.database.models.CookingRecipe;
+import space.yurisi.universecorev2.database.repositories.CookingRecipeRepository;
 import space.yurisi.universecorev2.exception.CookingRecipeNotFoundException;
 import space.yurisi.universecorev2.exception.InvalidRecipeException;
 import space.yurisi.universecorev2.exception.InvalidRecipeSizeException;
@@ -74,8 +74,8 @@ public interface Craftable {
             return false;
         }
         try {
-            byte[] flags = UniverseCoreV2API.getInstance().getDatabaseManager().getCookingRecipeRepository().getRecipeFlagsFromPlayer(uuid.toString());
-            if(!RecipeFlagOps.contains(RecipeFlagOps.fromBytes(flags), this.getFlagId())) return false;
+            CookingRecipe cookingRecipe = UniverseCoreV2API.getInstance().getDatabaseManagerV2().get(CookingRecipeRepository.class).getRecipeFlagsFromPlayer(uuid.toString());
+            if(!RecipeFlagOps.contains(RecipeFlagOps.fromBytes(cookingRecipe.getRecipe()), this.getFlagId())) return false;
         } catch (CookingRecipeNotFoundException e) {
             return false;
         }

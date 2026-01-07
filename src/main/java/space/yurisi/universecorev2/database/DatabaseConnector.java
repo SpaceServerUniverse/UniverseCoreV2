@@ -76,7 +76,8 @@ public class DatabaseConnector {
                 .addAnnotatedClass(LevelReward.class)
                 .addAnnotatedClass(Job.class)
                 .addAnnotatedClass(SpaceShip.class)
-                .addAnnotatedClass(Slot.class);
+                .addAnnotatedClass(Slot.class)
+                .addAnnotatedClass(CookingRecipe.class);
     }
 
     private Configuration registerProperties(Configuration configuration) {

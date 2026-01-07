@@ -37,7 +37,7 @@ public class CookingRecipeRepository {
      * @return byte[] レシピのフラグバイト配列
      * @throws CookingRecipeNotFoundException レシピデータが存在しない場合
      */
-    public byte[] getRecipeFlagsFromId(int recipeId) throws CookingRecipeNotFoundException {
+    public CookingRecipe getRecipeFlagsFromId(int recipeId) throws CookingRecipeNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
         try{
             session.beginTransaction();
@@ -48,7 +48,7 @@ public class CookingRecipeRepository {
             if(data.isEmpty()){
                 throw new CookingRecipeNotFoundException("レシピのデータが存在しませんでした。id: "+recipeId);
             }
-            return data.getFirst().getRecipe();
+            return data.getFirst();
         }finally {
             session.close();
         }
@@ -61,7 +61,7 @@ public class CookingRecipeRepository {
      * @return
      * @throws CookingRecipeNotFoundException
      */
-    public byte[] getRecipeFlagsFromPlayer(String uuid) throws CookingRecipeNotFoundException {
+    public CookingRecipe getRecipeFlagsFromPlayer(String uuid) throws CookingRecipeNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
         try{
             session.beginTransaction();
@@ -72,15 +72,14 @@ public class CookingRecipeRepository {
             if(data.isEmpty()){
                 throw new CookingRecipeNotFoundException("レシピのデータが存在しませんでした。uuid: "+uuid);
             }
-            return data.getFirst().getRecipe();
+            return data.getFirst();
         }finally {
             session.close();
         }
     }
 
-    public void updateRecipeFlags(CookingRecipe cookingRecipe, byte[] recipeFlags) {
+    public void updateRecipeFlags(CookingRecipe cookingRecipe) {
         Session session = this.sessionFactory.getCurrentSession();
-        cookingRecipe.setRecipe(recipeFlags);
         try {
             session.beginTransaction();
             session.merge(cookingRecipe);

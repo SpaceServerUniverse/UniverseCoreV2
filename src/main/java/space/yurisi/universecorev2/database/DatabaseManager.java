@@ -31,7 +31,6 @@ public class DatabaseManager {
     private final ReceiveBoxRepository receiveBoxRepository;
     private final BirthdayCardRepository birthdayCardRepository;
     private final LoginBonusRepository loginBonusRepository;
-    private final CookingRecipeRepository cookingRecipeRepository;
 
     public DatabaseManager(SessionFactory sessionFactory) {
         this.userRepository = new UserRepository(sessionFactory);
@@ -58,7 +57,6 @@ public class DatabaseManager {
         this.receiveBoxRepository = new ReceiveBoxRepository(sessionFactory);
         this.birthdayCardRepository = new BirthdayCardRepository(sessionFactory);
         this.loginBonusRepository = new LoginBonusRepository(sessionFactory);
-        this.cookingRecipeRepository = new CookingRecipeRepository(sessionFactory);
     }
 
     /**
@@ -272,12 +270,4 @@ public class DatabaseManager {
      * @return LoginBonusRepository
      */
     public LoginBonusRepository getLoginBonusRepository(){ return loginBonusRepository; }
-
-    /**
-     * 料理レシピリポジトリを取得
-     * @return CookingRecipeRepository
-     */
-    public CookingRecipeRepository getCookingRecipeRepository() {
-        return cookingRecipeRepository;
-    }
 }
