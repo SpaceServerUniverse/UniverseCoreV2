@@ -4,6 +4,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -18,11 +19,11 @@ import space.yurisi.universecorev2.database.repositories.CookingRecipeRepository
 import space.yurisi.universecorev2.exception.CookingRecipeNotFoundException;
 import space.yurisi.universecorev2.item.CustomItem;
 import space.yurisi.universecorev2.item.UniverseItem;
-import space.yurisi.universecorev2.item.cooking.Craftable;
-import space.yurisi.universecorev2.item.cooking.Edible;
-import space.yurisi.universecorev2.item.cooking.FoodBaseItem;
+import space.yurisi.universecorev2.item.cooking.*;
 import space.yurisi.universecorev2.subplugins.cooking.utils.CookingItems;
 import space.yurisi.universecorev2.subplugins.cooking.utils.RecipeFlagOps;
+
+import java.util.Objects;
 
 public class CookingEventListener implements Listener {
 
@@ -67,8 +68,25 @@ public class CookingEventListener implements Listener {
             if(!(foodBaseItem instanceof Craftable craftable)) continue;
             if(!craftable.canCraftedWith(matrix, e.getView().getPlayer().getUniqueId())) continue;
             CustomItem result = UniverseItem.getItem(foodBaseItem.getId());
-            if(result == null) return;
+            if(result == null) continue;
             e.getInventory().setResult(result.getItem());
+        }
+    }
+
+    @EventHandler
+    public void onFurnace(FurnaceSmeltEvent e){
+        ItemStack item = e.getSource();
+        PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
+        NamespacedKey key = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.COOKING_ITEM);
+        if(!container.has(key)) return;
+        CustomItem customItem = UniverseItem.getItem(container.get(key, PersistentDataType.STRING));
+        FoodItem[] smeltedItems = CookingItems.getAllFoodItems();
+        for(FoodItem smeltedItem : smeltedItems){
+            if(!(smeltedItem instanceof FurnaceResult furnaceResult)) continue;
+            if(customItem == null) continue;
+            if(!Objects.equals(customItem.getId(), furnaceResult.getFurnaceBaseItem().getId())) continue;
+            e.setResult(smeltedItem.getItem());
+            return;
         }
     }
 }
