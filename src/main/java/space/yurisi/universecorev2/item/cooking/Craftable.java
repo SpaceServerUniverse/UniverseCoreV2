@@ -27,7 +27,8 @@ public interface Craftable {
      *
      * @return CookingItem[]
      */
-    CookingItem[] @Nullable getRecipe();
+    @Nullable
+    CookingItem[] getRecipe();
 
     /**
      * レシピが形状付きかどうかを返します
