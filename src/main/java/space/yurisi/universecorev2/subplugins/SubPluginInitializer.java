@@ -97,7 +97,6 @@ public class SubPluginInitializer {
         this.subPlugins.add(new LoginBonus());
         this.subPlugins.add(new UniverseJob());
         this.subPlugins.add(new UniverseSlot());
-        //this.subPlugins.add(new SpaceShip());
         this.subPlugins.add(new SpaceShip());
         this.subPlugins.add(new Cooking());
     }
