@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import space.yurisi.universecorev2.item.cooking.FurnaceResult;
 import space.yurisi.universecorev2.item.cooking.foodbase.NapolitanBase;
 
-public class Napolitan extends FoodItem implements Edible, FurnaceResult {
+public final class Napolitan extends FoodItem implements Edible, FurnaceResult {
 
     public static final String id = "napolitan";
 

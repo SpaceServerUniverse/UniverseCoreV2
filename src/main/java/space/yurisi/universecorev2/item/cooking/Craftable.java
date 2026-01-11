@@ -77,6 +77,7 @@ public interface Craftable {
             CookingRecipe cookingRecipe = UniverseCoreV2API.getInstance().getDatabaseManagerV2().get(CookingRecipeRepository.class).getRecipeFlagsFromPlayer(uuid.toString());
             if(!RecipeFlagOps.contains(RecipeFlagOps.fromBytes(cookingRecipe.getRecipe()), this.getFlagId())) return false;
         } catch (CookingRecipeNotFoundException e) {
+            UniverseCoreV2.getInstance().getLogger().warning(e.getMessage());
             return false;
         }
         CookingItem[] checkedRecipe = new CookingItem[9];
