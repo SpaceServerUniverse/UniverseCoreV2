@@ -20,10 +20,8 @@ services:
       - ./paper/plugins:/data/plugins
       - ./paper/logs:/data/logs
     depends_on:
-      - db
-    networks:
-      - space_network
-      - shared_network
+      db:
+        condition: service_healthy
 
   db:
     image: mariadb:10.5.3-bionic
@@ -39,10 +37,12 @@ services:
     ]
     volumes:
       - ./db/data:/var/lib/mysql
-      - ./db/my.cnf:/etc/mysql/conf.d/my.cnf
-    networks:
-      - space_network
-      - shared_network
+      - ./db/my.cnf:/etc/mysql/conf.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-ppassword"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -58,12 +58,3 @@ services:
       - "8080:80"
     volumes:
       - ./phpmyadmin/sessions:/sessions
-    networks:
-      - space_network
-      - shared_network
-
-networks:
-  space_network:
-    driver: bridge
-  shared_network:
-    external: true

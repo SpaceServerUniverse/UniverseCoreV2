@@ -1,24 +1,20 @@
 package space.yurisi.universecorev2.subplugins.playerinfoscoreboard.task;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scoreboard.Criteria;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.*;
 import space.yurisi.universecorev2.exception.MoneyNotFoundException;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
 import space.yurisi.universecorev2.subplugins.autocollect.data.AutoCollectMap;
-import space.yurisi.universecorev2.subplugins.spaceship.SpaceShipAPI;
 import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomyAPI;
 import space.yurisi.universecorev2.subplugins.universejob.UniverseJob;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.Objects;
 
 public final class ScoreBoardTask extends BukkitRunnable {
@@ -31,12 +27,27 @@ public final class ScoreBoardTask extends BukkitRunnable {
 
     public ScoreBoardTask(Player player) {
         this.player = player;
+
+        if (player.getScoreboard().equals(Bukkit.getScoreboardManager().getMainScoreboard())) {
+            player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+        }
     }
 
     @Override
     public void run() {
-        Scoreboard scoreboard = createScoreboard();
+        Scoreboard scoreboard = player.getScoreboard();
+
+        updateTeams(scoreboard);
+
         Objective objective = scoreboard.getObjective("score");
+        if (objective == null) {
+            objective = scoreboard.registerNewObjective("score", Criteria.DUMMY, Component.text(this.getTickTitle()));
+            objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        }
+        objective.displayName(Component.text(this.getTickTitle()));
+
+        scoreboard.getEntries().forEach(scoreboard::resetScores);
+
         setMoney(objective, -1);
         setLocation(objective, -2);
         setWorld(objective, -3);
@@ -53,11 +64,48 @@ public final class ScoreBoardTask extends BukkitRunnable {
         changeTick();
     }
 
-    private Scoreboard createScoreboard() {
-        Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-        Objective o = scoreboard.registerNewObjective("score", Criteria.DUMMY, Component.text(this.getTickTitle()));
-        o.setDisplaySlot(DisplaySlot.SIDEBAR);
-        return scoreboard;
+    private void updateTeams(Scoreboard scoreboard) {
+        Scoreboard mainScoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
+
+        for (Team localTeam : scoreboard.getTeams()) {
+            if (mainScoreboard.getTeam(localTeam.getName()) == null) {
+                localTeam.unregister();
+            }
+        }
+
+        for (Team mainTeam : mainScoreboard.getTeams()) {
+            Team localTeam = scoreboard.getTeam(mainTeam.getName());
+
+            if (localTeam == null) {
+                localTeam = scoreboard.registerNewTeam(mainTeam.getName());
+            }
+
+            localTeam.displayName(mainTeam.displayName());
+            localTeam.prefix(mainTeam.prefix());
+            localTeam.suffix(mainTeam.suffix());
+            //localTeam.color(mainTeam.color()); #カラーも同期させたいけどうまくいかない
+            localTeam.setAllowFriendlyFire(mainTeam.allowFriendlyFire());
+            localTeam.setCanSeeFriendlyInvisibles(mainTeam.canSeeFriendlyInvisibles());
+
+            for (Team.Option option : Team.Option.values()) {
+                Team.OptionStatus status = mainTeam.getOption(option);
+                if (localTeam.getOption(option) != status) {
+                    localTeam.setOption(option, status);
+                }
+            }
+
+            for (String entry : mainTeam.getEntries()) {
+                if (!localTeam.hasEntry(entry)) {
+                    localTeam.addEntry(entry);
+                }
+            }
+
+            for (String entry : localTeam.getEntries()) {
+                if (!mainTeam.hasEntry(entry)) {
+                    localTeam.removeEntry(entry);
+                }
+            }
+        }
     }
 
     private void setMoney(Objective objective, int score) {
