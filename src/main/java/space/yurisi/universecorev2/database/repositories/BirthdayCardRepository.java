@@ -30,7 +30,7 @@ public class BirthdayCardRepository {
      */
     public BirthdayData createBirthdayData(UUID uuidMC, int month, int day) {
         String uuid = uuidMC.toString();
-        BirthdayData birthdayData = new BirthdayData(null, uuid, month, day, false);
+        BirthdayData birthdayData = new BirthdayData(null, uuid, month, day, false, null);
 
         Session session = this.sessionFactory.getCurrentSession();
         try {
@@ -129,10 +129,10 @@ public class BirthdayCardRepository {
         Session session = this.sessionFactory.getCurrentSession();
         try {
             session.beginTransaction();
-            List<BirthdayData> data = session.createSelectionQuery("FROM BirthdayData", BirthdayData.class)
-                    .setFirstResult(offset)
-                    .setMaxResults(limit)
-                    .getResultList();
+            var query = session.createSelectionQuery("FROM BirthdayData", BirthdayData.class);
+            query.setFirstResult(offset);
+            query.setMaxResults(limit);
+            List<BirthdayData> data = query.getResultList();
 
             session.getTransaction().commit();
             return data;

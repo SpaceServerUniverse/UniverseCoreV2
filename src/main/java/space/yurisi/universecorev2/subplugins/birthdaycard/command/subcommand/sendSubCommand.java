@@ -80,7 +80,7 @@ public class sendSubCommand implements BirthdayCardSubCommand {
         var birthdayMessage = repo.createBirthdayMessage(birthdayData.getId(), player, pageJson);
 
         Message.sendSuccessMessage(player, BirthdayCard.PREFIX, "お誕生日カードを送信しました");
-        player.getInventory().remove(mainHandItem);
+        player.getInventory().setItemInMainHand(null);
 
         ItemStack ticket = UniverseItem.getItem(GachaTicket.id).getItem();
         ticket.setAmount(5);

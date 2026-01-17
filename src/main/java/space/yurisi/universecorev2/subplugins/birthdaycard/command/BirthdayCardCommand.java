@@ -1,47 +1,21 @@
 package space.yurisi.universecorev2.subplugins.birthdaycard.command;
 
-import net.kyori.adventure.inventory.Book;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.UniverseCoreV2API;
-import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.database.models.BirthdayData;
-import space.yurisi.universecorev2.database.models.BirthdayMessages;
 import space.yurisi.universecorev2.database.repositories.BirthdayCardRepository;
-import space.yurisi.universecorev2.exception.BirthdayDataNotFoundException;
-import space.yurisi.universecorev2.item.UniverseItem;
-import space.yurisi.universecorev2.item.ticket.GachaTicket;
 import space.yurisi.universecorev2.subplugins.birthdaycard.BirthdayCard;
 import space.yurisi.universecorev2.subplugins.birthdaycard.command.subcommand.*;
 import space.yurisi.universecorev2.subplugins.birthdaycard.menu.birthday_menu.BirthdayCardMenu;
-import space.yurisi.universecorev2.subplugins.birthdaycard.utils.PageJsonUtils;
 import space.yurisi.universecorev2.subplugins.birthdaycard.utils.PlayerUtils;
-import space.yurisi.universecorev2.subplugins.receivebox.ReceiveBoxAPI;
-import space.yurisi.universecorev2.utils.Message;
-import space.yurisi.universecorev2.utils.NumberUtils;
 
-import java.time.DateTimeException;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.MonthDay;
 import java.util.*;
 
 public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
@@ -81,7 +55,7 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
     private void sendHelp(Player player) {
         player.sendMessage("""
                 §6-- 🎉BirthdayCard Help --
-                🎂 §bバースデーカードのコマンド一覧です 🎂
+                🎂 §bバースデーカードのコマンド一覧です §r🎂
                    §7/birthday : バースデーカレンダーメニューを開きます
                    §7/birthday register <月> <日> : 誕生日を登録します
                    §7/birthday check [プレイヤー名] : 誕生日を確認します
@@ -97,8 +71,11 @@ public class BirthdayCardCommand implements CommandExecutor, TabCompleter {
         List<String> completions = new ArrayList<>();
 
         if (args.length == 1) {
-            List<String> shows = subCommands.keySet().stream().filter(n -> !Objects.equals(n, "registerconfirm")).toList();
-            completions.addAll(shows);
+            List<String> subCommandList = subCommands.keySet().stream()
+                    .filter(n -> !n.equalsIgnoreCase("registerconfirm"))
+                    .toList();
+            StringUtil.copyPartialMatches(args[0], subCommandList, completions);
+            Collections.sort(completions); // アルファベット順に
             return completions;
         }
 

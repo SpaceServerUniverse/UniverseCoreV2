@@ -32,7 +32,9 @@ public class JoinEvent implements Listener {
         List<BirthdayData> birthdayDataList;
         birthdayDataList = birthdayCardRepository.getAllBirthdayData();
         for (BirthdayData birthdayData : birthdayDataList) {
-            if (birthdayData.isGiftReceived()) return;
+            if (birthdayData.isGiftReceived()) {
+                continue;
+            }
             MonthDay birthday = MonthDay.of(birthdayData.getMonth(), birthdayData.getDay());
             LocalDate thisYearBirthday = LocalDate.of(LocalDate.now().getYear(), birthday.getMonthValue(), birthday.getDayOfMonth());
             LocalDate today = LocalDate.now();
@@ -55,13 +57,6 @@ public class JoinEvent implements Listener {
                 }
             }
 
-            if (birthdayData.isGiftReceived()) {
-                LocalDate oneDayLater = LocalDate.now().plusDays(1);
-                if (thisYearBirthday.isAfter(oneDayLater)) {
-                    birthdayData.setGiftReceived(false);
-                    birthdayCardRepository.updateBirthdayData(birthdayData);
-                }
-            }
         }
     }
 }

@@ -40,7 +40,7 @@ public class giftSubCommand implements BirthdayCardSubCommand{
         }
 
         if (birthdayData.isGiftReceived()) {
-            Message.sendNormalMessage(player, BirthdayCard.PREFIX, "もうすでに誕生日カードを受け取っています");
+            Message.sendNormalMessage(player, BirthdayCard.PREFIX, "今年の誕生日カードはすでに受け取っています");
             return true;
         }
 
@@ -92,7 +92,9 @@ public class giftSubCommand implements BirthdayCardSubCommand{
                 .append(Component.text(" さんの誕生日です！🎂\n", NamedTextColor.YELLOW))
                 .append(Component.text("素晴らしい一年になりますように！おめでとう！", NamedTextColor.GREEN)));
 
+        int currentYear = LocalDate.now().getYear();
         birthdayData.setGiftReceived(true);
+        birthdayData.setLastGiftReceivedYear(currentYear);
         repo.updateBirthdayData(birthdayData);
         return true;
     }
