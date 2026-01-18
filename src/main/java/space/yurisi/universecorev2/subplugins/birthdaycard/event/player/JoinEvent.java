@@ -23,20 +23,18 @@ public class JoinEvent implements Listener {
     private final BirthdayCardRepository birthdayCardRepository;
 
     public JoinEvent() {
-        birthdayCardRepository = UniverseCoreV2API.getInstance().getDatabaseManager().getBirthdayCardRepository();
+        birthdayCardRepository = UniverseCoreV2API.getInstance().getDatabaseManagerV2().get(BirthdayCardRepository.class);
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         List<BirthdayData> birthdayDataList;
-        try {
-            birthdayDataList = birthdayCardRepository.getAllBirthdayData();
-        } catch (BirthdayDataNotFoundException error) {
-            return;
-        }
+        birthdayDataList = birthdayCardRepository.getAllBirthdayData();
         for (BirthdayData birthdayData : birthdayDataList) {
-            if (birthdayData.isGiftReceived()) return;
+            if (birthdayData.isGiftReceived()) {
+                continue;
+            }
             MonthDay birthday = MonthDay.of(birthdayData.getMonth(), birthdayData.getDay());
             LocalDate thisYearBirthday = LocalDate.of(LocalDate.now().getYear(), birthday.getMonthValue(), birthday.getDayOfMonth());
             LocalDate today = LocalDate.now();
@@ -59,13 +57,6 @@ public class JoinEvent implements Listener {
                 }
             }
 
-            if (birthdayData.isGiftReceived()) {
-                LocalDate oneDayLater = LocalDate.now().plusDays(1);
-                if (thisYearBirthday.isAfter(oneDayLater)) {
-                    birthdayData.setGiftReceived(false);
-                    birthdayCardRepository.updateBirthdayData(birthdayData);
-                }
-            }
         }
     }
 }
