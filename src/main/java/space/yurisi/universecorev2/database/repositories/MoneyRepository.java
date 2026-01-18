@@ -212,6 +212,17 @@ public class MoneyRepository {
         }
     }
 
+    public void updateMoneyWithoutHistory(Money money) {
+        Session session = this.sessionFactory.getCurrentSession();
+        try {
+            session.beginTransaction();
+            session.merge(money);
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
+    }
+
     /**
      * トランザクション付きで2人のプレイヤーのお金を増減します。
      *

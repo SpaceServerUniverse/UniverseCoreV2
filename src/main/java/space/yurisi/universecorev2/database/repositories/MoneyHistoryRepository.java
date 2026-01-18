@@ -47,6 +47,18 @@ public class MoneyHistoryRepository {
         return money_history;
     }
 
+    public MoneyHistory createMoneyHistory(MoneyHistory moneyHistory) {
+        Session session = this.sessionFactory.getCurrentSession();
+        try {
+            session.beginTransaction();
+            session.persist(moneyHistory);
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
+        return moneyHistory;
+    }
+
     /**
      * お金履歴をプライマリーキーから取得します。
      *
@@ -80,7 +92,7 @@ public class MoneyHistoryRepository {
         Session session = this.sessionFactory.getCurrentSession();
         try {
             session.beginTransaction();
-            List<MoneyHistory> data = session.createSelectionQuery("from Money where user_id = ?1", MoneyHistory.class)
+            List<MoneyHistory> data = session.createSelectionQuery("from MoneyHistory where user_id = ?1", MoneyHistory.class)
                     .setParameter(1, user_id).getResultList();
             session.getTransaction().commit();
             if (data.isEmpty()) {

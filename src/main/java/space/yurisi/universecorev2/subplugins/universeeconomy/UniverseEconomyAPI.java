@@ -3,12 +3,15 @@ package space.yurisi.universecorev2.subplugins.universeeconomy;
 import org.bukkit.entity.Player;
 import space.yurisi.universecorev2.database.DatabaseManager;
 import space.yurisi.universecorev2.database.models.Money;
+import space.yurisi.universecorev2.database.models.MoneyHistory;
 import space.yurisi.universecorev2.exception.MoneyNotFoundException;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
 import space.yurisi.universecorev2.subplugins.universeeconomy.exception.CanNotAddMoneyException;
 import space.yurisi.universecorev2.subplugins.universeeconomy.exception.CanNotReduceMoneyException;
 import space.yurisi.universecorev2.subplugins.universeeconomy.exception.ParameterException;
 import space.yurisi.universecorev2.subplugins.universeeconomy.file.Config;
+
+import java.util.List;
 
 /**
  * The type Universe economy api.
@@ -134,6 +137,41 @@ public class UniverseEconomyAPI extends UniverseCoreAPIConnector{
      */
     public Long getMoneyFromUserName(String name) throws UserNotFoundException, MoneyNotFoundException {
         return baseGetMoneyFromUserName(name);
+    }
+
+    /**
+     * お金履歴を取得
+     *
+     * @param player プレイヤー
+     * @return List MoneyHistory
+     * @throws UserNotFoundException  ユーザーデータが存在しない
+     * @throws MoneyNotFoundException お金データが存在しない
+     */
+    public List<MoneyHistory> getMoneyHistory(Player player) throws UserNotFoundException, MoneyNotFoundException {
+        return baseGetMoneyHistory(player);
+    }
+
+    /**
+     * お金履歴を取得
+     *
+     * @param name プレイヤー名
+     * @return List MoneyHistory
+     * @throws UserNotFoundException  ユーザーデータが存在しない
+     * @throws MoneyNotFoundException お金データが存在しない
+     */
+    public List<MoneyHistory> getMoneyHistoryFromUserName(String name) throws UserNotFoundException, MoneyNotFoundException {
+        return baseGetMoneyHistoryFromUserName(name);
+    }
+
+    public void flushPlayer(Player player) {
+        try {
+            baseFlushPlayer(player.getUniqueId());
+        } catch (UserNotFoundException | MoneyNotFoundException ignored) {
+        }
+    }
+
+    public void flushAll() {
+        baseFlushAll();
     }
 
     /**
