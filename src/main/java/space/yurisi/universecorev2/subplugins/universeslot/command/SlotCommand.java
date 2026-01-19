@@ -15,6 +15,7 @@ import space.yurisi.universecorev2.UniverseCoreV2API;
 import space.yurisi.universecorev2.database.models.Slot;
 import space.yurisi.universecorev2.database.models.User;
 import space.yurisi.universecorev2.database.repositories.SlotRepository;
+import space.yurisi.universecorev2.exception.CannotReduceSlotCashException;
 import space.yurisi.universecorev2.exception.MoneyNotFoundException;
 import space.yurisi.universecorev2.exception.SlotNotFoundException;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
@@ -91,41 +92,42 @@ public class SlotCommand implements CommandExecutor, TabCompleter {
         }
 
         switch (args[0]) {
-            case "register" -> {
 
+            case "register" -> {
                 if (slot != null) {
                     Message.sendErrorMessage(player, "[スロットAI]", "この棚は既にスロットとして登録されています。");
                     return false;
-                } else {
-                    // 以降スロット登録
-                    if (!shelf.getInventory().isEmpty()) {
-                        Message.sendErrorMessage(player, "[スロットAI]", "棚が空ではないためスロットにできません。");
-                        return false;
-                    }
-                    try {
-                        UniverseEconomyAPI.getInstance().reduceMoney(player, 10000L, "スロット設置費用");
-                    } catch (UserNotFoundException | MoneyNotFoundException exception) {
-                        Message.sendErrorMessage(player, "[スロットAI]", "ユーザーかお金の情報の取得に失敗しました。管理者にお問い合わせください。");
-                        return false;
-                    } catch (CanNotReduceMoneyException exception) {
-                        Message.sendErrorMessage(player, "[スロットAI]", "お金が不足しているためスロットを設置できません。");
-                        return false;
-                    } catch (ParameterException exception) {
-                        Message.sendErrorMessage(player, "[スロットAI]", "パラメーターの値が不正です。管理者にお問い合わせください。");
-                        return false;
-                    }
-
-                    slotRepository.createSlot(player.getUniqueId(), (long) clickedLocation.getX(), (long) clickedLocation.getY(), (long) clickedLocation.getZ(), clickedLocation.getWorld().getName());
-                    slotLocationManager.registerSlotLocation(clickedLocation, player.getUniqueId());
-                    Message.sendSuccessMessage(player, "[スロットAI]", "スロットを作成しました");
-
-                    shelf.getInventory().setItem(0, UniverseSlot.getInstance().getRoller().getRandomRotateItem());
-                    shelf.getInventory().setItem(1, UniverseSlot.getInstance().getRoller().getRandomRotateItem());
-                    shelf.getInventory().setItem(2, UniverseSlot.getInstance().getRoller().getRandomRotateItem());
-
-                    return true;
                 }
+
+                if (!shelf.getInventory().isEmpty()) {
+                    Message.sendErrorMessage(player, "[スロットAI]", "棚が空ではないためスロットにできません。");
+                    return false;
+                }
+
+                try {
+                    UniverseEconomyAPI.getInstance().reduceMoney(player, 10000L, "スロット設置費用");
+                } catch (UserNotFoundException | MoneyNotFoundException exception) {
+                    Message.sendErrorMessage(player, "[スロットAI]", "ユーザーかお金の情報の取得に失敗しました。管理者にお問い合わせください。");
+                    return false;
+                } catch (CanNotReduceMoneyException exception) {
+                    Message.sendErrorMessage(player, "[スロットAI]", "お金が不足しているためスロットを設置できません。");
+                    return false;
+                } catch (ParameterException exception) {
+                    Message.sendErrorMessage(player, "[スロットAI]", "パラメーターの値が不正です。管理者にお問い合わせください。");
+                    return false;
+                }
+
+                slotRepository.createSlot(player.getUniqueId(), (long) clickedLocation.getX(), (long) clickedLocation.getY(), (long) clickedLocation.getZ(), clickedLocation.getWorld().getName());
+                slotLocationManager.registerSlotLocation(clickedLocation, player.getUniqueId());
+                Message.sendSuccessMessage(player, "[スロットAI]", "スロットを作成しました");
+
+                shelf.getInventory().setItem(0, UniverseSlot.getInstance().getRoller().getRandomRotateItem());
+                shelf.getInventory().setItem(1, UniverseSlot.getInstance().getRoller().getRandomRotateItem());
+                shelf.getInventory().setItem(2, UniverseSlot.getInstance().getRoller().getRandomRotateItem());
+
+                return true;
             }
+
             case "unregister" -> {
                 if (slot == null) {
                     Message.sendErrorMessage(player, "[スロットAI]", "この棚はスロットとして登録されていません。");
@@ -168,6 +170,7 @@ public class SlotCommand implements CommandExecutor, TabCompleter {
                     return false;
                 }
             }
+
             case "info" -> {
                 if (slot == null) {
                     Message.sendErrorMessage(player, "[スロットAI]", "この棚はスロットとして登録されていません。");
@@ -188,11 +191,13 @@ public class SlotCommand implements CommandExecutor, TabCompleter {
                 }
                 return true;
             }
+
             case "config" -> {
                 if (args.length != 2) {
                     Message.sendErrorMessage(player, "[スロットAI]", "引数が不正です。/slot config <設定値>の形式で実行してください。");
                     return false;
                 }
+
                 int config;
                 try {
                     config = Integer.parseInt(args[1]);
@@ -220,11 +225,13 @@ public class SlotCommand implements CommandExecutor, TabCompleter {
                 Message.sendSuccessMessage(player, "[スロットAI]", "スロットの設定を " + config + " に変更しました。");
                 return true;
             }
+
             case "addCash" -> {
                 if (args.length != 2) {
                     Message.sendErrorMessage(player, "[スロットAI]", "引数が不正です。/slot addCash <金額>の形式で実行してください。");
                     return false;
                 }
+
                 long amount;
                 try {
                     amount = Long.parseLong(args[1]);
@@ -249,6 +256,7 @@ public class SlotCommand implements CommandExecutor, TabCompleter {
                 }
 
                 try {
+                    slotRepository.updateCash(slot, amount);
                     UniverseEconomyAPI.getInstance().reduceMoney(player, amount, "スロット内部キャッシュ追加");
                 } catch (UserNotFoundException | MoneyNotFoundException exception) {
                     Message.sendErrorMessage(player, "[スロットAI]", "ユーザーかお金の情報の取得に失敗しました。管理者にお問い合わせください。");
@@ -259,8 +267,15 @@ public class SlotCommand implements CommandExecutor, TabCompleter {
                 } catch (ParameterException exception) {
                     Message.sendErrorMessage(player, "[スロットAI]", "パラメーターの値が不正です。管理者にお問い合わせください。");
                     return false;
+                } catch (CannotReduceSlotCashException exception) {
+                    Message.sendErrorMessage(player, "[スロットAI]", "スロットのキャッシュを追加できません。管理者にお問い合わせください。");
+                    return false;
                 }
 
+                Message.sendSuccessMessage(player, "[スロットAI]", "スロットの内部キャッシュに " + amount + " 円を追加しました。");
+                Message.sendSuccessMessage(player, "[スロットAI]", "現在のスロット内部キャッシュ: " + slot.getCash() + " 円");
+
+                return true;
             }
             case "removeCash" -> {
                 if (args.length != 2) {
@@ -291,6 +306,7 @@ public class SlotCommand implements CommandExecutor, TabCompleter {
                 }
 
                 try {
+                    slotRepository.updateCash(slot, -amount);
                     UniverseEconomyAPI.getInstance().addMoney(player, amount, "スロット内部キャッシュ引き出し");
                 } catch (UserNotFoundException | MoneyNotFoundException exception) {
                     Message.sendErrorMessage(player, "[スロットAI]", "ユーザーかお金の情報の取得に失敗しました。管理者にお問い合わせください。");
@@ -301,7 +317,16 @@ public class SlotCommand implements CommandExecutor, TabCompleter {
                 } catch (ParameterException exception) {
                     Message.sendErrorMessage(player, "[スロットAI]", "パラメーターの値が不正です。管理者にお問い合わせください。");
                     return false;
+                } catch (CannotReduceSlotCashException exception) {
+                    Message.sendErrorMessage(player, "[スロットAI]", "スロットのキャッシュが不足しているため、引き出せません。");
+                    return false;
                 }
+                Message.sendSuccessMessage(player, "[スロットAI]", "スロットの内部キャッシュから " + amount + " 円を引き出しました。");
+                Message.sendSuccessMessage(player, "[スロットAI]", "現在のスロット内部キャッシュ: " + slot.getCash() + " 円");
+                if(slot.getCash() < 5000L){
+                    Message.sendWarningMessage(player, "[スロットAI]", "スロット内部キャッシュが5000円未満です。このスロットはプレイ不可能になります。");
+                }
+                return true;
 
             }
             default -> {
@@ -309,7 +334,6 @@ public class SlotCommand implements CommandExecutor, TabCompleter {
                 return false;
             }
         }
-        return true;
 
     }
 
