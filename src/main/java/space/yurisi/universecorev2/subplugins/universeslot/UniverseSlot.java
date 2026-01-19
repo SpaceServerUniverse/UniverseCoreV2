@@ -5,6 +5,7 @@ import space.yurisi.universecorev2.subplugins.SubPlugin;
 import space.yurisi.universecorev2.subplugins.universeslot.command.SlotCommand;
 import space.yurisi.universecorev2.subplugins.universeslot.listener.EventManager;
 import space.yurisi.universecorev2.subplugins.universeslot.manager.PlayerStatusManager;
+import space.yurisi.universecorev2.subplugins.universeslot.manager.RoleManager;
 import space.yurisi.universecorev2.subplugins.universeslot.manager.SlotLocationManager;
 import space.yurisi.universecorev2.subplugins.universeslot.core.Roller;
 import space.yurisi.universecorev2.subplugins.universeslot.manager.SlotStatusManager;
@@ -33,6 +34,11 @@ public class UniverseSlot implements SubPlugin {
         return slotStatusManager;
     }
 
+    private RoleManager roleManager;
+    public RoleManager getRoleManager() {
+        return roleManager;
+    }
+
     private Roller roller;
     public Roller getRoller() {
         return roller;
@@ -43,6 +49,7 @@ public class UniverseSlot implements SubPlugin {
         playerStatusManager = new PlayerStatusManager();
         slotStatusManager = new SlotStatusManager();
         slotLocationManager = new SlotLocationManager();
+        roleManager = new RoleManager();
         roller = new Roller();
         new EventManager(core, this);
 

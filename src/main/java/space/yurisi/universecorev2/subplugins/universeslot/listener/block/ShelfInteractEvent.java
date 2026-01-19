@@ -49,78 +49,16 @@ public class ShelfInteractEvent implements Listener {
             return;
         }
 
+        // slot編集モードは別処理
+        if(main.getPlayerStatusManager().hasFlag(player.getUniqueId(), PlayerStatusManager.ON_EDIT_MODE)){
+            return;
+        }
+
         SlotLocationManager slotLocationManager = UniverseSlot.getInstance().getSlotLocationManager();
 
         Location location = playerInteractEvent.getClickedBlock().getLocation();
         SlotRepository slotRepository = UniverseCoreV2API.getInstance().getDatabaseManagerV2().get(SlotRepository.class);
 
-        // slot編集モード
-        if(main.getPlayerStatusManager().hasFlag(player.getUniqueId(), PlayerStatusManager.ON_EDIT_MODE)){
-            if (playerInteractEvent.getHand() != EquipmentSlot.HAND) return;
-            playerInteractEvent.setCancelled(true);
-
-            LandDataManager landDataManager = LandDataManager.getInstance();
-            if(!landDataManager.canAccess(player, new BoundingBox(shelf.getX(), shelf.getZ(), shelf.getX(), shelf.getZ(), shelf.getWorld().getName()))){
-                Message.sendErrorMessage(player, "[スロットAI]", "あなたの土地ではないため編集できません。");
-                return;
-            }
-
-            Slot slot;
-
-            main.getPlayerStatusManager().removeFlag(player.getUniqueId(), PlayerStatusManager.ON_EDIT_MODE);
-
-            try{
-                // ここで例外吐いたらスロットではない
-                slot = slotRepository.getSlotFromCoordinates((long)location.getX(), (long)location.getY(), (long)location.getZ(), location.getWorld().getName());
-
-                // 以降スロット解除処理
-                if(player.isOp() || player.getUniqueId().equals(UUID.fromString(slot.getUuid()))){
-                    SlotCore slotCore = main.getPlayerStatusManager().getPlayerSlotCore(player.getUniqueId());
-                    if(slotCore != null){
-                        slotCore.stopSlotMachine();
-                        main.getPlayerStatusManager().removePlayerSlotCore(player.getUniqueId());
-                    }
-                    slotLocationManager.unregisterSlotLocation(location);
-                    slotRepository.deleteSlot(slot);
-                    shelf.getInventory().clear();
-                    Message.sendSuccessMessage(player, "[スロットAI]", "スロットの登録を解除しました。");
-                    return;
-                }
-                User user = UniverseCoreV2API.getInstance().getDatabaseManager().getUserRepository().getUserFromUUID(UUID.fromString(slot.getUuid()));
-                Message.sendNormalMessage(player, "[スロットAI]", "他のユーザーによってこのスロットは登録されています。持ち主：" + user.getName());
-
-            } catch (SlotNotFoundException e) {
-                // 以降スロット登録
-                if(!shelf.getInventory().isEmpty()){
-                    Message.sendErrorMessage(player, "[スロットAI]", "棚が空ではないためスロットにできません。");
-                    return;
-                }
-                try{
-                    UniverseEconomyAPI.getInstance().reduceMoney(player, 10000L, "スロット設置費用");
-                } catch (UserNotFoundException | MoneyNotFoundException exception){
-                    Message.sendErrorMessage(player, "[スロットAI]", "ユーザーかお金の情報の取得に失敗しました。管理者にお問い合わせください。");
-                    return;
-                } catch (CanNotReduceMoneyException exception){
-                    Message.sendErrorMessage(player, "[スロットAI]", "お金が不足しているためスロットを設置できません。");
-                    return;
-                } catch (ParameterException exception){
-                    Message.sendErrorMessage(player, "[スロットAI]", "パラメーターの値が不正です。管理者にお問い合わせください。");
-                    return;
-                }
-
-                slotRepository.createSlot(player.getUniqueId(), (long)location.getX(), (long)location.getY(), (long)location.getZ(), location.getWorld().getName());
-                slotLocationManager.registerSlotLocation(location, player.getUniqueId());
-                Message.sendSuccessMessage(player, "[スロットAI]", "スロットを作成しました");
-
-                shelf.getInventory().setItem(0, UniverseSlot.getInstance().getRoller().getRandomRotateItem());
-                shelf.getInventory().setItem(1, UniverseSlot.getInstance().getRoller().getRandomRotateItem());
-                shelf.getInventory().setItem(2, UniverseSlot.getInstance().getRoller().getRandomRotateItem());
-
-            } catch (UserNotFoundException e) {
-                return;
-            }
-            return;
-        }
         if(!playerInteractEvent.getAction().isRightClick()){
             return;
         }
@@ -172,11 +110,18 @@ public class ShelfInteractEvent implements Listener {
             return;
         }
 
-        SlotCore slotCore = new SlotCore(player, shelf);
-        if(!slotCore.startSlot()){
-            Message.sendErrorMessage(player, "[スロットAI]", "スロットの開始に失敗しました。");
+        SlotCore slotCore;
+        try {
+            slotCore = new SlotCore(player, shelf);
+        } catch (SlotNotFoundException e) {
+            Message.sendErrorMessage(player, "[スロットAI]", "スロットの情報の取得に失敗しました。管理者にお問い合わせください。");
             return;
         }
+
+        if(!slotCore.prepareSlot()){
+            return;
+        }
+        slotCore.startSlot();
         playerStatusManager.setPlayerSlotCore(player.getUniqueId(), slotCore);
 
     }

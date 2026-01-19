@@ -1,0 +1,5 @@
+USE SpaceServerUniverse;
+
+ALTER TABLE slots
+    ADD COLUMN cash BIGINT NOT NULL DEFAULT 10000;
+    ADD COLUMN config INT NOT NULL DEFAULT 1;

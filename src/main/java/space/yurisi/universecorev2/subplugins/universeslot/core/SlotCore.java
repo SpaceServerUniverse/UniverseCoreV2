@@ -9,21 +9,23 @@ import org.bukkit.scheduler.BukkitRunnable;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.UniverseCoreV2API;
 import space.yurisi.universecorev2.database.models.Money;
+import space.yurisi.universecorev2.database.models.Slot;
 import space.yurisi.universecorev2.database.repositories.MoneyRepository;
+import space.yurisi.universecorev2.database.repositories.SlotRepository;
 import space.yurisi.universecorev2.database.repositories.UserRepository;
-import space.yurisi.universecorev2.exception.LaneNumberWrongException;
-import space.yurisi.universecorev2.exception.MoneyNotFoundException;
-import space.yurisi.universecorev2.exception.UserNotFoundException;
+import space.yurisi.universecorev2.exception.*;
 import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomyAPI;
 import space.yurisi.universecorev2.subplugins.universeeconomy.exception.CanNotAddMoneyException;
 import space.yurisi.universecorev2.subplugins.universeeconomy.exception.CanNotReduceMoneyException;
 import space.yurisi.universecorev2.subplugins.universeeconomy.exception.ParameterException;
 import space.yurisi.universecorev2.subplugins.universeslot.UniverseSlot;
 import space.yurisi.universecorev2.subplugins.universeslot.manager.PlayerStatusManager;
+import space.yurisi.universecorev2.subplugins.universeslot.manager.RoleManager;
 import space.yurisi.universecorev2.subplugins.universeslot.manager.SlotStatusManager;
 import space.yurisi.universecorev2.utils.Message;
 
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 public class SlotCore {
@@ -45,6 +47,18 @@ public class SlotCore {
     private final PlayerStatusManager playerStatusManager;
     private final SlotStatusManager slotStatusManager;
 
+    private final SlotRepository slotRepository;
+    private final Slot slot;
+
+    private ItemStack roleItem;
+
+    private List<ItemStack> rotateItemsLane1;
+    private List<ItemStack> rotateItemsLane2;
+    private List<ItemStack> rotateItemsLane3;
+
+
+    private boolean onFreeze;
+
     private final Location location;
     public Location getLocation() {
         return location;
@@ -58,31 +72,39 @@ public class SlotCore {
         slotStatusManager = UniverseSlot.getInstance().getSlotStatusManager();
         this.ownerUUID = UniverseSlot.getInstance().getSlotLocationManager().getOwnerUUID(shelf.getLocation());
         this.location = shelf.getLocation();
+        try{
+            slotRepository = UniverseCoreV2API.getInstance().getDatabaseManagerV2().get(SlotRepository.class);
+            slot = slotRepository.getSlotFromCoordinates((long)location.getX(), (long)location.getY(), (long)location.getZ(), location.getWorld().getName());
+        } catch (SlotNotFoundException e) {
+            throw new SlotNotFoundException("Slot not found at location: " + location);
+        }
     }
 
-    public boolean startSlot(){
+    public boolean prepareSlot(){
         if(playerStatusManager.hasFlag(uuid, PlayerStatusManager.ON_SLOT)){
+            Message.sendErrorMessage(player, "[スロットAI]", "既に他のスロットを利用中です。");
             return false;
         }
         if(slotStatusManager.isInUse(location)){
+            Message.sendErrorMessage(player, "[スロットAI]", "他のプレイヤーが利用中です。");
             return false;
         }
         if(player.getVehicle() == null){
             Message.sendErrorMessage(player, "[スロットAI]", "椅子に座ってスロットを引いてください。");
             return false;
         }
+        if(slot.getCash() < 5000L){
+            Message.sendErrorMessage(player, "[スロットAI]", "このスロットはメンテナンス中のため利用できません。");
+            Player owner = Bukkit.getPlayer(ownerUUID);
+            if(owner != null && owner.isOnline()){
+                Message.sendWarningMessage(owner, "[スロットAI]", "あなたのスロットの残高が不足しています！(" + shelf.getX() + ", " + shelf.getY() + ", " + shelf.getZ() + ")");
+            }
+            return false;
+        }
+
         try{
             UniverseEconomyAPI.getInstance().reduceMoney(player, 10L, "スロット利用料");
-            if(!player.getUniqueId().equals(ownerUUID)) {
-                Long user_id;
-                Money money;
-                UserRepository userRepository = UniverseCoreV2API.getInstance().getDatabaseManager().getUserRepository();
-                MoneyRepository moneyRepository = UniverseCoreV2API.getInstance().getDatabaseManager().getMoneyRepository();
-                user_id = userRepository.getPrimaryKeyFromUUID(ownerUUID);
-                money = moneyRepository.getMoneyFromUserId(user_id);
-                money.setMoney(money.getMoney() + 2L);
-                moneyRepository.updateMoney(money, 2L, "スロット利用料収益");
-            }
+            slotRepository.updateCash(slot, 2L);
         } catch (UserNotFoundException | MoneyNotFoundException e){
             Message.sendErrorMessage(player, "[スロットAI]", "ユーザーかお金の情報が見つかりません。スロットを利用できません。");
             return false;
@@ -92,57 +114,76 @@ public class SlotCore {
         } catch (ParameterException e){
             Message.sendErrorMessage(player, "[スロットAI]", "エラー:ParameterExceptionが発生しました。運営にお問い合わせください。");
             return false;
+        } catch (CannotReduceSlotCashException e){
+            Message.sendErrorMessage(player, "[スロットAI]", "スロットの残高を減らせません。運営にお問い合わせください。");
+            return false;
         }
+
+        return true;
+    }
+
+    public void startSlot(){
         slotStatusManager.addFlag(location, SlotStatusManager.IN_USE);
         playerStatusManager.addFlag(uuid, PlayerStatusManager.ON_SLOT);
 
-        // ロール作成
-        UniverseSlot.getInstance().getRoller().createRandomLane(15);
-        List<ItemStack> rotateItemsLane1 = UniverseSlot.getInstance().getRoller().getRotateItemsLane1();
-        List<ItemStack> rotateItemsLane2 = UniverseSlot.getInstance().getRoller().getRotateItemsLane2();
-        List<ItemStack> rotateItemsLane3 = UniverseSlot.getInstance().getRoller().getRotateItemsLane3();
+        // 1/8192でフリーズに突入
+        Random random = new Random();
+        int freezeChance = random.nextInt(8192);
+        if(freezeChance == 0){
+            onFreeze = true;
+        }else{
 
-        currentIndexSlot1 = rotateItemsLane1.indexOf(shelf.getInventory().getItem(0));
-        currentIndexSlot2 = rotateItemsLane2.indexOf(shelf.getInventory().getItem(1));
-        currentIndexSlot3 = rotateItemsLane3.indexOf(shelf.getInventory().getItem(2));
+            int config = slot.getConfig();
+            RoleManager manager = UniverseSlot.getInstance().getRoleManager();
+            RoleManager.SlotRole role = manager.drawRole(config);
+            roleItem = UniverseSlot.getInstance().getRoller().getItemFromRole(role);
 
-        rotateTaskSlot1 = new BukkitRunnable() {
-            @Override
-            public void run() {
-                currentIndexSlot1 = (currentIndexSlot1 + 1) % rotateItemsLane1.size();
-                shelf.getInventory().setItem(0, rotateItemsLane1.get(currentIndexSlot1));
-            }
-        };
-        rotateTaskSlot2 = new BukkitRunnable() {
-            @Override
-            public void run() {
-                currentIndexSlot2 = (currentIndexSlot2 + 1) % rotateItemsLane2.size();
-                shelf.getInventory().setItem(1, rotateItemsLane2.get(currentIndexSlot2));
-            }
-        };
-        rotateTaskSlot3 = new BukkitRunnable() {
-            @Override
-            public void run() {
-                if(player.getVehicle() == null){
-                    Message.sendErrorMessage(player, "[スロットAI]", "椅子から降りたためスロットを強制終了します。");
-                    stopSlotMachine();
-                    return;
+            // ロール作成
+            List<List<ItemStack>> lanes = UniverseSlot.getInstance().getRoller().createRandomLane(15);
+            rotateItemsLane1 = lanes.get(0);
+            rotateItemsLane2 = lanes.get(1);
+            rotateItemsLane3 = lanes.get(2);
+
+            currentIndexSlot1 = rotateItemsLane1.indexOf(shelf.getInventory().getItem(0));
+            currentIndexSlot2 = rotateItemsLane2.indexOf(shelf.getInventory().getItem(1));
+            currentIndexSlot3 = rotateItemsLane3.indexOf(shelf.getInventory().getItem(2));
+
+            rotateTaskSlot1 = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    currentIndexSlot1 = (currentIndexSlot1 + 1) % rotateItemsLane1.size();
+                    shelf.getInventory().setItem(0, rotateItemsLane1.get(currentIndexSlot1));
                 }
-                currentIndexSlot3 = (currentIndexSlot3 + 1) % rotateItemsLane3.size();
-                shelf.getInventory().setItem(2, rotateItemsLane3.get(currentIndexSlot3));
-            }
-        };
+            };
+            rotateTaskSlot2 = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    currentIndexSlot2 = (currentIndexSlot2 + 1) % rotateItemsLane2.size();
+                    shelf.getInventory().setItem(1, rotateItemsLane2.get(currentIndexSlot2));
+                }
+            };
+            rotateTaskSlot3 = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (player.getVehicle() == null) {
+                        Message.sendErrorMessage(player, "[スロットAI]", "椅子から降りたためスロットを強制終了します。");
+                        stopSlotMachine();
+                        return;
+                    }
+                    currentIndexSlot3 = (currentIndexSlot3 + 1) % rotateItemsLane3.size();
+                    shelf.getInventory().setItem(2, rotateItemsLane3.get(currentIndexSlot3));
+                }
+            };
 
-        rotateTaskSlot1.runTaskTimer(UniverseCoreV2.getInstance(), 0L, Roller.ROTATE_INTERVAL);
-        rotateTaskSlot2.runTaskTimer(UniverseCoreV2.getInstance(), 2L, Roller.ROTATE_INTERVAL);
-        rotateTaskSlot3.runTaskTimer(UniverseCoreV2.getInstance(), 4L, Roller.ROTATE_INTERVAL);
-        slotStatusManager.addFlag(location, SlotStatusManager.LANE1_SPINNING);
-        slotStatusManager.addFlag(location, SlotStatusManager.LANE2_SPINNING);
-        slotStatusManager.addFlag(location, SlotStatusManager.LANE3_SPINNING);
+            rotateTaskSlot1.runTaskTimer(UniverseCoreV2.getInstance(), 0L, Roller.ROTATE_INTERVAL);
+            rotateTaskSlot2.runTaskTimer(UniverseCoreV2.getInstance(), 2L, Roller.ROTATE_INTERVAL);
+            rotateTaskSlot3.runTaskTimer(UniverseCoreV2.getInstance(), 4L, Roller.ROTATE_INTERVAL);
+            slotStatusManager.addFlag(location, SlotStatusManager.LANE1_SPINNING);
+            slotStatusManager.addFlag(location, SlotStatusManager.LANE2_SPINNING);
+            slotStatusManager.addFlag(location, SlotStatusManager.LANE3_SPINNING);
 
-        location.getWorld().playSound(location, Sound.BLOCK_NOTE_BLOCK_HARP, 0.8f, 1.0f);
-
-        return true;
+            location.getWorld().playSound(location, Sound.BLOCK_NOTE_BLOCK_HARP, 0.8f, 1.0f);
+        }
     }
 
     public void stopSlot(int selectedLane){
@@ -169,10 +210,24 @@ public class SlotCore {
                 location.getWorld().playSound(location, Sound.BLOCK_NOTE_BLOCK_BELL, 0.8f, 1.2f);
                 rotateTaskSlot3.cancel();
                 slotStatusManager.removeFlag(location, SlotStatusManager.LANE3_SPINNING);
+                if(isShouldFumble()){
+                    currentIndexSlot3 = (currentIndexSlot3 + 1) % rotateItemsLane3.size();
+                    shelf.getInventory().setItem(2, rotateItemsLane3.get(currentIndexSlot3));
+                }
             }
         }
         if(slotStatusManager.getSpinningLaneCount(location) == 0){
             resultSlot();
+        }
+    }
+
+    public boolean isShouldFumble(){
+        ItemStack item1 = shelf.getInventory().getItem(0);
+        ItemStack item2 = shelf.getInventory().getItem(1);
+        if(item1 != null && item2 != null && item1.isSimilar(item2)){
+            return !item1.isSimilar(roleItem);
+        }else{
+            return false;
         }
     }
 
@@ -214,11 +269,16 @@ public class SlotCore {
                 case Material.SWEET_BERRIES -> rewardAmount = Roller.SWEET_BERRIES_AWARD;
                 case Material.COD -> rewardAmount = Roller.COD_AWARD;
                 case Material.GREEN_BUNDLE -> rewardAmount = Roller.GREEN_BUNDLE_AWARD;
+                case Material.CREEPER_HEAD -> rewardAmount = Roller.CREEPER_HEAD_AWARD;
             }
             if(rewardAmount > 0L){
-                try{
+                try {
+                    slotRepository.updateCash(slot, -rewardAmount);
                     UniverseEconomyAPI.getInstance().addMoney(player, rewardAmount, "スロット当選報酬");
                     Message.sendSuccessMessage(player, "[スロットAI]", "おめでとうございます！" + rewardAmount + "円を獲得しました！");
+                } catch (CannotReduceSlotCashException e){
+                    Message.sendErrorMessage(player, "[スロットAI]", "スロットの残高を減らせません。運営にお問い合わせください。");
+                    Message.sendErrorMessage(player, "[スロットAI]", "報酬金額: " + rewardAmount + "円");
                 } catch (UserNotFoundException | MoneyNotFoundException e){
                     Message.sendErrorMessage(player, "[スロットAI]", "ユーザーかお金の情報が見つかりません。スロットの報酬を付与できません。");
                 } catch (ParameterException e){

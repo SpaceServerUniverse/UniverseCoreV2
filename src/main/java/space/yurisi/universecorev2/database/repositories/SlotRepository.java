@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import space.yurisi.universecorev2.database.models.Slot;
+import space.yurisi.universecorev2.exception.CannotReduceSlotCashException;
 import space.yurisi.universecorev2.exception.SlotNotFoundException;
 
 import java.util.Date;
@@ -40,7 +41,7 @@ public class SlotRepository {
      * @return Slot
      */
     public Slot createSlot(UUID uuid, Long x, Long y, Long z, String world_name) {
-        Slot slot = new Slot(null, uuid.toString(), x, y, z, world_name, new Date(), new Date());
+        Slot slot = new Slot(null, uuid.toString(), x, y, z, world_name, 10000L, 1, new Date(), new Date());
         return createSlot(slot);
     }
 
@@ -74,6 +75,34 @@ public class SlotRepository {
             }
 
             return slot;
+        } finally {
+            session.close();
+        }
+    }
+
+    public void updateCash(Slot slot, Long difference) throws CannotReduceSlotCashException {
+        long newCash = slot.getCash() + difference;
+        if(newCash < 0){
+            throw new CannotReduceSlotCashException("スロットの所持金をこれ以上減らせません");
+        }
+        Session session = this.sessionFactory.getCurrentSession();
+        try {
+            session.beginTransaction();
+            slot.setCash(newCash);
+            session.merge(slot);
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
+    }
+
+    public void updateConfig(Slot slot, int newConfig) {
+        Session session = this.sessionFactory.getCurrentSession();
+        try {
+            session.beginTransaction();
+            slot.setConfig(newConfig);
+            session.merge(slot);
+            session.getTransaction().commit();
         } finally {
             session.close();
         }
