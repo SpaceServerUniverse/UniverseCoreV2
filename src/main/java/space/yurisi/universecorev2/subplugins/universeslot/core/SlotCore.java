@@ -1,6 +1,5 @@
 package space.yurisi.universecorev2.subplugins.universeslot.core;
 
-import net.kyori.adventure.text.Component;
 import org.bukkit.*;
 import org.bukkit.block.Shelf;
 import org.bukkit.entity.Player;
@@ -24,6 +23,7 @@ import space.yurisi.universecorev2.subplugins.universeslot.manager.RoleManager;
 import space.yurisi.universecorev2.subplugins.universeslot.manager.SlotStatusManager;
 import space.yurisi.universecorev2.utils.Message;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -36,13 +36,15 @@ public class SlotCore {
 
     private final Shelf shelf;
 
-    private int currentIndexSlot1;
-    private int currentIndexSlot2;
-    private int currentIndexSlot3;
+    private List<Integer> currentIndexSlots;
+
+    private List<List<ItemStack>> rotateItemLanes;
 
     private BukkitRunnable rotateTaskSlot1;
     private BukkitRunnable rotateTaskSlot2;
     private BukkitRunnable rotateTaskSlot3;
+
+    private boolean isMissed = false;
 
     private final PlayerStatusManager playerStatusManager;
     private final SlotStatusManager slotStatusManager;
@@ -51,10 +53,6 @@ public class SlotCore {
     private final Slot slot;
 
     private ItemStack roleItem;
-
-    private List<ItemStack> rotateItemsLane1;
-    private List<ItemStack> rotateItemsLane2;
-    private List<ItemStack> rotateItemsLane3;
 
     private boolean onFreeze = false;
 
@@ -77,6 +75,8 @@ public class SlotCore {
         } catch (SlotNotFoundException e) {
             throw new SlotNotFoundException("Slot not found at location: " + location);
         }
+        this.currentIndexSlots = new ArrayList<>(List.of(0, 0, 0));
+        this.rotateItemLanes = List.of(List.of());
     }
 
     public boolean prepareSlot(){
@@ -132,15 +132,11 @@ public class SlotCore {
             onFreeze = true;
             playerStatusManager.addFlag(uuid, PlayerStatusManager.ON_FREEZE_MODE);
             List<ItemStack> freezeLane = UniverseSlot.getInstance().getRoller().createFreezeLane(15);
-            rotateItemsLane1 = freezeLane;
-            rotateItemsLane2 = freezeLane;
-            rotateItemsLane3 = freezeLane;
-            currentIndexSlot1 = 0;
-            currentIndexSlot2 = 0;
-            currentIndexSlot3 = 0;
-            shelf.getInventory().setItem(currentIndexSlot1, rotateItemsLane1.getFirst());
-            shelf.getInventory().setItem(currentIndexSlot2, rotateItemsLane2.getFirst());
-            shelf.getInventory().setItem(currentIndexSlot3, rotateItemsLane3.getFirst());
+            rotateItemLanes = List.of(freezeLane, freezeLane, freezeLane);
+            currentIndexSlots = new ArrayList<>(List.of(0, 0, 0));
+            shelf.getInventory().setItem(0, rotateItemLanes.get(0).getFirst());
+            shelf.getInventory().setItem(1, rotateItemLanes.get(1).getFirst());
+            shelf.getInventory().setItem(2, rotateItemLanes.get(2).getFirst());
 
             player.sendTitle("§c§lFREEZE!", "");
 
@@ -155,28 +151,25 @@ public class SlotCore {
             roleItem = UniverseSlot.getInstance().getRoller().getItemFromRole(role);
 
             // ロール作成
-            List<List<ItemStack>> lanes = UniverseSlot.getInstance().getRoller().createRandomLane(20);
-            rotateItemsLane1 = lanes.get(0);
-            rotateItemsLane2 = lanes.get(1);
-            rotateItemsLane3 = lanes.get(2);
+            rotateItemLanes = UniverseSlot.getInstance().getRoller().createRandomLane(20);
 
-            currentIndexSlot1 = rotateItemsLane1.indexOf(shelf.getInventory().getItem(0));
-            currentIndexSlot2 = rotateItemsLane2.indexOf(shelf.getInventory().getItem(1));
-            currentIndexSlot3 = rotateItemsLane3.indexOf(shelf.getInventory().getItem(2));
+            for(int i = 0; i < 3; i++){
+                currentIndexSlots.set(i, rotateItemLanes.get(i).indexOf(shelf.getInventory().getItem(i)));
+            }
         }
 
         rotateTaskSlot1 = new BukkitRunnable() {
             @Override
             public void run() {
-                currentIndexSlot1 = (currentIndexSlot1 + 1) % rotateItemsLane1.size();
-                shelf.getInventory().setItem(0, rotateItemsLane1.get(currentIndexSlot1));
+                currentIndexSlots.set(0, (currentIndexSlots.get(0) + 1) % rotateItemLanes.getFirst().size());
+                shelf.getInventory().setItem(0, rotateItemLanes.get(0).get(currentIndexSlots.get(0)));
             }
         };
         rotateTaskSlot2 = new BukkitRunnable() {
             @Override
             public void run() {
-                currentIndexSlot2 = (currentIndexSlot2 + 1) % rotateItemsLane2.size();
-                shelf.getInventory().setItem(1, rotateItemsLane2.get(currentIndexSlot2));
+                currentIndexSlots.set(1, (currentIndexSlots.get(1) + 1) % rotateItemLanes.get(1).size());
+                shelf.getInventory().setItem(1, rotateItemLanes.get(1).get(currentIndexSlots.get(1)));
             }
         };
         rotateTaskSlot3 = new BukkitRunnable() {
@@ -187,8 +180,8 @@ public class SlotCore {
                     stopSlotMachine();
                     return;
                 }
-                currentIndexSlot3 = (currentIndexSlot3 + 1) % rotateItemsLane3.size();
-                shelf.getInventory().setItem(2, rotateItemsLane3.get(currentIndexSlot3));
+                currentIndexSlots.set(2, (currentIndexSlots.get(2) + 1) % rotateItemLanes.get(2).size());
+                shelf.getInventory().setItem(2, rotateItemLanes.get(2).get(currentIndexSlots.get(2)));
             }
         };
 
@@ -216,19 +209,28 @@ public class SlotCore {
                 location.getWorld().playSound(location, Sound.BLOCK_NOTE_BLOCK_BELL, 0.8f, 0.8f);
                 rotateTaskSlot1.cancel();
                 slotStatusManager.removeFlag(location, SlotStatusManager.LANE1_SPINNING);
+                if(canAssist(selectedLane)){
+                    shelf.getInventory().setItem(0, roleItem);
+                }else{
+                    isMissed = true;
+                }
             }
             case 2 -> {
                 location.getWorld().playSound(location, Sound.BLOCK_NOTE_BLOCK_BELL, 0.8f, 1.0f);
                 rotateTaskSlot2.cancel();
                 slotStatusManager.removeFlag(location, SlotStatusManager.LANE2_SPINNING);
+                if(canAssist(selectedLane) && !isMissed){
+                    shelf.getInventory().setItem(1, roleItem);
+                }else{
+                    isMissed = true;
+                }
             }
             case 3 -> {
                 location.getWorld().playSound(location, Sound.BLOCK_NOTE_BLOCK_BELL, 0.8f, 1.2f);
                 rotateTaskSlot3.cancel();
                 slotStatusManager.removeFlag(location, SlotStatusManager.LANE3_SPINNING);
-                if(isShouldFumble()){
-                    currentIndexSlot3 = (currentIndexSlot3 + 1) % rotateItemsLane3.size();
-                    shelf.getInventory().setItem(2, rotateItemsLane3.get(currentIndexSlot3));
+                if(canAssist(selectedLane) && !isMissed){
+                    shelf.getInventory().setItem(2, roleItem);
                 }
             }
         }
@@ -237,19 +239,21 @@ public class SlotCore {
         }
     }
 
-    public boolean isShouldFumble(){
+    public boolean canAssist(int laneNumber){
         if(onFreeze){
             return false;
         }
-        ItemStack item1 = rotateItemsLane1.get(currentIndexSlot1);
-        ItemStack item2 = rotateItemsLane2.get(currentIndexSlot2);
-        ItemStack item3 = rotateItemsLane3.get(currentIndexSlot3);
-        if(item1 != null && item2 != null && item3 != null &&
-                item1.isSimilar(item2) && item2.isSimilar(item3)){
-            return !item3.isSimilar(roleItem);
-        }else{
-            return false;
+        // 前後3つのアイテムを確認して、roleItemと一致するか確認
+        List<ItemStack> laneItems = rotateItemLanes.get(laneNumber - 1);
+        int currentIndex = currentIndexSlots.get(laneNumber - 1);
+        for(int offset = -3; offset <= 3; offset++){
+            int index = (currentIndex + offset + laneItems.size()) % laneItems.size();
+            ItemStack item = laneItems.get(index);
+            if(item != null && item.isSimilar(roleItem)){
+                return true;
+            }
         }
+        return false;
     }
 
     public void resultSlot(){

@@ -136,57 +136,6 @@ public class RoleManager {
     }
 
     /**
-     * 指定された設定値に基づいて役の確率マップを取得する
-     *
-     * @param setting 設定値(1~6)
-     * @return 役と確率(0.0~1.0)のマップ
-     * @throws IllegalArgumentException 設定値が1~6の範囲外の場合
-     */
-    public Map<SlotRole, Double> getRoleProbabilities(int setting) {
-        validateSetting(setting);
-
-        Map<SlotRole, Integer> rawProbabilities = PROBABILITY_TABLE.get(setting);
-        Map<SlotRole, Double> probabilities = new HashMap<>();
-
-        for (Map.Entry<SlotRole, Integer> entry : rawProbabilities.entrySet()) {
-            // 100000で割って0.0~1.0の確率に変換
-            probabilities.put(entry.getKey(), entry.getValue() / 100000.0);
-        }
-
-        return probabilities;
-    }
-
-    /**
-     * 指定された設定値と役の確率を取得する
-     *
-     * @param setting 設定値(1~6)
-     * @param role 取得したい役
-     * @return 確率(0.0~1.0)
-     * @throws IllegalArgumentException 設定値が1~6の範囲外の場合
-     */
-    public double getRoleProbability(int setting, SlotRole role) {
-        validateSetting(setting);
-
-        Map<SlotRole, Integer> rawProbabilities = PROBABILITY_TABLE.get(setting);
-        return rawProbabilities.get(role) / 100000.0;
-    }
-
-    /**
-     * 指定された設定値と役の確率をパーセント表記で取得する
-     *
-     * @param setting 設定値(1~6)
-     * @param role 取得したい役
-     * @return 確率（パーセント表記、例: 0.020）
-     * @throws IllegalArgumentException 設定値が1~6の範囲外の場合
-     */
-    public double getRoleProbabilityPercent(int setting, SlotRole role) {
-        validateSetting(setting);
-
-        Map<SlotRole, Integer> rawProbabilities = PROBABILITY_TABLE.get(setting);
-        return rawProbabilities.get(role) / 1000.0;
-    }
-
-    /**
      * 指定された設定値に基づいて抽選を行い、当選した役を返す
      *
      * @param setting 設定値(1~6)
@@ -222,25 +171,5 @@ public class RoleManager {
         if (setting < 1 || setting > 6) {
             throw new IllegalArgumentException("設定値は1~6の範囲で指定してください: " + setting);
         }
-    }
-
-    /**
-     * 指定された設定値の機械割を取得する
-     *
-     * @param setting 設定値(1~6)
-     * @return 機械割（パーセント）
-     */
-    public int getMechanicalRate(int setting) {
-        validateSetting(setting);
-
-        return switch (setting) {
-            case 1 -> 85;
-            case 2 -> 90;
-            case 3 -> 95;
-            case 4 -> 98;
-            case 5 -> 100;
-            case 6 -> 103;
-            default -> 0;
-        };
     }
 }
