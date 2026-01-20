@@ -246,7 +246,7 @@ public class SlotCore {
         // 後3つのアイテムを確認して、roleItemと一致するか確認
         List<ItemStack> laneItems = rotateItemLanes.get(laneNumber - 1);
         int currentIndex = currentIndexSlots.get(laneNumber - 1);
-        for(int offset = 0; offset <= 3; offset++){
+        for(int offset = 0; offset <= 4; offset++){
             int index = (currentIndex + offset + laneItems.size()) % laneItems.size();
             ItemStack item = laneItems.get(index);
             if(item != null && item.isSimilar(roleItem)){
