@@ -47,7 +47,7 @@ public class SlotCommand implements CommandExecutor, TabCompleter {
             Message.sendNormalMessage(player, "[スロットAI]", "/slot register : スロットの登録");
             Message.sendNormalMessage(player, "[スロットAI]", "/slot unregister : スロットの登録解除");
             Message.sendNormalMessage(player, "[スロットAI]", "/slot info : スロット情報の確認");
-            Message.sendNormalMessage(player, "[スロットAI]", "/slot config : スロット設定メニューを開く");
+            Message.sendNormalMessage(player, "[スロットAI]", "/slot config <設定値> : スロット設定値(1~6)の変更");
             Message.sendNormalMessage(player, "[スロットAI]", "/slot addCash <金額> : スロット内部キャッシュを追加");
             Message.sendNormalMessage(player, "[スロットAI]", "/slot removeCash <金額> : スロット内部キャッシュから引き出し");
             return false;
