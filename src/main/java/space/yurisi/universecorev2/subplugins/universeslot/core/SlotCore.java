@@ -231,11 +231,31 @@ public class SlotCore {
                 slotStatusManager.removeFlag(location, SlotStatusManager.LANE3_SPINNING);
                 if(canAssist(selectedLane) && !isMissed){
                     shelf.getInventory().setItem(2, roleItem);
+                }else{
+                    if(isShouldFumble()){
+                        currentIndexSlots.set(2, (currentIndexSlots.get(2) + 1) % rotateItemLanes.get(2).size());
+                        shelf.getInventory().setItem(2, rotateItemLanes.get(2).get(currentIndexSlots.get(2)));
+                    }
                 }
             }
         }
         if(slotStatusManager.getSpinningLaneCount(location) == 0){
             resultSlot();
+        }
+    }
+
+    public boolean isShouldFumble(){
+        if(onFreeze){
+            return false;
+        }
+        ItemStack item1 = rotateItemLanes.get(0).get(currentIndexSlots.get(0));
+        ItemStack item2 = rotateItemLanes.get(1).get(currentIndexSlots.get(1));
+        ItemStack item3 = rotateItemLanes.get(2).get(currentIndexSlots.get(2));
+        if(item1 != null && item2 != null && item3 != null &&
+                item1.isSimilar(item2) && item2.isSimilar(item3)){
+            return !item3.isSimilar(roleItem);
+        }else{
+            return false;
         }
     }
 
