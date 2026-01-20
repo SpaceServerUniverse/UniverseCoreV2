@@ -23,6 +23,7 @@ import space.yurisi.universecorev2.subplugins.universeslot.manager.RoleManager;
 import space.yurisi.universecorev2.subplugins.universeslot.manager.SlotStatusManager;
 import space.yurisi.universecorev2.utils.Message;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -125,9 +126,12 @@ public class SlotCore {
         slotStatusManager.addFlag(location, SlotStatusManager.IN_USE);
         playerStatusManager.addFlag(uuid, PlayerStatusManager.ON_SLOT);
 
-        // 1/8192でフリーズに突入
+        // 1/8192でフリーズに突入（7のつく日は1/4096に上昇）
+        int dayOfMonth = LocalDate.now().getDayOfMonth();
+        boolean isLuckySevenDay = (dayOfMonth == 7 || dayOfMonth == 17 || dayOfMonth == 27);
+        int bound = isLuckySevenDay ? 4096 : 8192;
         Random random = new Random();
-        int freezeChance = random.nextInt(8192);
+        int freezeChance = random.nextInt(bound);
         if(freezeChance == 0){
             onFreeze = true;
             playerStatusManager.addFlag(uuid, PlayerStatusManager.ON_FREEZE_MODE);
@@ -263,7 +267,7 @@ public class SlotCore {
         if(onFreeze){
             return false;
         }
-        // 後3つのアイテムを確認して、roleItemと一致するか確認
+        // 後4つのアイテムを確認して、roleItemと一致するか確認
         List<ItemStack> laneItems = rotateItemLanes.get(laneNumber - 1);
         int currentIndex = currentIndexSlots.get(laneNumber - 1);
         for(int offset = 0; offset <= 4; offset++){
