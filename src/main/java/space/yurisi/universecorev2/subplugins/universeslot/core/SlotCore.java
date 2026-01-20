@@ -23,6 +23,7 @@ import space.yurisi.universecorev2.subplugins.universeslot.manager.RoleManager;
 import space.yurisi.universecorev2.subplugins.universeslot.manager.SlotStatusManager;
 import space.yurisi.universecorev2.utils.Message;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -125,9 +126,12 @@ public class SlotCore {
         slotStatusManager.addFlag(location, SlotStatusManager.IN_USE);
         playerStatusManager.addFlag(uuid, PlayerStatusManager.ON_SLOT);
 
-        // 1/8192でフリーズに突入
+        // 1/8192でフリーズに突入（7のつく日は1/4096に上昇）
+        int dayOfMonth = LocalDate.now().getDayOfMonth();
+        boolean isLuckySevenDay = (dayOfMonth == 7 || dayOfMonth == 17 || dayOfMonth == 27);
+        int bound = isLuckySevenDay ? 4096 : 8192;
         Random random = new Random();
-        int freezeChance = random.nextInt(8192);
+        int freezeChance = random.nextInt(bound);
         if(freezeChance == 0){
             onFreeze = true;
             playerStatusManager.addFlag(uuid, PlayerStatusManager.ON_FREEZE_MODE);
@@ -231,6 +235,11 @@ public class SlotCore {
                 slotStatusManager.removeFlag(location, SlotStatusManager.LANE3_SPINNING);
                 if(canAssist(selectedLane) && !isMissed){
                     shelf.getInventory().setItem(2, roleItem);
+                }else{
+                    if(isShouldFumble()){
+                        currentIndexSlots.set(2, (currentIndexSlots.get(2) + 1) % rotateItemLanes.get(2).size());
+                        shelf.getInventory().setItem(2, rotateItemLanes.get(2).get(currentIndexSlots.get(2)));
+                    }
                 }
             }
         }
@@ -239,14 +248,29 @@ public class SlotCore {
         }
     }
 
+    public boolean isShouldFumble(){
+        if(onFreeze){
+            return false;
+        }
+        ItemStack item1 = rotateItemLanes.get(0).get(currentIndexSlots.get(0));
+        ItemStack item2 = rotateItemLanes.get(1).get(currentIndexSlots.get(1));
+        ItemStack item3 = rotateItemLanes.get(2).get(currentIndexSlots.get(2));
+        if(item1 != null && item2 != null && item3 != null &&
+                item1.isSimilar(item2) && item2.isSimilar(item3)){
+            return !item3.isSimilar(roleItem);
+        }else{
+            return false;
+        }
+    }
+
     public boolean canAssist(int laneNumber){
         if(onFreeze){
             return false;
         }
-        // 前後3つのアイテムを確認して、roleItemと一致するか確認
+        // 後4つのアイテムを確認して、roleItemと一致するか確認
         List<ItemStack> laneItems = rotateItemLanes.get(laneNumber - 1);
         int currentIndex = currentIndexSlots.get(laneNumber - 1);
-        for(int offset = -3; offset <= 3; offset++){
+        for(int offset = 0; offset <= 4; offset++){
             int index = (currentIndex + offset + laneItems.size()) % laneItems.size();
             ItemStack item = laneItems.get(index);
             if(item != null && item.isSimilar(roleItem)){
