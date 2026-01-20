@@ -1,18 +1,18 @@
 package space.yurisi.universecorev2.subplugins.universeslot.core;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.*;
 import org.bukkit.block.Shelf;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.UniverseCoreV2API;
-import space.yurisi.universecorev2.database.models.Money;
 import space.yurisi.universecorev2.database.models.Slot;
-import space.yurisi.universecorev2.database.repositories.MoneyRepository;
 import space.yurisi.universecorev2.database.repositories.SlotRepository;
-import space.yurisi.universecorev2.database.repositories.UserRepository;
 import space.yurisi.universecorev2.exception.*;
 import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomyAPI;
 import space.yurisi.universecorev2.subplugins.universeeconomy.exception.CanNotAddMoneyException;
@@ -56,8 +56,7 @@ public class SlotCore {
     private List<ItemStack> rotateItemsLane2;
     private List<ItemStack> rotateItemsLane3;
 
-
-    private boolean onFreeze;
+    private boolean onFreeze = false;
 
     private final Location location;
     public Location getLocation() {
@@ -104,7 +103,7 @@ public class SlotCore {
 
         try{
             UniverseEconomyAPI.getInstance().reduceMoney(player, 10L, "スロット利用料");
-            slotRepository.updateCash(slot, 2L);
+            slotRepository.updateCash(slot, 10L);
         } catch (UserNotFoundException | MoneyNotFoundException e){
             Message.sendErrorMessage(player, "[スロットAI]", "ユーザーかお金の情報が見つかりません。スロットを利用できません。");
             return false;
@@ -131,15 +130,32 @@ public class SlotCore {
         int freezeChance = random.nextInt(8192);
         if(freezeChance == 0){
             onFreeze = true;
-        }else{
+            playerStatusManager.addFlag(uuid, PlayerStatusManager.ON_FREEZE_MODE);
+            List<ItemStack> freezeLane = UniverseSlot.getInstance().getRoller().createFreezeLane(15);
+            rotateItemsLane1 = freezeLane;
+            rotateItemsLane2 = freezeLane;
+            rotateItemsLane3 = freezeLane;
+            currentIndexSlot1 = 0;
+            currentIndexSlot2 = 0;
+            currentIndexSlot3 = 0;
+            shelf.getInventory().setItem(currentIndexSlot1, rotateItemsLane1.getFirst());
+            shelf.getInventory().setItem(currentIndexSlot2, rotateItemsLane2.getFirst());
+            shelf.getInventory().setItem(currentIndexSlot3, rotateItemsLane3.getFirst());
 
+            player.sendTitle("§c§lFREEZE!", "");
+
+            player.getWorld().playSound(location, Sound.AMBIENT_CAVE, 8.0f, 1.0f);
+
+            player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, Integer.MAX_VALUE, 2, false, false));
+
+        }else {
             int config = slot.getConfig();
             RoleManager manager = UniverseSlot.getInstance().getRoleManager();
             RoleManager.SlotRole role = manager.drawRole(config);
             roleItem = UniverseSlot.getInstance().getRoller().getItemFromRole(role);
 
             // ロール作成
-            List<List<ItemStack>> lanes = UniverseSlot.getInstance().getRoller().createRandomLane(15);
+            List<List<ItemStack>> lanes = UniverseSlot.getInstance().getRoller().createRandomLane(20);
             rotateItemsLane1 = lanes.get(0);
             rotateItemsLane2 = lanes.get(1);
             rotateItemsLane3 = lanes.get(2);
@@ -147,43 +163,43 @@ public class SlotCore {
             currentIndexSlot1 = rotateItemsLane1.indexOf(shelf.getInventory().getItem(0));
             currentIndexSlot2 = rotateItemsLane2.indexOf(shelf.getInventory().getItem(1));
             currentIndexSlot3 = rotateItemsLane3.indexOf(shelf.getInventory().getItem(2));
-
-            rotateTaskSlot1 = new BukkitRunnable() {
-                @Override
-                public void run() {
-                    currentIndexSlot1 = (currentIndexSlot1 + 1) % rotateItemsLane1.size();
-                    shelf.getInventory().setItem(0, rotateItemsLane1.get(currentIndexSlot1));
-                }
-            };
-            rotateTaskSlot2 = new BukkitRunnable() {
-                @Override
-                public void run() {
-                    currentIndexSlot2 = (currentIndexSlot2 + 1) % rotateItemsLane2.size();
-                    shelf.getInventory().setItem(1, rotateItemsLane2.get(currentIndexSlot2));
-                }
-            };
-            rotateTaskSlot3 = new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (player.getVehicle() == null) {
-                        Message.sendErrorMessage(player, "[スロットAI]", "椅子から降りたためスロットを強制終了します。");
-                        stopSlotMachine();
-                        return;
-                    }
-                    currentIndexSlot3 = (currentIndexSlot3 + 1) % rotateItemsLane3.size();
-                    shelf.getInventory().setItem(2, rotateItemsLane3.get(currentIndexSlot3));
-                }
-            };
-
-            rotateTaskSlot1.runTaskTimer(UniverseCoreV2.getInstance(), 0L, Roller.ROTATE_INTERVAL);
-            rotateTaskSlot2.runTaskTimer(UniverseCoreV2.getInstance(), 2L, Roller.ROTATE_INTERVAL);
-            rotateTaskSlot3.runTaskTimer(UniverseCoreV2.getInstance(), 4L, Roller.ROTATE_INTERVAL);
-            slotStatusManager.addFlag(location, SlotStatusManager.LANE1_SPINNING);
-            slotStatusManager.addFlag(location, SlotStatusManager.LANE2_SPINNING);
-            slotStatusManager.addFlag(location, SlotStatusManager.LANE3_SPINNING);
-
-            location.getWorld().playSound(location, Sound.BLOCK_NOTE_BLOCK_HARP, 0.8f, 1.0f);
         }
+
+        rotateTaskSlot1 = new BukkitRunnable() {
+            @Override
+            public void run() {
+                currentIndexSlot1 = (currentIndexSlot1 + 1) % rotateItemsLane1.size();
+                shelf.getInventory().setItem(0, rotateItemsLane1.get(currentIndexSlot1));
+            }
+        };
+        rotateTaskSlot2 = new BukkitRunnable() {
+            @Override
+            public void run() {
+                currentIndexSlot2 = (currentIndexSlot2 + 1) % rotateItemsLane2.size();
+                shelf.getInventory().setItem(1, rotateItemsLane2.get(currentIndexSlot2));
+            }
+        };
+        rotateTaskSlot3 = new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (player.getVehicle() == null) {
+                    Message.sendErrorMessage(player, "[スロットAI]", "椅子から降りたためスロットを強制終了します。");
+                    stopSlotMachine();
+                    return;
+                }
+                currentIndexSlot3 = (currentIndexSlot3 + 1) % rotateItemsLane3.size();
+                shelf.getInventory().setItem(2, rotateItemsLane3.get(currentIndexSlot3));
+            }
+        };
+
+        rotateTaskSlot1.runTaskTimer(UniverseCoreV2.getInstance(), 0L, Roller.ROTATE_INTERVAL);
+        rotateTaskSlot2.runTaskTimer(UniverseCoreV2.getInstance(), 2L, Roller.ROTATE_INTERVAL);
+        rotateTaskSlot3.runTaskTimer(UniverseCoreV2.getInstance(), 4L, Roller.ROTATE_INTERVAL);
+        slotStatusManager.addFlag(location, SlotStatusManager.LANE1_SPINNING);
+        slotStatusManager.addFlag(location, SlotStatusManager.LANE2_SPINNING);
+        slotStatusManager.addFlag(location, SlotStatusManager.LANE3_SPINNING);
+
+        location.getWorld().playSound(location, Sound.BLOCK_NOTE_BLOCK_HARP, 0.8f, 1.0f);
     }
 
     public void stopSlot(int selectedLane){
@@ -222,10 +238,15 @@ public class SlotCore {
     }
 
     public boolean isShouldFumble(){
-        ItemStack item1 = shelf.getInventory().getItem(0);
-        ItemStack item2 = shelf.getInventory().getItem(1);
-        if(item1 != null && item2 != null && item1.isSimilar(item2)){
-            return !item1.isSimilar(roleItem);
+        if(onFreeze){
+            return false;
+        }
+        ItemStack item1 = rotateItemsLane1.get(currentIndexSlot1);
+        ItemStack item2 = rotateItemsLane2.get(currentIndexSlot2);
+        ItemStack item3 = rotateItemsLane3.get(currentIndexSlot3);
+        if(item1 != null && item2 != null && item3 != null &&
+                item1.isSimilar(item2) && item2.isSimilar(item3)){
+            return !item3.isSimilar(roleItem);
         }else{
             return false;
         }
@@ -269,7 +290,12 @@ public class SlotCore {
                 case Material.SWEET_BERRIES -> rewardAmount = Roller.SWEET_BERRIES_AWARD;
                 case Material.COD -> rewardAmount = Roller.COD_AWARD;
                 case Material.GREEN_BUNDLE -> rewardAmount = Roller.GREEN_BUNDLE_AWARD;
-                case Material.CREEPER_HEAD -> rewardAmount = Roller.CREEPER_HEAD_AWARD;
+                case Material.DRAGON_HEAD ->{
+                    rewardAmount = Roller.ENDER_DRAGON_HEAD_AWARD;
+                    location.getWorld().playSound(location, Sound.ENTITY_ENDER_DRAGON_DEATH, 3.0f, 1.0f);
+                    Float dragonBreath = 1.0f;
+                    location.getWorld().spawnParticle(Particle.DRAGON_BREATH, location, 100, 3.0, 1.0, 3.0, 0.1, dragonBreath);
+                }
             }
             if(rewardAmount > 0L){
                 try {
@@ -288,6 +314,7 @@ public class SlotCore {
                 }
             }
         }
+
         stopSlotMachine();
     }
 
@@ -301,6 +328,14 @@ public class SlotCore {
         slotStatusManager.removeFlag(location, SlotStatusManager.LANE3_SPINNING);
         playerStatusManager.removeFlag(uuid, PlayerStatusManager.ON_SLOT);
         playerStatusManager.removePlayerSlotCore(uuid);
+
+        if(onFreeze){
+            player.removePotionEffect(PotionEffectType.BLINDNESS);
+            playerStatusManager.removeFlag(uuid, PlayerStatusManager.ON_FREEZE_MODE);
+            shelf.getInventory().setItem(0, UniverseSlot.getInstance().getRoller().getRandomRotateItem());
+            shelf.getInventory().setItem(1, UniverseSlot.getInstance().getRoller().getRandomRotateItem());
+            shelf.getInventory().setItem(2, UniverseSlot.getInstance().getRoller().getRandomRotateItem());
+        }
     }
 
 }

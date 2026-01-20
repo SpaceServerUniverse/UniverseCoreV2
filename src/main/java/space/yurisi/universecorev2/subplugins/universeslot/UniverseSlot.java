@@ -66,6 +66,6 @@ public class UniverseSlot implements SubPlugin {
 
     @Override
     public String getVersion() {
-        return "1.0.0";
+        return "2.0.0";
     }
 }

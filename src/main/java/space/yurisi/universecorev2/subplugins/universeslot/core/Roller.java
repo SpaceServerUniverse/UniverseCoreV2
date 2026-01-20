@@ -20,7 +20,7 @@ public class Roller {
     public static final long SWEET_BERRIES_AWARD = 30L; // スイートベリー賞金
     public static final long COD_AWARD = 15L; // タラ賞金
     public static final long GREEN_BUNDLE_AWARD = 10L; // 緑のバンドル賞金
-    public static final long CREEPER_HEAD_AWARD = 5000L;
+    public static final long ENDER_DRAGON_HEAD_AWARD = 5000L;
     public static final int ROTATE_INTERVAL = 2;// タスク実行間隔（ティック数）
 
     public ItemStack getRandomRotateItem() {
@@ -69,6 +69,8 @@ public class Roller {
         roleItemMap.put(RoleManager.SlotRole.COD, new ItemStack(Material.COD));
         roleItemMap.put(RoleManager.SlotRole.SWEET_BERRIES, new ItemStack(Material.SWEET_BERRIES));
         roleItemMap.put(RoleManager.SlotRole.GLOW_BERRIES, new ItemStack(Material.GLOW_BERRIES));
+        roleItemMap.put(RoleManager.SlotRole.GREEN_BUNDLE, new ItemStack(Material.GREEN_BUNDLE));
+        roleItemMap.put(RoleManager.SlotRole.MISS, new ItemStack(Material.BARRIER));
     }
 
     public List<List<ItemStack>> createRandomLane(int rollLength) throws RollLengthNotEnoughException{
@@ -95,6 +97,22 @@ public class Roller {
         Collections.shuffle(rotateItemsLane2);
         Collections.shuffle(rotateItemsLane3);
         return List.of(rotateItemsLane1, rotateItemsLane2, rotateItemsLane3);
+    }
+
+    public List<ItemStack> createFreezeLane(int rollLength) throws RollLengthNotEnoughException{
+        if(rollLength < rotateItems.size()){
+            throw new RollLengthNotEnoughException("管理者に連絡してください。ロール長が不正です。" + rollLength);
+        }
+
+        List<ItemStack> rotateItemsLane = new ArrayList<>();
+
+        rotateItemsLane.add(roleItemMap.get(RoleManager.SlotRole.YURISI_HEAD));
+
+        for(int i = 1; i < rollLength; i++){
+            rotateItemsLane.add(ItemStack.of(Material.DRAGON_HEAD));
+        }
+
+        return rotateItemsLane;
     }
 
 

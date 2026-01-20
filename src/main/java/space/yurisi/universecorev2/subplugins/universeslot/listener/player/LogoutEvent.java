@@ -4,7 +4,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.potion.PotionEffectType;
 import space.yurisi.universecorev2.subplugins.universeslot.UniverseSlot;
+import space.yurisi.universecorev2.subplugins.universeslot.manager.PlayerStatusManager;
 
 public class LogoutEvent implements Listener {
 
@@ -22,5 +24,9 @@ public class LogoutEvent implements Listener {
             main.getPlayerStatusManager().getPlayerSlotCore(player.getUniqueId()).stopSlotMachine();
             main.getPlayerStatusManager().removePlayerSlotCore(player.getUniqueId());
         }
+        if(main.getPlayerStatusManager().hasFlag(player.getUniqueId(), PlayerStatusManager.ON_FREEZE_MODE)){
+            player.removePotionEffect(PotionEffectType.BLINDNESS);
+        }
+        main.getPlayerStatusManager().clearFlags(player.getUniqueId());
     }
 }

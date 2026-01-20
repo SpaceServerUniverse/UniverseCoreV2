@@ -76,7 +76,6 @@ public class SlotCommand implements CommandExecutor, TabCompleter {
             Message.sendErrorMessage(player, "[スロットAI]", "スロット編集モードでスロットを右クリックしてから実行してください。");
             return false;
         }
-        main.getPlayerStatusManager().removeFlag(player.getUniqueId(), PlayerStatusManager.ON_EDIT_MODE);
 
         Slot slot;
         try{
@@ -86,7 +85,7 @@ public class SlotCommand implements CommandExecutor, TabCompleter {
         }
 
         Block block = player.getWorld().getBlockAt(clickedLocation);
-        if(!(block instanceof Shelf shelf)){
+        if(!(block.getState() instanceof Shelf shelf)){
             Message.sendErrorMessage(player, "[スロットAI]", "選択した座標には棚が存在しません。");
             return false;
         }
@@ -142,15 +141,15 @@ public class SlotCommand implements CommandExecutor, TabCompleter {
                             slotCore.stopSlotMachine();
                             main.getPlayerStatusManager().removePlayerSlotCore(player.getUniqueId());
                         }
-                        slotLocationManager.unregisterSlotLocation(clickedLocation);
-                        slotRepository.deleteSlot(slot);
-                        shelf.getInventory().clear();
-                        Message.sendSuccessMessage(player, "[スロットAI]", "スロットの登録を解除しました。");
                         Long remainCash = slot.getCash();
                         if (remainCash > 0) {
                             UniverseEconomyAPI.getInstance().addMoney(player, remainCash, "スロット解除による残高返還");
                             Message.sendNormalMessage(player, "[スロットAI]", "スロット内に残っていた" + remainCash + "円を返還しました。");
                         }
+                        slotLocationManager.unregisterSlotLocation(clickedLocation);
+                        slotRepository.deleteSlot(slot);
+                        shelf.getInventory().clear();
+                        Message.sendSuccessMessage(player, "[スロットAI]", "スロットの登録を解除しました。");
 
                         return true;
                     }

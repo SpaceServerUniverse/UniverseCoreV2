@@ -10,6 +10,7 @@ public class PlayerStatusManager {
 
     public static final int ON_SLOT = 1;
     public static final int ON_EDIT_MODE = 1 << 1;
+    public static final int ON_FREEZE_MODE = 1 << 2;
 
     private final HashMap<UUID, Integer> playerStates = new HashMap<>();
 
@@ -51,5 +52,9 @@ public class PlayerStatusManager {
     public void removeFlag(UUID uuid, int flag) {
         int currentFlags = playerStates.getOrDefault(uuid, 0);
         playerStates.put(uuid, currentFlags & ~flag);
+    }
+
+    public void clearFlags(UUID uuid) {
+        playerStates.remove(uuid);
     }
 }
