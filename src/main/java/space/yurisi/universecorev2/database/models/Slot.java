@@ -29,6 +29,12 @@ public class Slot {
     @Column(name= "world_name")
     private String world_name;
 
+    @Column(name = "cash")
+    private Long cash;
+
+    @Column(name = "config")
+    private int config;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false)
     private Date created_at;
@@ -44,6 +50,8 @@ public class Slot {
             Long y,
             Long z,
             String world_name,
+            Long cash,
+            int config,
             Date created_at,
             Date updated_at
     ) {
@@ -53,6 +61,8 @@ public class Slot {
         this.y = y;
         this.z = z;
         this.world_name = world_name;
+        this.cash = cash;
+        this.config = config;
         this.created_at = created_at;
         this.updated_at = updated_at;
     }
@@ -107,6 +117,22 @@ public class Slot {
 
     public void setWorld_name(String world_name) {
         this.world_name = world_name;
+    }
+
+    public Long getCash() {
+        return cash;
+    }
+
+    public void setCash(Long cash) {
+        this.cash = cash;
+    }
+
+    public int getConfig() {
+        return config;
+    }
+
+    public void setConfig(int config) {
+        this.config = config;
     }
 
     public Date getCreated_at() {
