@@ -6,8 +6,6 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 import space.yurisi.universecorev2.subplugins.gacha.menu.gacha_menu.GachaInventoryMenu;
-import space.yurisi.universecorev2.subplugins.mywarp.connector.UniverseCoreAPIConnector;
-import space.yurisi.universecorev2.subplugins.mywarp.menu.mywarp_menu.MywarpInventoryMenu;
 import xyz.xenondevs.invui.item.ItemProvider;
 import xyz.xenondevs.invui.item.builder.ItemBuilder;
 import xyz.xenondevs.invui.item.impl.AbstractItem;
@@ -21,7 +19,7 @@ public class TopItem extends AbstractItem {
 
     @Override
     public void handleClick(@NotNull ClickType clickType, @NotNull Player player, @NotNull InventoryClickEvent event) {
-        GachaInventoryMenu mywarp_menu = new GachaInventoryMenu();
-        mywarp_menu.sendMenu(player);
+        GachaInventoryMenu gachaInventoryMenu = new GachaInventoryMenu();
+        gachaInventoryMenu.sendMenu(player);
     }
 }
