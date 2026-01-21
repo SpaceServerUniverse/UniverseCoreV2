@@ -136,7 +136,6 @@ public class UniverseItem {
                         int itemAmount = item.getAmount();
                         if (itemAmount <= remainingAmount) {
                             remainingAmount -= itemAmount;
-                            player.sendMessage(remainingAmount + " " + item_name);
                             item.setAmount(0);
                         } else {
                             item.setAmount(itemAmount - remainingAmount);
