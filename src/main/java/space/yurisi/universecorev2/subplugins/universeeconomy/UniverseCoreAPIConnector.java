@@ -63,7 +63,8 @@ public class UniverseCoreAPIConnector {
             moneyCache.setMoney(uuid, currentMoney);
         }
 
-        if (!baseCanAddMoney(new Money(null, userId, currentMoney, null, null), amount)) {
+        Money defaultMoneyModel = new Money(null, userId, currentMoney, null, null);
+        if (!baseCanAddMoney(defaultMoneyModel, amount)) {
             throw new CanNotAddMoneyException();
         }
 
@@ -72,8 +73,9 @@ public class UniverseCoreAPIConnector {
         }
 
         Long newMoney = currentMoney + amount;
+        MoneyHistory moneyHistory = new MoneyHistory(null, userId, amount, newMoney, reason == null ? "" : reason, new Date(), new Date());
         moneyCache.setMoney(uuid, newMoney);
-        moneyHistoryBuffer.add(userId, new MoneyHistory(null, userId, amount, newMoney, reason == null ? "" : reason, new Date(), new Date()));
+        moneyHistoryBuffer.add(userId, moneyHistory);
         dirtyUsers.add(uuid);
     }
 
