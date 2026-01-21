@@ -30,7 +30,7 @@ public class SolarSystemEventGacha extends EventGacha {
     protected void initializeRareList() {
         LoseTicket ticket = (LoseTicket) Objects.requireNonNull(UniverseItem.getItem(LoseTicket.id));
         ItemStack itemStack = ticket.getItem();
-        itemStack.setAmount(5);
+        itemStack.setAmount(2);
         ticket.setLoseTicketType(itemStack, GachaType.SOLAR_SYSTEM);
         rare.add(itemStack);
     }
