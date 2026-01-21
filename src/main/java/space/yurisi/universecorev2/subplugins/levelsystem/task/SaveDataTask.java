@@ -14,6 +14,7 @@ import space.yurisi.universecorev2.subplugins.levelsystem.exception.PlayerDataNo
 import space.yurisi.universecorev2.subplugins.levelsystem.manager.PlayerLevelDataManager;
 import space.yurisi.universecorev2.subplugins.levelsystem.utils.DayOfWeek;
 import space.yurisi.universecorev2.subplugins.receivebox.ReceiveBoxAPI;
+import space.yurisi.universecorev2.subplugins.universeeconomy.UniverseEconomyAPI;
 import space.yurisi.universecorev2.utils.Message;
 
 import java.time.LocalDateTime;
@@ -39,6 +40,7 @@ public class SaveDataTask extends BukkitRunnable {
     @Override
     public void run() {
         manager.saveAll();
+        UniverseEconomyAPI.getInstance().flushAll();
         DayOfWeek.getInstance().checkHoliday();
 
         tick++;
@@ -54,11 +56,11 @@ public class SaveDataTask extends BukkitRunnable {
     }
 
     private boolean shouldGiveExp(int tick) {
-        return tick % 4 == 2;
+        return tick % 6 == 2;
     }
 
     private boolean shouldGiveTicket(int tick) {
-        return tick == 8;
+        return tick == 12;
     }
 
     private void forEachOnlinePlayer(java.util.function.Consumer<Player> action) {
