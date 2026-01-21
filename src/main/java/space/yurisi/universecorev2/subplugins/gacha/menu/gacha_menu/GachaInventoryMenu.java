@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import space.yurisi.universecorev2.menu.BaseMenu;
 import space.yurisi.universecorev2.subplugins.gacha.menu.gacha_menu.item.NormalGachaMenuItem;
 import space.yurisi.universecorev2.subplugins.gacha.menu.gacha_menu.item.SolarSystemGachaDetailMenuItem;
+import space.yurisi.universecorev2.subplugins.gacha.menu.gacha_menu.item.SolarSystemGachaExchangeMenuItem;
 import space.yurisi.universecorev2.subplugins.gacha.menu.gacha_menu.item.SolarSystemGachaMenuItem;
 import space.yurisi.universecorev2.subplugins.mywarp.menu.mywarp_menu.item.*;
 import xyz.xenondevs.invui.gui.Gui;
@@ -23,11 +24,13 @@ public class GachaInventoryMenu implements BaseMenu {
                         "# # # # # # # # #",
                         "# a b # # # # # #",
                         "# # c # # # # # #",
+                        "# # d # # # # # #",
                         "# # # # # # # # #")
                 .addIngredient('#', border)
                 .addIngredient('a', new NormalGachaMenuItem())
                 .addIngredient('b', new SolarSystemGachaMenuItem())
                 .addIngredient('c', new SolarSystemGachaDetailMenuItem())
+                .addIngredient('d', new SolarSystemGachaExchangeMenuItem())
                 .build();
 
         xyz.xenondevs.invui.window.Window window = Window.single()
