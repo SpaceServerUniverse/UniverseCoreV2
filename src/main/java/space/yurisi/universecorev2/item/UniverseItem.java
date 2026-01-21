@@ -19,6 +19,7 @@ import space.yurisi.universecorev2.item.solar_system.*;
 import space.yurisi.universecorev2.item.stick.BlockCopyStick;
 import space.yurisi.universecorev2.item.ticket.GachaTicket;
 import space.yurisi.universecorev2.item.ticket.GunTicket;
+import space.yurisi.universecorev2.item.ticket.LoseTicket;
 import space.yurisi.universecorev2.menu.MainMenu;
 
 import java.util.HashMap;
@@ -59,6 +60,7 @@ public class UniverseItem {
         items.put(TacticalVest.id, new TacticalVest());
         items.put(MainMenuBook.id, new MainMenuBook());
         items.put(TutorialBook.id, new TutorialBook());
+        items.put(LoseTicket.id, new LoseTicket());
     }
 
     public static CustomItem getItem(String id){

@@ -123,7 +123,7 @@ public abstract class EventGacha {
             LifeCount lifeCount = lifeCountRepo.getLifeCount(count);
 
             if (rarity == GachaRarity.Normal || rarity == GachaRarity.Rare) {
-                Message.sendSuccessMessage(player, "[ガチャAI]", "ガチャで" + itemStack.getType().toString() + "§rを入手しました！");
+                Message.sendSuccessMessage(player, "[ガチャAI]", "ガチャで" + meta.getDisplayName() + "§rを入手しました！");
                 lifeCount.setGacha_ceiling_count(lifeCount.getGacha_ceiling_count() + 1);
             }
 

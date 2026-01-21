@@ -39,7 +39,7 @@ public class GachaExchangeMenuItem extends AbstractItem {
 
         boolean removed = UniverseItem.removeItem(player, LoseTicket.id, 100);
         if(removed) {
-            Message.sendSuccessMessage(player, "[ガチャAI]", "ハズレ券を使用して" + Objects.requireNonNull(UniverseItem.getItem(itemID)).getName() + "§fと交換しました！");
+            Message.sendSuccessMessage(player, "[ガチャAI]", "ハズレ券を使用して" + Objects.requireNonNull(UniverseItem.getItem(itemID)).getName() + "と交換しました！");
             inventory.addItem(item);
         }else{
             Message.sendWarningMessage(player, "[ガチャAI]",  gachaType.getTypeName() + "の§d§lハズレ券§fが不足しています。");

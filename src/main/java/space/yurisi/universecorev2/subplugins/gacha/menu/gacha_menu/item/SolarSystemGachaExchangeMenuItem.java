@@ -19,7 +19,7 @@ public class SolarSystemGachaExchangeMenuItem extends AbstractItem {
     public ItemProvider getItemProvider() {
         return new ItemBuilder(Material.PAPER).setDisplayName("§e§lハズレ券交換").addLoreLines(
                 "SolarSystemイベントガチャの",
-                "§d§lハズレ券§fを100枚使って",
+                "ハズレ券を100枚使って",
                 "好きなURと交換できます！");
     }
 
