@@ -11,4 +11,5 @@ public class UniverseItemKeyString {
     public static final String GUN = "gun";
     public static final String GUN_SERIAL = "gun_serial";
     public static final String GUN_ITEM_MODEL = "gun";
+    public static final String LOSE_TICKET_TYPE = "lose_ticket_type";
 }

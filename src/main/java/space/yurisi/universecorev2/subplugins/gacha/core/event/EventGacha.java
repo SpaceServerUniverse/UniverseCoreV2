@@ -17,6 +17,7 @@ import space.yurisi.universecorev2.exception.CountNotFoundException;
 import space.yurisi.universecorev2.exception.LifeCountNotFoundException;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
 import space.yurisi.universecorev2.item.UniverseItem;
+import space.yurisi.universecorev2.item.ticket.LoseTicket;
 import space.yurisi.universecorev2.subplugins.gacha.constrants.GachaRarity;
 import space.yurisi.universecorev2.utils.Message;
 
@@ -89,21 +90,9 @@ public abstract class EventGacha {
     }
 
     protected void initializeNormalList() {
-        normal.add(new ItemStack(Material.OAK_LOG, 32));
-        normal.add(new ItemStack(Material.SPRUCE_LOG, 32));
-        normal.add(new ItemStack(Material.BIRCH_LOG, 32));
-        normal.add(new ItemStack(Material.JUNGLE_LOG, 32));
-        normal.add(new ItemStack(Material.ACACIA_LOG, 32));
-        normal.add(new ItemStack(Material.DARK_OAK_LOG, 32));
     }
 
     protected void initializeRareList() {
-        rare.add(new ItemStack(Material.COOKED_BEEF, 32));
-        rare.add(new ItemStack(Material.PUMPKIN_PIE, 32));
-        rare.add(new ItemStack(Material.COOKED_RABBIT, 32));
-        rare.add(new ItemStack(Material.ENCHANTED_GOLDEN_APPLE, 5));
-        rare.add(new ItemStack(Material.GOLDEN_CARROT, 12));
-        rare.add(new ItemStack(Material.COOKIE, 32));
     }
 
     protected void initializeSuperRareList() {
@@ -134,7 +123,7 @@ public abstract class EventGacha {
             LifeCount lifeCount = lifeCountRepo.getLifeCount(count);
 
             if (rarity == GachaRarity.Normal || rarity == GachaRarity.Rare) {
-                Message.sendSuccessMessage(player, "[ガチャAI]", "ガチャで" + itemStack.getType().toString() + "§rを入手しました！");
+                Message.sendSuccessMessage(player, "[ガチャAI]", "ガチャで" + meta.getDisplayName() + "§rを入手しました！");
                 lifeCount.setGacha_ceiling_count(lifeCount.getGacha_ceiling_count() + 1);
             }
 
