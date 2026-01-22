@@ -1,6 +1,8 @@
 package space.yurisi.universecorev2.item.cooking;
 
 import org.bukkit.NamespacedKey;
+import org.bukkit.Server;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -16,6 +18,7 @@ import space.yurisi.universecorev2.exception.InvalidRecipeSizeException;
 import space.yurisi.universecorev2.exception.NotCookingItemException;
 import space.yurisi.universecorev2.item.CustomItem;
 import space.yurisi.universecorev2.item.UniverseItem;
+import space.yurisi.universecorev2.subplugins.cooking.CookingAPI;
 import space.yurisi.universecorev2.subplugins.cooking.utils.RecipeFlagOps;
 
 import java.util.UUID;
@@ -73,11 +76,15 @@ public interface Craftable {
         if(recipeToCheck.length != 9){
             return false;
         }
-        try {
-            CookingRecipe cookingRecipe = UniverseCoreV2API.getInstance().getDatabaseManagerV2().get(CookingRecipeRepository.class).getRecipeFlagsFromPlayer(uuid.toString());
-            if(!RecipeFlagOps.contains(RecipeFlagOps.fromBytes(cookingRecipe.getRecipe()), this.getFlagId())) return false;
-        } catch (CookingRecipeNotFoundException e) {
+        try{
+            if(!CookingAPI.getInstance().hasRecipe(uuid, this.getFlagId())){
+                return false;
+            }
+        }catch (IllegalStateException e){
             UniverseCoreV2.getInstance().getLogger().warning(e.getMessage());
+            if(UniverseCoreV2.getInstance().getServer().getPlayer(uuid) instanceof Player player){
+                player.sendMessage("§cレシピのデータを正しく取得できませんでした。管理者にお問い合わせください。");
+            }
             return false;
         }
         CookingItem[] checkedRecipe = new CookingItem[9];

@@ -8,12 +8,13 @@ public class Cooking implements SubPlugin {
 
     @Override
     public void onEnable(UniverseCoreV2 core) {
+        new CookingAPI(this);
         core.getServer().getPluginManager().registerEvents(new CookingEventListener(), core);
     }
 
     @Override
     public void onDisable() {
-
+        CookingAPI.getInstance().close();
     }
 
     @Override

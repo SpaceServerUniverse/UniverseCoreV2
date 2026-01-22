@@ -8,6 +8,7 @@ import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -20,8 +21,8 @@ import space.yurisi.universecorev2.exception.CookingRecipeNotFoundException;
 import space.yurisi.universecorev2.item.CustomItem;
 import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.item.cooking.*;
-import space.yurisi.universecorev2.item.cooking.flag.RecipeIds;
-import space.yurisi.universecorev2.item.cooking.foodbase.NapolitanBase;
+import space.yurisi.universecorev2.subplugins.cooking.CookingAPI;
+import space.yurisi.universecorev2.subplugins.cooking.utils.RecipeIds;
 import space.yurisi.universecorev2.subplugins.cooking.utils.CookingItems;
 import space.yurisi.universecorev2.subplugins.cooking.utils.RecipeFlagOps;
 
@@ -32,16 +33,11 @@ public class CookingEventListener implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent e){
-        String uuid = e.getPlayer().getUniqueId().toString();
-        try {
-            CookingRecipe cookingRecipe = UniverseCoreV2API.getInstance().getDatabaseManagerV2().get(CookingRecipeRepository.class).getRecipeFlagsFromPlayer(uuid);
-            BitSet bitset = RecipeFlagOps.fromBytes(cookingRecipe.getRecipe());
-            RecipeFlagOps.add(bitset, RecipeIds.NAPOLITAN);
-            cookingRecipe.setRecipe(bitset.toByteArray());
-            UniverseCoreV2API.getInstance().getDatabaseManagerV2().get(CookingRecipeRepository.class).updateRecipeFlags(cookingRecipe);
-        }catch (CookingRecipeNotFoundException exception){
-            UniverseCoreV2API.getInstance().getDatabaseManagerV2().get(CookingRecipeRepository.class).createCookingRecipe(uuid, RecipeFlagOps.empty().toByteArray());
-        }
+        CookingAPI.getInstance().cacheRepositoryData(e.getPlayer().getUniqueId());
+    }
+
+    public void onQuit(PlayerQuitEvent e){
+        CookingAPI.getInstance().saveRepositoryData(e.getPlayer().getUniqueId());
     }
 
     @EventHandler
