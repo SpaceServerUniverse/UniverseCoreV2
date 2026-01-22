@@ -1,25 +1,19 @@
 package space.yurisi.universecorev2.item.cooking;
 
 import org.bukkit.NamespacedKey;
-import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jspecify.annotations.Nullable;
 import space.yurisi.universecorev2.UniverseCoreV2;
-import space.yurisi.universecorev2.UniverseCoreV2API;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
-import space.yurisi.universecorev2.database.models.CookingRecipe;
-import space.yurisi.universecorev2.database.repositories.CookingRecipeRepository;
-import space.yurisi.universecorev2.exception.CookingRecipeNotFoundException;
 import space.yurisi.universecorev2.exception.InvalidRecipeException;
 import space.yurisi.universecorev2.exception.InvalidRecipeSizeException;
 import space.yurisi.universecorev2.exception.NotCookingItemException;
 import space.yurisi.universecorev2.item.CustomItem;
 import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.subplugins.cooking.CookingAPI;
-import space.yurisi.universecorev2.subplugins.cooking.utils.RecipeFlagOps;
 
 import java.util.UUID;
 
@@ -72,7 +66,7 @@ public interface Craftable {
         return ret;
     }
 
-    default boolean canCraftedWith(ItemStack[] recipeToCheck, UUID uuid) {
+    default boolean canCraftWith(ItemStack[] recipeToCheck, UUID uuid) {
         if(recipeToCheck.length != 9){
             return false;
         }
@@ -87,7 +81,7 @@ public interface Craftable {
             }
             return false;
         }
-        CookingItem[] checkedRecipe = new CookingItem[9];
+        CookingItem[] providedRecipe = new CookingItem[9];
         for (int i = 0; i <= 8; i++) {
             ItemStack item = recipeToCheck[i];
             if (item == null) continue;
@@ -96,16 +90,16 @@ public interface Craftable {
             if(!container.has(key)) return false;
             CustomItem customItem = UniverseItem.getItem(container.get(key, PersistentDataType.STRING));
             if(!(customItem instanceof CookingItem cookingItem)) return false;
-            checkedRecipe[i] = cookingItem;
+            providedRecipe[i] = cookingItem;
         }
         CookingItem[] recipe = this.getRecipe();
         if(this.isShaped()){
             for(int j = 0; j <= 8; j++){
                 CookingItem requiredItem = recipe[j];
-                CookingItem checkedItem = checkedRecipe[j];
-                if(requiredItem == null && checkedItem == null) continue;
-                if(requiredItem == null || checkedItem == null) return false;
-                if(!requiredItem.getId().equals(checkedItem.getId())) return false;
+                CookingItem providedItem = providedRecipe[j];
+                if(requiredItem == null && providedItem == null) continue;
+                if(requiredItem == null || providedItem == null) return false;
+                if(!requiredItem.getId().equals(providedItem.getId())) return false;
             }
         }else{
             for(int k = 0; k <= 8; k++){
@@ -113,14 +107,19 @@ public interface Craftable {
                 if(requiredItem == null) continue;
                 boolean found = false;
                 for(int l = 0; l <= 8; l++){
-                    CookingItem checkedItem = checkedRecipe[l];
-                    if(checkedItem == null) continue;
-                    if(!requiredItem.getId().equals(checkedItem.getId())) continue;
+                    CookingItem providedItem = providedRecipe[l];
+                    if(providedItem == null) continue;
+                    if(!requiredItem.getId().equals(providedItem.getId())) continue;
                     found = true;
-                    checkedRecipe[l] = null;
+                    providedRecipe[l] = null;
                     break;
                 }
                 if(!found) return false;
+            }
+            for (CookingItem provided: providedRecipe) {
+                if (provided != null) {
+                    return false;
+                }
             }
         }
         return true;
