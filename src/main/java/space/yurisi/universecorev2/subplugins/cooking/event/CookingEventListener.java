@@ -13,20 +13,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import space.yurisi.universecorev2.UniverseCoreV2;
-import space.yurisi.universecorev2.UniverseCoreV2API;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
-import space.yurisi.universecorev2.database.models.CookingRecipe;
-import space.yurisi.universecorev2.database.repositories.CookingRecipeRepository;
-import space.yurisi.universecorev2.exception.CookingRecipeNotFoundException;
 import space.yurisi.universecorev2.item.CustomItem;
 import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.item.cooking.*;
 import space.yurisi.universecorev2.subplugins.cooking.CookingAPI;
-import space.yurisi.universecorev2.subplugins.cooking.utils.RecipeIds;
 import space.yurisi.universecorev2.subplugins.cooking.utils.CookingItems;
-import space.yurisi.universecorev2.subplugins.cooking.utils.RecipeFlagOps;
 
-import java.util.BitSet;
 import java.util.Objects;
 
 public class CookingEventListener implements Listener {

@@ -1,28 +1,53 @@
 package space.yurisi.universecorev2.subplugins.cooking.utils;
 
-import java.util.BitSet;
-
 public final class RecipeFlagOps {
+
+    public static final int MAX_RECIPES = 256;
+    public static final int RECIPE_BYTES = 32;
 
     private RecipeFlagOps() {}
 
-    public static void add(BitSet bits, int index) {
-        bits.set(index);
+    public static byte[] add(byte[] flags, int index) {
+        rangeCheck(index);
+        int byteIndex = index >> 3;
+        int bitIndex  = index & 0b111;
+        flags[byteIndex] |= (byte) (1 << bitIndex);
+        return flags.clone();
     }
 
-    public static void remove(BitSet bits, int index) {
-        bits.clear(index);
+    public static byte[] remove(byte[] flags, int index) {
+        rangeCheck(index);
+        int byteIndex = index >> 3;
+        int bitIndex  = index & 0b111;
+        flags[byteIndex] &= (byte) ~(1 << bitIndex);
+        return flags.clone();
+
     }
 
-    public static boolean contains(BitSet bits, int index) {
-        return bits.get(index);
+    public static boolean contains(byte[] flags, int index) {
+        rangeCheck(index);
+        int byteIndex = index >> 3;
+        int bitIndex  = index & 0b111;
+        return (flags[byteIndex] & (1 << bitIndex)) != 0;
     }
 
-    public static BitSet fromBytes(byte[] bytes) {
-        return BitSet.valueOf(bytes);
+    public static byte[] empty() {
+        return new byte[RECIPE_BYTES];
     }
 
-    public static BitSet empty() {
-        return new BitSet();
+    private static void rangeCheck(int index) {
+        if (index < 0 || index >= MAX_RECIPES) {
+            throw new IndexOutOfBoundsException("Recipe index out of range: " + index);
+        }
+    }
+
+    public static String toBitStringLSBRight(byte[] bytes) {
+        StringBuilder sb = new StringBuilder(bytes.length * 8);
+        for (int i = bytes.length - 1; i >= 0; i--) {
+            for (int bit = 7; bit >= 0; bit--) {
+                sb.append(((bytes[i] >> bit) & 1) == 1 ? '1' : '0');
+            }
+        }
+        return sb.toString();
     }
 }

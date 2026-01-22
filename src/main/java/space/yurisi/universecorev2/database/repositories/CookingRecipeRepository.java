@@ -33,20 +33,20 @@ public class CookingRecipeRepository {
     /**
      * レシピIDからレシピのフラグバイト配列を取得します。
      *
-     * @param recipeId int レシピID
+     * @param key int primary key
      * @return byte[] レシピのフラグバイト配列
      * @throws CookingRecipeNotFoundException レシピデータが存在しない場合
      */
-    public CookingRecipe getRecipeFlagsFromId(int recipeId) throws CookingRecipeNotFoundException {
+    public CookingRecipe getRecipeFlagsFromId(int key) throws CookingRecipeNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
         try{
             session.beginTransaction();
             List<CookingRecipe> data = session.createSelectionQuery("FROM CookingRecipe WHERE id = :id", CookingRecipe.class)
-                    .setParameter("id", recipeId)
+                    .setParameter("id", key)
                     .getResultList();
             session.getTransaction().commit();
             if(data.isEmpty()){
-                throw new CookingRecipeNotFoundException("レシピのデータが存在しませんでした。id: "+recipeId);
+                throw new CookingRecipeNotFoundException("レシピのデータが存在しませんでした。id: "+key);
             }
             return data.getFirst();
         }finally {
@@ -57,11 +57,11 @@ public class CookingRecipeRepository {
     /**
      * プレイヤーUUIDからレシピのフラグバイト配列を取得します。
      *
-     * @param uuid
-     * @return
-     * @throws CookingRecipeNotFoundException
+     * @param uuid UUID
+     * @return CookingRecipe
+     * @throws CookingRecipeNotFoundException レシピデータが存在しない場合
      */
-    public CookingRecipe getRecipeFlagsFromPlayer(String uuid) throws CookingRecipeNotFoundException {
+    public CookingRecipe getRecipeFlagsFromUuid(String uuid) throws CookingRecipeNotFoundException {
         Session session = this.sessionFactory.getCurrentSession();
         try{
             session.beginTransaction();
@@ -74,6 +74,19 @@ public class CookingRecipeRepository {
             }
             return data.getFirst();
         }finally {
+            session.close();
+        }
+    }
+
+    public List<CookingRecipe> getAllCookingRecipes() {
+        Session session = this.sessionFactory.getCurrentSession();
+        try {
+            session.beginTransaction();
+            List<CookingRecipe> data = session.createSelectionQuery("FROM CookingRecipe", CookingRecipe.class)
+                    .getResultList();
+            session.getTransaction().commit();
+            return data;
+        } finally {
             session.close();
         }
     }

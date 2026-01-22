@@ -11,7 +11,9 @@ import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.item.book.MainMenuBook;
 import space.yurisi.universecorev2.item.book.TutorialBook;
+import space.yurisi.universecorev2.item.cooking.food.GoheiMochi;
 import space.yurisi.universecorev2.item.cooking.food.Napolitan;
+import space.yurisi.universecorev2.item.cooking.foodbase.GoheiMochiBase;
 import space.yurisi.universecorev2.item.cooking.foodbase.NapolitanBase;
 import space.yurisi.universecorev2.item.cooking.ingredients.*;
 import space.yurisi.universecorev2.item.fishingrod.FishingRod;
@@ -75,6 +77,8 @@ public class UniverseItem {
         items.put(Tomato.id, new Tomato());
         items.put(NapolitanBase.id, new NapolitanBase());
         items.put(Napolitan.id, new Napolitan());
+        items.put(GoheiMochiBase.id, new GoheiMochiBase());
+        items.put(GoheiMochi.id, new GoheiMochi());
     }
 
     public static CustomItem getItem(String id){

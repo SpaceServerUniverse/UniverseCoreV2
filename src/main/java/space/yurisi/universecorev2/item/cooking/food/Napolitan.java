@@ -1,7 +1,10 @@
 package space.yurisi.universecorev2.item.cooking.food;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.item.cooking.Edible;
 import space.yurisi.universecorev2.item.cooking.FoodBaseItem;
@@ -26,7 +29,9 @@ public final class Napolitan extends FoodItem implements Edible, FurnaceResult {
 
     @Override
     public void onEat(Player player) {
-
+        player.sendActionBar(Component.text("§bナポリタンを食べた！"));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60 * 20, 0, false));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.HASTE, 45 * 20, 0, false));
     }
 
     @Override
