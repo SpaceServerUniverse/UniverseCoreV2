@@ -35,7 +35,7 @@ public class BirthdayCalendar implements BaseMenu {
     private List<Item> currentItems;
 
     public BirthdayCalendar(List<List<Item>> listItems, Integer page) {
-        birthdayCardRepository = UniverseCoreV2API.getInstance().getDatabaseManager().getBirthdayCardRepository();
+        birthdayCardRepository = UniverseCoreV2API.getInstance().getDatabaseManagerV2().get(BirthdayCardRepository.class);
         this.listItems = listItems;
         this.page = Objects.requireNonNullElse(page, 0);
     }

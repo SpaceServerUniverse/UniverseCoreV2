@@ -32,7 +32,10 @@ public final class UniverseEconomy implements SubPlugin {
     }
 
     public void onDisable() {
-        // Plugin shutdown logic
+        UniverseEconomyAPI api = UniverseEconomyAPI.getInstance();
+        if (api != null) {
+            api.flushAll();
+        }
     }
 
     @Override

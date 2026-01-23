@@ -20,7 +20,8 @@ services:
       - ./paper/plugins:/data/plugins
       - ./paper/logs:/data/logs
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - space_network
       - shared_network
@@ -39,7 +40,12 @@ services:
     ]
     volumes:
       - ./db/data:/var/lib/mysql
-      - ./db/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./db/my.cnf:/etc/mysql/conf.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-ppassword"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
     networks:
       - space_network
       - shared_network

@@ -7,9 +7,29 @@ SpaceServer Universe のコアプラグイン
 
 ## 使い方
 
-1. `plugins/` に `UniverseCoreV2.jar` を配置します。
-2. サーバーを起動し, `plugins/UniverseCoreV2/` に生成された `config.yml` を編集します。 ([設定方法](#discord-との連携))
-3. サーバーを起動する。
+1. `UniverseCoreV2` リポジトリをクローンします。
+
+    ```shell
+    git clone https://github.com/SpaceServerUniverse/UniverseCoreV2.git
+    ```
+
+2. 一度サーバを立ち上げます。
+
+    ```shell
+    cd docker
+    docker network create shared_network
+    docker compose up -d
+    ```
+
+3. プラグインをビルドします．
+
+    ```shell
+    cd ..
+    ./gradlew reobfJar
+    ```
+
+4. `plugins/` に `build/libs/` にある `UniverseCoreV2-1.0-reobf.jar` を配置します。
+5. サーバーを起動します。
 
 ## 依存関係
 

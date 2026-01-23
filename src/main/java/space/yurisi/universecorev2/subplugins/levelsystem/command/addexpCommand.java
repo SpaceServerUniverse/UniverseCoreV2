@@ -38,6 +38,10 @@ public class addexpCommand implements CommandExecutor {
 
         try {
             int exp = Integer.parseInt(args[1]);
+            if(exp <= 0){
+                Message.sendErrorMessage(player, "[XP管理AI]", "経験値は1以上を指定して下さい。");
+                return false;
+            }
             LevelSystemAPI.getInstance().addExp(to_player, exp);
             Message.sendNormalMessage(to_player, "[XP管理AI]", to_player.getName() + "に" + exp + "EXP与えました。");
         } catch (NumberFormatException exception){

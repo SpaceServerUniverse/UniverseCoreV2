@@ -23,6 +23,7 @@ import space.yurisi.universecorev2.subplugins.mywarp.Mywarp;
 import space.yurisi.universecorev2.subplugins.navigation.Navigation;
 import space.yurisi.universecorev2.subplugins.playerhead.PlayerHead;
 import space.yurisi.universecorev2.subplugins.playerinfoscoreboard.PlayerInfoScoreBoard;
+import space.yurisi.universecorev2.subplugins.positionsystem.PositionSystem;
 import space.yurisi.universecorev2.subplugins.rankcounter.RankCounter;
 import space.yurisi.universecorev2.subplugins.receivebox.ReceiveBox;
 import space.yurisi.universecorev2.subplugins.repaircream.RepairCream;
@@ -95,6 +96,7 @@ public class SubPluginInitializer {
         this.subPlugins.add(new AutoCollect());
         this.subPlugins.add(new Achievement());
         this.subPlugins.add(new LoginBonus());
+        this.subPlugins.add(new PositionSystem());
         this.subPlugins.add(new UniverseJob());
         this.subPlugins.add(new UniverseSlot());
         this.subPlugins.add(new SpaceShip());

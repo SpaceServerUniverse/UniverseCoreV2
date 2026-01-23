@@ -31,6 +31,7 @@ public class gachaCommand implements CommandExecutor, TabCompleter {
         switch (args[0]){
             case "solar_system":
                 new SolarSystemEventGacha(player).turn();
+                break;
         }
 
 

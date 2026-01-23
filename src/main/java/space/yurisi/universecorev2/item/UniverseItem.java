@@ -11,10 +11,8 @@ import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.item.book.MainMenuBook;
 import space.yurisi.universecorev2.item.book.TutorialBook;
-import space.yurisi.universecorev2.item.cooking.food.GoheiMochi;
-import space.yurisi.universecorev2.item.cooking.food.Napolitan;
-import space.yurisi.universecorev2.item.cooking.foodbase.GoheiMochiBase;
-import space.yurisi.universecorev2.item.cooking.foodbase.NapolitanBase;
+import space.yurisi.universecorev2.item.cooking.food.*;
+import space.yurisi.universecorev2.item.cooking.foodbase.*;
 import space.yurisi.universecorev2.item.cooking.ingredients.*;
 import space.yurisi.universecorev2.item.fishingrod.FishingRod;
 import space.yurisi.universecorev2.item.pickaxe.FishingPickaxe;
@@ -24,6 +22,7 @@ import space.yurisi.universecorev2.item.solar_system.*;
 import space.yurisi.universecorev2.item.stick.BlockCopyStick;
 import space.yurisi.universecorev2.item.ticket.GachaTicket;
 import space.yurisi.universecorev2.item.ticket.GunTicket;
+import space.yurisi.universecorev2.item.ticket.LoseTicket;
 import space.yurisi.universecorev2.menu.MainMenu;
 
 import java.util.HashMap;
@@ -64,6 +63,7 @@ public class UniverseItem {
         items.put(TacticalVest.id, new TacticalVest());
         items.put(MainMenuBook.id, new MainMenuBook());
         items.put(TutorialBook.id, new TutorialBook());
+        items.put(LoseTicket.id, new LoseTicket());
         items.put(Carrot.id, new Carrot());
         items.put(GreenPepper.id, new GreenPepper());
         items.put(Pasta.id, new Pasta());
@@ -156,7 +156,6 @@ public class UniverseItem {
                         int itemAmount = item.getAmount();
                         if (itemAmount <= remainingAmount) {
                             remainingAmount -= itemAmount;
-                            player.sendMessage(remainingAmount + " " + item_name);
                             item.setAmount(0);
                         } else {
                             item.setAmount(itemAmount - remainingAmount);
