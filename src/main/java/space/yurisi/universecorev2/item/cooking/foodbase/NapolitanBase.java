@@ -5,7 +5,7 @@ import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.item.cooking.CookingItem;
 import space.yurisi.universecorev2.item.cooking.Craftable;
 import space.yurisi.universecorev2.item.cooking.FoodBaseItem;
-import space.yurisi.universecorev2.subplugins.cooking.utils.RecipeId;
+import space.yurisi.universecorev2.item.cooking.constant.RecipeId;
 import space.yurisi.universecorev2.item.cooking.ingredients.GreenPepper;
 import space.yurisi.universecorev2.item.cooking.ingredients.Pasta;
 import space.yurisi.universecorev2.item.cooking.ingredients.Salt;
@@ -43,6 +43,6 @@ public final class NapolitanBase extends FoodBaseItem implements Craftable {
 
     @Override
     public int getFlagId() {
-        return RecipeId.NAPOLITAN.getId();
+        return RecipeId.NAPOLITAN_BASE.getFlagId();
     }
 }

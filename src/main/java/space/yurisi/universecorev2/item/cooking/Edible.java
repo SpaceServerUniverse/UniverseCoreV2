@@ -5,23 +5,23 @@ import org.bukkit.entity.Player;
 public interface Edible {
 
     /**
-     * 食べたときの処理を記述します
+     * Called when the player eats the item
      *
-     * @param player プレイヤー
+     * @param player Player
      */
     void onEat(Player player);
 
     /**
-     * 満腹度を返します
-     * 例:ステーキの場合は8
+     * Returns the nutrition value
+     * Example: For steak, returns 8
      *
      * @return int
      */
     int getNutrition() ;
 
     /**
-     * 隠し満腹度を返します
-     * 例:ステーキの場合は12.8
+     * Returns the saturation value
+     * Example: For steak, returns 12.8f
      *
      * @return float
      */

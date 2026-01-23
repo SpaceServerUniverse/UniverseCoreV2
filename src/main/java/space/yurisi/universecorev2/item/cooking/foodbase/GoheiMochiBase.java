@@ -7,7 +7,7 @@ import space.yurisi.universecorev2.item.cooking.CookingItem;
 import space.yurisi.universecorev2.item.cooking.Craftable;
 import space.yurisi.universecorev2.item.cooking.FoodBaseItem;
 import space.yurisi.universecorev2.item.cooking.ingredients.*;
-import space.yurisi.universecorev2.subplugins.cooking.utils.RecipeId;
+import space.yurisi.universecorev2.item.cooking.constant.RecipeId;
 
 public final class GoheiMochiBase extends FoodBaseItem implements Craftable {
 
@@ -41,6 +41,6 @@ public final class GoheiMochiBase extends FoodBaseItem implements Craftable {
 
     @Override
     public int getFlagId() {
-        return RecipeId.GOHEI_MOCHI.getId();
+        return RecipeId.GOHEI_MOCHI_BASE.getFlagId();
     }
 }

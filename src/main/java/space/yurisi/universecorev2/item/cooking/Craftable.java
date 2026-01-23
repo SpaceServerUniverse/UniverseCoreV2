@@ -20,7 +20,7 @@ import java.util.UUID;
 public interface Craftable {
 
     /**
-     * レシピを返します
+     * Returns the recipe matrix
      *
      * @return CookingItem[]
      */
@@ -28,14 +28,14 @@ public interface Craftable {
     CookingItem[] getRecipe();
 
     /**
-     * レシピが形状付きかどうかを返します
+     * Checks if the recipe is shaped
      *
      * @return boolean
      */
     boolean isShaped();
 
     /**
-     * レシピのフラグIDを返します
+     * Returns the flag ID
      *
      * @return int
      */

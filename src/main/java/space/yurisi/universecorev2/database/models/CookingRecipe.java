@@ -6,14 +6,14 @@ import jakarta.persistence.*;
 @Table(name = "recipe_unlocked")
 public class CookingRecipe {
     @Id
-    @Column(name = "id", columnDefinition = "BIGINT UNSIGNED")
+    @Column(name = "id", columnDefinition = "BIGINT UNSIGNED", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "player_uuid", columnDefinition = "VARCHAR(255) NOT NULL")
+    @Column(name = "player_uuid", columnDefinition = "VARCHAR(255) NOT NULL", nullable = false)
     private String player_uuid;
 
-    @Column(name = "recipe", nullable = false)
+    @Column(name = "recipe", columnDefinition = "BINARY(32) NOT NULL", nullable = false)
     private byte[] recipe;
 
     public CookingRecipe(

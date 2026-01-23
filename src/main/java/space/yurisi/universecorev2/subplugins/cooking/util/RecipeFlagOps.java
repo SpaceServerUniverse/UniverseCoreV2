@@ -1,4 +1,4 @@
-package space.yurisi.universecorev2.subplugins.cooking.utils;
+package space.yurisi.universecorev2.subplugins.cooking.util;
 
 public final class RecipeFlagOps {
 

@@ -30,8 +30,8 @@ public final class Napolitan extends FoodItem implements Edible, FurnaceResult {
     @Override
     public void onEat(Player player) {
         player.sendActionBar(Component.text("§bナポリタンを食べた！"));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60 * 20, 0, false));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.HASTE, 45 * 20, 0, false));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60 * 20, 0, true));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.HASTE, 45 * 20, 0, true));
     }
 
     @Override

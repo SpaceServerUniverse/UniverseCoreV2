@@ -18,9 +18,11 @@ import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.item.CustomItem;
 import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.item.cooking.*;
+import space.yurisi.universecorev2.item.cooking.constant.FoodId;
+import space.yurisi.universecorev2.item.cooking.constant.RecipeId;
 import space.yurisi.universecorev2.subplugins.cooking.CookingAPI;
-import space.yurisi.universecorev2.subplugins.cooking.utils.CookingItems;
 
+import java.util.List;
 import java.util.Objects;
 
 public class CookingEventListener implements Listener {
@@ -30,6 +32,7 @@ public class CookingEventListener implements Listener {
         CookingAPI.getInstance().cacheRepositoryData(e.getPlayer().getUniqueId());
     }
 
+    @EventHandler
     public void onQuit(PlayerQuitEvent e){
         CookingAPI.getInstance().saveRepositoryData(e.getPlayer().getUniqueId());
     }
@@ -60,7 +63,7 @@ public class CookingEventListener implements Listener {
     public void onPrepareCraft(PrepareItemCraftEvent e){
         ItemStack[] matrix = e.getInventory().getMatrix();
         if(matrix.length != 9) return;
-        CookingItem[] foodBaseItems = CookingItems.getAllCookingItems();
+        List<CookingItem> foodBaseItems = RecipeId.getAllCraftItems();
         for(CookingItem foodBaseItem : foodBaseItems){
             if(!(foodBaseItem instanceof Craftable craftable)) continue;
             if(!craftable.canCraftWith(matrix, e.getView().getPlayer().getUniqueId())) continue;
@@ -81,7 +84,7 @@ public class CookingEventListener implements Listener {
         if(!container.has(key)) return;
         CustomItem customItem = UniverseItem.getItem(container.get(key, PersistentDataType.STRING));
         if(!(customItem instanceof CookingItem item)) return;
-        CookingItem[] cookingItems = CookingItems.getAllCookingItems();
+        List<CookingItem> cookingItems = RecipeId.getAllCraftItems();
         CookingItem craftedItem = null;
         for (CookingItem cookingItem: cookingItems){
             if(Objects.equals(item.getId(), cookingItem.getId())){
@@ -99,7 +102,6 @@ public class CookingEventListener implements Listener {
             if (stack.getAmount() <= 0) {
                 matrix[i] = null;
             }
-            break;
         }
 
         e.getInventory().setMatrix(matrix);
@@ -112,7 +114,7 @@ public class CookingEventListener implements Listener {
         NamespacedKey key = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.COOKING_ITEM);
         if(!container.has(key)) return;
         CustomItem customItem = UniverseItem.getItem(container.get(key, PersistentDataType.STRING));
-        CookingItem[] smeltedItems = CookingItems.getAllFoodItems();
+        List<CookingItem> smeltedItems = FoodId.getAllFoodItems();
         for(CookingItem smeltedItem : smeltedItems){
             if(!(smeltedItem instanceof FurnaceResult furnaceResult)) continue;
             if(customItem == null) continue;

@@ -11,8 +11,8 @@ import space.yurisi.universecorev2.UniverseCoreV2API;
 import space.yurisi.universecorev2.api.LuckPermsWrapper;
 import space.yurisi.universecorev2.exception.UserNotFoundException;
 import space.yurisi.universecorev2.subplugins.cooking.CookingAPI;
-import space.yurisi.universecorev2.subplugins.cooking.utils.RecipeFlagOps;
-import space.yurisi.universecorev2.subplugins.cooking.utils.RecipeId;
+import space.yurisi.universecorev2.subplugins.cooking.util.RecipeFlagOps;
+import space.yurisi.universecorev2.item.cooking.constant.RecipeId;
 import space.yurisi.universecorev2.utils.Message;
 
 import java.util.ArrayList;
@@ -24,9 +24,10 @@ public class CookingCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
         String[] helpMessage = """
             §6-- Recipe Help --
-               §7/cooking add <player> <ID>:　レシピを追加します
-               §7/cooking remove <player> <ID>: レシピを削除します
+               §7/cooking add <player> <RecipeID>:　レシピを追加します
+               §7/cooking remove <player> <RecipeID>: レシピを削除します
                §7/cooking check <player>: 取得済みのレシピを確認します(byte形式)
+               §7/cooking help: ヘルプを表示します
             """.split("\n");
         if(args.length == 0){
             sender.sendMessage(helpMessage);
@@ -51,9 +52,9 @@ public class CookingCommand implements CommandExecutor, TabCompleter {
                     UUID uuid = UniverseCoreV2API.getInstance().getDatabaseManager().getUserRepository().getUser(primaryKey).getFormattedUUID();
                     CookingAPI.getInstance().cacheRepositoryData(uuid);
                     for(RecipeId recipeId: RecipeId.values()){
-                        if(!args[2].equals(recipeId.getName())) continue;
-                        CookingAPI.getInstance().addRecipe(uuid, recipeId.getId());
-                        Message.sendSuccessMessage(player, "[料理AI]", "レシピ「§e"+recipeId.getName()+"§a」を§e"+args[1]+"§aに追加しました。");
+                        if(!args[2].equals(recipeId.getStringId())) continue;
+                        CookingAPI.getInstance().addRecipe(uuid, recipeId.getFlagId());
+                        Message.sendSuccessMessage(player, "[料理AI]", "レシピ「§e"+recipeId.getStringId()+"§a」を§e"+args[1]+"§aに追加しました。");
                         return true;
                     }
                 } catch (UserNotFoundException | IllegalStateException e) {
@@ -75,9 +76,9 @@ public class CookingCommand implements CommandExecutor, TabCompleter {
                     UUID uuid = UniverseCoreV2API.getInstance().getDatabaseManager().getUserRepository().getUser(primaryKey).getFormattedUUID();
                     CookingAPI.getInstance().cacheRepositoryData(uuid);
                     for(RecipeId recipeId: RecipeId.values()){
-                        if(!args[2].equals(recipeId.getName())) continue;
-                        CookingAPI.getInstance().removeRecipe(uuid, recipeId.getId());
-                        Message.sendSuccessMessage(player, "[料理AI]", "レシピ「§e"+recipeId.getName()+"§a」を§e"+args[1]+"§aから削除しました。");
+                        if(!args[2].equals(recipeId.getStringId())) continue;
+                        CookingAPI.getInstance().removeRecipe(uuid, recipeId.getFlagId());
+                        Message.sendSuccessMessage(player, "[料理AI]", "レシピ「§e"+recipeId.getStringId()+"§a」を§e"+args[1]+"§aから削除しました。");
                         return true;
                     }
                 } catch (UserNotFoundException | IllegalStateException e) {
@@ -109,6 +110,7 @@ public class CookingCommand implements CommandExecutor, TabCompleter {
                     Message.sendErrorMessage(player, "[料理AI]", "指定されたプレイヤーは存在しません。");
                     return true;
                 }
+            case "help":
             default:
                 sender.sendMessage(helpMessage);
                 break;
@@ -119,7 +121,7 @@ public class CookingCommand implements CommandExecutor, TabCompleter {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
         if(args.length == 1){
-            return List.of("add", "remove", "check");
+            return List.of("add", "remove", "check", "help");
         }
         if(args.length == 2){
             return null;
@@ -127,7 +129,7 @@ public class CookingCommand implements CommandExecutor, TabCompleter {
         if(args.length == 3 && (args[0].equals("add") || args[0].equals("remove"))){
             List<String> completions = new ArrayList<>();
             for (RecipeId recipeId : RecipeId.values()) {
-                completions.add(recipeId.getName());
+                completions.add(recipeId.getStringId());
             }
             return completions;
         }

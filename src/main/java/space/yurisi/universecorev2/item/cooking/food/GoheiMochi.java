@@ -9,6 +9,7 @@ import space.yurisi.universecorev2.item.cooking.Edible;
 import space.yurisi.universecorev2.item.cooking.FoodBaseItem;
 import space.yurisi.universecorev2.item.cooking.FoodItem;
 import space.yurisi.universecorev2.item.cooking.FurnaceResult;
+import space.yurisi.universecorev2.item.cooking.foodbase.GoheiMochiBase;
 
 public final class GoheiMochi extends FoodItem implements Edible, FurnaceResult {
 
@@ -27,11 +28,11 @@ public final class GoheiMochi extends FoodItem implements Edible, FurnaceResult 
     @Override
     public void onEat(Player player) {
         player.sendActionBar(Component.text("§b五平餅を食べた！"));
-        player.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.HASTE, 30 * 20, 1, false));
+        player.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.HASTE, 30 * 20, 1, true));
     }
 
     @Override
     public FoodBaseItem getFurnaceBaseItem() {
-        return (FoodBaseItem) UniverseItem.getItem(GoheiMochi.id);
+        return (FoodBaseItem) UniverseItem.getItem(GoheiMochiBase.id);
     }
 }
