@@ -37,7 +37,7 @@ public final class CookingAPI {
     /**
      * Cache player data from repository.
      *
-     * @param uuid
+     * @param uuid UUID
      */
     public void cacheRepositoryData(UUID uuid){
         CookingRecipeRepository repository = UniverseCoreV2API.getInstance().getDatabaseManagerV2().get(CookingRecipeRepository.class);
@@ -59,7 +59,7 @@ public final class CookingAPI {
     /**
      * Save player data to repository.
      *
-     * @param uuid
+     * @param uuid UUID
      */
     public void saveRepositoryData(UUID uuid){
         if(!cachedPlayerData.containsKey(uuid)) return;

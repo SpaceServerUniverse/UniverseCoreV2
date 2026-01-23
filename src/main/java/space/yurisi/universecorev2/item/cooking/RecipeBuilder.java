@@ -20,7 +20,7 @@ public final class RecipeBuilder {
 
     private RecipeBuilder(){
         recipeMatrix = new String[9];
-    };
+    }
 
     public static RecipeBuilder create() {
         return new RecipeBuilder();
