@@ -1,12 +1,10 @@
 package space.yurisi.universecorev2.item.cooking.foodbase;
 
 import org.jetbrains.annotations.NotNull;
-import space.yurisi.universecorev2.item.CustomItem;
-import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.item.cooking.CookingItem;
 import space.yurisi.universecorev2.item.cooking.Craftable;
 import space.yurisi.universecorev2.item.cooking.FoodBaseItem;
-import space.yurisi.universecorev2.item.cooking.constant.RecipeBuilder;
+import space.yurisi.universecorev2.item.cooking.RecipeBuilder;
 import space.yurisi.universecorev2.item.cooking.constant.RecipeId;
 import space.yurisi.universecorev2.item.cooking.ingredients.GreenPepper;
 import space.yurisi.universecorev2.item.cooking.ingredients.Pasta;
@@ -30,7 +28,7 @@ public final class NapolitanBase extends FoodBaseItem implements Craftable {
                 .setRecipeFromIndex(1, GreenPepper.id)
                 .setRecipeFromIndex(2, Pasta.id)
                 .setRecipeFromIndex(3, Salt.id);
-        this.recipe = builder.build();
+        this.recipe = builder.build(this);
     }
 
     @Override
