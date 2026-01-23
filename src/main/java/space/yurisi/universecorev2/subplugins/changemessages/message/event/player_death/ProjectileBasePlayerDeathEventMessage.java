@@ -23,6 +23,10 @@ public final class ProjectileBasePlayerDeathEventMessage extends BasePlayerDeath
                 Object shooterObj = damager.getShooter();
 
                 if (shooterObj instanceof Entity shooter) {
+                    if (shooter instanceof Player shooterPlayer && shooterPlayer.getUniqueId().equals(player.getUniqueId())) {
+                        setDefaultMessages(player);
+                        return;
+                    }
                     String item = "";
 
                     if (shooter instanceof Player shooterPlayer) {
@@ -44,13 +48,11 @@ public final class ProjectileBasePlayerDeathEventMessage extends BasePlayerDeath
                     return;
                 }
 
-                setMessages(new Component[]{
-                        Component.text("§a§l[死亡管理AI] §c" + player.getName() + "§a が死亡した")
-                });
+                setDefaultMessages(player);
                 return;
             }
 
-            setMessages(new Component[]{ Component.text("") });
+            setDefaultMessages(player);
         } else {
             setMessages(
                     new Component[]{
@@ -59,5 +61,14 @@ public final class ProjectileBasePlayerDeathEventMessage extends BasePlayerDeath
             );
         }
 
+    }
+
+    private void setDefaultMessages(Player player) {
+        setMessages(new Component[]{
+                Component.text("§a§l[死亡管理AI] §b" + player.getName() + "§a はなぞのダメージにより死んだ"),
+                Component.text("§a§l[死亡管理AI] §b" + player.getName() + "§a はなにかの力によって死亡した"),
+                Component.text("§a§l[死亡管理AI] §b" + player.getName() + "§a はなにかの圧力によって死亡した"),
+                Component.text("§a§l[死亡管理AI] §b" + player.getName() + "§a は神の力によって消滅した")
+        });
     }
 }
