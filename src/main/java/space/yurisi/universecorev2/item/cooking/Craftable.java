@@ -5,12 +5,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.jspecify.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
-import space.yurisi.universecorev2.exception.InvalidRecipeException;
-import space.yurisi.universecorev2.exception.InvalidRecipeSizeException;
-import space.yurisi.universecorev2.exception.NotCookingItemException;
 import space.yurisi.universecorev2.item.CustomItem;
 import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.subplugins.cooking.CookingAPI;
@@ -24,7 +21,7 @@ public interface Craftable {
      *
      * @return CookingItem[]
      */
-    @Nullable
+    @NotNull
     CookingItem[] getRecipe();
 
     /**
@@ -40,31 +37,6 @@ public interface Craftable {
      * @return int
      */
     int getFlagId();
-
-    default CookingItem[] toCookingRecipe(CookingItem item, CustomItem[] recipe) throws InvalidRecipeSizeException, InvalidRecipeException {
-        if(recipe.length != 9){
-            throw new InvalidRecipeSizeException(recipe.length);
-        }
-        CookingItem[] ret = new CookingItem[9];
-        boolean isThrownError = false;
-        InvalidRecipeException exception = new InvalidRecipeException(item.getId());
-        for(int j = 0; j <= 8; j++){
-            if(recipe[j] == null) {
-                ret[j] = null;
-                continue;
-            }
-            if(recipe[j] instanceof CookingItem cookingItem){
-                ret[j] = cookingItem;
-            }else{
-                isThrownError = true;
-                exception.addSuppressed(new NotCookingItemException(item, j));
-            }
-        }
-        if(isThrownError){
-            throw exception;
-        }
-        return ret;
-    }
 
     default boolean canCraftWith(ItemStack[] recipeToCheck, UUID uuid) {
         if(recipeToCheck.length != 9){

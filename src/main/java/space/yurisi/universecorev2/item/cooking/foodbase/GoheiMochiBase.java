@@ -1,17 +1,19 @@
 package space.yurisi.universecorev2.item.cooking.foodbase;
 
+import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.Nullable;
 import space.yurisi.universecorev2.item.CustomItem;
 import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.item.cooking.CookingItem;
 import space.yurisi.universecorev2.item.cooking.Craftable;
 import space.yurisi.universecorev2.item.cooking.FoodBaseItem;
+import space.yurisi.universecorev2.item.cooking.constant.RecipeBuilder;
 import space.yurisi.universecorev2.item.cooking.ingredients.*;
 import space.yurisi.universecorev2.item.cooking.constant.RecipeId;
 
 public final class GoheiMochiBase extends FoodBaseItem implements Craftable {
 
-    public static final String id = "mochi_base";
+    public static final String id = "gohei_mochi_base";
 
     private final CookingItem[] recipe;
 
@@ -21,16 +23,16 @@ public final class GoheiMochiBase extends FoodBaseItem implements Craftable {
                 "餅の素"
         );
 
-        CustomItem[] items = new CustomItem[9];
-        items[0] = UniverseItem.getItem(Salt.id);
-        items[1] = UniverseItem.getItem(SoySauce.id);
-        items[2] = UniverseItem.getItem(Sugar.id);
-        items[3] = UniverseItem.getItem(Rice.id);
-        this.recipe = this.toCookingRecipe(this, items);
+        RecipeBuilder builder = RecipeBuilder.create()
+                .setRecipeFromIndex(0, Salt.id)
+                .setRecipeFromIndex(1, SoySauce.id)
+                .setRecipeFromIndex(2, Sugar.id)
+                .setRecipeFromIndex(3, Rice.id);
+        this.recipe = builder.build();
     }
 
     @Override
-    public @Nullable CookingItem[] getRecipe() {
+    public @NotNull CookingItem[] getRecipe() {
         return this.recipe;
     }
 

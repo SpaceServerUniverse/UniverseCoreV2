@@ -101,6 +101,8 @@ public class CookingEventListener implements Listener {
             stack.setAmount(stack.getAmount() - 1);
             if (stack.getAmount() <= 0) {
                 matrix[i] = null;
+            }else{
+                matrix[i] = stack;
             }
         }
 
