@@ -17,6 +17,8 @@ commands:
     description: オンラインのプレイヤーに経験値を与えます
   lobby:
     description: ロビーに戻ります
+  flat:
+    description: フラットワールドに行きます。
 
   # SubPlugins
 
