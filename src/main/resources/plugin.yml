@@ -163,6 +163,9 @@ commands:
   gm:
     description: ゲームモードを切り替えます
 
+  flat:
+    description: 地面を平らにします
+
   #cooking:
   cooking:
     description: レシピを編集します
