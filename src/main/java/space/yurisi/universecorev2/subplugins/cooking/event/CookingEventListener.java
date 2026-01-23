@@ -76,46 +76,6 @@ public class CookingEventListener implements Listener {
             }
         }
     }
-//
-//    @EventHandler
-//    public void onCraft(CraftItemEvent e) {
-//        if (!(e.getWhoClicked() instanceof Player player)) return;
-//
-//        ItemStack[] matrix = e.getInventory().getMatrix();
-//        if(!(e.getInventory().getResult() instanceof ItemStack itemStack)) return;
-//        PersistentDataContainer container = itemStack.getItemMeta().getPersistentDataContainer();
-//        NamespacedKey key = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.COOKING_ITEM);
-//        if(!container.has(key)) return;
-//        CustomItem customItem = UniverseItem.getItem(container.get(key, PersistentDataType.STRING));
-//        if(!(customItem instanceof CookingItem item)) return;
-//        List<CookingItem> cookingItems = RecipeId.getAllCraftItems();
-//        CookingItem craftedItem = null;
-//        for (CookingItem cookingItem: cookingItems){
-//            if(Objects.equals(item.getId(), cookingItem.getId())){
-//                craftedItem = cookingItem;
-//                break;
-//            }
-//        }
-//        if(craftedItem instanceof Craftable) return;
-//        ItemStack resultItem = e.getCursor();
-//        e.setCancelled(true);
-//        player.setItemOnCursor(resultItem);
-//
-//        for (int i = 0; i < matrix.length; i++) {
-//            ItemStack stack = matrix[i];
-//            if (stack == null) continue;
-//
-//            stack.setAmount(stack.getAmount() - 1);
-//            if (stack.getAmount() <= 0) {
-//                matrix[i] = null;
-//            }else{
-//                matrix[i] = stack;
-//            }
-//        }
-//
-//        Bukkit.getScheduler().scheduleSyncDelayedTask(UniverseCoreV2.getInstance(), () -> e.getInventory().setMatrix(matrix), 1L);
-//
-//    }
 
     @EventHandler
     public void onFurnace(FurnaceSmeltEvent e){
