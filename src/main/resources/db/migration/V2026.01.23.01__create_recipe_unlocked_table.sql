@@ -1,0 +1,7 @@
+USE SpaceServerUniverse;
+
+CREATE TABLE IF NOT EXISTS recipe_unlocked (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    player_uuid VARCHAR(255) NOT NULL,
+    recipe BINARY(32) NOT NULL
+);

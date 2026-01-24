@@ -164,3 +164,7 @@ commands:
   #PositionSystem
   gm:
     description: ゲームモードを切り替えます
+
+  #cooking:
+  cooking:
+    description: レシピを編集します
