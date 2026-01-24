@@ -122,10 +122,6 @@ commands:
   repair:
     description: アイテムを修復します
 
-  ## ChestShop
-  item:
-    description: メインハンドに持ったアイテムの名前を表示します
-
   ## AutoCollect
   autocollect:
     description: 自動収集機能のオンオフを切り替えます
