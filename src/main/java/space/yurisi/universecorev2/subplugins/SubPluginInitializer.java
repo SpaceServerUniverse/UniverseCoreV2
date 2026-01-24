@@ -13,6 +13,7 @@ import space.yurisi.universecorev2.subplugins.customname.CustomName;
 import space.yurisi.universecorev2.subplugins.elevator.Elevator;
 import space.yurisi.universecorev2.subplugins.evolutionitem.EvolutionItem;
 import space.yurisi.universecorev2.subplugins.fishingsystem.FishingSystem;
+import space.yurisi.universecorev2.subplugins.flysystem.Fly;
 import space.yurisi.universecorev2.subplugins.gacha.Gacha;
 import space.yurisi.universecorev2.subplugins.itemhat.ItemHat;
 import space.yurisi.universecorev2.subplugins.freemarket.FreeMarket;
@@ -101,6 +102,8 @@ public class SubPluginInitializer {
         this.subPlugins.add(new UniverseSlot());
         this.subPlugins.add(new SpaceShip());
         this.subPlugins.add(new Cooking());
+        this.subPlugins.add(new Fly());
+
     }
 
     public void onEnable() {
