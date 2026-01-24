@@ -24,7 +24,7 @@ public final class PlayerHeadMenu implements BaseMenu {
                     if (slot == AnvilGUI.Slot.OUTPUT) {
                         try {
 
-                            Long price = 10000L;
+                            Long price = 2000L;
                             Long money = UniverseEconomyAPI.getInstance().getMoney(player);
 
                             if(money >= price){
