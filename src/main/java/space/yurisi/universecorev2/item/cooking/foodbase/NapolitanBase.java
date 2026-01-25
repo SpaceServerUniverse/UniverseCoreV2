@@ -1,21 +1,24 @@
 package space.yurisi.universecorev2.item.cooking.foodbase;
 
 import org.jetbrains.annotations.NotNull;
-import space.yurisi.universecorev2.item.cooking.CookingItem;
 import space.yurisi.universecorev2.item.cooking.Craftable;
 import space.yurisi.universecorev2.item.cooking.FoodBaseItem;
 import space.yurisi.universecorev2.item.cooking.RecipeBuilder;
 import space.yurisi.universecorev2.item.cooking.constant.RecipeId;
+import space.yurisi.universecorev2.item.cooking.entry.RecipeEntryItemStack;
+import space.yurisi.universecorev2.item.cooking.entry.RecipeEntryString;
 import space.yurisi.universecorev2.item.cooking.ingredients.GreenPepper;
 import space.yurisi.universecorev2.item.cooking.ingredients.Pasta;
 import space.yurisi.universecorev2.item.cooking.ingredients.Salt;
 import space.yurisi.universecorev2.item.cooking.ingredients.Tomato;
 
+import java.util.HashMap;
+
 public final class NapolitanBase extends FoodBaseItem implements Craftable {
 
     public static final String id = "napolitan_base";
 
-    private final CookingItem[] recipe;
+    private final HashMap<Integer, RecipeEntryItemStack> recipe;
 
     public NapolitanBase(){
         super(
@@ -24,15 +27,15 @@ public final class NapolitanBase extends FoodBaseItem implements Craftable {
         );
 
         RecipeBuilder builder = RecipeBuilder.create()
-                .setRecipeFromIndex(0, Tomato.id)
-                .setRecipeFromIndex(1, GreenPepper.id)
-                .setRecipeFromIndex(2, Pasta.id)
-                .setRecipeFromIndex(3, Salt.id);
+                .setRecipeFromIndex(0, RecipeEntryString.of(Tomato.id))
+                .setRecipeFromIndex(1, RecipeEntryString.of(GreenPepper.id))
+                .setRecipeFromIndex(2, RecipeEntryString.of(Pasta.id))
+                .setRecipeFromIndex(3, RecipeEntryString.of(Salt.id));
         this.recipe = builder.build(this);
     }
 
     @Override
-    public @NotNull CookingItem[] getRecipe() {
+    public @NotNull HashMap<Integer, RecipeEntryItemStack> getRecipe() {
         return this.recipe;
     }
 

@@ -1,5 +1,6 @@
 package space.yurisi.universecorev2.item.cooking.ingredients;
 
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
@@ -8,12 +9,17 @@ import space.yurisi.universecorev2.item.cooking.Craftable;
 import space.yurisi.universecorev2.item.cooking.IngredientItem;
 import space.yurisi.universecorev2.item.cooking.RecipeBuilder;
 import space.yurisi.universecorev2.item.cooking.constant.RecipeId;
+import space.yurisi.universecorev2.item.cooking.entry.RecipeEntryItemStack;
+import space.yurisi.universecorev2.item.cooking.entry.RecipeEntryMaterial;
+import space.yurisi.universecorev2.item.cooking.entry.RecipeEntryString;
+
+import java.util.HashMap;
 
 public final class SoySauce extends IngredientItem implements Craftable {
 
     public static final String id = "soy_sauce";
 
-    private final CookingItem[] recipe;
+    private final HashMap<Integer, RecipeEntryItemStack> recipe;
 
     public SoySauce() {
         super(
@@ -23,14 +29,14 @@ public final class SoySauce extends IngredientItem implements Craftable {
                 "soysauce"
         );
         RecipeBuilder builder = RecipeBuilder.create()
-                .setRecipeFromIndex(0, Wheat.id)
-                .setRecipeFromIndex(1, Salt.id)
-                .setRecipeFromIndex(2, Soy.id);
+                .setRecipeFromIndex(0, RecipeEntryMaterial.of(Material.WHEAT))
+                .setRecipeFromIndex(1, RecipeEntryString.of(Salt.id))
+                .setRecipeFromIndex(2, RecipeEntryString.of(Soy.id));
         this.recipe = builder.build(this);
     }
 
     @Override
-    public @NotNull CookingItem[] getRecipe() {
+    public @NotNull HashMap<Integer, RecipeEntryItemStack> getRecipe() {
         return this.recipe;
     }
 

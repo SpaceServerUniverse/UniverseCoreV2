@@ -1,6 +1,7 @@
 package space.yurisi.universecorev2.item.cooking;
 
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -10,8 +11,11 @@ import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.constants.UniverseItemKeyString;
 import space.yurisi.universecorev2.item.CustomItem;
 import space.yurisi.universecorev2.item.UniverseItem;
+import space.yurisi.universecorev2.item.cooking.entry.RecipeEntryItemStack;
 import space.yurisi.universecorev2.subplugins.cooking.CookingAPI;
 
+import java.util.HashMap;
+import java.util.Objects;
 import java.util.UUID;
 
 public interface Craftable {
@@ -19,10 +23,10 @@ public interface Craftable {
     /**
      * Returns the recipe matrix
      *
-     * @return CookingItem[]
+     * @return HashMap<Integer, RecipeEntryItemStack>
      */
     @NotNull
-    CookingItem[] getRecipe();
+    HashMap<Integer, RecipeEntryItemStack> getRecipe();
 
     /**
      * Checks if the recipe is shaped
@@ -53,42 +57,51 @@ public interface Craftable {
             }
             return false;
         }
-        CookingItem[] providedRecipe = new CookingItem[9];
+        ItemStack[] providedRecipe = new ItemStack[9];
         for (int i = 0; i <= 8; i++) {
             ItemStack item = recipeToCheck[i];
-            if (item == null) continue;
-            PersistentDataContainer container = item.getItemMeta().getPersistentDataContainer();
-            NamespacedKey key = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.COOKING_ITEM);
-            if(!container.has(key)) return false;
-            CustomItem customItem = UniverseItem.getItem(container.get(key, PersistentDataType.STRING));
-            if(!(customItem instanceof CookingItem cookingItem)) return false;
-            providedRecipe[i] = cookingItem;
+            if (item == null) {
+                providedRecipe[i] = null;
+                continue;
+            }
+            providedRecipe[i] = item.clone();
         }
-        CookingItem[] recipe = this.getRecipe();
+        HashMap<Integer, RecipeEntryItemStack> recipe = this.getRecipe();
+        NamespacedKey key = new NamespacedKey(UniverseCoreV2.getInstance(), UniverseItemKeyString.COOKING_ITEM);
         if(this.isShaped()){
             for(int j = 0; j <= 8; j++){
-                CookingItem requiredItem = recipe[j];
-                CookingItem providedItem = providedRecipe[j];
-                if(requiredItem == null && providedItem == null) continue;
-                if(requiredItem == null || providedItem == null) return false;
-                if(!requiredItem.getId().equals(providedItem.getId())) return false;
+                if(recipe.get(j) == null && providedRecipe[j] == null) continue;
+                if(recipe.get(j) == null || providedRecipe[j] == null) return false;
+                ItemStack requiredItem = recipe.get(j).getItemStack();
+                ItemStack providedItem = providedRecipe[j];
+                PersistentDataContainer requiredContainer = requiredItem.getItemMeta().getPersistentDataContainer();
+                PersistentDataContainer providedContainer = providedItem.getItemMeta().getPersistentDataContainer();
+                if(requiredContainer.has(key) && !providedContainer.has(key)) return false;
+                if(!requiredContainer.has(key) && providedContainer.has(key)) return false;
+                if(requiredContainer.has(key) && providedContainer.has(key)){
+                    if(!Objects.equals(requiredContainer.get(key, PersistentDataType.STRING), providedContainer.get(key, PersistentDataType.STRING))) return false;
+                }else{
+                    if(!requiredItem.isSimilar(providedItem)) return false;
+                }
             }
         }else{
             for(int k = 0; k <= 8; k++){
-                CookingItem requiredItem = recipe[k];
-                if(requiredItem == null) continue;
+                if(recipe.get(k) == null) continue;
+                ItemStack requiredItem = recipe.get(k).getItemStack();
                 boolean found = false;
                 for(int l = 0; l <= 8; l++){
-                    CookingItem providedItem = providedRecipe[l];
+                    ItemStack providedItem = providedRecipe[l];
                     if(providedItem == null) continue;
-                    if(!requiredItem.getId().equals(providedItem.getId())) continue;
+                    PersistentDataContainer requiredContainer = requiredItem.getItemMeta().getPersistentDataContainer();
+                    PersistentDataContainer providedContainer = providedItem.getItemMeta().getPersistentDataContainer();
+                    if(!Objects.equals(requiredContainer.get(key, PersistentDataType.STRING), providedContainer.get(key, PersistentDataType.STRING))) continue;
                     found = true;
                     providedRecipe[l] = null;
                     break;
                 }
                 if(!found) return false;
             }
-            for (CookingItem provided: providedRecipe) {
+            for (ItemStack provided: providedRecipe) {
                 if (provided != null) {
                     return false;
                 }

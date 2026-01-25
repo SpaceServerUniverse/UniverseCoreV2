@@ -64,23 +64,18 @@ public class UniverseItem {
         items.put(MainMenuBook.id, new MainMenuBook());
         items.put(TutorialBook.id, new TutorialBook());
         items.put(LoseTicket.id, new LoseTicket());
-        items.put(Carrot.id, new Carrot());
         items.put(GreenPepper.id, new GreenPepper());
         items.put(Pasta.id, new Pasta());
-        items.put(RawBeef.id, new RawBeef());
-        items.put(RawPork.id, new RawPork());
         items.put(Rice.id, new Rice());
         items.put(Salt.id, new Salt());
         items.put(Shimeji.id, new Shimeji());
         items.put(Soy.id, new Soy());
         items.put(SoySauce.id, new SoySauce());
-        items.put(Sugar.id, new Sugar());
         items.put(Tomato.id, new Tomato());
         items.put(NapolitanBase.id, new NapolitanBase());
         items.put(Napolitan.id, new Napolitan());
         items.put(GoheiMochiBase.id, new GoheiMochiBase());
         items.put(GoheiMochi.id, new GoheiMochi());
-        items.put(Wheat.id, new Wheat());
     }
 
     public static CustomItem getItem(String id){

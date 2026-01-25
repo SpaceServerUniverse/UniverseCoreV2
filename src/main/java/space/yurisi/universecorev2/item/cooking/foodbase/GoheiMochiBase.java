@@ -1,18 +1,24 @@
 package space.yurisi.universecorev2.item.cooking.foodbase;
 
+import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import space.yurisi.universecorev2.item.cooking.CookingItem;
 import space.yurisi.universecorev2.item.cooking.Craftable;
 import space.yurisi.universecorev2.item.cooking.FoodBaseItem;
 import space.yurisi.universecorev2.item.cooking.RecipeBuilder;
+import space.yurisi.universecorev2.item.cooking.entry.RecipeEntryItemStack;
+import space.yurisi.universecorev2.item.cooking.entry.RecipeEntryMaterial;
+import space.yurisi.universecorev2.item.cooking.entry.RecipeEntryString;
 import space.yurisi.universecorev2.item.cooking.ingredients.*;
 import space.yurisi.universecorev2.item.cooking.constant.RecipeId;
+
+import java.util.HashMap;
 
 public final class GoheiMochiBase extends FoodBaseItem implements Craftable {
 
     public static final String id = "gohei_mochi_base";
 
-    private final CookingItem[] recipe;
+    private final HashMap<Integer, RecipeEntryItemStack> recipe;
 
     public GoheiMochiBase(){
         super(
@@ -21,15 +27,15 @@ public final class GoheiMochiBase extends FoodBaseItem implements Craftable {
         );
 
         RecipeBuilder builder = RecipeBuilder.create()
-                .setRecipeFromIndex(0, Salt.id)
-                .setRecipeFromIndex(1, SoySauce.id)
-                .setRecipeFromIndex(2, Sugar.id)
-                .setRecipeFromIndex(3, Rice.id);
+                .setRecipeFromIndex(0, RecipeEntryString.of(Salt.id))
+                .setRecipeFromIndex(1, RecipeEntryString.of(SoySauce.id))
+                .setRecipeFromIndex(2, RecipeEntryMaterial.of(Material.SUGAR))
+                .setRecipeFromIndex(3, RecipeEntryString.of(Rice.id));
         this.recipe = builder.build(this);
     }
 
     @Override
-    public @NotNull CookingItem[] getRecipe() {
+    public @NotNull HashMap<Integer, RecipeEntryItemStack> getRecipe() {
         return this.recipe;
     }
 
