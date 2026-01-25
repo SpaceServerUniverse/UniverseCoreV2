@@ -13,7 +13,8 @@ public final class Salt extends IngredientItem implements Edible {
         super(
                 Salt.id,
                 "塩",
-                ItemStack.of(INEDIBLE)
+                ItemStack.of(INEDIBLE),
+                "sugar"
         );
     }
 

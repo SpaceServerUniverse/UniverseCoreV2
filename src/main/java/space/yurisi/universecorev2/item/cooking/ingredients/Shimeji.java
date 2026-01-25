@@ -13,7 +13,8 @@ public final class Shimeji extends IngredientItem implements Edible {
         super(
                 id,
                 "しめじ",
-                ItemStack.of(EDIBLE)
+                ItemStack.of(EDIBLE),
+                null
         );
     }
 

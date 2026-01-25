@@ -13,7 +13,8 @@ public final class Tomato extends IngredientItem implements Edible {
         super(
                 Tomato.id,
                 "トマト",
-                ItemStack.of(EDIBLE)
+                ItemStack.of(EDIBLE),
+                "tomato"
         );
     }
 

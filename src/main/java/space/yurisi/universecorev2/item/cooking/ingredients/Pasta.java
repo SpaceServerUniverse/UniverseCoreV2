@@ -11,7 +11,8 @@ public final class Pasta extends IngredientItem {
         super(
                 Pasta.id,
                 "パスタ",
-                ItemStack.of(INEDIBLE)
+                ItemStack.of(INEDIBLE),
+                null
         );
     }
 }

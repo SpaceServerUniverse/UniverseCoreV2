@@ -13,7 +13,8 @@ public final class GreenPepper extends IngredientItem implements Edible {
         super(
                 GreenPepper.id,
                 "ピーマン",
-                ItemStack.of(EDIBLE)
+                ItemStack.of(EDIBLE),
+                "bell_pepper"
         );
     }
 

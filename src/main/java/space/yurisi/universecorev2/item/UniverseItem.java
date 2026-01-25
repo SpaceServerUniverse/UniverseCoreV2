@@ -72,6 +72,7 @@ public class UniverseItem {
         items.put(Rice.id, new Rice());
         items.put(Salt.id, new Salt());
         items.put(Shimeji.id, new Shimeji());
+        items.put(Soy.id, new Soy());
         items.put(SoySauce.id, new SoySauce());
         items.put(Sugar.id, new Sugar());
         items.put(Tomato.id, new Tomato());
@@ -79,6 +80,7 @@ public class UniverseItem {
         items.put(Napolitan.id, new Napolitan());
         items.put(GoheiMochiBase.id, new GoheiMochiBase());
         items.put(GoheiMochi.id, new GoheiMochi());
+        items.put(Wheat.id, new Wheat());
     }
 
     public static CustomItem getItem(String id){

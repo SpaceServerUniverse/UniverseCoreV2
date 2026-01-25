@@ -3,14 +3,14 @@ package space.yurisi.universecorev2.item.cooking.ingredients;
 import org.bukkit.inventory.ItemStack;
 import space.yurisi.universecorev2.item.cooking.IngredientItem;
 
-public final class RawBeef extends IngredientItem {
+public final class Wheat extends IngredientItem {
 
-    public static final String id = "beef_raw";
+    public static final String id = "wheat";
 
-    public RawBeef() {
+    public Wheat() {
         super(
-                RawBeef.id,
-                "生の牛肉",
+                Wheat.id,
+                "小麦",
                 ItemStack.of(INEDIBLE),
                 null
         );
