@@ -54,20 +54,21 @@ public class SlotCommand implements CommandExecutor, TabCompleter {
         }
 
         UniverseSlot main = UniverseSlot.getInstance();
+        PlayerStatusManager playerStatusManager = main.getPlayerStatusManager();
 
         // スロット編集モードの切り替え
         if(args[0].equals("edit")) {
-            if (main.getPlayerStatusManager().hasFlag(player.getUniqueId(), PlayerStatusManager.ON_EDIT_MODE)) {
-                main.getPlayerStatusManager().removeFlag(player.getUniqueId(), PlayerStatusManager.ON_EDIT_MODE);
+            if (playerStatusManager.hasFlag(player.getUniqueId(), PlayerStatusManager.ON_EDIT_MODE)) {
+                playerStatusManager.removeFlag(player.getUniqueId(), PlayerStatusManager.ON_EDIT_MODE);
+                playerStatusManager.removeClickedLocation(player.getUniqueId());
                 Message.sendNormalMessage(player, "[スロットAI]", "スロット編集モードを解除しました。");
             } else {
-                main.getPlayerStatusManager().addFlag(player.getUniqueId(), PlayerStatusManager.ON_EDIT_MODE);
+                playerStatusManager.addFlag(player.getUniqueId(), PlayerStatusManager.ON_EDIT_MODE);
                 Message.sendSuccessMessage(player, "[スロットAI]", "スロット編集モードに入りました。");
             }
             return true;
         }
 
-        PlayerStatusManager playerStatusManager = main.getPlayerStatusManager();
         SlotLocationManager slotLocationManager = main.getSlotLocationManager();
         SlotRepository slotRepository = UniverseCoreV2API.getInstance().getDatabaseManagerV2().get(SlotRepository.class);
 

@@ -3,6 +3,7 @@ package space.yurisi.universecorev2.subplugins.universeslot.listener;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.subplugins.universeslot.UniverseSlot;
 import space.yurisi.universecorev2.subplugins.universeslot.listener.block.BreakEvent;
+import space.yurisi.universecorev2.subplugins.universeslot.listener.block.HopperPlaceProtect;
 import space.yurisi.universecorev2.subplugins.universeslot.listener.block.ShelfInteractEvent;
 import space.yurisi.universecorev2.subplugins.universeslot.listener.block.SlotEditEvent;
 import space.yurisi.universecorev2.subplugins.universeslot.listener.player.LogoutEvent;
@@ -22,5 +23,6 @@ public class EventManager {
         core.getServer().getPluginManager().registerEvents(new BreakEvent(), core);
         core.getServer().getPluginManager().registerEvents(new SlotPlayerMoveEvent(), core);
         core.getServer().getPluginManager().registerEvents(new SlotPlayerTeleportEvent(), core);
+        core.getServer().getPluginManager().registerEvents(new HopperPlaceProtect(), core);
     }
 }
