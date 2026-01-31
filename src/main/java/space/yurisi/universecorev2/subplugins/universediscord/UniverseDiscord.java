@@ -1,72 +1,79 @@
 package space.yurisi.universecorev2.subplugins.universediscord;
 
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.channel.ChannelType;
-import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
-import net.dv8tion.jda.api.requests.GatewayIntent;
 import org.bukkit.Bukkit;
-import org.jetbrains.annotations.NotNull;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.subplugins.SubPlugin;
-import space.yurisi.universecorev2.subplugins.universediscord.event.DiscordEvent;
-import space.yurisi.universecorev2.subplugins.universediscord.event.EventManager;
-import space.yurisi.universecorev2.subplugins.universediscord.exception.DiscordChannelNotFoundException;
-import space.yurisi.universecorev2.subplugins.universediscord.exception.DiscordGuildNotFoundException;
-import space.yurisi.universecorev2.subplugins.universediscord.exception.DiscordJDANotReadyException;
-import space.yurisi.universecorev2.subplugins.universediscord.file.Config;
+import space.yurisi.universecorev2.subplugins.universediscord.config.DiscordConfiguration;
+import space.yurisi.universecorev2.subplugins.universediscord.config.DiscordConfigurationLoader;
+import space.yurisi.universecorev2.subplugins.universediscord.discord.DiscordBotManager;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
+import java.util.logging.Logger;
 
 public class UniverseDiscord implements SubPlugin {
 
-    private Config config;
+    private static final Logger logger = Bukkit.getLogger();
+
+    private Optional<DiscordBotManager> botManager = Optional.empty();
+    private Optional<EventBridge> eventBridge = Optional.empty();
 
     @Override
     public void onEnable(UniverseCoreV2 core) {
-        this.config = new Config(core);
-
-        if(Objects.equals(config.getDiscordBotToken(), "")){
-            Bukkit.getLogger().info("トークンが書かれていないのでUniverseDiscordは無効化されました。");
-            onDisable();
-            return;
-        }
-
-        List<GatewayIntent> intents = List.of(GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT);
-        JDA jda = JDABuilder.createLight(config.getDiscordBotToken(), intents).addEventListeners(new DiscordEvent(config.getDiscordChannelId())).setAutoReconnect(true).build();
-
         try {
-            jda.awaitReady();
-        } catch (InterruptedException e) {
-            throw new DiscordJDANotReadyException("JDA の初期化に失敗しました。詳しくは JDA のスタックトレースを確認してください");
+            DiscordConfigurationLoader configLoader = new DiscordConfigurationLoader(core);
+            Optional<DiscordConfiguration> configOpt = configLoader.load();
+
+            if (configOpt.isEmpty()) {
+                logger.severe("[UniverseDiscord] 設定の読み込みに失敗しました。プラグインを無効化します。");
+                return;
+            }
+
+            DiscordConfiguration config = configOpt.get();
+            DiscordBotManager manager = new DiscordBotManager(config, core);
+            this.botManager = Optional.of(manager);
+
+            manager.initialize().thenAccept(jdaOpt -> {
+                if (jdaOpt.isEmpty()) {
+                    logger.severe("[UniverseDiscord] Discord Bot の初期化に失敗しました。プラグインを無効化します。");
+                    cleanup();
+                    return;
+                }
+
+                JDA client = jdaOpt.get();
+                Bukkit.getScheduler().runTask(core, () -> {
+                    try {
+                        EventBridge bridge = new EventBridge(core, client, config);
+                        bridge.registerEvents();
+                        eventBridge = Optional.of(bridge);
+                        logger.info("[UniverseDiscord] イベントブリッジが正常に登録されました。");
+                    } catch (Exception e) {
+                        logger.severe("[UniverseDiscord] イベントブリッジの登録中にエラーが発生しました: " + e.getMessage());
+                        cleanup();
+                    }
+                });
+                logger.info("[UniverseDiscord] Discord Bot が正常に初期化されました。");
+            }).exceptionally(throwable -> {
+                logger.severe("[UniverseDiscord] Discord Bot の初期化中にエラーが発生しました: " + throwable.getMessage());
+                cleanup();
+                return null;
+            });
+        } catch (Exception e) {
+            logger.severe("[UniverseDiscord] プラグインの有効化中に予期しないエラーが発生しました: " + e.getMessage());
+            throw new RuntimeException(e);
         }
-
-        Guild guild = jda.getGuildById(config.getDiscordGuildId());
-        if (guild == null) {
-            throw new DiscordGuildNotFoundException("指定されたギルドIDは無効です: " + config.getDiscordGuildId());
-        }
-
-        TextChannel channel = guild.getTextChannelById(config.getDiscordChannelId());
-        if (channel == null) {
-            throw new DiscordChannelNotFoundException("指定されたチャンネルIDは無効です: " + config.getDiscordChannelId());
-        }
-
-        if (channel.getType() != ChannelType.TEXT) {
-            throw new DiscordChannelNotFoundException("指定されたチャンネルIDはテキストチャンネルではありません: " + config.getDiscordChannelId());
-        }
-
-        new EventManager(core, channel);
-    }
-
-    public @NotNull Config getPluginConfig() {
-        return this.config;
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        cleanup();
+        logger.info("[UniverseDiscord] プラグインが無効化されました。");
+    }
+
+    private void cleanup() {
+        botManager.ifPresent(DiscordBotManager::shutdown);
+        botManager = Optional.empty();
+        eventBridge = Optional.empty();
     }
 
     @Override
@@ -76,6 +83,6 @@ public class UniverseDiscord implements SubPlugin {
 
     @Override
     public String getVersion() {
-        return "1.0.0";
+        return "2.0.0";
     }
 }
