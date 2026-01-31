@@ -15,9 +15,6 @@ import java.util.regex.Pattern;
  */
 public class Message {
 
-    static String discordInviteURL = "https://discord\\.gg/[a-zA-Z0-9]+";
-    static Pattern pattern = Pattern.compile(discordInviteURL);
-
     /**
      * プレイヤーに通常形式のメッセージを送信します.
      * メッセージ内容は色が白色で表示され, また `message` には色付きの文字列を指定することもできます.
@@ -82,16 +79,5 @@ public class Message {
     public static void sendErrorMessage(Player target, String prefix, String message) {
         target.sendMessage(Component.text("§b" + prefix + " §c" + message));
     }
-
-    /**
-     * 送信しようとした文字列が安全かどうかを判定します.
-     * 以下のチェックを行います.
-     * - Discord の招待リンクが含まれていないか
-     *
-     * @param message チェックする文字列
-     * @return boolean 安全な文字列かどうか
-     */
-    public static boolean isSafeMessage(String message) {
-        return !pattern.matcher(message).matches();
-    }
+    
 }
