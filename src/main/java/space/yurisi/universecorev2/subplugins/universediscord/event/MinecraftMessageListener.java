@@ -10,7 +10,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerLoadEvent;
-import org.jetbrains.annotations.NotNull;
 import space.yurisi.universecorev2.subplugins.universediscord.MessageSender;
 
 import java.util.logging.Logger;
@@ -26,7 +25,7 @@ public class MinecraftMessageListener implements Listener {
         this.discordChannel = discordChannel;
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(PlayerJoinEvent event) {
         String message = SERIALIZER.serialize(event.getPlayer().displayName()) + " がサーバーに参加しました。";
         discordChannel.sendMessage(message)
@@ -36,7 +35,7 @@ public class MinecraftMessageListener implements Listener {
                 );
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onQuit(PlayerQuitEvent event) {
         String message = SERIALIZER.serialize(event.getPlayer().displayName()) + " がサーバーから退出しました。";
         discordChannel.sendMessage(message)
@@ -46,13 +45,13 @@ public class MinecraftMessageListener implements Listener {
                 );
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onChat(AsyncChatEvent event) {
         String message = SERIALIZER.serialize(event.originalMessage());
         MessageSender.sendPlayerMessage(event.getPlayer(), discordChannel, message);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onServerLoad(ServerLoadEvent event) {
         String message = "サーバーが正常に起動しました。";
         discordChannel.sendMessage(message)
