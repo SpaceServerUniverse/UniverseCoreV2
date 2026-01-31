@@ -28,7 +28,7 @@ public class MinecraftMessageListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(PlayerJoinEvent event) {
-        String message = SERIALIZER.serialize(event.getPlayer().displayName()) + " がサーバーに参加しました。";
+        String message = SERIALIZER.serialize(event.getPlayer().name()) + " がサーバーに参加しました。";
         discordChannel.sendMessage(message)
                 .queue(
                         success -> {},
@@ -38,7 +38,7 @@ public class MinecraftMessageListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onQuit(PlayerQuitEvent event) {
-        String message = SERIALIZER.serialize(event.getPlayer().displayName()) + " がサーバーから退出しました。";
+        String message = SERIALIZER.serialize(event.getPlayer().name()) + " がサーバーから退出しました。";
         discordChannel.sendMessage(message)
                 .queue(
                         success -> {},
