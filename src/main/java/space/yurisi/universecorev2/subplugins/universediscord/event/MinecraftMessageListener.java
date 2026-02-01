@@ -3,6 +3,7 @@ package space.yurisi.universecorev2.subplugins.universediscord.event;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -27,7 +28,7 @@ public class MinecraftMessageListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(PlayerJoinEvent event) {
-        String message = SERIALIZER.serialize(event.getPlayer().displayName()) + " がサーバーに参加しました。";
+        String message = SERIALIZER.serialize(event.getPlayer().name()) + " がサーバーに参加しました。";
         discordChannel.sendMessage(message)
                 .queue(
                         success -> {},
@@ -37,7 +38,7 @@ public class MinecraftMessageListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onQuit(PlayerQuitEvent event) {
-        String message = SERIALIZER.serialize(event.getPlayer().displayName()) + " がサーバーから退出しました。";
+        String message = SERIALIZER.serialize(event.getPlayer().name()) + " がサーバーから退出しました。";
         discordChannel.sendMessage(message)
                 .queue(
                         success -> {},
@@ -47,7 +48,7 @@ public class MinecraftMessageListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onChat(AsyncChatEvent event) {
-        String message = SERIALIZER.serialize(event.originalMessage());
+        String message = PlainTextComponentSerializer.plainText().serialize(event.message());
         MessageSender.sendPlayerMessage(event.getPlayer(), discordChannel, message);
     }
 
