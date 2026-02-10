@@ -1,0 +1,18 @@
+# External Plugins Configuration
+#
+# List external plugin URLs here (one per line).
+# Lines starting with '#' are ignored.
+#
+# Supported URL formats:
+#   - Direct JAR download URL
+#   - GitHub release URL (https://github.com/owner/repo/releases/download/version/plugin.jar)
+#   - SpigotMC resource URL (requires manual download)
+#
+# Examples:
+# https://github.com/EssentialsX/Essentials/releases/download/2.20.1/EssentialsX-2.20.1.jar
+# https://github.com/PlaceholderAPI/PlaceholderAPI/releases/download/2.11.3/PlaceholderAPI-2.11.3.jar
+#
+# Add your plugin URLs below:
+
+https://download.luckperms.net/1614/bukkit/loader/LuckPerms-Bukkit-5.5.26.jar
+https://github.com/OneWalkDev/Ribbon/releases/download/v0.3.3/Ribbon-v0.3.3.jar

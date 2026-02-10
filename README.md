@@ -5,31 +5,32 @@
 
 SpaceServer Universe のコアプラグイン
 
-## 使い方
+## セットアップ方法
 
-1. `UniverseCoreV2` リポジトリをクローンします。
+- デバッグ環境は以下のコマンド 1つで起動するようになっています．
+  - 起動するデバッグ環境はフラットワールドで生成され，使用するメモリを少しでも開発環境に割けるよう描画距離などが最適化されています．
+  - またこのデバッグ環境はオフラインモードで起動します． Prism Launcher などのランチャーを使用してデバッグ用のサブアカウントを作成しておくと便利です．
 
-    ```shell
-    git clone https://github.com/SpaceServerUniverse/UniverseCoreV2.git
-    ```
+```shell
+# macOS / Linux / WSL2
+./x start
 
-2. 一度サーバを立ち上げます。
+# Windows
+.\x.ps1 start
 
-    ```shell
-    cd docker
-    docker network create shared_network
-    docker compose up -d
-    ```
+## Windows の場合は PowerShell が実行を嫌がらせで妨害してくることがあります
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+```
 
-3. プラグインをビルドします．
+## プラグインの導入
 
-    ```shell
-    cd ..
-    ./gradlew reobfJar
-    ```
+- UniverseCoreV2 のビルドは `start` コマンド実行時に同時に実行されて，ビルドされた Jar ファイルは自動的にデバッグ環境に導入されるようになっています．
+- UniverseCoreV2 以外のプラグイン (例えば LuckPerms など) を導入したい場合は [`docker/plugins.txt`](./docker/plugins.txt) にプラグインのダウンロード URL を追加すると，それらのプラグインも自動的にデバッグ環境に導入されます．
 
-4. `plugins/` に `build/libs/` にある `UniverseCoreV2-1.0-reobf.jar` を配置します。
-5. サーバーを起動します。
+```text
+https://download.luckperms.net/1614/bukkit/loader/LuckPerms-Bukkit-5.5.26.jar
+https://github.com/OneWalkDev/Ribbon/releases/download/v0.3.3/Ribbon-v0.3.3.jar
+```
 
 ## 依存関係
 

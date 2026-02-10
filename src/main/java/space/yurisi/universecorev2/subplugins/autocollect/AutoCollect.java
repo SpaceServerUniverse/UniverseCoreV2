@@ -1,24 +1,36 @@
 package space.yurisi.universecorev2.subplugins.autocollect;
 
-import org.bukkit.Bukkit;
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.subplugins.SubPlugin;
-import space.yurisi.universecorev2.subplugins.autocollect.command.AutoCollectCommand;
-import space.yurisi.universecorev2.subplugins.autocollect.data.AutoCollectMap;
-import space.yurisi.universecorev2.subplugins.autocollect.event.AutoCollectListener;
 
 public class AutoCollect implements SubPlugin {
 
+    private static AutoCollect instance;
+    private AutoCollectManager manager;
+
+    public static AutoCollect getInstance() {
+        return instance;
+    }
+
+    public AutoCollectManager getManager() {
+        return manager;
+    }
+
     @Override
     public void onEnable(UniverseCoreV2 core) {
-        new AutoCollectMap();
-        Bukkit.getPluginManager().registerEvents(new AutoCollectListener(), core);
-        core.getCommand("autocollect").setExecutor(new AutoCollectCommand());
+        instance = this;
+        this.manager = new AutoCollectManager();
+        AutoCollectMessageFormatter messageFormatter = new AutoCollectMessageFormatter();
+
+        core.getCommand("autocollect").setExecutor(new AutoCollectCommand(manager, messageFormatter));
+        core.getServer().getPluginManager().registerEvents(new AutoCollectEvent(manager, messageFormatter), core);
     }
 
     @Override
     public void onDisable() {
-        //NOOP
+        manager.clear();
+        manager = null;
+        instance = null;
     }
 
     @Override
@@ -28,6 +40,6 @@ public class AutoCollect implements SubPlugin {
 
     @Override
     public String getVersion() {
-        return "1.0.0";
+        return "2.0.0";
     }
 }

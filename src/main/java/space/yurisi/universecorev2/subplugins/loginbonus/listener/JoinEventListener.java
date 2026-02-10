@@ -10,7 +10,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import space.yurisi.universecorev2.UniverseCoreV2API;
 import space.yurisi.universecorev2.database.models.LoginBonus;
 import space.yurisi.universecorev2.exception.LoginBonusNotFoundException;
-import space.yurisi.universecorev2.subplugins.autocollect.data.AutoCollectMap;
 import space.yurisi.universecorev2.utils.DateHelper;
 
 import java.util.Date;
