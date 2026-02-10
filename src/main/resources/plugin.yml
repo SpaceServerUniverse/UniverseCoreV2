@@ -168,3 +168,7 @@ commands:
   #cooking:
   cooking:
     description: レシピを編集します
+
+  #fly
+  fly:
+    description: 飛行モードを切り替えます
