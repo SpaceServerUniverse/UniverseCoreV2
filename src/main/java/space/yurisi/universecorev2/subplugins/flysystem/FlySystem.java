@@ -2,7 +2,6 @@ package space.yurisi.universecorev2.subplugins.flysystem;
 
 import space.yurisi.universecorev2.UniverseCoreV2;
 import space.yurisi.universecorev2.subplugins.SubPlugin;
-import space.yurisi.universecorev2.subplugins.flysystem.command.FlyCommand;
 
 public final class FlySystem implements SubPlugin {
 
