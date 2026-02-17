@@ -11,6 +11,7 @@ import java.util.List;
 
 public class LobbyFishList extends BaseFishList {
 
+    // TODO: ロビー限定の魚をどこかのワールドへフォールバックするか削除する
     public LobbyFishList(){
         setWorldName("ロビー");
     }

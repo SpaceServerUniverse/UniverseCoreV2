@@ -15,7 +15,6 @@ public class CommandManager {
         main.getCommand("menu").setExecutor(new menuCommand());
         main.getCommand("password").setExecutor(new passwordCommand());
         main.getCommand("pplayer").setExecutor(new pplayerCommand());
-        main.getCommand("lobby").setExecutor(new lobbyCommand());
         main.getCommand("giveu").setExecutor(new giveuCommand());
         main.getCommand("flat").setExecutor(new flatCommand());
     }

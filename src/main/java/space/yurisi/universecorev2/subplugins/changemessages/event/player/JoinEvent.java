@@ -42,16 +42,6 @@ public final class JoinEvent implements Listener {
             return;
         }
         event.joinMessage(getUserCustomJoinMessage(player));
-
-
-        if(player.getWorld().getName().equals("lobby")){
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    player.setAllowFlight(true);
-                }
-            }.runTaskLater(plugin, 10);
-        }
     }
 
     private Component getFirstJoinMessage(Player player) {
