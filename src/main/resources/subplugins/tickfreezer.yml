@@ -1,4 +1,3 @@
 settings:
   deny-worlds:
-    - lobby
     - pvp

@@ -1,5 +1,6 @@
 package space.yurisi.universecorev2.event.player;
 
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,28 +23,13 @@ public class BlockProtectEvent implements Listener {
             return;
         }
 
-        switch (targetBlock.getType()) {
-            case ENCHANTING_TABLE -> {
-                if (LuckPermsWrapper.isUserInAdminOrDevGroup(player)) {
-                    event.setCancelled(false);
-                    break;
-                }
-
-                event.setCancelled(true);
-            }
-            case ANVIL -> {
-                if (!player.getWorld().getName().equals("lobby")) {
-                    return;
-                }
-
-                if (LuckPermsWrapper.isUserInAdminOrDevGroup(player)) {
-                    event.setCancelled(false);
-                    break;
-                }
-
-                event.setCancelled(true);
-            }
+        if (targetBlock.getType() != Material.ENCHANTING_TABLE) return;
+        if (LuckPermsWrapper.isUserInAdminOrDevGroup(player)) {
+            event.setCancelled(false);
+            return;
         }
+
+        event.setCancelled(true);
     }
 
 }
