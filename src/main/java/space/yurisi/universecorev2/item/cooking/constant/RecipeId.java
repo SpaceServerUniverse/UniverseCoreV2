@@ -3,6 +3,8 @@ package space.yurisi.universecorev2.item.cooking.constant;
 import space.yurisi.universecorev2.item.UniverseItem;
 import space.yurisi.universecorev2.item.cooking.CookingItem;
 import space.yurisi.universecorev2.item.cooking.foodbase.*;
+import space.yurisi.universecorev2.item.cooking.ingredients.Pasta;
+import space.yurisi.universecorev2.item.cooking.ingredients.Salt;
 import space.yurisi.universecorev2.item.cooking.ingredients.SoySauce;
 
 import java.util.List;
@@ -11,7 +13,9 @@ public enum RecipeId {
 
     NAPOLITAN_BASE(1, NapolitanBase.id),
     GOHEI_MOCHI_BASE(2, GoheiMochiBase.id),
-    SOY_SAUCE(3, SoySauce.id);
+    SOY_SAUCE(3, SoySauce.id),
+    SALT(4,Salt.id),
+    PASTA(5, Pasta.id);
 
     private final int id;
     private final String name;
