@@ -5,7 +5,7 @@ import org.bukkit.inventory.ItemStack;
 import space.yurisi.universecorev2.item.cooking.Edible;
 import space.yurisi.universecorev2.item.cooking.IngredientItem;
 
-public final class Salt extends IngredientItem implements Edible {
+public final class Salt extends IngredientItem {
 
     public static final String id = "salt";
 
@@ -16,20 +16,5 @@ public final class Salt extends IngredientItem implements Edible {
                 ItemStack.of(INEDIBLE),
                 "sugar"
         );
-    }
-
-    @Override
-    public void onEat(Player player) {
-
-    }
-
-    @Override
-    public int getNutrition() {
-        return 1;
-    }
-
-    @Override
-    public float getSaturation() {
-        return 0;
     }
 }
